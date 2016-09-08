@@ -1,0 +1,15 @@
+{
+  "name": "sentinella",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/sentinella.js",
+  "scripts": {
+    "build": "rollup -c",
+    "clean": "rm -fr dist/*"
+  },
+  "author": "Sam Stephenson",
+  "license": "MIT",
+  "devDependencies": {
+    "rollup-plugin-typescript": "^0.8.1"
+  }
+}
