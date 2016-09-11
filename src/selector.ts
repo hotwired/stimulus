@@ -1,10 +1,19 @@
 export class Selector {
-  static wrap(selector: Selector | string) {
-    if (selector instanceof Selector) {
-      return selector
+  private static selectors = new Map<string, Selector>()
+
+  static get(source) {
+    let selector: Selector
+    const selectors = Selector.selectors
+    source = source.toString().trim()
+
+    if (selectors.has(source)) {
+      selector = selectors.get(source)!
     } else {
-      return new Selector(selector.toString())
+      selector = new Selector(source)
+      selectors.set(source, selector)
     }
+
+    return selector
   }
 
   source: string
@@ -13,7 +22,7 @@ export class Selector {
 
   constructor(source) {
     try {
-      this.source = source.toString().trim()
+      this.source = source
       this.tokens = Token.readTokens(this.source)
       this.attributes = attributesFromTokens(this.tokens)
     } catch (error) {

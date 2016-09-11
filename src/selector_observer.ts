@@ -1,5 +1,4 @@
 import { ElementObserver, ElementObserverDelegate } from "./element_observer"
-import { SelectorSet } from "./selector_set"
 import { Selector } from "./selector"
 import { Multimap } from "./multimap"
 
@@ -13,7 +12,7 @@ export class SelectorObserver implements ElementObserverDelegate {
   delegate: SelectorObserverDelegate
   elementObserver: ElementObserver
 
-  selectors: SelectorSet
+  selectors: Set<Selector>
   elements: Multimap<Selector, Element>
   attributes: Multimap<Selector, string>
 
@@ -22,7 +21,7 @@ export class SelectorObserver implements ElementObserverDelegate {
     this.delegate = delegate
     this.elementObserver = new ElementObserver(element, this)
 
-    this.selectors = new SelectorSet()
+    this.selectors = new Set<Selector>()
     this.elements = new Multimap<Selector, Element>()
     this.attributes = new Multimap<Selector, string>()
   }
@@ -33,11 +32,11 @@ export class SelectorObserver implements ElementObserverDelegate {
 
   stop() {
     this.elementObserver.stop()
-  }  
+  }
 
   observeSelector(selector: Selector) {
     if (!this.selectors.has(selector)) {
-      this.selectors = this.selectors.add(selector)
+      this.selectors.add(selector)
       for (const attribute of selector.attributes) {
         this.attributes.add(selector, attribute)
       }
@@ -46,7 +45,7 @@ export class SelectorObserver implements ElementObserverDelegate {
 
   stopObservingSelector(selector: Selector) {
     if (this.selectors.has(selector)) {
-      this.selectors = this.selectors.delete(selector)
+      this.selectors.delete(selector)
       for (const attribute of selector.attributes) {
         this.attributes.delete(selector, attribute)
       }
@@ -54,8 +53,8 @@ export class SelectorObserver implements ElementObserverDelegate {
   }
 
   get compositeSelector(): string {
-    const selector = this.selectors.toString()
-    return selector.length == 0 ? ":not(*)" : selector
+    const compositeSelector = Array.from(this.selectors).join(", ")
+    return compositeSelector.length == 0 ? ":not(*)" : compositeSelector
   }
 
   // Element observer delegate
@@ -103,12 +102,12 @@ export class SelectorObserver implements ElementObserverDelegate {
 
   // Element matching
 
-  private recordMatch(selector, element) {
+  private recordMatch(selector: Selector, element: Element) {
     this.elements.add(selector, element)
     this.delegate.elementMatchedSelector(element, selector)
   }
 
-  private recordUnmatch(selector, element) {
+  private recordUnmatch(selector: Selector, element: Element) {
     this.elements.delete(selector, element)
     this.delegate.elementUnmatchedSelector(element, selector)
   }
