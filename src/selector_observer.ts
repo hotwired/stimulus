@@ -8,18 +8,16 @@ export interface SelectorObserverDelegate {
 }
 
 export class SelectorObserver implements ElementObserverDelegate {
-  element: Element
-  delegate: SelectorObserverDelegate
   elementObserver: ElementObserver
+  delegate: SelectorObserverDelegate
 
   selectors: Set<Selector>
   elements: Multimap<Selector, Element>
   attributes: Multimap<Selector, string>
 
   constructor(element: Element, delegate: SelectorObserverDelegate) {
-    this.element = element
-    this.delegate = delegate
     this.elementObserver = new ElementObserver(element, this)
+    this.delegate = delegate
 
     this.selectors = new Set<Selector>()
     this.elements = new Multimap<Selector, Element>()
@@ -33,6 +31,17 @@ export class SelectorObserver implements ElementObserverDelegate {
   stop() {
     this.elementObserver.stop()
   }
+
+  get element(): Element {
+    return this.elementObserver.element
+  }
+
+  get compositeSelector(): string {
+    const compositeSelector = Array.from(this.selectors).join(", ")
+    return compositeSelector.length == 0 ? ":not(*)" : compositeSelector
+  }
+
+  // Selector observation
 
   observeSelector(selector: Selector) {
     if (!this.selectors.has(selector)) {
@@ -50,11 +59,6 @@ export class SelectorObserver implements ElementObserverDelegate {
         this.attributes.delete(selector, attribute)
       }
     }
-  }
-
-  get compositeSelector(): string {
-    const compositeSelector = Array.from(this.selectors).join(", ")
-    return compositeSelector.length == 0 ? ":not(*)" : compositeSelector
   }
 
   // Element observer delegate
@@ -100,7 +104,7 @@ export class SelectorObserver implements ElementObserverDelegate {
     }
   }
 
-  // Element matching
+  // Element bookkeeping
 
   private recordMatch(selector: Selector, element: Element) {
     this.elements.add(selector, element)
