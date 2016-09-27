@@ -85,32 +85,47 @@ class Token {
 
   static readToken(source: string, type: TokenType): Token | undefined {
     const pattern = Token.PATTERNS[type]
-    const match = source.match(pattern)
+    const negated = source.slice(0, 5) == ":not("
+    const offset = negated ? 5 : 0
+    const match = source.slice(offset).match(pattern)
+
     if (match) {
-      return new Token(type, match)
+      const [value, data] = match
+
+      if (negated) {
+        if (source.charAt(value.length + offset) == ")") {
+          return new Token(type, `:not(${value})`, data, true)
+        } else {
+          throw new Error(`Expected close-parenthesis after ':not(${value}'`)
+        }
+      } else {
+        return new Token(type, value, data, false)
+      }
     }
   }
 
   type: TokenType
-  match: string
-  parts: string[]
+  value: string
+  data: string
+  negated: boolean
 
-  constructor(type: TokenType, matches: string[]) {
+  constructor(type: TokenType, value: string, data: string | null, negated: boolean) {
     this.type = type
-    this.match = matches[0]
-    this.parts = matches.slice(1)
+    this.value = value
+    this.data = data || ""
+    this.negated = negated
   }
 
   get attribute(): string | undefined {
     switch (this.type) {
       case TokenType.ID:    return "id"
       case TokenType.CLASS: return "class"
-      case TokenType.ATTR:  return this.parts[0]
+      case TokenType.ATTR:  return this.data
     }
   }
 
   get length(): number {
-    return this.match.length
+    return this.value.length
   }
 }
 
