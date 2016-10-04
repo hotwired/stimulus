@@ -2,7 +2,7 @@ import { Selector } from "./selector"
 import { ControllerConstructor, DefaultController } from "./controller"
 
 export type ScopeOptions = {
-  selector: Selector,
+  selector: Selector | string,
   controllerConstructor?: ControllerConstructor,
   eventListeners?: EventListenerSet,
   childScopes?: ScopeOptions[]
@@ -21,7 +21,7 @@ export class Scope {
     }
   }
 
-  selector: Selector | string
+  selector: Selector
   controllerConstructor: ControllerConstructor
   eventListeners: EventListenerSet
   childScopes: Scope[]
