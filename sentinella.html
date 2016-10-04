@@ -2,6 +2,38 @@
 <html>
 <head>
   <script src="dist/sentinella.js"></script>
+  <script>
+    window.region = new Sentinella.Region(document.documentElement)
+    region.define({
+      "[data-trait~=expandable]": {
+        name: "expandable",
+        
+        "[data-expandable-action]": {
+          onclick(event) {
+            const {expandableAction} = event.target.dataset
+            this.expandable[expandableAction]()
+            return false
+          }
+        },
+        
+        expand() {
+          this.element.classList.add("expanded")
+        },
+        
+        collapse() {
+          this.element.classList.remove("expanded")
+        },
+        
+        toggle() {
+          this.isExpanded ? this.collapse() : this.expand()
+        },
+        
+        get isExpanded() {
+          return this.element.classList.has("expanded")
+        }
+      }
+    })
+  </script>
 </head>
 <body>
 </body>
