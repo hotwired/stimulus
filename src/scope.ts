@@ -28,7 +28,7 @@ export class Scope {
 
   constructor({selector, controllerConstructor, eventListeners, childScopes}: ScopeOptions) {
     this.selector = Selector.get(selector)
-    this.controllerConstructor = controllerConstructor || DefaultController
+    this.controllerConstructor = controllerConstructor || <ControllerConstructor> <Function> DefaultController
     this.eventListeners = eventListeners || {}
     this.childScopes = (<Scope[]> (childScopes || [])).map(Scope.wrap)
   }
