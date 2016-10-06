@@ -4,36 +4,40 @@ import { Selector } from "./selector"
 
 export class Instance {
   element: Element
-  selector: Selector
-  controllers: Map<Scope, Controller>
+  controllersByScope: Map<Scope, Controller>
+  connectedControllers: Set<Controller>
 
-  constructor(element: Element, selector: Selector) {
+  constructor(element: Element) {
     this.element = element
-    this.selector = selector
-    this.controllers = new Map()
+    this.controllersByScope = new Map()
+    this.connectedControllers = new Set()
   }
 
-  connectControllerForScope(scope: Scope) {
+  connectScope(scope: Scope) {
     const controller = this.fetchControllerForScope(scope)
+    this.connectedControllers.add(controller)
     controller.connect()
   }
 
-  disconnectControllerForScope(scope: Scope) {
+  disconnectScope(scope: Scope) {
     const controller = this.getControllerForScope(scope)
     if (controller) {
+      this.connectedControllers.delete(controller)
       controller.disconnect()
-    }    
+    }
   }
 
-  getControllerForScope(scope: Scope): Controller | undefined {
-    return this.controllers.get(scope)
+  // Private
+
+  private getControllerForScope(scope: Scope): Controller | undefined {
+    return this.controllersByScope.get(scope)
   }
 
-  fetchControllerForScope(scope: Scope): Controller {
-    let controller = this.controllers.get(scope)
+  private fetchControllerForScope(scope: Scope): Controller {
+    let controller = this.controllersByScope.get(scope)
     if (!controller) {
       controller = new scope.controllerConstructor(this.element)
-      this.controllers.set(scope, controller)
+      this.controllersByScope.set(scope, controller)
     }
 
     return controller

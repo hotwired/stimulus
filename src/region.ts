@@ -3,7 +3,6 @@ import { Scope } from "./scope"
 import { Selector } from "./selector"
 import { SelectorObserver, SelectorObserverDelegate } from "./selector_observer"
 import { Multimap } from "./multimap"
-import { Registry } from "./registry"
 import { Instance } from "./instance"
 
 export class Region implements SelectorObserverDelegate {
@@ -12,7 +11,7 @@ export class Region implements SelectorObserverDelegate {
   scopes: Set<Scope>
   scopesBySelector: Multimap<Selector, Scope>
   selectorObserver: SelectorObserver
-  registry: Registry
+  instances: WeakMap<Element, Instance>
 
   constructor(parentRegion: Region | null, element: Element) {
     this.parentRegion = parentRegion
@@ -20,7 +19,11 @@ export class Region implements SelectorObserverDelegate {
     this.scopes = new Set()
     this.scopesBySelector = new Multimap<Selector, Scope>()
     this.selectorObserver = new SelectorObserver(element, this)
-    this.registry = new Registry()
+    this.instances = new WeakMap()
+  }
+
+  start() {
+    this.selectorObserver.start()
   }
 
   define(definition) {
@@ -35,25 +38,35 @@ export class Region implements SelectorObserverDelegate {
     this.selectorObserver.observeSelector(scope.selector)
   }
 
-  getScopesForSelector(selector: Selector): Scope[] {
-    return this.scopesBySelector.getValuesForKey(selector)
-  }
-
   // Selector observer delegate
 
   elementMatchedSelector(element: Element, selector: Selector) {
-    const instance = this.registry.fetchInstanceForElementAndSelector(element, selector)
     for (const scope of this.getScopesForSelector(selector)) {
-      instance.connectControllerForScope(scope)
+      const instance = this.fetchInstanceForElement(element)
+      instance.connectScope(scope)
     }
   }
 
   elementUnmatchedSelector(element: Element, selector: Selector) {
-    const instance = this.registry.getInstanceForElementAndSelector(element, selector)
-    if (instance) {
-      for (const scope of this.getScopesForSelector(selector)) {
-        instance.disconnectControllerForScope(scope)
-      }
+    for (const scope of this.getScopesForSelector(selector)) {
+      const instance = this.fetchInstanceForElement(element)
+      instance.disconnectScope(scope)
     }
+  }
+
+  // Private
+
+  private getScopesForSelector(selector: Selector): Scope[] {
+    return this.scopesBySelector.getValuesForKey(selector)
+  }
+
+  private fetchInstanceForElement(element: Element) {
+    let instance = this.instances.get(element)
+    if (!instance) {
+      instance = new Instance(element)
+      this.instances.set(element, instance)
+    }
+
+    return instance
   }
 }
