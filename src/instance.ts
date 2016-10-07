@@ -1,14 +1,17 @@
 import { Controller } from "./controller"
+import { Region } from "./region"
 import { Scope } from "./scope"
 import { Selector } from "./selector"
 
 export class Instance {
   element: Element
+  region: Region
   controllersByScope: Map<Scope, Controller>
   connectedControllers: Set<Controller>
 
   constructor(element: Element) {
     this.element = element
+    this.region = new Region(element)
     this.controllersByScope = new Map()
     this.connectedControllers = new Set()
   }
@@ -17,6 +20,8 @@ export class Instance {
     const controller = this.fetchControllerForScope(scope)
     this.connectedControllers.add(controller)
     controller.connect()
+    this.addScopes(scope.childScopes)
+    this.connectController(controller)
   }
 
   disconnectScope(scope: Scope) {
@@ -24,7 +29,53 @@ export class Instance {
     if (controller) {
       this.connectedControllers.delete(controller)
       controller.disconnect()
+      this.disconnectController(controller)
+      this.deleteScopes(scope.childScopes)
     }
+  }
+
+  // Controllers
+
+  private connectController(controller: Controller) {
+    if (this.connectedControllers.size == 0) {
+      this.beforeConnectingFirstController()
+    }
+
+    this.connectedControllers.add(controller)
+    controller.connect()
+  }
+
+  private disconnectController(controller: Controller) {
+    this.connectedControllers.delete(controller)
+    controller.disconnect()
+
+    if (this.connectedControllers.size == 0) {
+      this.afterDisconnectingLastController()
+    }
+  }
+
+  // Scopes
+
+  private addScopes(scopes: Scope[]) {
+    for (const scope of scopes) {
+      this.region.addScope(scope)
+    }
+  }
+
+  private deleteScopes(scopes: Scope[]) {
+    for (const scope of scopes) {
+      this.region.deleteScope(scope)
+    }
+  }
+
+  // Regions
+
+  private beforeConnectingFirstController() {
+    this.region.start()
+  }
+
+  private afterDisconnectingLastController() {
+    this.region.stop()
   }
 
   // Private
