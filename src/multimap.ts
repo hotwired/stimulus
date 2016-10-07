@@ -31,6 +31,11 @@ export class Multimap<Key, Value> {
     const values = this.valuesByKey.get(key)
     return values ? Array.from(values) : []
   }
+
+  getValueCountForKey(key: Key): number {
+    const values = this.valuesByKey.get(key)
+    return values ? values.size : 0    
+  }
 }
 
 function add<A, B>(a: A, b: B, bsByA: Map<A, Set<B>>) {

@@ -26,6 +26,10 @@ export class Region implements SelectorObserverDelegate {
     this.selectorObserver.start()
   }
 
+  stop() {
+    this.selectorObserver.stop()
+  }
+
   define(definition) {
     for (const scope of scopesForDefinition(definition)) {
       this.addScope(scope)
@@ -33,9 +37,21 @@ export class Region implements SelectorObserverDelegate {
   }
 
   addScope(scope: Scope) {
+    const selector = scope.selector
     this.scopes.add(scope)
-    this.scopesBySelector.add(scope.selector, scope)
-    this.selectorObserver.observeSelector(scope.selector)
+    this.scopesBySelector.add(selector, scope)
+    if (this.scopesBySelector.getValueCountForKey(selector) == 1) {
+      this.selectorObserver.observeSelector(selector)
+    }
+  }
+
+  deleteScope(scope: Scope) {
+    const selector = scope.selector
+    this.scopes.delete(scope)
+    this.scopesBySelector.delete(selector, scope)
+    if (this.scopesBySelector.getValueCountForKey(selector) == 0) {
+      this.selectorObserver.stopObservingSelector(selector)
+    }
   }
 
   // Selector observer delegate
