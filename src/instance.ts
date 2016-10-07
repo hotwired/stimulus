@@ -2,6 +2,7 @@ import { Controller } from "./controller"
 import { Region } from "./region"
 import { Scope } from "./scope"
 import { Selector } from "./selector"
+import { log, trace } from "./logger"
 
 export class Instance {
   parentRegion: Region
@@ -20,8 +21,7 @@ export class Instance {
 
   connectScope(scope: Scope) {
     const controller = this.fetchControllerForScope(scope)
-    this.connectedControllers.add(controller)
-    controller.connect()
+    trace("connecting controller", controller)
     this.addScopes(scope.childScopes)
     this.connectController(controller)
   }
@@ -29,8 +29,7 @@ export class Instance {
   disconnectScope(scope: Scope) {
     const controller = this.getControllerForScope(scope)
     if (controller) {
-      this.connectedControllers.delete(controller)
-      controller.disconnect()
+      trace("disconnecting controller", controller)
       this.disconnectController(controller)
       this.deleteScopes(scope.childScopes)
     }
@@ -73,10 +72,12 @@ export class Instance {
   // Regions
 
   private beforeConnectingFirstController() {
+    log("instance will connect first controller", this)
     this.region.start()
   }
 
   private afterDisconnectingLastController() {
+    log("instance did disconnect last controller", this)
     this.region.stop()
   }
 
@@ -90,6 +91,7 @@ export class Instance {
     let controller = this.controllersByScope.get(scope)
     if (!controller) {
       controller = new scope.controllerConstructor(this.element)
+      log("created controller", controller)
       this.controllersByScope.set(scope, controller)
     }
 
