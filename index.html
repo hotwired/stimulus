@@ -3,7 +3,7 @@
 <head>
   <script src="dist/sentinella.js"></script>
   <script>
-    window.region = new Sentinella.Region(null, document.documentElement)
+    window.region = new Sentinella.Region(document.documentElement)
     region.define({
       "[data-trait~=expandable]": {
         name: "expandable",

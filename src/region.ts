@@ -6,17 +6,15 @@ import { Multimap } from "./multimap"
 import { Instance } from "./instance"
 
 export class Region implements SelectorObserverDelegate {
-  parentRegion: Region | null
   element: Element
   scopes: Set<Scope>
   scopesBySelector: Multimap<Selector, Scope>
   selectorObserver: SelectorObserver
   instances: WeakMap<Element, Instance>
 
-  constructor(parentRegion: Region | null, element: Element) {
-    this.parentRegion = parentRegion
+  constructor(element: Element, scopes: Scope[] = []) {
     this.element = element
-    this.scopes = new Set()
+    this.scopes = new Set(scopes)
     this.scopesBySelector = new Multimap<Selector, Scope>()
     this.selectorObserver = new SelectorObserver(element, this)
     this.instances = new WeakMap()
@@ -79,7 +77,7 @@ export class Region implements SelectorObserverDelegate {
   private fetchInstanceForElement(element: Element) {
     let instance = this.instances.get(element)
     if (!instance) {
-      instance = new Instance(element)
+      instance = new Instance(this, element)
       this.instances.set(element, instance)
     }
 

@@ -4,12 +4,14 @@ import { Scope } from "./scope"
 import { Selector } from "./selector"
 
 export class Instance {
+  parentRegion: Region
   element: Element
   region: Region
   controllersByScope: Map<Scope, Controller>
   connectedControllers: Set<Controller>
 
-  constructor(element: Element) {
+  constructor(parentRegion: Region, element: Element) {
+    this.parentRegion = parentRegion
     this.element = element
     this.region = new Region(element)
     this.controllersByScope = new Map()
