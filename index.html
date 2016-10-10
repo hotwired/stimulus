@@ -3,15 +3,13 @@
 <head>
   <script src="dist/sentinella.js"></script>
   <script>
-    window.region = new Sentinella.Region(null, new Sentinella.Instance(null, document.documentElement))
-    region.define({
-      "[data-trait~=expandable]": {
-        name: "expandable",
-        
+    window.router = new Sentinella.Router(document.documentElement)
+    router.define({
+      "[data-trait~=expandable]": {       
         "[data-expandable-action]": {
           onclick(event) {
             const {expandableAction} = event.target.dataset
-            this.expandable[expandableAction]()
+            this.parentController[expandableAction]()
             return false
           }
         },
@@ -33,7 +31,7 @@
         }
       }
     })
-    region.start()
+    router.start()
   </script>
 </head>
 <body>

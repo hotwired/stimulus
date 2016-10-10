@@ -1,21 +1,21 @@
 import { Controller } from "./controller"
-import { Instance } from "./instance"
+import { Router } from "./router"
 import { Scope } from "./scope"
 import { Selector } from "./selector"
 
 export class Context {
   parentController: Controller | null
-  instance: Instance
+  router: Router
   scope: Scope
 
-  constructor(parentController: Controller | null, instance: Instance, scope: Scope) {
+  constructor(parentController: Controller | null, router: Router, scope: Scope) {
     this.parentController = parentController
-    this.instance = instance
+    this.router = router
     this.scope = scope
   }
 
   get element(): Element {
-    return this.instance.element
+    return this.router.element
   }
 
   get selector(): Selector {
