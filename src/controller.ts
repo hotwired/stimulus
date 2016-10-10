@@ -1,39 +1,54 @@
-import { Selector } from "./selector"
+declare class Context {}
 
 export interface ControllerConstructor {
-  new(element: Element): Controller
+  new(context: Context): Controller
   prototype: Controller
 }
 
 export interface Controller {
+  context: Context
+
+  initialize()
   connect()
   disconnect()
 }
 
-export function DefaultController(element: Element) {
-  this.element = element
+export function DefaultController(context: Context) {
+  this.context = context
   this.initialize()
+  return this
 }
 
 DefaultController.prototype = {
-  initialize: function() {},
-  connect: function() {},
-  disconnect: function() {}
+  initialize() {},
+  connect() {},
+  disconnect() {},
+
+  get element(): Element {
+    return this.context.element
+  },
+
+  get parentController(): Controller | undefined {
+    return this.context.parentController
+  }
 }
 
 export function controllerConstructorForPrototype(prototype): ControllerConstructor {
-  const constructor = function(element: Element) {
-    DefaultController.call(this, element)
-  }
-  constructor.prototype = Object.create(DefaultController.prototype)
-
-  for (const key in prototype) {
-    const descriptor = Object.getOwnPropertyDescriptor(prototype, key)
-    Object.defineProperty(constructor.prototype, key, descriptor)
+  function Controller(context: Context) {
+    return DefaultController.call(this, context)
   }
 
-  const descriptor = { enumerable: false, writable: true, value: constructor }
-  Object.defineProperty(constructor.prototype, "constructor", descriptor)
+  const extendedPrototype = Object.create(DefaultController.prototype)
+  Controller.prototype = extend(extendedPrototype, prototype)
 
-  return <ControllerConstructor> <Function> constructor
+  return <ControllerConstructor> <Function> Controller
+}
+
+function extend(target, source) {
+  for (const key in source) {
+    const descriptor = Object.getOwnPropertyDescriptor(source, key)
+    Object.defineProperty(target, key, descriptor)
+  }
+
+  return target
 }

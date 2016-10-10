@@ -6,17 +6,21 @@ import { Multimap } from "./multimap"
 import { Instance } from "./instance"
 
 export class Region implements SelectorObserverDelegate {
-  element: Element
+  parentRegion: Region | null
+  instance: Instance
   scopes: Set<Scope>
+  parentScopes: Map<Scope, Scope | null>
   scopesBySelector: Multimap<Selector, Scope>
   selectorObserver: SelectorObserver
   instances: WeakMap<Element, Instance>
 
-  constructor(element: Element, scopes: Scope[] = []) {
-    this.element = element
-    this.scopes = new Set(scopes)
+  constructor(parentRegion: Region | null, instance: Instance) {
+    this.parentRegion = parentRegion
+    this.instance = instance
+    this.scopes = new Set()
+    this.parentScopes = new Map()
     this.scopesBySelector = new Multimap<Selector, Scope>()
-    this.selectorObserver = new SelectorObserver(element, this)
+    this.selectorObserver = new SelectorObserver(this.element, this)
     this.instances = new WeakMap()
   }
 
@@ -34,22 +38,44 @@ export class Region implements SelectorObserverDelegate {
     }
   }
 
-  addScope(scope: Scope) {
-    const selector = scope.selector
-    this.scopes.add(scope)
-    this.scopesBySelector.add(selector, scope)
-    if (this.scopesBySelector.getValueCountForKey(selector) == 1) {
-      this.selectorObserver.observeSelector(selector)
+  get element(): Element {
+    return this.instance.element
+  }
+
+  // Scopes
+
+  addScope(scope: Scope, parentScope: Scope | null = null) {
+    if (!this.scopes.has(scope)) { 
+      const selector = scope.selector
+      this.scopes.add(scope)
+      this.parentScopes.set(scope, parentScope)
+      this.scopesBySelector.add(selector, scope)
+
+      if (this.scopesBySelector.getValueCountForKey(selector) == 1) {
+        this.selectorObserver.observeSelector(selector)
+      }
     }
   }
 
   deleteScope(scope: Scope) {
-    const selector = scope.selector
-    this.scopes.delete(scope)
-    this.scopesBySelector.delete(selector, scope)
-    if (this.scopesBySelector.getValueCountForKey(selector) == 0) {
-      this.selectorObserver.stopObservingSelector(selector)
+    if (this.scopes.has(scope)) {
+      const selector = scope.selector
+      this.scopes.delete(scope)
+      this.parentScopes.delete(scope)
+      this.scopesBySelector.delete(selector, scope)
+
+      if (this.scopesBySelector.getValueCountForKey(selector) == 0) {
+        this.selectorObserver.stopObservingSelector(selector)
+      }
     }
+  }
+
+  getParentForScope(scope: Scope) : Scope | null {
+    return this.parentScopes.get(scope) || null
+  }
+
+  private getScopesForSelector(selector: Selector): Scope[] {
+    return this.scopesBySelector.getValuesForKey(selector)
   }
 
   // Selector observer delegate
@@ -66,12 +92,6 @@ export class Region implements SelectorObserverDelegate {
       const instance = this.fetchInstanceForElement(element)
       instance.disconnectScope(scope)
     }
-  }
-
-  // Private
-
-  private getScopesForSelector(selector: Selector): Scope[] {
-    return this.scopesBySelector.getValuesForKey(selector)
   }
 
   private fetchInstanceForElement(element: Element) {
