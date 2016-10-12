@@ -1,12 +1,12 @@
-SENTINELLA_SRC := $(wildcard src/sentinella/*.ts) src/sentinella/tsconfig.json package.json rollup.config.js
+SENTINELLA_SRC := $(wildcard src/sentinella/*.ts) src/sentinella/tsconfig.json package.json config/rollup.js
 TEST_SRC := $(wildcard src/test/*.ts) src/test/tsconfig.json
 SRC := $(SENTINELLA_SRC) $(TEST_SRC)
 
-ROLLUP := node_modules/rollup/bin/rollup
-BUBLE	 := node_modules/buble/bin/buble
-TSLINT := node_modules/tslint/bin/tslint
+ROLLUP := node_modules/rollup/bin/rollup -c config/rollup.js -m inline
+BUBLE	 := node_modules/buble/bin/buble --yes dangerousForOf -m inline
+TSLINT := node_modules/tslint/bin/tslint -c config/tslint.json
 TSC		 := node_modules/typescript/bin/tsc
-TESTEM := node_modules/testem/testem.js
+TESTEM := node_modules/testem/testem.js -f config/testem.json
 
 default: dist
 
@@ -25,7 +25,7 @@ testem: test
 $(SRC): ;
 
 dist/sentinella.js: build/sentinella
-	$(ROLLUP) -c -m inline | $(BUBLE) --yes dangerousForOf -m inline > dist/sentinella.js
+	$(ROLLUP) | $(BUBLE) > dist/sentinella.js
 
 build/sentinella: build/sentinella/index.js build/sentinella/index.d.ts
 
