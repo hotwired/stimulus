@@ -18,16 +18,20 @@ export class Selector {
 
   source: string
   private tokens: Token[]
-  attributes: Set<string>
+  attributeSet: Set<string>
 
   constructor(source) {
     try {
       this.source = source
       this.tokens = Token.readTokens(this.source)
-      this.attributes = attributesFromTokens(this.tokens)
+      this.attributeSet = attributesFromTokens(this.tokens)
     } catch (error) {
       throw new Error(`Error in selector '${source}': ${error.message}`)
     }
+  }
+
+  get attributes(): string[] {
+    return Array.from(this.attributeSet)
   }
 
   matches(element: Element): boolean {

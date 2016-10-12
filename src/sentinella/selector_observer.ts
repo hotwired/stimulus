@@ -11,7 +11,7 @@ export class SelectorObserver implements ElementObserverDelegate {
   elementObserver: ElementObserver
   delegate: SelectorObserverDelegate
 
-  selectors: Set<Selector>
+  selectorSet: Set<Selector>
   elements: Multimap<Selector, Element>
   attributes: Multimap<Selector, string>
 
@@ -19,7 +19,7 @@ export class SelectorObserver implements ElementObserverDelegate {
     this.elementObserver = new ElementObserver(element, this)
     this.delegate = delegate
 
-    this.selectors = new Set<Selector>()
+    this.selectorSet = new Set<Selector>()
     this.elements = new Multimap<Selector, Element>()
     this.attributes = new Multimap<Selector, string>()
   }
@@ -36,16 +36,20 @@ export class SelectorObserver implements ElementObserverDelegate {
     return this.elementObserver.element
   }
 
+  get selectors(): Selector[] {
+    return Array.from(this.selectors)
+  }
+
   get compositeSelector(): string {
-    const compositeSelector = Array.from(this.selectors).join(", ")
+    const compositeSelector = Array.from(this.selectorSet).join(", ")
     return compositeSelector.length == 0 ? ":not(*)" : compositeSelector
   }
 
   // Selector observation
 
   observeSelector(selector: Selector) {
-    if (!this.selectors.has(selector)) {
-      this.selectors.add(selector)
+    if (!this.selectorSet.has(selector)) {
+      this.selectorSet.add(selector)
       for (const attribute of selector.attributes) {
         this.attributes.add(selector, attribute)
       }
@@ -53,8 +57,8 @@ export class SelectorObserver implements ElementObserverDelegate {
   }
 
   stopObservingSelector(selector: Selector) {
-    if (this.selectors.has(selector)) {
-      this.selectors.delete(selector)
+    if (this.selectorSet.has(selector)) {
+      this.selectorSet.delete(selector)
       for (const attribute of selector.attributes) {
         this.attributes.delete(selector, attribute)
       }
