@@ -1,7 +1,7 @@
 export class Multimap<Key, Value> {
   valuesByKey: Map<Key, Set<Value>>
   keysByValue: Map<Value, Set<Key>>
-  
+
   constructor() {
     this.valuesByKey = new Map<Key, Set<Value>>()
     this.keysByValue = new Map<Value, Set<Key>>()
@@ -34,7 +34,7 @@ export class Multimap<Key, Value> {
 
   getValueCountForKey(key: Key): number {
     const values = this.valuesByKey.get(key)
-    return values ? values.size : 0    
+    return values ? values.size : 0
   }
 }
 
@@ -42,7 +42,7 @@ function add<A, B>(a: A, b: B, bsByA: Map<A, Set<B>>) {
   let bs
 
   if (bsByA.has(a)) {
-    bs = bsByA.get(a) 
+    bs = bsByA.get(a)
   } else {
     bs = new Set<B>()
     bsByA.set(a, bs)
