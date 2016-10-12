@@ -1,5 +1,5 @@
 import { Selector } from "./selector"
-import { Scope, ScopeOptions, EventListenerSet } from "./scope"
+import { Scope, EventListenerSet } from "./scope"
 import { ControllerConstructor, controllerConstructorForPrototype } from "./controller"
 
 export function scopesForDefinition(definition): Scope[] {
@@ -52,7 +52,7 @@ function controllerConstructorForDefinitionBody(definitionBody): ControllerConst
 }
 
 function childScopesForDefinitionBody(definitionBody): Scope[] {
-  const definition = {} 
+  const definition = {}
   for (const key in definitionBody) {
     if (propertyIsDefinition(definitionBody, key)) {
       definition[key] = definitionBody[key]
@@ -68,7 +68,7 @@ function propertyIsEventListener(definitionBody, key): boolean {
 }
 
 function propertyIsControllerProperty(definitionBody, key): boolean {
-  return !propertyIsEventListener(definitionBody, key) && 
+  return !propertyIsEventListener(definitionBody, key) &&
     !propertyIsDefinition(definitionBody, key)
 }
 
@@ -78,11 +78,11 @@ function propertyIsDefinition(definitionBody, key): boolean {
 }
 
 function valueIsPlainObject(value): boolean {
-  return value != null && typeof value == "object" && 
+  return value != null && typeof value == "object" &&
     prototypeIsNullOrExtendedObject(value)
 }
 
 function prototypeIsNullOrExtendedObject(value): boolean {
   const prototype = Object.getPrototypeOf(value)
-  return prototype == null || prototype.constructor == Object  
+  return prototype == null || prototype.constructor == Object
 }

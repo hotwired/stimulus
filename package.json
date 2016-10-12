@@ -4,12 +4,15 @@
   "description": "",
   "main": "dist/sentinella.js",
   "scripts": {
-    "build": "rollup -c",
-    "clean": "rm -fr dist/*"
+    "build": "make",
+    "clean": "make clean"
   },
   "author": "Sam Stephenson",
   "license": "MIT",
   "devDependencies": {
-    "rollup-plugin-typescript": "^0.8.1"
+    "@types/qunit": "^1.16.30",
+    "rollup": "^0.36.3",
+    "tslint": "^3.15.1",
+    "typescript": "^2.0.3"
   }
 }

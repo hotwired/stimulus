@@ -1,4 +1,4 @@
-declare class Context {}
+import { Context } from "./context"
 
 export interface ControllerConstructor {
   new(context: Context): Controller

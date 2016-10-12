@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
+      "outDir": "../../build/sentinella",
       "target": "es6",
       "module": "es2015",
       "pretty": true,
-      "rootDir": "src",
       "strictNullChecks": true,
       "experimentalDecorators": true
     }

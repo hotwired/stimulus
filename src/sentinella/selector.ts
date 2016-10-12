@@ -17,7 +17,7 @@ export class Selector {
   }
 
   source: string
-  tokens: Token[]
+  private tokens: Token[]
   attributes: Set<string>
 
   constructor(source) {

@@ -4,7 +4,7 @@ import { Multimap } from "./multimap"
 import { Scope } from "./scope"
 import { Selector } from "./selector"
 import { SelectorObserver, SelectorObserverDelegate } from "./selector_observer"
-import { log, trace } from "./logger"
+import { log } from "./logger"
 import { scopesForDefinition } from "./definition"
 
 export class Router implements SelectorObserverDelegate {
