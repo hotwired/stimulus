@@ -6,6 +6,7 @@
       "pretty": true,
       "strictNullChecks": true,
       "experimentalDecorators": true,
+      "inlineSourceMap": true,
       "types": [
         "qunit",
         "sentinella"

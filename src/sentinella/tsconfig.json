@@ -5,6 +5,7 @@
       "module": "es2015",
       "pretty": true,
       "strictNullChecks": true,
-      "experimentalDecorators": true
+      "experimentalDecorators": true,
+      "inlineSourceMap": true
     }
 }

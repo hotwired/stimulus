@@ -25,7 +25,9 @@ testem: test
 $(SRC): ;
 
 dist/sentinella.js: build/sentinella
-	$(ROLLUP) -c | $(BUBLE) --yes dangerousForOf > dist/sentinella.js
+	$(ROLLUP) -c -m inline | $(BUBLE) --yes dangerousForOf -m inline > dist/sentinella.js
+
+build/sentinella: build/sentinella/index.js build/sentinella/index.d.ts
 
 build/sentinella/index.js: $(SENTINELLA_SRC)
 	$(TSLINT) src/sentinella/*.ts
@@ -38,11 +40,9 @@ build/sentinella/index.d.ts: build/sentinella/index.js build/sentinella/index.d.
 	echo "export as namespace Sentinella;" >> build/sentinella/index.d.ts
 	echo "export { Router };" >> build/sentinella/index.d.ts
 
-build/sentinella: build/sentinella/index.js build/sentinella/index.d.ts
+build/test: build/test/index.js
 
 build/test/index.js: $(TEST_SRC)
 	$(TSLINT) src/test/*.ts
 	rm -fr build/test
 	$(TSC) -p src/test
-
-build/test: build/test/index.js
