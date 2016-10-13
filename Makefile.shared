@@ -1,3 +1,5 @@
+# Configurable variables ---------------------------------------------------
+
 MODULE_NAME ?= new-project
 MODULE_SYMBOL ?= NewProject
 MODULE_EXPORTS ?=
@@ -7,57 +9,222 @@ TEST_PATH ?= src/test
 CONFIG_PATH ?= config
 BUILD_PATH ?= build
 
-TSLINT := node_modules/tslint/bin/tslint -c $(CONFIG_PATH)/tslint.json
-TSC := node_modules/typescript/bin/tsc
-ROLLUP := node_modules/rollup/bin/rollup -c $(CONFIG_PATH)/rollup.js -m inline
-BUBLE := node_modules/buble/bin/buble --yes dangerousForOf -m inline
-TESTEM := node_modules/testem/testem.js -f $(CONFIG_PATH)/testem.json
 
-MODULE_SRC := $(wildcard $(MODULE_PATH)/*.ts) package.json $(MODULE_PATH)/tsconfig.json $(CONFIG_PATH)/rollup.js
-TEST_SRC := $(wildcard $(TEST_PATH)/*.ts) $(TEST_PATH)/tsconfig.json
+# Computed variables -------------------------------------------------------
+
+TSC_BIN := node_modules/typescript/bin/tsc
+TSLINT_BIN := node_modules/tslint/bin/tslint
+ROLLUP_BIN := node_modules/rollup/bin/rollup
+BUBLE_BIN := node_modules/buble/bin/buble
+TESTEM_BIN := node_modules/testem/testem.js
+
+TSC := $(TSC_BIN)
+TSLINT := $(TSLINT_BIN) -c $(CONFIG_PATH)/tslint.json
+ROLLUP := $(ROLLUP_BIN) -c $(CONFIG_PATH)/rollup.js -m inline
+BUBLE := $(BUBLE_BIN) --yes dangerousForOf -m inline
+TESTEM := $(TESTEM_BIN) -f $(CONFIG_PATH)/testem.json
+NPM := npm --loglevel=error
+
+MODULE_SRC := $(wildcard $(MODULE_PATH)/*.ts) package.json $(MODULE_PATH)/tsconfig.json $(CONFIG_PATH)/rollup.js $(CONFIG_PATH)/tslint.json
+TEST_SRC := $(wildcard $(TEST_PATH)/*.ts) $(TEST_PATH)/tsconfig.json $(CONFIG_PATH)/tslint.json
 SRC := $(MODULE_SRC) $(TEST_SRC)
 
 MODULE_BUILD_TARGET := $(BUILD_PATH)/$(MODULE_NAME)
-MODULE_BUILD_UMD_TARGET := $(BUILD_PATH)/$(MODULE_NAME)/index.js
+MODULE_BUILD_JS_TARGET := $(BUILD_PATH)/$(MODULE_NAME)/index.js
 MODULE_BUILD_TYPING_TARGET := $(BUILD_PATH)/$(MODULE_NAME)/index.d.ts
 TEST_BUILD_TARGET := $(BUILD_PATH)/test
 TEST_BUILD_JS_TARGET := $(TEST_BUILD_TARGET)/index.js
 DIST_TARGET := dist/$(MODULE_NAME).js
 
+
+# Main rules ---------------------------------------------------------------
+
 default: dist
+
+init: init-config init-src init-deps
 
 clean:
 	rm -fr $(MODULE_BUILD_TARGET) $(TEST_BUILD_TARGET) dist/*.js
 
 all: dist test
 
-dist: $(DIST_TARGET)
+dist: init $(DIST_TARGET)
 
 test: dist $(TEST_BUILD_TARGET)
 
 testem: test
 	$(TESTEM)
 
-$(SRC): ;
+
+# Template sources ---------------------------------------------------------
+
+define CONFIG_ROLLUP_JS
+export default {
+  entry: "./$(MODULE_BUILD_JS_TARGET)",
+  moduleName: "$(MODULE_SYMBOL)",
+  format: "umd"
+}
+endef
+export CONFIG_ROLLUP_JS
+
+define CONFIG_TESTEM_JSON
+{
+  "framework": "qunit",
+  "src_files": [
+    "src/*.ts",
+    "test/*.ts"
+  ],
+  "serve_files": [
+    "$(DIST_TARGET)",
+    "build/test/*.js"
+  ]
+}
+endef
+export CONFIG_TESTEM_JSON
+
+define CONFIG_TSLINT_JSON
+{
+  "rules": {
+    "no-unused-expression": true,
+    "no-unused-variable": true,
+    "semicolon": "never",
+    "quotemark": [true, "double", "avoid-escape"]
+  }
+}
+endef
+export CONFIG_TSLINT_JSON
+
+define MODULE_TSCONFIG_JSON
+{
+  "compilerOptions": {
+    "outDir": "../../$(MODULE_BUILD_TARGET)",
+    "target": "es6",
+    "module": "es2015",
+    "pretty": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "inlineSourceMap": true
+  }
+}
+endef
+export MODULE_TSCONFIG_JSON
+
+define TEST_TSCONFIG_JSON
+{
+  "compilerOptions": {
+    "outDir": "../../$(TEST_BUILD_TARGET)",
+    "target": "es6",
+    "module": "es2015",
+    "pretty": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "inlineSourceMap": true,
+    "types": [
+      "qunit",
+      "$(MODULE_NAME)"
+    ],
+    "typeRoots": [
+      "../../node_modules",
+      "../../$(BUILD_PATH)"
+    ]
+  }
+}
+endef
+export TEST_TSCONFIG_JSON
+
+define MODULE_INDEX_D_TS
+export as namespace $(MODULE_SYMBOL);
+export { $(MODULE_EXPORTS) };
+endef
+export MODULE_INDEX_D_TS
+
+
+# Project initialization ---------------------------------------------------
+
+init-config: | $(CONFIG_PATH)/rollup.js $(CONFIG_PATH)/testem.json $(CONFIG_PATH)/tslint.json
+
+$(CONFIG_PATH):
+	@mkdir -p $@
+
+$(CONFIG_PATH)/rollup.js: $(CONFIG_PATH)
+	@echo "$$CONFIG_ROLLUP_JS" > $@
+
+$(CONFIG_PATH)/testem.json: $(CONFIG_PATH)
+	@echo "$$CONFIG_TESTEM_JSON" > $@
+
+$(CONFIG_PATH)/tslint.json: $(CONFIG_PATH)
+	@echo "$$CONFIG_TSLINT_JSON" > $@
+
+init-src: init-module init-test
+
+init-module: | $(MODULE_PATH)/index.ts $(MODULE_PATH)/tsconfig.json
+
+init-test: | $(TEST_PATH)/index.ts $(TEST_PATH)/tsconfig.json
+
+$(MODULE_PATH)/index.ts: $(MODULE_PATH)
+	@touch $@
+
+$(MODULE_PATH)/tsconfig.json: $(MODULE_PATH)
+	@echo "$$MODULE_TSCONFIG_JSON" > $@
+
+$(MODULE_PATH): src
+	@mkdir -p $@
+
+$(TEST_PATH)/index.ts: $(TEST_PATH)
+	@touch $@
+
+$(TEST_PATH)/tsconfig.json: $(TEST_PATH)
+	@echo "$$TEST_TSCONFIG_JSON" > $@
+
+$(TEST_PATH): src
+	@mkdir -p $@
+
+src:
+	@mkdir -p src
+
+init-deps: | $(TSC_BIN) $(TSLINT_BIN) $(ROLLUP_BIN) $(BUBLE_BIN) $(TESTEM_BIN)
+
+$(TSC_BIN): | package.json
+	@$(NPM) install --save-dev typescript
+
+$(TSLINT_BIN): | package.json
+	@$(NPM) install --save-dev tslint
+
+$(ROLLUP_BIN): | package.json
+	@$(NPM) install --save-dev rollup
+
+$(BUBLE_BIN): | package.json
+	@$(NPM) install --save-dev buble
+
+$(TESTEM_BIN): | package.json
+	@$(NPM) install --save-dev testem @types/qunit
+
+package.json:
+	@$(NPM) init -y
+
+
+# Build targets ------------------------------------------------------------
 
 $(DIST_TARGET): $(MODULE_BUILD_TARGET)
-	$(ROLLUP) | $(BUBLE) > $(DIST_TARGET)
+	@mkdir -p dist
+	@$(ROLLUP) | $(BUBLE) > $@
+	@echo "Built $@"
 
-$(MODULE_BUILD_TARGET): $(MODULE_BUILD_UMD_TARGET) $(MODULE_BUILD_TYPING_TARGET)
-	touch $(MODULE_BUILD_TARGET)
+$(MODULE_BUILD_TARGET): $(MODULE_BUILD_JS_TARGET) $(MODULE_BUILD_TYPING_TARGET)
+	@touch $@
 
-$(MODULE_BUILD_UMD_TARGET): $(MODULE_SRC)
-	$(TSLINT) $(MODULE_PATH)/*.ts
-	$(TSC) -d -p $(MODULE_PATH)
-	mv $(MODULE_BUILD_TYPING_TARGET){,.1}
+$(MODULE_BUILD_JS_TARGET): $(MODULE_SRC)
+	@$(TSLINT) $(MODULE_PATH)/*.ts
+	@$(TSC) -d -p $(MODULE_PATH)
+	@mv $(MODULE_BUILD_TYPING_TARGET){,.1}
 
-$(MODULE_BUILD_TYPING_TARGET): $(MODULE_BUILD_UMD_TARGET)
-	echo "export as namespace $(MODULE_SYMBOL);" >> $(MODULE_BUILD_TYPING_TARGET).1
-	echo "export { $(MODULE_EXPORTS) };" >> $(MODULE_BUILD_TYPING_TARGET).1
-	mv $(MODULE_BUILD_TYPING_TARGET){.1,}
+$(MODULE_BUILD_TYPING_TARGET): $(MODULE_BUILD_JS_TARGET)
+	@echo "$$MODULE_INDEX_D_TS" >> $@.1
+	@mv $@{.1,}
 
 $(TEST_BUILD_TARGET): $(TEST_BUILD_JS_TARGET)
+	@touch $@
 
 $(TEST_BUILD_JS_TARGET): $(TEST_SRC)
-	$(TSLINT) $(TEST_PATH)/*.ts
-	$(TSC) -p $(TEST_PATH)
+	@$(TSLINT) $(TEST_PATH)/*.ts
+	@$(TSC) -p $(TEST_PATH)
