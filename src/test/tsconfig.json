@@ -1,19 +1,19 @@
 {
-    "compilerOptions": {
-      "outDir": "../../build/test",
-      "target": "es6",
-      "module": "es2015",
-      "pretty": true,
-      "strictNullChecks": true,
-      "experimentalDecorators": true,
-      "inlineSourceMap": true,
-      "types": [
-        "qunit",
-        "sentinella"
-      ],
-      "typeRoots": [
-        "../../node_modules",
-        "../../build"
-      ]
-    }
+  "compilerOptions": {
+    "outDir": "../../build/test",
+    "target": "es6",
+    "module": "es2015",
+    "pretty": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "inlineSourceMap": true,
+    "types": [
+      "qunit",
+      "sentinella"
+    ],
+    "typeRoots": [
+      "../../node_modules",
+      "../../build"
+    ]
+  }
 }
