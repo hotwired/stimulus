@@ -1,0 +1,63 @@
+MODULE_NAME ?= new-project
+MODULE_SYMBOL ?= NewProject
+MODULE_EXPORTS ?=
+
+MODULE_PATH ?= src/$(MODULE_NAME)
+TEST_PATH ?= src/test
+CONFIG_PATH ?= config
+BUILD_PATH ?= build
+
+TSLINT := node_modules/tslint/bin/tslint -c $(CONFIG_PATH)/tslint.json
+TSC := node_modules/typescript/bin/tsc
+ROLLUP := node_modules/rollup/bin/rollup -c $(CONFIG_PATH)/rollup.js -m inline
+BUBLE := node_modules/buble/bin/buble --yes dangerousForOf -m inline
+TESTEM := node_modules/testem/testem.js -f $(CONFIG_PATH)/testem.json
+
+MODULE_SRC := $(wildcard $(MODULE_PATH)/*.ts) package.json $(MODULE_PATH)/tsconfig.json $(CONFIG_PATH)/rollup.js
+TEST_SRC := $(wildcard $(TEST_PATH)/*.ts) $(TEST_PATH)/tsconfig.json
+SRC := $(MODULE_SRC) $(TEST_SRC)
+
+MODULE_BUILD_TARGET := $(BUILD_PATH)/$(MODULE_NAME)
+MODULE_BUILD_UMD_TARGET := $(BUILD_PATH)/$(MODULE_NAME)/index.js
+MODULE_BUILD_TYPING_TARGET := $(BUILD_PATH)/$(MODULE_NAME)/index.d.ts
+TEST_BUILD_TARGET := $(BUILD_PATH)/test
+TEST_BUILD_JS_TARGET := $(TEST_BUILD_TARGET)/index.js
+DIST_TARGET := dist/$(MODULE_NAME).js
+
+default: dist
+
+clean:
+	rm -fr $(MODULE_BUILD_TARGET) $(TEST_BUILD_TARGET) dist/*.js
+
+all: dist test
+
+dist: $(DIST_TARGET)
+
+test: dist $(TEST_BUILD_TARGET)
+
+testem: test
+	$(TESTEM)
+
+$(SRC): ;
+
+$(DIST_TARGET): $(MODULE_BUILD_TARGET)
+	$(ROLLUP) | $(BUBLE) > $(DIST_TARGET)
+
+$(MODULE_BUILD_TARGET): $(MODULE_BUILD_UMD_TARGET) $(MODULE_BUILD_TYPING_TARGET)
+	touch $(MODULE_BUILD_TARGET)
+
+$(MODULE_BUILD_UMD_TARGET): $(MODULE_SRC)
+	$(TSLINT) $(MODULE_PATH)/*.ts
+	$(TSC) -d -p $(MODULE_PATH)
+	mv $(MODULE_BUILD_TYPING_TARGET){,.1}
+
+$(MODULE_BUILD_TYPING_TARGET): $(MODULE_BUILD_UMD_TARGET)
+	echo "export as namespace $(MODULE_SYMBOL);" >> $(MODULE_BUILD_TYPING_TARGET).1
+	echo "export { $(MODULE_EXPORTS) };" >> $(MODULE_BUILD_TYPING_TARGET).1
+	mv $(MODULE_BUILD_TYPING_TARGET){.1,}
+
+$(TEST_BUILD_TARGET): $(TEST_BUILD_JS_TARGET)
+
+$(TEST_BUILD_JS_TARGET): $(TEST_SRC)
+	$(TSLINT) $(TEST_PATH)/*.ts
+	$(TSC) -p $(TEST_PATH)
