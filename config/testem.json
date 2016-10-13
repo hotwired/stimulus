@@ -1,6 +1,5 @@
 {
   "framework": "qunit",
-  "before_tests": "make test",
   "src_files": [
     "src/*.ts",
     "test/*.ts"
