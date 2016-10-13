@@ -44,7 +44,7 @@ default: dist
 init: init-config init-src init-deps
 
 clean:
-	rm -fr $(MODULE_BUILD_TARGET) $(TEST_BUILD_TARGET) dist/*.js
+	@rm -fr $(MODULE_BUILD_TARGET) $(TEST_BUILD_TARGET) dist/*.js
 
 all: dist test
 
@@ -53,7 +53,7 @@ dist: init $(DIST_TARGET)
 test: dist $(TEST_BUILD_TARGET)
 
 testem: test
-	$(TESTEM)
+	@$(TESTEM)
 
 
 # Template sources ---------------------------------------------------------
@@ -208,10 +208,11 @@ package.json:
 $(DIST_TARGET): $(MODULE_BUILD_TARGET)
 	@mkdir -p dist
 	@$(ROLLUP) | $(BUBLE) > $@
-	@echo "Built $@"
+	@echo "Built bundle $@"
 
 $(MODULE_BUILD_TARGET): $(MODULE_BUILD_JS_TARGET) $(MODULE_BUILD_TYPING_TARGET)
 	@touch $@
+	@echo "Built $(MODULE_PATH) -> $@"
 
 $(MODULE_BUILD_JS_TARGET): $(MODULE_SRC)
 	@$(TSLINT) $(MODULE_PATH)/*.ts
@@ -224,6 +225,7 @@ $(MODULE_BUILD_TYPING_TARGET): $(MODULE_BUILD_JS_TARGET)
 
 $(TEST_BUILD_TARGET): $(TEST_BUILD_JS_TARGET)
 	@touch $@
+	@echo "Built $(TEST_PATH) -> $@"
 
 $(TEST_BUILD_JS_TARGET): $(TEST_SRC)
 	@$(TSLINT) $(TEST_PATH)/*.ts
