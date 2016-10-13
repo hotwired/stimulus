@@ -143,17 +143,17 @@ export MODULE_INDEX_D_TS
 
 init-config: | $(CONFIG_PATH)/rollup.js $(CONFIG_PATH)/testem.json $(CONFIG_PATH)/tslint.json
 
-$(CONFIG_PATH):
-	@mkdir -p $@
-
-$(CONFIG_PATH)/rollup.js: $(CONFIG_PATH)
+$(CONFIG_PATH)/rollup.js: | $(CONFIG_PATH)
 	@echo "$$CONFIG_ROLLUP_JS" > $@
 
-$(CONFIG_PATH)/testem.json: $(CONFIG_PATH)
+$(CONFIG_PATH)/testem.json: | $(CONFIG_PATH)
 	@echo "$$CONFIG_TESTEM_JSON" > $@
 
-$(CONFIG_PATH)/tslint.json: $(CONFIG_PATH)
+$(CONFIG_PATH)/tslint.json: | $(CONFIG_PATH)
 	@echo "$$CONFIG_TSLINT_JSON" > $@
+
+$(CONFIG_PATH):
+	@mkdir -p $@
 
 init-src: init-module init-test
 
@@ -161,22 +161,22 @@ init-module: | $(MODULE_PATH)/index.ts $(MODULE_PATH)/tsconfig.json
 
 init-test: | $(TEST_PATH)/index.ts $(TEST_PATH)/tsconfig.json
 
-$(MODULE_PATH)/index.ts: $(MODULE_PATH)
+$(MODULE_PATH)/index.ts: | $(MODULE_PATH)
 	@touch $@
 
-$(MODULE_PATH)/tsconfig.json: $(MODULE_PATH)
+$(MODULE_PATH)/tsconfig.json: | $(MODULE_PATH)
 	@echo "$$MODULE_TSCONFIG_JSON" > $@
 
-$(MODULE_PATH): src
+$(MODULE_PATH): | src
 	@mkdir -p $@
 
-$(TEST_PATH)/index.ts: $(TEST_PATH)
+$(TEST_PATH)/index.ts: | $(TEST_PATH)
 	@touch $@
 
-$(TEST_PATH)/tsconfig.json: $(TEST_PATH)
+$(TEST_PATH)/tsconfig.json: | $(TEST_PATH)
 	@echo "$$TEST_TSCONFIG_JSON" > $@
 
-$(TEST_PATH): src
+$(TEST_PATH): | src
 	@mkdir -p $@
 
 src:
