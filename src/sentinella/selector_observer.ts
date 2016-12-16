@@ -24,6 +24,10 @@ export class SelectorObserver implements ElementObserverDelegate {
     this.attributes = new Multimap<Selector, string>()
   }
 
+  get started(): boolean {
+    return this.elementObserver.started
+  }
+
   start() {
     this.elementObserver.start()
   }

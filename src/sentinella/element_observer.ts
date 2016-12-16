@@ -12,21 +12,29 @@ export class ElementObserver {
   delegate: ElementObserverDelegate
   elements: Set<Element>
   mutationObserver: MutationObserver
+  started: boolean
 
   constructor(element, delegate) {
     this.element = element
     this.delegate = delegate
     this.elements = new Set<Element>()
     this.mutationObserver = new MutationObserver((mutations) => this.processMutations(mutations))
+    this.started = false
   }
 
   start() {
-    this.mutationObserver.observe(this.element, { attributes: true, childList: true, subtree: true })
+    if (!this.started) {
+      this.mutationObserver.observe(this.element, { attributes: true, childList: true, subtree: true })
+      this.started = true
+    }
   }
 
   stop() {
-    this.mutationObserver.takeRecords()
-    this.mutationObserver.disconnect()
+    if (this.started) {
+      this.mutationObserver.takeRecords()
+      this.mutationObserver.disconnect()
+      this.started = false
+    }
   }
 
   // Mutation record processing
