@@ -41,7 +41,7 @@ export class SelectorObserver implements ElementObserverDelegate {
   }
 
   get selectors(): Selector[] {
-    return Array.from(this.selectors)
+    return Array.from(this.selectorSet)
   }
 
   get compositeSelector(): string {
