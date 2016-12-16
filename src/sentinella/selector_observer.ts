@@ -30,10 +30,33 @@ export class SelectorObserver implements ElementObserverDelegate {
 
   start() {
     this.elementObserver.start()
+    this.refresh()
   }
 
   stop() {
     this.elementObserver.stop()
+  }
+
+  refresh() {
+    if (!this.started) return
+
+    const previousMatches = new Set<Element>()
+    const currentMatches = new Set<Element>(this.matchElementsInTree())
+
+    for (const selector of this.selectorSet) {
+      for (const element of this.elements.getValuesForKey(selector)) {
+        previousMatches.add(element)
+        if (!currentMatches.has(element)) {
+          this.recordUnmatch(selector, element)
+        }
+      }
+    }
+
+    for (const element of Array.from(currentMatches)) {
+      if (!previousMatches.has(element)) {
+        this.elementMatched(element)
+      }
+    }
   }
 
   get element(): Element {
@@ -57,6 +80,7 @@ export class SelectorObserver implements ElementObserverDelegate {
       for (const attribute of selector.attributes) {
         this.attributes.add(selector, attribute)
       }
+      this.refresh()
     }
   }
 
@@ -66,6 +90,7 @@ export class SelectorObserver implements ElementObserverDelegate {
       for (const attribute of selector.attributes) {
         this.attributes.delete(selector, attribute)
       }
+      this.refresh()
     }
   }
 
@@ -75,7 +100,7 @@ export class SelectorObserver implements ElementObserverDelegate {
     return element.matches(this.compositeSelector)
   }
 
-  matchElementsInTree(tree: Element): Element[] {
+  matchElementsInTree(tree: Element = this.element): Element[] {
     const match = tree.matches(this.compositeSelector) ? [tree] : []
     const matches = Array.from(tree.querySelectorAll(this.compositeSelector))
     return match.concat(matches)
