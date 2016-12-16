@@ -4,7 +4,6 @@ import { Multimap } from "./multimap"
 import { Scope } from "./scope"
 import { Selector } from "./selector"
 import { SelectorObserver, SelectorObserverDelegate } from "./selector_observer"
-import { log } from "./logger"
 import { scopesForDefinition } from "./definition"
 
 export class Router implements SelectorObserverDelegate {
@@ -150,7 +149,6 @@ export class Router implements SelectorObserverDelegate {
   }
 
   private connectController(controller: Controller) {
-    log("connectController", controller)
     if (this.connectedControllers.has(controller)) {
       throw new Error("Controller is already connected")
     } else {
@@ -160,7 +158,6 @@ export class Router implements SelectorObserverDelegate {
   }
 
   private disconnectController(controller: Controller) {
-    log("disconnectController", controller)
     if (this.connectedControllers.has(controller)) {
       this.connectedControllers.delete(controller)
       controller.disconnect()
