@@ -1,5 +1,5 @@
 import { Context } from "./context"
-import { Controller } from "./controller"
+import { Trait } from "./trait"
 import { Multimap } from "./multimap"
 import { Scope } from "./scope"
 import { Selector } from "./selector"
@@ -15,8 +15,8 @@ export class Router implements SelectorObserverDelegate {
   parentScopes: Map<Scope, Scope | null>
   scopesBySelector: Multimap<Selector, Scope>
   routersByElement: WeakMap<Element, Router>
-  connectedControllers: Set<Controller>
-  controllersByScope: WeakMap<Scope, Controller>
+  connectedTraits: Set<Trait>
+  traitsByScope: WeakMap<Scope, Trait>
 
   constructor(element: Element, parentRouter: Router | null = null) {
     this.element = element
@@ -27,8 +27,8 @@ export class Router implements SelectorObserverDelegate {
     this.parentScopes = new Map()
     this.scopesBySelector = new Multimap<Selector, Scope>()
     this.routersByElement = new WeakMap()
-    this.connectedControllers = new Set()
-    this.controllersByScope = new WeakMap()
+    this.connectedTraits = new Set()
+    this.traitsByScope = new WeakMap()
   }
 
   start() {
@@ -80,7 +80,7 @@ export class Router implements SelectorObserverDelegate {
     if (scopes.length) {
       const router = this.fetchRouterForElement(element)
       for (const scope of scopes) {
-        router.connectControllerForScope(scope)
+        router.connectTraitForScope(scope)
       }
     }
   }
@@ -90,7 +90,7 @@ export class Router implements SelectorObserverDelegate {
     const router = this.getRouterForElement(element)
     if (scopes.length && router) {
       for (const scope of scopes) {
-        router.disconnectControllerForScope(scope)
+        router.disconnectTraitForScope(scope)
       }
     }
   }
@@ -114,69 +114,69 @@ export class Router implements SelectorObserverDelegate {
     return router
   }
 
-  private connectControllerForScope(scope: Scope) {
-    const controller = this.fetchControllerForScope(scope)
+  private connectTraitForScope(scope: Scope) {
+    const trait = this.fetchTraitForScope(scope)
     for (const childScope of scope.childScopes) {
       this.addScope(childScope, scope)
     }
-    this.connectController(controller)
+    this.connectTrait(trait)
   }
 
-  private disconnectControllerForScope(scope: Scope) {
-    const controller = this.getControllerForScope(scope)
-    if (controller) {
+  private disconnectTraitForScope(scope: Scope) {
+    const trait = this.getTraitForScope(scope)
+    if (trait) {
       for (const childScope of scope.childScopes) {
         this.deleteScope(childScope)
       }
-      this.disconnectController(controller)
+      this.disconnectTrait(trait)
     }
   }
 
-  private getControllerForScope(scope: Scope): Controller | null {
-    return this.controllersByScope.get(scope) || null
+  private getTraitForScope(scope: Scope): Trait | null {
+    return this.traitsByScope.get(scope) || null
   }
 
-  private fetchControllerForScope(scope: Scope): Controller {
-    let controller = this.controllersByScope.get(scope)
-    if (!controller) {
-      const parentController = this.getParentControllerForScope(scope)
-      const context = new Context(parentController, this, scope)
-      controller = new scope.controllerConstructor(context)
-      this.controllersByScope.set(scope, controller)
+  private fetchTraitForScope(scope: Scope): Trait {
+    let trait = this.traitsByScope.get(scope)
+    if (!trait) {
+      const parentTrait = this.getParentTraitForScope(scope)
+      const context = new Context(parentTrait, this, scope)
+      trait = new scope.traitConstructor(context)
+      this.traitsByScope.set(scope, trait)
     }
 
-    return controller
+    return trait
   }
 
-  private connectController(controller: Controller) {
-    if (this.connectedControllers.has(controller)) {
-      throw new Error("Controller is already connected")
+  private connectTrait(trait: Trait) {
+    if (this.connectedTraits.has(trait)) {
+      throw new Error("Trait is already connected")
     } else {
-      this.connectedControllers.add(controller)
-      controller.connect()
+      this.connectedTraits.add(trait)
+      trait.connect()
     }
   }
 
-  private disconnectController(controller: Controller) {
-    if (this.connectedControllers.has(controller)) {
-      this.connectedControllers.delete(controller)
-      controller.disconnect()
+  private disconnectTrait(trait: Trait) {
+    if (this.connectedTraits.has(trait)) {
+      this.connectedTraits.delete(trait)
+      trait.disconnect()
     } else {
-      throw new Error("Controller is not connected")
+      throw new Error("Trait is not connected")
     }
   }
 
-  private getParentControllerForScope(scope: Scope): Controller | null {
-    let parentController: Controller | null = null
+  private getParentTraitForScope(scope: Scope): Trait | null {
+    let parentTrait: Trait | null = null
     const parentRouter = this.parentRouter
     if (parentRouter) {
       const parentScope = parentRouter.getParentForScope(scope)
       if (parentScope) {
-        parentController = parentRouter.getControllerForScope(parentScope)
+        parentTrait = parentRouter.getTraitForScope(parentScope)
       }
     }
 
-    return parentController
+    return parentTrait
   }
 
   private getParentForScope(scope: Scope): Scope | null {

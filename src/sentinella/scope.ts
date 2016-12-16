@@ -1,9 +1,9 @@
 import { Selector } from "./selector"
-import { ControllerConstructor, DefaultController } from "./controller"
+import { TraitConstructor, DefaultTrait } from "./trait"
 
 export type ScopeOptions = {
   selector: Selector | string,
-  controllerConstructor?: ControllerConstructor,
+  traitConstructor?: TraitConstructor,
   eventListeners?: EventListenerSet,
   childScopes?: ScopeOptions[]
 } | Scope
@@ -22,13 +22,13 @@ export class Scope {
   }
 
   selector: Selector
-  controllerConstructor: ControllerConstructor
+  traitConstructor: TraitConstructor
   eventListeners: EventListenerSet
   childScopes: Scope[]
 
-  constructor({selector, controllerConstructor, eventListeners, childScopes}: ScopeOptions) {
+  constructor({selector, traitConstructor, eventListeners, childScopes}: ScopeOptions) {
     this.selector = Selector.get(selector)
-    this.controllerConstructor = controllerConstructor || <ControllerConstructor> <Function> DefaultController
+    this.traitConstructor = traitConstructor || <TraitConstructor> <Function> DefaultTrait
     this.eventListeners = eventListeners || {}
     this.childScopes = (<Scope[]> (childScopes || [])).map(Scope.wrap)
   }

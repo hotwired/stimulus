@@ -1,15 +1,15 @@
-import { Controller } from "./controller"
+import { Trait } from "./trait"
 import { Router } from "./router"
 import { Scope } from "./scope"
 import { Selector } from "./selector"
 
 export class Context {
-  parentController: Controller | null
+  parentTrait: Trait | null
   router: Router
   scope: Scope
 
-  constructor(parentController: Controller | null, router: Router, scope: Scope) {
-    this.parentController = parentController
+  constructor(parentTrait: Trait | null, router: Router, scope: Scope) {
+    this.parentTrait = parentTrait
     this.router = router
     this.scope = scope
   }

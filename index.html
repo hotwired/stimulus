@@ -9,7 +9,7 @@
         "[data-expandable-action]": {
           connect() {
             console.log("connected action", this.element)
-            console.log("    parent", this.parentController.element)
+            console.log("    parent", this.parentTrait.element)
           },
 
           disconnect() {
@@ -18,7 +18,7 @@
 
           onclick(event) {
             const {expandableAction} = event.target.dataset
-            this.parentController[expandableAction]()
+            this.parentTrait[expandableAction]()
             return false
           }
         },

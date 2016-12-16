@@ -1,6 +1,6 @@
 import { Selector } from "./selector"
 import { Scope, EventListenerSet } from "./scope"
-import { ControllerConstructor, controllerConstructorForPrototype } from "./controller"
+import { TraitConstructor, traitConstructorForPrototype } from "./trait"
 
 export function scopesForDefinition(definition): Scope[] {
   const scopes: Scope[] = []
@@ -21,7 +21,7 @@ function scopeForSelectorAndDefinitionBody(selector: Selector, definitionBody): 
 
   return new Scope({
     selector: selector,
-    controllerConstructor: controllerConstructor,
+    traitConstructor: controllerConstructor,
     eventListeners: eventListeners,
     childScopes: childScopes
   })
@@ -39,7 +39,7 @@ function eventListenersForDefinitionBody(definitionBody): EventListenerSet {
   return eventListeners
 }
 
-function controllerConstructorForDefinitionBody(definitionBody): ControllerConstructor {
+function controllerConstructorForDefinitionBody(definitionBody): TraitConstructor {
   const prototype = {}
   for (const key in definitionBody) {
     if (propertyIsControllerProperty(definitionBody, key)) {
@@ -48,7 +48,7 @@ function controllerConstructorForDefinitionBody(definitionBody): ControllerConst
     }
   }
 
-  return controllerConstructorForPrototype(prototype)
+  return traitConstructorForPrototype(prototype)
 }
 
 function childScopesForDefinitionBody(definitionBody): Scope[] {
