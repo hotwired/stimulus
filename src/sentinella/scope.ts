@@ -1,5 +1,6 @@
 import { Selector } from "./selector"
 import { TraitConstructor, DefaultTrait } from "./trait"
+import { EventListenerSet } from "./event_listener_set"
 
 export type ScopeOptions = {
   selector: Selector | string,
@@ -7,10 +8,6 @@ export type ScopeOptions = {
   eventListeners?: EventListenerSet,
   childScopes?: ScopeOptions[]
 } | Scope
-
-export type EventListenerSet = {
-  [key: string]: EventListener
-}
 
 export class Scope {
   static wrap(definition: ScopeOptions): Scope {

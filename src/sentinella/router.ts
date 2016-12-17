@@ -15,8 +15,7 @@ export class Router implements SelectorObserverDelegate {
   parentScopes: Map<Scope, Scope | null>
   scopesBySelector: Multimap<Selector, Scope>
   routersByElement: WeakMap<Element, Router>
-  connectedTraits: Set<Trait>
-  traitsByScope: WeakMap<Scope, Trait>
+  contextsByScope: WeakMap<Scope, Context>
 
   constructor(element: Element, parentRouter: Router | null = null) {
     this.element = element
@@ -27,8 +26,7 @@ export class Router implements SelectorObserverDelegate {
     this.parentScopes = new Map()
     this.scopesBySelector = new Multimap<Selector, Scope>()
     this.routersByElement = new WeakMap()
-    this.connectedTraits = new Set()
-    this.traitsByScope = new WeakMap()
+    this.contextsByScope = new WeakMap()
   }
 
   start() {
@@ -80,7 +78,7 @@ export class Router implements SelectorObserverDelegate {
     if (scopes.length) {
       const router = this.fetchRouterForElement(element)
       for (const scope of scopes) {
-        router.connectTraitForScope(scope)
+        router.connectScope(scope)
       }
     }
   }
@@ -90,7 +88,7 @@ export class Router implements SelectorObserverDelegate {
     const router = this.getRouterForElement(element)
     if (scopes.length && router) {
       for (const scope of scopes) {
-        router.disconnectTraitForScope(scope)
+        router.disconnectScope(scope)
       }
     }
   }
@@ -114,56 +112,39 @@ export class Router implements SelectorObserverDelegate {
     return router
   }
 
-  private connectTraitForScope(scope: Scope) {
-    const trait = this.fetchTraitForScope(scope)
-    for (const childScope of scope.childScopes) {
-      this.addScope(childScope, scope)
+  private connectScope(scope: Scope) {
+    const context = this.fetchContextForScope(scope)
+    if (!context.connected) {
+      for (const childScope of scope.childScopes) {
+        this.addScope(childScope, scope)
+      }
+      context.connect()
     }
-    this.connectTrait(trait)
   }
 
-  private disconnectTraitForScope(scope: Scope) {
-    const trait = this.getTraitForScope(scope)
-    if (trait) {
+  private disconnectScope(scope: Scope) {
+    const context = this.getContextForScope(scope)
+    if (context && context.connected) {
       for (const childScope of scope.childScopes) {
         this.deleteScope(childScope)
       }
-      this.disconnectTrait(trait)
+      context.disconnect()
     }
   }
 
-  private getTraitForScope(scope: Scope): Trait | null {
-    return this.traitsByScope.get(scope) || null
+  private getContextForScope(scope: Scope): Context | null {
+    return this.contextsByScope.get(scope) || null
   }
 
-  private fetchTraitForScope(scope: Scope): Trait {
-    let trait = this.traitsByScope.get(scope)
-    if (!trait) {
+  private fetchContextForScope(scope: Scope): Context {
+    let context = this.getContextForScope(scope)
+    if (!context) {
       const parentTrait = this.getParentTraitForScope(scope)
-      const context = new Context(parentTrait, this, scope)
-      trait = new scope.traitConstructor(context)
-      this.traitsByScope.set(scope, trait)
+      context = new Context(parentTrait, this, scope)
+      this.contextsByScope.set(scope, context)
     }
 
-    return trait
-  }
-
-  private connectTrait(trait: Trait) {
-    if (this.connectedTraits.has(trait)) {
-      throw new Error("Trait is already connected")
-    } else {
-      this.connectedTraits.add(trait)
-      trait.connect()
-    }
-  }
-
-  private disconnectTrait(trait: Trait) {
-    if (this.connectedTraits.has(trait)) {
-      this.connectedTraits.delete(trait)
-      trait.disconnect()
-    } else {
-      throw new Error("Trait is not connected")
-    }
+    return context
   }
 
   private getParentTraitForScope(scope: Scope): Trait | null {
@@ -181,5 +162,10 @@ export class Router implements SelectorObserverDelegate {
 
   private getParentForScope(scope: Scope): Scope | null {
     return this.parentScopes.get(scope) || null
+  }
+
+  private getTraitForScope(scope: Scope): Trait | null {
+    const context = this.getContextForScope(scope)
+    return context ? context.trait : null
   }
 }

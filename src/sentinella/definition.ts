@@ -1,5 +1,6 @@
 import { Selector } from "./selector"
-import { Scope, EventListenerSet } from "./scope"
+import { Scope } from "./scope"
+import { EventListenerSet } from "./event_listener_set"
 import { TraitConstructor, traitConstructorForPrototype } from "./trait"
 
 export function scopesForDefinition(definition): Scope[] {
