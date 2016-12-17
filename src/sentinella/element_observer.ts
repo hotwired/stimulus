@@ -26,6 +26,7 @@ export class ElementObserver {
     if (!this.started) {
       this.mutationObserver.observe(this.element, { attributes: true, childList: true, subtree: true })
       this.started = true
+      this.refresh()
     }
   }
 
@@ -34,6 +35,22 @@ export class ElementObserver {
       this.mutationObserver.takeRecords()
       this.mutationObserver.disconnect()
       this.started = false
+    }
+  }
+
+  refresh() {
+    if (this.started) {
+      const matches = new Set<Element>(this.matchElementsInTree())
+
+      for (const element of Array.from(this.elements)) {
+        if (!matches.has(element)) {
+          this.removeElement(element)
+        }
+      }
+
+      for (const element of Array.from(matches)) {
+        this.addElement(element)
+      }
     }
   }
 
@@ -85,7 +102,7 @@ export class ElementObserver {
     return this.delegate.matchElement(element)
   }
 
-  private matchElementsInTree(tree: Element): Element[] {
+  private matchElementsInTree(tree: Element = this.element): Element[] {
     return this.delegate.matchElementsInTree(tree)
   }
 
