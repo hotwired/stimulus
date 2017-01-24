@@ -5,67 +5,37 @@
   <script src="dist/sentinella.js"></script>
   <script>
     window.router = new Sentinella.Router(document.documentElement)
-    router.define({
-      "[data-trait~=expandable]": {
-        "[data-expandable-action]": {
-          connect() {
-            console.log("connected action", this.element)
-          },
+    router.register("expandable", class extends Sentinella.Controller {
+      initialize() {
+        console.log("expandable.initialize", this)
+      }
 
-          disconnect() {
-            console.log("disconnected action", this.element)
-          },
+      connect() {
+        console.log("expandable.connect", this)
+      }
 
-          onclick(event) {
-            const {expandableAction} = event.target.dataset
-            this.parentTrait[expandableAction]()
-            return false
-          }
-        },
-
-        connect() {
-          console.log("connected expandable", this.element)
-        },
-
-        disconnect() {
-          console.log("disconnected expandable", this.element)
-        },
-
-        expand() {
-          this.element.classList.add("expanded")
-        },
-
-        collapse() {
-          this.element.classList.remove("expanded")
-        },
-
-        toggle() {
-          this.isExpanded ? this.collapse() : this.expand()
-        },
-
-        get isExpanded() {
-          return this.element.classList.contains("expanded")
-        }
+      disconnect() {
+        console.log("expandable.disconnect", this)
       }
     })
     router.start()
   </script>
   <style type="text/css">
-    [data-trait~=expandable] .expanded_content {
+    [data-controller~=expandable] .expanded_content {
       display: none
     }
 
-    [data-trait~=expandable].expanded .collapsed_content {
+    [data-controller~=expandable].expanded .collapsed_content {
       display: none
     }
 
-    [data-trait~=expandable].expanded .expanded_content {
+    [data-controller~=expandable].expanded .expanded_content {
       display: initial
     }
   </style>
 </head>
 <body>
-  <div data-trait="expandable">
+  <div data-controller="expandable">
     <div>
       <button type="button" data-expandable-action="toggle">Toggle</button>
     </div>

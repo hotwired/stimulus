@@ -1,171 +1,99 @@
-import { Context } from "./context"
-import { Trait } from "./trait"
-import { Multimap } from "./multimap"
-import { Scope } from "./scope"
-import { Selector } from "./selector"
-import { SelectorObserver, SelectorObserverDelegate } from "./selector_observer"
-import { scopesForDefinition } from "./definition"
+import { TokenListObserver, TokenListObserverDelegate } from "./token_list_observer"
+import { Controller, ControllerConstructor } from "./controller"
 
-export class Router implements SelectorObserverDelegate {
-  element: Element
-  parentRouter: Router | null
-  selectorObserver: SelectorObserver
+type ControllerMap = Map<string, Controller>
 
-  scopes: Set<Scope>
-  parentScopes: Map<Scope, Scope | null>
-  scopesBySelector: Multimap<Selector, Scope>
-  routersByElement: WeakMap<Element, Router>
-  contextsByScope: WeakMap<Scope, Context>
+export class Router implements TokenListObserverDelegate {
+  private tokenListObserver: TokenListObserver
+  private controllerConstructors: Map<string, ControllerConstructor>
+  private controllerMaps: WeakMap<Element, ControllerMap>
+  private connectedControllers: Set<Controller>
 
-  constructor(element: Element, parentRouter: Router | null = null) {
-    this.element = element
-    this.parentRouter = parentRouter
-    this.selectorObserver = new SelectorObserver(element, this)
+  constructor(element: Element) {
+    this.tokenListObserver = new TokenListObserver(element, "data-controller", this)
+    this.controllerConstructors = new Map()
+    this.controllerMaps = new WeakMap()
+    this.connectedControllers = new Set()
+  }
 
-    this.scopes = new Set()
-    this.parentScopes = new Map()
-    this.scopesBySelector = new Multimap<Selector, Scope>()
-    this.routersByElement = new WeakMap()
-    this.contextsByScope = new WeakMap()
+  get element(): Element {
+    return this.tokenListObserver.element
   }
 
   start() {
-    this.selectorObserver.start()
+    this.tokenListObserver.start()
   }
 
   stop() {
-    this.selectorObserver.stop()
+    this.tokenListObserver.stop()
   }
 
-  define(definition) {
-    for (const scope of scopesForDefinition(definition)) {
-      this.addScope(scope)
+  // Controllers
+
+  register(name: string, controllerConstructor: ControllerConstructor) {
+    if (this.controllerConstructors.has(name)) {
+      throw new Error(`Router already has a controller registered with the name '${name}'`)
+    }
+
+    this.controllerConstructors.set(name, controllerConstructor)
+    this.connectControllers(name)
+  }
+
+  private connectControllers(name: string) {
+    const elements = this.tokenListObserver.getElementsMatchingToken(name)
+    for (const element of elements) {
+      this.connectControllerForElement(name, element)
     }
   }
 
-  addScope(scope: Scope, parentScope: Scope | null = null) {
-    if (this.scopes.has(scope)) {
-      throw new Error("Scope already exists in router")
-    } else {
-      const selector = scope.selector
-      this.scopes.add(scope)
-      this.parentScopes.set(scope, parentScope)
-      this.scopesBySelector.add(selector, scope)
+  private connectControllerForElement(name: string, element: Element) {
+    const controller = this.fetchControllerForElement(name, element)
+    if (controller && !this.connectedControllers.has(controller)) {
+      this.connectedControllers.add(controller)
+      controller.connect()
+    }
+  }
 
-      if (this.scopesBySelector.getValueCountForKey(selector) == 1) {
-        this.selectorObserver.observeSelector(selector)
+  private disconnectControllerForElement(name: string, element: Element) {
+    const controller = this.fetchControllerForElement(name, element)
+    if (controller && this.connectedControllers.has(controller)) {
+      this.connectedControllers.delete(controller)
+      controller.disconnect()
+    }
+  }
+
+  private fetchControllerForElement(name: string, element: Element): Controller | undefined {
+    const constructor = this.controllerConstructors.get(name)
+    if (constructor) {
+      const controllerMap = this.fetchControllerMapForElement(element)
+      let controller = controllerMap.get(name)
+
+      if (!controller) {
+        controller = new constructor(element)
+        controllerMap.set(name, controller)
       }
+
+      return controller
     }
   }
 
-  deleteScope(scope: Scope) {
-    if (this.scopes.has(scope)) {
-      const selector = scope.selector
-      this.scopes.delete(scope)
-      this.parentScopes.delete(scope)
-      this.scopesBySelector.delete(selector, scope)
-
-      if (this.scopesBySelector.getValueCountForKey(selector) == 0) {
-        this.selectorObserver.stopObservingSelector(selector)
-      }
-    } else {
-      throw new Error("Scope doesn't exist in router")
-    }
-  }
-
-  elementMatchedSelector(element: Element, selector: Selector) {
-    const scopes = this.getScopesForSelector(selector)
-    if (scopes.length) {
-      const router = this.fetchRouterForElement(element)
-      for (const scope of scopes) {
-        router.connectScope(scope)
-      }
-    }
-  }
-
-  elementUnmatchedSelector(element: Element, selector: Selector) {
-    const scopes = this.getScopesForSelector(selector)
-    const router = this.getRouterForElement(element)
-    if (scopes.length && router) {
-      for (const scope of scopes) {
-        router.disconnectScope(scope)
-      }
-    }
-  }
-
-  private getScopesForSelector(selector: Selector): Scope[] {
-    return this.scopesBySelector.getValuesForKey(selector)
-  }
-
-  private getRouterForElement(element: Element): Router | undefined {
-    return this.routersByElement.get(element)
-  }
-
-  private fetchRouterForElement(element: Element): Router {
-    let router = this.routersByElement.get(element)
-    if (!router) {
-      router = new Router(element, this)
-      this.routersByElement.set(element, router)
-      router.start()
+  private fetchControllerMapForElement(element: Element): ControllerMap {
+    let controllerMap = this.controllerMaps.get(element)
+    if (!controllerMap) {
+      controllerMap = new Map()
+      this.controllerMaps.set(element, controllerMap)
     }
 
-    return router
+    return controllerMap
   }
 
-  private connectScope(scope: Scope) {
-    const context = this.fetchContextForScope(scope)
-    if (!context.connected) {
-      for (const childScope of scope.childScopes) {
-        this.addScope(childScope, scope)
-      }
-      context.connect()
-    }
+  // Token list observer delegate
+
+  elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
+    this.connectControllerForElement(token, element)
   }
 
-  private disconnectScope(scope: Scope) {
-    const context = this.getContextForScope(scope)
-    if (context && context.connected) {
-      for (const childScope of scope.childScopes) {
-        this.deleteScope(childScope)
-      }
-      context.disconnect()
-    }
-  }
-
-  private getContextForScope(scope: Scope): Context | null {
-    return this.contextsByScope.get(scope) || null
-  }
-
-  private fetchContextForScope(scope: Scope): Context {
-    let context = this.getContextForScope(scope)
-    if (!context) {
-      const parentTrait = this.getParentTraitForScope(scope)
-      context = new Context(parentTrait, this, scope)
-      this.contextsByScope.set(scope, context)
-    }
-
-    return context
-  }
-
-  private getParentTraitForScope(scope: Scope): Trait | null {
-    let parentTrait: Trait | null = null
-    const parentRouter = this.parentRouter
-    if (parentRouter) {
-      const parentScope = parentRouter.getParentForScope(scope)
-      if (parentScope) {
-        parentTrait = parentRouter.getTraitForScope(parentScope)
-      }
-    }
-
-    return parentTrait
-  }
-
-  private getParentForScope(scope: Scope): Scope | null {
-    return this.parentScopes.get(scope) || null
-  }
-
-  private getTraitForScope(scope: Scope): Trait | null {
-    const context = this.getContextForScope(scope)
-    return context ? context.trait : null
+  elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
+    this.disconnectControllerForElement(token, element)
   }
 }

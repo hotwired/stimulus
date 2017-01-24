@@ -35,7 +35,7 @@ export class Selector {
   }
 
   matches(element: Element): boolean {
-    return element.matches(this.toString())
+    return element.matches(this.source)
   }
 
   toString() {

@@ -230,3 +230,9 @@ $(TEST_BUILD_TARGET): $(TEST_BUILD_JS_TARGET)
 $(TEST_BUILD_JS_TARGET): $(TEST_SRC)
 	@$(TSLINT) $(TEST_PATH)/*.ts
 	@$(TSC) -p $(TEST_PATH)
+
+
+# Virtual targets ------------------------------------------------------------
+
+watch:
+	@fswatch -or $(MODULE_SRC) $(TEST_SRC) | xargs -n 1 -I {} make

@@ -8,13 +8,13 @@ export class Multimap<Key, Value> {
   }
 
   add(key: Key, value: Value) {
-    add<Key, Value>(key, value, this.valuesByKey)
-    add<Value, Key>(value, key, this.keysByValue)
+    add(key, value, this.valuesByKey)
+    add(value, key, this.keysByValue)
   }
 
   delete(key: Key, value: Value) {
-    del<Key, Value>(key, value, this.valuesByKey)
-    del<Value, Key>(value, key, this.keysByValue)
+    del(key, value, this.valuesByKey)
+    del(value, key, this.keysByValue)
   }
 
   has(key: Key, value: Value): boolean {
