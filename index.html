@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <script src="dist/sentinella.js"></script>
   <script>
-    window.router = new Sentinella.Router(document.documentElement)
+    window.router = new Sentinella.Router(document.documentElement, "data-controller")
     router.register("expandable", class extends Sentinella.Controller {
       initialize() {
         console.log("expandable.initialize", this)

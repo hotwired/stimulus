@@ -4,13 +4,15 @@ import { Controller, ControllerConstructor } from "./controller"
 type ControllerMap = Map<string, Controller>
 
 export class Router implements TokenListObserverDelegate {
+  private attributeName: string
   private tokenListObserver: TokenListObserver
   private controllerConstructors: Map<string, ControllerConstructor>
   private controllerMaps: WeakMap<Element, ControllerMap>
   private connectedControllers: Set<Controller>
 
-  constructor(element: Element) {
-    this.tokenListObserver = new TokenListObserver(element, "data-controller", this)
+  constructor(element: Element, attributeName: string) {
+    this.attributeName = attributeName
+    this.tokenListObserver = new TokenListObserver(element, attributeName, this)
     this.controllerConstructors = new Map()
     this.controllerMaps = new WeakMap()
     this.connectedControllers = new Set()
