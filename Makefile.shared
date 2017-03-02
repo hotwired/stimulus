@@ -8,15 +8,15 @@ MODULE_PATH ?= src/$(MODULE_NAME)
 TEST_PATH ?= src/test
 CONFIG_PATH ?= config
 BUILD_PATH ?= build
-
+BIN_PATH ?= node_modules/.bin
 
 # Computed variables -------------------------------------------------------
 
-TSC_BIN := node_modules/typescript/bin/tsc
-TSLINT_BIN := node_modules/tslint/bin/tslint
-ROLLUP_BIN := node_modules/rollup/bin/rollup
-BUBLE_BIN := node_modules/buble/bin/buble
-TESTEM_BIN := node_modules/testem/testem.js
+TSC_BIN := $(BIN_PATH)/tsc
+TSLINT_BIN := $(BIN_PATH)/tslint
+ROLLUP_BIN := $(BIN_PATH)/rollup
+BUBLE_BIN := $(BIN_PATH)/buble
+TESTEM_BIN := $(BIN_PATH)/testem
 
 TSC := $(TSC_BIN)
 TSLINT := $(TSLINT_BIN) -c $(CONFIG_PATH)/tslint.json
@@ -24,6 +24,7 @@ ROLLUP := $(ROLLUP_BIN) -c $(CONFIG_PATH)/rollup.js -m inline
 BUBLE := $(BUBLE_BIN) --yes dangerousForOf -m inline
 TESTEM := $(TESTEM_BIN) -f $(CONFIG_PATH)/testem.json
 NPM := npm --loglevel=error
+YARN := yarn
 
 MODULE_SRC := $(wildcard $(MODULE_PATH)/*.ts) package.json $(MODULE_PATH)/tsconfig.json $(CONFIG_PATH)/rollup.js $(CONFIG_PATH)/tslint.json
 TEST_SRC := $(wildcard $(TEST_PATH)/*.ts) $(TEST_PATH)/tsconfig.json $(CONFIG_PATH)/tslint.json
@@ -182,25 +183,14 @@ $(TEST_PATH): | src
 src:
 	@mkdir -p src
 
-init-deps: | $(TSC_BIN) $(TSLINT_BIN) $(ROLLUP_BIN) $(BUBLE_BIN) $(TESTEM_BIN)
+init-deps: yarn.lock $(BIN_PATH)
 
-$(TSC_BIN): | package.json
-	@$(NPM) install --save-dev typescript
+$(BIN_PATH):
+	@$(YARN) install
 
-$(TSLINT_BIN): | package.json
-	@$(NPM) install --save-dev tslint
-
-$(ROLLUP_BIN): | package.json
-	@$(NPM) install --save-dev rollup
-
-$(BUBLE_BIN): | package.json
-	@$(NPM) install --save-dev buble
-
-$(TESTEM_BIN): | package.json
-	@$(NPM) install --save-dev testem @types/qunit
-
-package.json:
-	@$(NPM) init -y
+yarn.lock:
+	@$(YARN) init -y
+	@$(YARN) add typescript tslint rollup buble testem @types/qunit
 
 
 # Build targets ------------------------------------------------------------
@@ -236,3 +226,5 @@ $(TEST_BUILD_JS_TARGET): $(TEST_SRC)
 
 watch:
 	@fswatch -or $(MODULE_SRC) $(TEST_SRC) | xargs -n 1 -I {} make
+
+.PHONY: init init-config init-src init-module init-test init-deps clean test watch
