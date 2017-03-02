@@ -7,7 +7,8 @@
     "ts-loader": "^2.0.1",
     "tslint": "^4.5.1",
     "typescript": "^2.2.1",
-    "webpack": "^2.2.1"
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.4.1"
   },
   "dependencies": {
     "sentinella": "git+ssh://git@github.com/basecamp/sentinella.git"
@@ -15,6 +16,7 @@
   "scripts": {
     "lint": "tslint -c config/tslint.json src/stimulus/*.ts",
     "prebuild": "yarn run lint",
-    "build": "webpack"
+    "build": "webpack",
+    "serve": "webpack-dev-server"
   }
 }

@@ -8,6 +8,7 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, './dist'),
+    library: 'stimulus'
   },
   module: {
     rules: [
@@ -21,5 +22,9 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.js']
+  },
+  devServer: {
+    contentBase: path.join(__dirname, 'examples'),
+    port: 9000
   }
 }
