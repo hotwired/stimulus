@@ -1,10 +1,57 @@
 <html>
   <head>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html, body {
+        height: 100%;
+        width: 100%;
+      }
+
+      body {
+        padding: 10px;
+        font-family: -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color: #333;
+        background-color: rgba(0,0,0,0.08);
+      }
+
+      a {
+        color: #333;
+      }
+
+      main {
+        display: flex;
+        flex-flow: row;
+        justify-content: space-around;
+      }
+
+      .container {
+        flex-grow: 1;
+        border: 1px dashed #666;
+        border-radius: 3px;
+        min-height: 300px;
+        padding: 10px;
+        margin: 10px;
+        background-color: white;
+      }
+    </style>
     <script src="/stimulus.js"></script>
     <script>
-      console.log(window.stimulus)
+      window.App = stimulus.Application.start()
     </script>
+    <script src="/js/example_loader.js"></script>
+    <script src="/js/controllers/bulk_checker.js"></script>
+    <script src="/js/controllers/expander.js"></script>
   </head>
   <body>
+    <main>
+      <ul class="examples" data-examples>
+        <li><a href="/bulk_checker.html">Bulk Checker</a></li>
+        <li><a href="/expander.html">Expander</a></li>
+      </ul>
+      <div class="container" data-container></div>
+    </main>
   </body>
 </html>
