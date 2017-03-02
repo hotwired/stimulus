@@ -190,7 +190,7 @@ $(BIN_PATH):
 
 yarn.lock:
 	@$(YARN) init -y
-	@$(YARN) add typescript tslint rollup buble testem @types/qunit
+	@$(YARN) add --dev typescript tslint rollup buble testem @types/qunit
 
 
 # Build targets ------------------------------------------------------------
