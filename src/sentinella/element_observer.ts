@@ -9,17 +9,19 @@ export interface ElementObserverDelegate {
 
 export class ElementObserver {
   element: Element
-  delegate: ElementObserverDelegate
-  elements: Set<Element>
-  mutationObserver: MutationObserver
   started: boolean
+  private delegate: ElementObserverDelegate
+
+  private elements: Set<Element>
+  private mutationObserver: MutationObserver
 
   constructor(element, delegate) {
     this.element = element
+    this.started = false
     this.delegate = delegate
+
     this.elements = new Set<Element>()
     this.mutationObserver = new MutationObserver((mutations) => this.processMutations(mutations))
-    this.started = false
   }
 
   start() {

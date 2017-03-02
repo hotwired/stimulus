@@ -8,17 +8,17 @@ export interface SelectorObserverDelegate {
 }
 
 export class SelectorObserver implements ElementObserverDelegate {
-  elementObserver: ElementObserver
-  delegate: SelectorObserverDelegate
+  private delegate: SelectorObserverDelegate
 
-  selectorSet: Set<Selector>
-  elements: Multimap<Selector, Element>
-  attributes: Multimap<Selector, string>
+  private elementObserver: ElementObserver
+  private selectorSet: Set<Selector>
+  private elements: Multimap<Selector, Element>
+  private attributes: Multimap<Selector, string>
 
   constructor(element: Element, delegate: SelectorObserverDelegate) {
-    this.elementObserver = new ElementObserver(element, this)
     this.delegate = delegate
 
+    this.elementObserver = new ElementObserver(element, this)
     this.selectorSet = new Set<Selector>()
     this.elements = new Multimap<Selector, Element>()
     this.attributes = new Multimap<Selector, string>()

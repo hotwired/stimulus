@@ -7,15 +7,17 @@ export interface TokenListObserverDelegate {
 }
 
 export class TokenListObserver implements ElementObserverDelegate {
-  elementObserver: ElementObserver
   attributeName: string
-  delegate: TokenListObserverDelegate
-  tokensByElement: Multimap<Element, string>
+  private delegate: TokenListObserverDelegate
+
+  private elementObserver: ElementObserver
+  private tokensByElement: Multimap<Element, string>
 
   constructor(element: Element, attributeName: string, delegate: TokenListObserverDelegate) {
-    this.elementObserver = new ElementObserver(element, this)
     this.attributeName = attributeName
     this.delegate = delegate
+
+    this.elementObserver = new ElementObserver(element, this)
     this.tokensByElement = new Multimap<Element, string>()
   }
 
