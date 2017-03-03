@@ -3,11 +3,15 @@ app.register("expander", class extends Stimulus.Controller {
     console.log("expander#initialize", this.identifier, this.element)
   }
 
-  connect() {
-    console.log("expander#connect")
+  expand(event) {
+    console.log("expand", event)
   }
 
-  disconnect() {
-    console.log("expander#disconnect")
+  collapse(event) {
+    console.log("collapse", event)
+  }
+
+  toggle(event) {
+    console.log("toggle", event)
   }
 })

@@ -3,11 +3,11 @@ app.register("bulk-checker", class extends Stimulus.Controller {
     console.log("bulk-checker#initialize", this.identifier, this.element)
   }
 
-  connect() {
-    console.log("bulk-checker#connect")
+  checkAll(event) {
+    console.log("checkAll", event)
   }
 
-  disconnect() {
-    console.log("bulk-checker#disconnect")
+  uncheckAll(event) {
+    console.log("uncheckAll", event)
   }
 })

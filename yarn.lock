@@ -2039,7 +2039,7 @@ send@0.15.0:
 
 "sentinella@git+ssh://git@github.com/basecamp/sentinella.git":
   version "0.1.0"
-  resolved "git+ssh://git@github.com/basecamp/sentinella.git#dc132925ec7597a8491aa398ac6fa0a376b7e11c"
+  resolved "git+ssh://git@github.com/basecamp/sentinella.git#fd307376243c10c60c998322ff4b1d82a7b914bc"
 
 serve-index@^1.7.2:
   version "1.8.0"
