@@ -4,13 +4,11 @@ app.register("expander", class extends Stimulus.Controller {
   }
 
   expand(event) {
-    this.targets.find("collapsed").classList.add("hidden")
-    this.targets.find("expanded").classList.remove("hidden")
+    this.element.classList.add("expanded")
   }
 
   collapse(event) {
-    this.targets.find("collapsed").classList.remove("hidden")
-    this.targets.find("expanded").classList.add("hidden")
+    this.element.classList.remove("expanded")
   }
 
   toggle(event) {
@@ -18,6 +16,6 @@ app.register("expander", class extends Stimulus.Controller {
   }
 
   get isExpanded() {
-    return this.targets.find("collapsed").classList.contains("hidden")
+    return this.element.classList.contains("expanded")
   }
 })

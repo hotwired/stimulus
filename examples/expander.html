@@ -1,5 +1,15 @@
 <style>
-  .hidden { display: none; }
+  [data-controller~=expander] [data-expander-target=expanded] {
+    display: none;
+  }
+
+  [data-controller~=expander].expanded [data-expander-target=expanded] {
+    display: block;
+  }
+
+  [data-controller~=expander].expanded [data-expander-target=collapsed] {
+    display: none;
+  }
 </style>
 
 <div data-controller="expander">
@@ -7,7 +17,7 @@
     <button type="button" data-expander-action="expand">Expand!</button>
   </div>
 
-  <div data-expander-target="expanded" class="hidden">
+  <div data-expander-target="expanded">
     <input type="text" autofocus>
     <button type="button" data-expander-action="collapse">Collapse!</button>
   </div>
