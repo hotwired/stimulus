@@ -1,4 +1,4 @@
-App.register("expander", class extends stimulus.Controller {
+app.register("expander", class extends Stimulus.Controller {
   initialize() {
     console.log("expander#initialize", this.identifier, this.element)
   }
