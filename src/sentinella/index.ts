@@ -1,6 +1,4 @@
-import { ElementObserver } from "./element_observer"
-import { Selector } from "./selector"
-import { SelectorObserver } from "./selector_observer"
-import { TokenListObserver } from "./token_list_observer"
-
-export { ElementObserver, Selector, SelectorObserver, TokenListObserver }
+export { Selector } from "./selector"
+export { ElementObserver, ElementObserverDelegate } from "./element_observer"
+export { SelectorObserver, SelectorObserverDelegate } from "./selector_observer"
+export { TokenListObserver, TokenListObserverDelegate } from "./token_list_observer"

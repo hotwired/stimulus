@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "main": "dist/sentinella.js",
+  "types": "dist/sentinella.d.ts",
   "scripts": {
     "build": "make",
     "clean": "make clean"
@@ -12,6 +13,7 @@
   "devDependencies": {
     "@types/qunit": "^2.0.31",
     "buble": "^0.15.2",
+    "dts-bundle": "^0.7.2",
     "rollup": "^0.41.4",
     "testem": "^1.15.0",
     "tslint": "^4.5.1",

@@ -8,18 +8,21 @@ MODULE_PATH ?= src/$(MODULE_NAME)
 TEST_PATH ?= src/test
 CONFIG_PATH ?= config
 BUILD_PATH ?= build
+DIST_PATH ?= dist
 BIN_PATH ?= node_modules/.bin
 
 # Computed variables -------------------------------------------------------
 
 TSC_BIN := $(BIN_PATH)/tsc
 TSLINT_BIN := $(BIN_PATH)/tslint
+DTS_BUNDLE_BIN := $(BIN_PATH)/dts-bundle
 ROLLUP_BIN := $(BIN_PATH)/rollup
 BUBLE_BIN := $(BIN_PATH)/buble
 TESTEM_BIN := $(BIN_PATH)/testem
 
 TSC := $(TSC_BIN)
 TSLINT := $(TSLINT_BIN) -c $(CONFIG_PATH)/tslint.json
+DTS_BUNDLE := $(DTS_BUNDLE_BIN)
 ROLLUP := $(ROLLUP_BIN) -c $(CONFIG_PATH)/rollup.js -m inline
 BUBLE := $(BUBLE_BIN) --yes dangerousForOf -m inline
 TESTEM := $(TESTEM_BIN) -f $(CONFIG_PATH)/testem.json
@@ -31,11 +34,12 @@ TEST_SRC := $(wildcard $(TEST_PATH)/*.ts) $(TEST_PATH)/tsconfig.json $(CONFIG_PA
 SRC := $(MODULE_SRC) $(TEST_SRC)
 
 MODULE_BUILD_TARGET := $(BUILD_PATH)/$(MODULE_NAME)
-MODULE_BUILD_JS_TARGET := $(BUILD_PATH)/$(MODULE_NAME)/index.js
-MODULE_BUILD_TYPING_TARGET := $(BUILD_PATH)/$(MODULE_NAME)/index.d.ts
+MODULE_BUILD_JS_TARGET := $(MODULE_BUILD_TARGET)/index.js
+MODULE_BUILD_TYPING_TARGET := $(MODULE_BUILD_TARGET)/index.d.ts
 TEST_BUILD_TARGET := $(BUILD_PATH)/test
 TEST_BUILD_JS_TARGET := $(TEST_BUILD_TARGET)/index.js
-DIST_TARGET := dist/$(MODULE_NAME).js
+DIST_JS_TARGET := $(DIST_PATH)/$(MODULE_NAME).js
+DIST_TYPING_TARGET := $(DIST_PATH)/$(MODULE_NAME).d.ts
 
 
 # Main rules ---------------------------------------------------------------
@@ -49,7 +53,7 @@ clean:
 
 all: dist test
 
-dist: init $(DIST_TARGET)
+dist: init $(DIST_JS_TARGET) $(DIST_TYPING_TARGET)
 
 test: dist $(TEST_BUILD_TARGET)
 
@@ -76,7 +80,7 @@ define CONFIG_TESTEM_JSON
     "test/*.ts"
   ],
   "serve_files": [
-    "$(DIST_TARGET)",
+    "$(DIST_JS_TARGET)",
     "build/test/*.js"
   ]
 }
@@ -126,18 +130,12 @@ define TEST_TSCONFIG_JSON
     ],
     "typeRoots": [
       "../../node_modules",
-      "../../$(BUILD_PATH)"
+      "../../$(DIST_PATH)"
     ]
   }
 }
 endef
 export TEST_TSCONFIG_JSON
-
-define MODULE_INDEX_D_TS
-export as namespace $(MODULE_SYMBOL);
-export { $(MODULE_EXPORTS) };
-endef
-export MODULE_INDEX_D_TS
 
 
 # Project initialization ---------------------------------------------------
@@ -190,28 +188,30 @@ $(BIN_PATH):
 
 yarn.lock:
 	@$(YARN) init -y
-	@$(YARN) add --dev typescript tslint rollup buble testem @types/qunit
+	@$(YARN) add --dev typescript tslint dts-bundle rollup buble testem @types/qunit
 
 
 # Build targets ------------------------------------------------------------
 
-$(DIST_TARGET): $(MODULE_BUILD_TARGET)
+$(DIST_JS_TARGET): $(MODULE_BUILD_TARGET)
 	@mkdir -p dist
 	@$(ROLLUP) | $(BUBLE) > $@
 	@echo "Built bundle $@"
 
-$(MODULE_BUILD_TARGET): $(MODULE_BUILD_JS_TARGET) $(MODULE_BUILD_TYPING_TARGET)
+$(DIST_TYPING_TARGET): $(MODULE_BUILD_TYPING_TARGET)
+	@$(DTS_BUNDLE) --name $(MODULE_NAME) --main $(MODULE_BUILD_TYPING_TARGET) >/dev/null
+	@mv $(patsubst $(DIST_PATH)/%,$(MODULE_BUILD_TARGET)/%,$(DIST_TYPING_TARGET)) $(DIST_TYPING_TARGET)
+	@echo "Built types $@"
+
+$(MODULE_BUILD_TARGET): $(MODULE_BUILD_JS_TARGET)
 	@touch $@
 	@echo "Built $(MODULE_PATH) -> $@"
+
+$(MODULE_BUILD_TYPING_TARGET): $(MODULE_BUILD_JS_TARGET)
 
 $(MODULE_BUILD_JS_TARGET): $(MODULE_SRC)
 	@$(TSLINT) $(MODULE_PATH)/*.ts
 	@$(TSC) -d -p $(MODULE_PATH)
-	@mv $(MODULE_BUILD_TYPING_TARGET){,.1}
-
-$(MODULE_BUILD_TYPING_TARGET): $(MODULE_BUILD_JS_TARGET)
-	@echo "$$MODULE_INDEX_D_TS" >> $@.1
-	@mv $@{.1,}
 
 $(TEST_BUILD_TARGET): $(TEST_BUILD_JS_TARGET)
 	@touch $@
