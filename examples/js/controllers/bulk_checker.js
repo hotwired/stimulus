@@ -4,10 +4,14 @@ app.register("bulk-checker", class extends Stimulus.Controller {
   }
 
   checkAll(event) {
-    console.log("checkAll", event)
+    for (const element of this.targets.findAll("checkbox")) {
+      element.checked = true
+    }
   }
 
   uncheckAll(event) {
-    console.log("uncheckAll", event)
+    for (const element of this.targets.findAll("checkbox")) {
+      element.checked = false
+    }
   }
 })

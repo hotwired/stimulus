@@ -4,14 +4,20 @@ app.register("expander", class extends Stimulus.Controller {
   }
 
   expand(event) {
-    console.log("expand", event)
+    this.targets.find("collapsed").classList.add("hidden")
+    this.targets.find("expanded").classList.remove("hidden")
   }
 
   collapse(event) {
-    console.log("collapse", event)
+    this.targets.find("collapsed").classList.remove("hidden")
+    this.targets.find("expanded").classList.add("hidden")
   }
 
   toggle(event) {
-    console.log("toggle", event)
+    this.isExpanded ? this.collapse() : this.expand()
+  }
+
+  get isExpanded() {
+    return this.targets.find("collapsed").classList.contains("hidden")
   }
 })

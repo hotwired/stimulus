@@ -1,5 +1,6 @@
 import { Action } from "./action"
 import { ActionObserver, ActionObserverDelegate } from "./action_observer"
+import { TargetSet } from "./target_set"
 
 export interface ControllerConstructor {
   new(identifier: string, element: Element): Controller
@@ -8,6 +9,7 @@ export interface ControllerConstructor {
 export class Controller implements ActionObserverDelegate {
   identifier: string
   element: Element
+  targets: TargetSet
 
   private actionObserver: ActionObserver
   private eventListeners: Map<Action, EventListener>
@@ -15,6 +17,7 @@ export class Controller implements ActionObserverDelegate {
   constructor(identifier: string, element: Element) {
     this.identifier = identifier
     this.element = element
+    this.targets = new TargetSet(identifier, element)
 
     this.actionObserver = new ActionObserver(identifier, element, this)
     this.eventListeners = new Map<Action, EventListener>()
