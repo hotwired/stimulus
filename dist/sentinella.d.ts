@@ -2,6 +2,7 @@
 
 declare module 'sentinella' {
     export { Selector } from "sentinella/selector";
+    export { AttributeObserver, AttributeObserverDelegate } from "sentinella/attribute_observer";
     export { ElementObserver, ElementObserverDelegate } from "sentinella/element_observer";
     export { SelectorObserver, SelectorObserverDelegate } from "sentinella/selector_observer";
     export { TokenListObserver, TokenListObserverDelegate } from "sentinella/token_list_observer";
@@ -16,6 +17,28 @@ declare module 'sentinella/selector' {
         readonly attributes: string[];
         matches(element: Element): boolean;
         toString(): string;
+    }
+}
+
+declare module 'sentinella/attribute_observer' {
+    import { ElementObserverDelegate } from "sentinella/element_observer";
+    export interface AttributeObserverDelegate {
+        elementMatchedAttribute(element: Element, attributeName: string): any;
+        elementAttributeValueChanged(element: Element, attributeName: string): any;
+        elementUnmatchedAttribute(element: Element, attributeName: string): any;
+    }
+    export class AttributeObserver implements ElementObserverDelegate {
+        attributeName: string;
+        constructor(element: Element, attributeName: string, delegate: AttributeObserverDelegate);
+        readonly element: Element;
+        readonly selector: string;
+        start(): void;
+        stop(): void;
+        matchElement(element: Element): boolean;
+        matchElementsInTree(tree: Element): Element[];
+        elementMatched(element: Element): void;
+        elementUnmatched(element: Element): void;
+        elementAttributeChanged(element: Element, attributeName: string): void;
     }
 }
 
