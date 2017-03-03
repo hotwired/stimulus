@@ -559,13 +559,13 @@ date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
 
-debug@2.6.1:
+debug@2.6.1, debug@^2.2.0:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.1.tgz#79855090ba2c4e3115cc7d8769491d58f0491351"
   dependencies:
     ms "0.7.2"
 
-debug@^2.2.0, debug@~2.2.0:
+debug@~2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.2.0.tgz#f87057e995b1a1f6ae6a4960664137bc56f039da"
   dependencies:
@@ -2039,7 +2039,7 @@ send@0.15.0:
 
 "sentinella@git+ssh://git@github.com/basecamp/sentinella.git":
   version "0.1.0"
-  resolved "git+ssh://git@github.com/basecamp/sentinella.git#e983d12506af4fd38359082983689ef10416ae09"
+  resolved "git+ssh://git@github.com/basecamp/sentinella.git#dc132925ec7597a8491aa398ac6fa0a376b7e11c"
 
 serve-index@^1.7.2:
   version "1.8.0"

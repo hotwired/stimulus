@@ -1,3 +1,1 @@
-import { Application } from "./application"
-
-export { Application }
+export { Application } from "./application"

@@ -1,4 +1,5 @@
-import { Router } from "sentinella"
+import { ControllerConstructor } from "./controller"
+import { Router } from "./router"
 
 export class Application {
   private router: Router
@@ -22,7 +23,7 @@ export class Application {
     this.router.stop()
   }
 
-  register(identifier: string, controllerConstructor) {
+  register(identifier: string, controllerConstructor: ControllerConstructor) {
     this.router.register(identifier, controllerConstructor)
   }
 }
