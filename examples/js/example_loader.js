@@ -4,13 +4,23 @@ addEventListener("DOMContentLoaded", function() {
 
   listElement.addEventListener("click", function(event) {
     event.preventDefault()
+    let url = event.target.href
+    if (!url) return
 
-    fetch(event.target.href)
-      .then(function(response) {
-        return response.text()
-      }).then(function(body) {
-        containerElement.innerHTML = body
-      })
+    if (url === containerElement.dataset.url) {
+      const element = containerElement.firstChild
+      containerElement.removeChild(element)
+      containerElement.appendChild(element)
+    } else {
+      fetch(url)
+        .then(function(response) {
+          return response.text()
+        }).then(function(body) {
+          containerElement.dataset.url = url
+          containerElement.innerHTML = "<div>" + body + "</div>"
+        })
+    }
+
   })
 })
 
