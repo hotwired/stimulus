@@ -1,11 +1,13 @@
 export interface ControllerConstructor {
-  new(element: Element): Controller
+  new(identifier: string, element: Element): Controller
 }
 
 export class Controller {
+  identifier: string
   element: Element
 
-  constructor(element: Element) {
+  constructor(identifier: string, element: Element) {
+    this.identifier = identifier
     this.element = element
     this.initialize()
   }

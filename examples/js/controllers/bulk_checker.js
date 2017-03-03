@@ -1,10 +1,6 @@
-App.register("bulk-checker", class {
-  constructor() {
-    console.log("bulk-checker#new")
-  }
-
+App.register("bulk-checker", class extends stimulus.Controller {
   initialize() {
-    console.log("bulk-checker#initialize")
+    console.log("bulk-checker#initialize", this.identifier, this.element)
   }
 
   connect() {

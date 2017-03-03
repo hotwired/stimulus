@@ -32,47 +32,47 @@ export class Router implements TokenListObserverDelegate {
 
   // Controllers
 
-  register(name: string, controllerConstructor: ControllerConstructor) {
-    if (this.controllerConstructors.has(name)) {
-      throw new Error(`Router already has a controller registered with the name '${name}'`)
+  register(identifier: string, controllerConstructor: ControllerConstructor) {
+    if (this.controllerConstructors.has(identifier)) {
+      throw new Error(`Router already has a controller registered with the identifier '${identifier}'`)
     }
 
-    this.controllerConstructors.set(name, controllerConstructor)
-    this.connectControllers(name)
+    this.controllerConstructors.set(identifier, controllerConstructor)
+    this.connectControllers(identifier)
   }
 
-  private connectControllers(name: string) {
-    const elements = this.tokenListObserver.getElementsMatchingToken(name)
+  private connectControllers(identifier: string) {
+    const elements = this.tokenListObserver.getElementsMatchingToken(identifier)
     for (const element of elements) {
-      this.connectControllerForElement(name, element)
+      this.connectControllerForElement(identifier, element)
     }
   }
 
-  private connectControllerForElement(name: string, element: Element) {
-    const controller = this.fetchControllerForElement(name, element)
+  private connectControllerForElement(identifier: string, element: Element) {
+    const controller = this.fetchControllerForElement(identifier, element)
     if (controller && !this.connectedControllers.has(controller)) {
       this.connectedControllers.add(controller)
       controller.connect()
     }
   }
 
-  private disconnectControllerForElement(name: string, element: Element) {
-    const controller = this.fetchControllerForElement(name, element)
+  private disconnectControllerForElement(identifier: string, element: Element) {
+    const controller = this.fetchControllerForElement(identifier, element)
     if (controller && this.connectedControllers.has(controller)) {
       this.connectedControllers.delete(controller)
       controller.disconnect()
     }
   }
 
-  private fetchControllerForElement(name: string, element: Element): Controller | undefined {
-    const constructor = this.controllerConstructors.get(name)
+  private fetchControllerForElement(identifier: string, element: Element): Controller | undefined {
+    const constructor = this.controllerConstructors.get(identifier)
     if (constructor) {
       const controllerMap = this.fetchControllerMapForElement(element)
-      let controller = controllerMap.get(name)
+      let controller = controllerMap.get(identifier)
 
       if (!controller) {
-        controller = new constructor(element)
-        controllerMap.set(name, controller)
+        controller = new constructor(identifier, element)
+        controllerMap.set(identifier, controller)
       }
 
       return controller

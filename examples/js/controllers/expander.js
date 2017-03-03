@@ -1,10 +1,6 @@
-App.register("expander", class {
-  constructor() {
-    console.log("expander#new")
-  }
-
+App.register("expander", class extends stimulus.Controller {
   initialize() {
-    console.log("expander#initialize")
+    console.log("expander#initialize", this.identifier, this.element)
   }
 
   connect() {
