@@ -1,19 +1,19 @@
 import { Action } from "./action"
 import { Selector, AttributeObserver, AttributeObserverDelegate } from "sentinella"
 
-export interface ActionObserverDelegate {
-  actionConnected(action: Action)
-  actionDisconnected(action: Action)
+export interface InlineActionObserverDelegate {
+  inlineActionConnected(action: Action)
+  inlineActionDisconnected(action: Action)
 }
 
-export class ActionObserver implements AttributeObserverDelegate {
+export class InlineActionObserver implements AttributeObserverDelegate {
   identifier: string
-  private delegate: ActionObserverDelegate
+  private delegate: InlineActionObserverDelegate
 
   private attributeObserver: AttributeObserver
   private connectedActions: Map<Element, Action>
 
-  constructor(identifier: string, element: Element, delegate: ActionObserverDelegate) {
+  constructor(identifier: string, element: Element, delegate: InlineActionObserverDelegate) {
     this.identifier = identifier
     this.delegate = delegate
 
@@ -69,14 +69,14 @@ export class ActionObserver implements AttributeObserverDelegate {
 
   connectActionForElement(action: Action, element: Element) {
     this.connectedActions.set(element, action)
-    this.delegate.actionConnected(action)
+    this.delegate.inlineActionConnected(action)
   }
 
   disconnectActionForElement(element: Element) {
     const action = this.getActionForElement(element)
     if (action) {
       this.connectedActions.delete(element)
-      this.delegate.actionDisconnected(action)
+      this.delegate.inlineActionDisconnected(action)
     }
   }
 

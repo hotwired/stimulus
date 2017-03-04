@@ -1,17 +1,17 @@
 import { Action } from "./action"
-import { ActionObserver, ActionObserverDelegate } from "./action_observer"
+import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
 import { TargetSet } from "./target_set"
 
 export interface ControllerConstructor {
   new(identifier: string, element: Element): Controller
 }
 
-export class Controller implements ActionObserverDelegate {
+export class Controller implements InlineActionObserverDelegate {
   identifier: string
   element: Element
   targets: TargetSet
 
-  private actionObserver: ActionObserver
+  private actionObserver: InlineActionObserver
   private actionsByElement: Map<Element, Action>
 
   constructor(identifier: string, element: Element) {
@@ -19,7 +19,7 @@ export class Controller implements ActionObserverDelegate {
     this.element = element
     this.targets = new TargetSet(identifier, element)
 
-    this.actionObserver = new ActionObserver(identifier, element, this)
+    this.actionObserver = new InlineActionObserver(identifier, element, this)
     this.actionsByElement = new Map<Element, Action>()
     this.handleDelegatedEvent = this.handleDelegatedEvent.bind(this)
 
@@ -41,9 +41,9 @@ export class Controller implements ActionObserverDelegate {
     return Array.from(this.actionsByElement, ([element, action]) => action)
   }
 
-  // Action observer delegate
+  // Inline action observer delegate
 
-  actionConnected(action: Action) {
+  inlineActionConnected(action: Action) {
     const {element, eventName} = action
     this.actionsByElement.set(element, action)
     if (this.getActionsForEventName(eventName).length == 1) {
@@ -51,7 +51,7 @@ export class Controller implements ActionObserverDelegate {
     }
   }
 
-  actionDisconnected(action: Action) {
+  inlineActionDisconnected(action: Action) {
     const {element, eventName} = action
     this.actionsByElement.delete(element)
     if (this.getActionsForEventName(eventName).length == 0) {
