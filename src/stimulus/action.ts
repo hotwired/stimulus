@@ -1,28 +1,64 @@
-import { ActionString } from "./action_string"
+import { Descriptor } from "./descriptor"
 
 export class Action {
-  static parse(element: Element, value: string): Action {
-    const {eventName, methodName} = new ActionString(value, element.tagName)
-    return new Action(element, eventName, methodName)
+  static defaultEventNames = {
+    "a":        (e: Element) => "click",
+    "button":   (e: Element) => "click",
+    "form":     (e: Element) => "submit",
+    "input":    (e: Element) => e.getAttribute("type") == "submit" ? "click" : "change",
+    "select":   (e: Element) => "change",
+    "textarea": (e: Element) => "change"
   }
 
-  element: Element
-  eventName: string
-  methodName: string
+  object: object
+  eventTarget: EventTarget
+  descriptor: Descriptor
 
-  constructor(element: Element, eventName: string, methodName: string) {
-    this.element = element
-    this.eventName = eventName
-    this.methodName = methodName
+  constructor(object: object, eventTarget: EventTarget, descriptor: Descriptor) {
+    this.object = object
+    this.eventTarget = eventTarget
+    this.descriptor = descriptor
   }
 
-  isEqualTo(action: Action | undefined): boolean {
-    if (action) {
-      return action.element == this.element &&
-        action.eventName == this.eventName &&
-        action.methodName == this.methodName
-    } else {
-      return false
+  get eventName(): string {
+    return this.descriptor.eventName || this.defaultEventName
+  }
+
+  get methodName(): string {
+    return this.descriptor.methodName
+  }
+
+  get method(): Function | undefined {
+    const value = this.object[this.methodName]
+    if (typeof value == "function") {
+      return <Function> value
     }
   }
+
+  isEqualTo(action?: Action): boolean {
+    return action != null &&
+      action.object === this.object &&
+      action.eventTarget == this.eventTarget &&
+      action.eventName == this.eventName &&
+      action.methodName == this.methodName
+  }
+
+  performWithEvent(event: Event) {
+    if (this.method) {
+      this.method.call(this.object, event, this)
+    }
+  }
+
+  private get defaultEventName(): string {
+    if (this.eventTarget instanceof Element) {
+      const tagName = this.eventTarget.tagName.toLowerCase()
+      const defaultEventName = Action.defaultEventNames[tagName]
+      if (defaultEventName) {
+        return defaultEventName(this.eventTarget)
+      }
+    }
+
+    throw new Error(`Descriptor must include an event name: "${this}`)
+  }
 }
+

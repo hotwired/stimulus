@@ -1,4 +1,5 @@
 import { Action } from "./action"
+import { Descriptor } from "./descriptor"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
 import { TargetSet } from "./target_set"
 
@@ -11,16 +12,16 @@ export class Controller implements InlineActionObserverDelegate {
   element: Element
   targets: TargetSet
 
-  private actionObserver: InlineActionObserver
-  private actionsByElement: Map<Element, Action>
+  private inlineActionObserver: InlineActionObserver
+  private actionsByEventTarget: Map<EventTarget, Action>
 
   constructor(identifier: string, element: Element) {
     this.identifier = identifier
     this.element = element
     this.targets = new TargetSet(identifier, element)
 
-    this.actionObserver = new InlineActionObserver(identifier, element, this)
-    this.actionsByElement = new Map<Element, Action>()
+    this.inlineActionObserver = new InlineActionObserver(identifier, element, this)
+    this.actionsByEventTarget = new Map<EventTarget, Action>()
     this.handleDelegatedEvent = this.handleDelegatedEvent.bind(this)
 
     this.initialize()
@@ -30,30 +31,34 @@ export class Controller implements InlineActionObserverDelegate {
   }
 
   connect() {
-    this.actionObserver.start()
+    this.inlineActionObserver.start()
   }
 
   disconnect() {
-    this.actionObserver.stop()
+    this.inlineActionObserver.stop()
   }
 
   get actions(): Action[] {
-    return Array.from(this.actionsByElement, ([element, action]) => action)
+    return Array.from(this.actionsByEventTarget, ([element, action]) => action)
   }
 
   // Inline action observer delegate
 
+  getObjectForInlineActionDescriptor(descriptor: Descriptor): object {
+    return this
+  }
+
   inlineActionConnected(action: Action) {
-    const {element, eventName} = action
-    this.actionsByElement.set(element, action)
+    const {eventTarget, eventName} = action
+    this.actionsByEventTarget.set(eventTarget, action)
     if (this.getActionsForEventName(eventName).length == 1) {
       this.element.addEventListener(eventName, this.handleDelegatedEvent, false)
     }
   }
 
   inlineActionDisconnected(action: Action) {
-    const {element, eventName} = action
-    this.actionsByElement.delete(element)
+    const {eventTarget, eventName} = action
+    this.actionsByEventTarget.delete(eventTarget)
     if (this.getActionsForEventName(eventName).length == 0) {
       this.element.removeEventListener(eventName, this.handleDelegatedEvent, false)
     }
@@ -77,7 +82,7 @@ export class Controller implements InlineActionObserverDelegate {
   private findActionForElement(element: Element): Action | undefined {
     let currentElement: Element | null = element
     while (currentElement) {
-      const action = this.actionsByElement.get(element)
+      const action = this.actionsByEventTarget.get(element)
       if (action) {
         return action
       } else {

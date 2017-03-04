@@ -1,7 +1,9 @@
 import { Action } from "./action"
+import { Descriptor } from "./descriptor"
 import { Selector, AttributeObserver, AttributeObserverDelegate } from "sentinella"
 
 export interface InlineActionObserverDelegate {
+  getObjectForInlineActionDescriptor(descriptor: Descriptor): object
   inlineActionConnected(action: Action)
   inlineActionDisconnected(action: Action)
 }
@@ -53,12 +55,12 @@ export class InlineActionObserver implements AttributeObserverDelegate {
 
   // Connected actions
 
-  refreshActionForElement(element: Element) {
-    const value = element.getAttribute(this.attributeName)
-    if (value == null) {
+  private refreshActionForElement(element: Element) {
+    const descriptorString = element.getAttribute(this.attributeName)
+    if (descriptorString == null) {
       this.disconnectActionForElement(element)
     } else {
-      const newAction = Action.parse(element, value)
+      const newAction = this.buildActionForElementWithDescriptorString(element, descriptorString)
       const existingAction = this.getActionForElement(element)
       if (!newAction.isEqualTo(existingAction)) {
         this.disconnectActionForElement(element)
@@ -67,12 +69,12 @@ export class InlineActionObserver implements AttributeObserverDelegate {
     }
   }
 
-  connectActionForElement(action: Action, element: Element) {
+  private connectActionForElement(action: Action, element: Element) {
     this.connectedActions.set(element, action)
     this.delegate.inlineActionConnected(action)
   }
 
-  disconnectActionForElement(element: Element) {
+  private disconnectActionForElement(element: Element) {
     const action = this.getActionForElement(element)
     if (action) {
       this.connectedActions.delete(element)
@@ -80,7 +82,13 @@ export class InlineActionObserver implements AttributeObserverDelegate {
     }
   }
 
-  getActionForElement(element: Element): Action | undefined {
+  private getActionForElement(element: Element): Action | undefined {
     return this.connectedActions.get(element)
+  }
+
+  private buildActionForElementWithDescriptorString(element: Element, descriptorString: string) {
+    const descriptor = Descriptor.parse(descriptorString)
+    const object = this.delegate.getObjectForInlineActionDescriptor(descriptor)
+    return new Action(object, element, descriptor)
   }
 }
