@@ -1,6 +1,9 @@
+import { ActionString } from "./action_string"
+
 export class Action {
   static parse(element: Element, value: string): Action {
-    return new Action(element, "click", value)
+    const {eventName, methodName} = new ActionString(value, element.tagName)
+    return new Action(element, eventName, methodName)
   }
 
   element: Element

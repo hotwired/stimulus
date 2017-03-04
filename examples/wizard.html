@@ -1,0 +1,41 @@
+<style>
+  [data-controller=wizard] [data-wizard-target=step]:not([data-current-step]) {
+    display: none;
+  }
+</style>
+
+<div data-controller="wizard">
+  <form method="get" action="/" data-wizard-action="nextStep" data-wizard-target="step" data-current-step="true">
+    <h1>Step 1</h1>
+
+    <select name="result">
+      <option disabled>Pick a letter</option>
+      <option value="a">A</option>
+      <option value="b">B</option>
+      <option value="c">C</option>
+    </select>
+
+    <button type="submit">Next Step →</button>
+  </form>
+
+  <div data-wizard-target="step">
+    <h1>Step 2</h1>
+
+    <p>
+      <input type="text" name="result" placeholder="Enter something">
+      <button type="button" data-wizard-action="mousedown->nextStep">Next Step →</button>
+    </p>
+  </div>
+
+  <div data-wizard-target="step">
+    <h1>Step 3</h1>
+
+    <a href="#WRONG" data-wizard-action="nextStep">See results →</a>
+  </div>
+
+  <div data-wizard-target="step">
+    <h1>Results</h1>
+
+    <pre data-wizard-target="results"></pre>
+  </div>
+</div>

@@ -68,6 +68,7 @@ export class Controller implements ActionObserverDelegate {
     if (element) {
       const action = this.findActionForElement(element)
       if (action) {
+        event.preventDefault()
         this.performActionWithEvent(action, event)
       }
     }
