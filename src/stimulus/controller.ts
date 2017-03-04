@@ -12,7 +12,7 @@ export class Controller implements ActionObserverDelegate {
   targets: TargetSet
 
   private actionObserver: ActionObserver
-  private eventListeners: Map<Action, EventListener>
+  private actionsByElement: Map<Element, Action>
 
   constructor(identifier: string, element: Element) {
     this.identifier = identifier
@@ -20,7 +20,8 @@ export class Controller implements ActionObserverDelegate {
     this.targets = new TargetSet(identifier, element)
 
     this.actionObserver = new ActionObserver(identifier, element, this)
-    this.eventListeners = new Map<Action, EventListener>()
+    this.actionsByElement = new Map<Element, Action>()
+    this.handleDelegatedEvent = this.handleDelegatedEvent.bind(this)
 
     this.initialize()
   }
@@ -36,36 +37,72 @@ export class Controller implements ActionObserverDelegate {
     this.actionObserver.stop()
   }
 
+  get actions(): Action[] {
+    return Array.from(this.actionsByElement, ([element, action]) => action)
+  }
+
   // Action observer delegate
 
   actionConnected(action: Action) {
-    const {element, eventName, methodName} = action
-    const method = this[methodName]
-    if (typeof method == "function") {
-      const eventListener = this.fetchEventListenerForAction(action, method)
-      element.addEventListener(eventName, eventListener, false)
+    const {element, eventName} = action
+    this.actionsByElement.set(element, action)
+    if (this.getActionsForEventName(eventName).length == 1) {
+      this.element.addEventListener(eventName, this.handleDelegatedEvent, false)
     }
   }
 
   actionDisconnected(action: Action) {
     const {element, eventName} = action
-    const handler = this.getEventListenerForAction(action)
-    if (handler) {
-      element.removeEventListener(eventName, handler, false)
+    this.actionsByElement.delete(element)
+    if (this.getActionsForEventName(eventName).length == 0) {
+      this.element.removeEventListener(eventName, this.handleDelegatedEvent, false)
     }
   }
 
-  getEventListenerForAction(action: Action): EventListener | undefined {
-    return this.eventListeners.get(action)
+  private getActionsForEventName(eventName: string): Action[] {
+    return this.actions.filter((action) => action.eventName == eventName)
   }
 
-  fetchEventListenerForAction(action: Action, method: Function): EventListener {
-    let eventListener = this.eventListeners.get(action)
-    if (!eventListener) {
-      eventListener = <EventListener> method.bind(this)
-      this.eventListeners.set(action, eventListener)
+  private handleDelegatedEvent(event: Event) {
+    const element = elementForEventTarget(event.target)
+    if (element) {
+      const action = this.findActionForElement(element)
+      if (action) {
+        this.performActionWithEvent(action, event)
+      }
     }
+  }
 
-    return eventListener
+  private findActionForElement(element: Element): Action | undefined {
+    let currentElement: Element | null = element
+    while (currentElement) {
+      const action = this.actionsByElement.get(element)
+      if (action) {
+        return action
+      } else {
+        currentElement = currentElement.parentElement
+      }
+    }
+  }
+
+  private performActionWithEvent(action: Action, event: Event) {
+    const method = this[action.methodName]
+    if (typeof method == "function") {
+      method.call(this, event, action)
+    }
+  }
+}
+
+function elementForEventTarget(eventTarget: EventTarget) {
+  if (eventTarget instanceof Node) {
+    return elementForNode(eventTarget)
+  }
+}
+
+function elementForNode(node: Node) {
+  if (node.nodeType == Node.ELEMENT_NODE) {
+    return <Element> node
+  } else {
+    return node.parentElement
   }
 }
