@@ -1,26 +1,35 @@
 <style>
-  [data-controller~=expander] [data-expander-target=expanded] {
+  [data-controller~=expander] {
+    position: relative;
+    border: 2px dotted red;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 15px;
+  }
+
+  [data-controller~=expander].expanded {
+    border-color: green;
+  }
+
+  [data-controller~=expander]:not(.expanded) > [data-expander-target=expanded] {
     display: none;
   }
 
-  [data-controller~=expander].expanded [data-expander-target=expanded] {
-    display: block;
-  }
-
-  [data-controller~=expander].expanded [data-expander-target=collapsed] {
+  [data-controller~=expander].expanded > [data-expander-target=collapsed] {
     display: none;
   }
 </style>
 
 <div data-controller="expander">
-  <div data-expander-target="collapsed">
-    <button type="button" data-expander-action="expand">Expand!</button>
-  </div>
-
-  <div data-expander-target="expanded">
-    <input type="text" autofocus>
-    <button type="button" data-expander-action="collapse">Collapse!</button>
-  </div>
-
+  <button type="button" data-expander-action="expand" data-expander-target="collapsed">Expand</button>
+  <button type="button" data-expander-action="collapse" data-expander-target="expanded">Collapse</button>
   <button type="button" data-expander-action="toggle">Toggle</button>
+  <p data-expander-target="expanded">Expander 1 expanded</p>
+
+  <div data-controller="expander">
+    <button type="button" data-expander-action="expand" data-expander-target="collapsed">Expand</button>
+    <button type="button" data-expander-action="collapse" data-expander-target="expanded">Collapse</button>
+    <button type="button" data-expander-action="toggle">Toggle</button>
+    <p data-expander-target="expanded">Expander 2 expanded</p>
+  </div>
 </div>

@@ -42,11 +42,15 @@ export class InlineActionObserver implements AttributeObserverDelegate {
   // Attribute observer delegate
 
   elementMatchedAttribute(element: Element, attributeName: string) {
-    this.refreshActionForElement(element)
+    if (this.elementIsSignificant(element)) {
+      this.refreshActionForElement(element)
+    }
   }
 
   elementAttributeValueChanged(element: Element, attributeName: string) {
-    this.refreshActionForElement(element)
+    if (this.elementIsSignificant(element)) {
+      this.refreshActionForElement(element)
+    }
   }
 
   elementUnmatchedAttribute(element: Element, attributeName: string) {
@@ -90,5 +94,11 @@ export class InlineActionObserver implements AttributeObserverDelegate {
     const descriptor = Descriptor.parse(descriptorString)
     const object = this.delegate.getObjectForInlineActionDescriptor(descriptor)
     return new Action(object, element, descriptor)
+  }
+
+  // Private
+
+  private elementIsSignificant(element: Element): boolean {
+    return element.closest(`[data-controller='${this.identifier}']`) == this.element
   }
 }
