@@ -28,11 +28,23 @@ export class Action {
     return this.descriptor.methodName
   }
 
+  get allowsDefault(): boolean {
+    return this.descriptor.allowsDefault
+  }
+
   get method(): Function | undefined {
     const value = this.object[this.methodName]
     if (typeof value == "function") {
       return <Function> value
     }
+  }
+
+  get isDirect(): boolean {
+    return !this.isDelegated
+  }
+
+  get isDelegated(): boolean {
+    return this.eventTarget instanceof Element
   }
 
   isEqualTo(action?: Action): boolean {
@@ -61,4 +73,3 @@ export class Action {
     throw new Error(`Descriptor must include an event name: "${this}`)
   }
 }
-
