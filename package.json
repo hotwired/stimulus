@@ -15,7 +15,7 @@
     "sentinella": "git+ssh://git@github.com/basecamp/sentinella.git"
   },
   "scripts": {
-    "lint": "tslint -c config/tslint.json src/stimulus/*.ts",
+    "lint": "tslint src/stimulus/*.ts",
     "prebuild": "yarn run lint",
     "build": "webpack --env.production",
     "serve": "webpack-dev-server --env.development"
