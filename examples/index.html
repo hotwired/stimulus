@@ -37,23 +37,15 @@
         background-color: white;
       }
     </style>
-    <script src="/stimulus.js"></script>
-    <script>
-      window.app = Stimulus.Application.start()
-    </script>
-    <script src="/js/example_loader.js"></script>
-    <script src="/js/controllers/bulk_checker.js"></script>
-    <script src="/js/controllers/expander.js"></script>
-    <script src="/js/controllers/wizard.js"></script>
   </head>
   <body>
-    <main>
-      <ul class="examples" data-examples>
-        <li><a href="/bulk_checker.html">Bulk Checker</a></li>
-        <li><a href="/expander.html">Expander</a></li>
-        <li><a href="/wizard.html">Wizard</a></li>
+    <main data-controller="example">
+      <ul class="examples">
+        <li><a href="/bulk_checker" data-example-action="load">Bulk Checker</a></li>
+        <li><a href="/expander" data-example-action="load">Expander</a></li>
+        <li><a href="/wizard" data-example-action="load">Wizard</a></li>
       </ul>
-      <div class="container" data-container></div>
+      <div class="container" data-example-target="container"></div>
     </main>
   </body>
 </html>

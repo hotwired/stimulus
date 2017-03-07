@@ -1,3 +1,5 @@
+import { app } from "../app"
+
 app.register("wizard", class extends Stimulus.Controller {
   initialize() {
     this.stepHistory = []

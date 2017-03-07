@@ -1,3 +1,5 @@
+import { app } from "../app"
+
 app.register("expander", class extends Stimulus.Controller {
   initialize() {
     console.log("expander#initialize", this.identifier, this.element)

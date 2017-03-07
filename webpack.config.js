@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const config = {}
 
@@ -33,12 +34,20 @@ config.all = {
 }
 
 config.development = {
+  entry: {
+    examples: './examples/index.js'
+  },
+
   devtool: 'inline-source-map',
 
   devServer: {
     contentBase: path.join(__dirname, 'examples'),
     port: 9000
-  }
+  },
+
+  plugins: [
+    new HtmlWebpackPlugin({template: 'examples/index.html'})
+  ]
 }
 
 config.production = {

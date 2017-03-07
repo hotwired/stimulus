@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "html-webpack-plugin": "^2.28.0",
     "ts-loader": "^2.0.1",
     "tslint": "^4.5.1",
     "typescript": "^2.2.1",
