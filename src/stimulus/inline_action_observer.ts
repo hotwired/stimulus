@@ -1,6 +1,6 @@
 import { Action } from "./action"
 import { Descriptor } from "./descriptor"
-import { Selector, AttributeObserver, AttributeObserverDelegate } from "sentinella"
+import { AttributeObserver, AttributeObserverDelegate } from "sentinella"
 
 export interface InlineActionObserverDelegate {
   getObjectForInlineActionDescriptor(descriptor: Descriptor): object
