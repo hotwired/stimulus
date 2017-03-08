@@ -6,11 +6,11 @@ app.register("expander", class extends Stimulus.Controller {
   }
 
   expand(event) {
-    this.element.classList.add("expanded")
+    this.allTargets.forEach(e => e.classList.add("expanded"))
   }
 
   collapse(event) {
-    this.element.classList.remove("expanded")
+    this.allTargets.forEach(e => e.classList.remove("expanded"))
   }
 
   toggle(event) {
@@ -19,5 +19,11 @@ app.register("expander", class extends Stimulus.Controller {
 
   get isExpanded() {
     return this.element.classList.contains("expanded")
+  }
+
+  get allTargets() {
+    const collapseTargets = this.targets.findAll("collapsed")
+    const expandTargets = this.targets.findAll("expanded")
+    return [this.element].concat(collapseTargets).concat(expandTargets)
   }
 })

@@ -11,11 +11,11 @@
     border-color: green;
   }
 
-  [data-controller~=expander]:not(.expanded) > [data-expander-target=expanded] {
+  [data-expander-target=expanded]:not(.expanded) {
     display: none;
   }
 
-  [data-controller~=expander].expanded > [data-expander-target=collapsed] {
+  [data-expander-target=collapsed].expanded {
     display: none;
   }
 </style>

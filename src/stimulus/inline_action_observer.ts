@@ -6,6 +6,7 @@ export interface InlineActionObserverDelegate {
   getObjectForInlineActionDescriptor(descriptor: Descriptor): object
   inlineActionConnected(action: Action)
   inlineActionDisconnected(action: Action)
+  elementIsSignificant(element: Element)
 }
 
 export class InlineActionObserver implements AttributeObserverDelegate {
@@ -42,13 +43,13 @@ export class InlineActionObserver implements AttributeObserverDelegate {
   // Attribute observer delegate
 
   elementMatchedAttribute(element: Element, attributeName: string) {
-    if (this.elementIsSignificant(element)) {
+    if (this.delegate.elementIsSignificant(element)) {
       this.refreshActionForElement(element)
     }
   }
 
   elementAttributeValueChanged(element: Element, attributeName: string) {
-    if (this.elementIsSignificant(element)) {
+    if (this.delegate.elementIsSignificant(element)) {
       this.refreshActionForElement(element)
     }
   }
@@ -94,11 +95,5 @@ export class InlineActionObserver implements AttributeObserverDelegate {
     const descriptor = Descriptor.parse(descriptorString)
     const object = this.delegate.getObjectForInlineActionDescriptor(descriptor)
     return new Action(object, this.element, element, descriptor)
-  }
-
-  // Private
-
-  private elementIsSignificant(element: Element): boolean {
-    return element.closest(`[data-controller='${this.identifier}']`) == this.element
   }
 }

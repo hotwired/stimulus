@@ -71,7 +71,7 @@ export class Router implements TokenListObserverDelegate {
       let controller = controllerMap.get(identifier)
 
       if (!controller) {
-        controller = new constructor(identifier, element)
+        controller = new constructor(identifier, element, this.attributeName)
         controllerMap.set(identifier, controller)
       }
 

@@ -2,25 +2,27 @@ import { Action } from "./action"
 import { ActionSet } from "./action_set"
 import { Descriptor } from "./descriptor"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
-import { TargetSet } from "./target_set"
+import { TargetSet, TargetSetDelegate } from "./target_set"
 
 export interface ControllerConstructor {
-  new(identifier: string, element: Element): Controller
+  new(identifier: string, element: Element, attributeName: string): Controller
 }
 
-export class Controller implements InlineActionObserverDelegate {
+export class Controller implements InlineActionObserverDelegate, TargetSetDelegate {
   identifier: string
   element: Element
+  elementSelector: string
   targets: TargetSet
 
   private directActions: ActionSet
   private delegatedActions: ActionSet
   private inlineActionObserver: InlineActionObserver
 
-  constructor(identifier: string, element: Element) {
+  constructor(identifier: string, element: Element, attributeName: string) {
     this.identifier = identifier
     this.element = element
-    this.targets = new TargetSet(identifier, element)
+    this.elementSelector = `[${attributeName}='${identifier}']`
+    this.targets = new TargetSet(identifier, element, this)
 
     this.directActions = new ActionSet()
     this.delegatedActions = new ActionSet()
@@ -58,6 +60,12 @@ export class Controller implements InlineActionObserverDelegate {
 
   inlineActionDisconnected(action: Action) {
     this.removeAction(action)
+  }
+
+  // Inline action observer & target set delegate
+
+  elementIsSignificant(element: Element): boolean {
+    return element.closest(this.elementSelector) == this.element
   }
 
   // Actions
