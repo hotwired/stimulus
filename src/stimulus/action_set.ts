@@ -1,88 +1,53 @@
 import { Action } from "./action"
+import { Multimap2 } from "./multimap"
+
+type EventName = string
+type ActionIndex = Multimap2<EventTarget, EventName, Action>
 
 export class ActionSet {
-  actionsByEventTarget: Map<EventTarget, Set<Action>>
-  actionsByEventName: Map<string, Set<Action>>
+  values: Set<Action>
+  actionsByCurrentTarget: Multimap2<EventTarget, EventName, Action>
+  actionsByEventTarget: Multimap2<EventTarget, EventName, Action>
 
   constructor() {
-    this.actionsByEventTarget = new Map<EventTarget, Set<Action>>()
-    this.actionsByEventName = new Map<string, Set<Action>>()
+    this.values = new Set<Action>()
+    this.actionsByCurrentTarget = new Multimap2<EventTarget, EventName, Action>()
+    this.actionsByEventTarget = new Multimap2<EventTarget, EventName, Action>()
   }
 
   get actions(): Action[] {
-    const sets = Array.from(this.actionsByEventTarget.values())
-    return sets.reduce((result, actions) => result.concat(Array.from(actions)), <Action[]> [])
+    return Array.from(this.values)
   }
 
   add(action: Action) {
-    const {eventTarget, eventName} = action
-    add(this.actionsByEventTarget, eventTarget, action)
-    add(this.actionsByEventName, eventName, action)
+    if (!this.values.has(action)) {
+      this.values.add(action)
+      this.actionsByCurrentTarget.add(action.currentTarget, action.eventName, action)
+      this.actionsByEventTarget.add(action.eventTarget, action.eventName, action)
+    }
   }
 
   delete(action: Action) {
-    const {eventTarget, eventName} = action
-    del(this.actionsByEventTarget, eventTarget, action)
-    del(this.actionsByEventName, eventName, action)
-  }
-
-  has(action: Action) {
-    const actions = this.actionsByEventTarget.get(action.eventTarget)
-    return actions != null && actions.has(action)
-  }
-
-  getActionsForEventTarget(eventTarget: EventTarget): Action[] {
-    const actions = this.actionsByEventTarget.get(eventTarget)
-    if (actions) {
-      return Array.from(actions)
+    if (this.values.has(action)) {
+      this.values.delete(action)
+      this.actionsByCurrentTarget.delete(action.currentTarget, action.eventName, action)
+      this.actionsByEventTarget.delete(action.eventTarget, action.eventName, action)
     }
-    return []
   }
 
-  hasActionsForEventTarget(eventTarget: EventTarget): boolean {
-    const actions = this.actionsByEventTarget.get(eventTarget)
-    return actions != null && actions.size > 0
+  has(action: Action): boolean {
+    return this.values.has(action)
   }
 
-  getActionsForEventName(eventName: string): Action[] {
-    const actions = this.actionsByEventName.get(eventName)
-    if (actions) {
-      return Array.from(actions)
-    }
-    return []
+  hasActionsForCurrentTargetAndEventName(currentTarget: EventTarget, eventName: EventName): boolean {
+    return this.actionsByCurrentTarget.get(currentTarget, eventName).length > 0
   }
 
-  hasActionsForEventName(eventName: string): boolean {
-    const actions = this.actionsByEventName.get(eventName)
-    return actions != null && actions.size > 0
+  getActionsForCurrentTargetAndEventName(currentTarget: EventTarget, eventName: EventName): Action[] {
+    return this.actionsByCurrentTarget.get(currentTarget, eventName)
   }
 
-  getActionsForEventNameAndEventTarget(eventName: string, eventTarget: EventTarget): Action[] {
-    return this.getActionsForEventName(eventName).filter((action) => action.eventTarget === eventTarget)
-  }
-}
-
-function add<T>(map: Map<T, Set<Action>>, key: T, value: Action) {
-  fetch(map, key).add(value)
-}
-
-function del<T>(map: Map<T, Set<Action>>, key: T, value: Action) {
-  fetch(map, key).delete(value)
-  prune(map, key)
-}
-
-function fetch<T>(map: Map<T, Set<Action>>, key: T): Set<Action> {
-  let actions = map.get(key)
-  if (!actions) {
-    actions = new Set<Action>()
-    map.set(key, actions)
-  }
-  return actions
-}
-
-function prune<T>(map: Map<T, Set<Action>>, key: T) {
-  const actions = map.get(key)
-  if (actions != null && actions.size == 0) {
-    map.delete(key)
+  getActionsForEventTargetAndEventName(eventTarget: EventTarget, eventName: EventName): Action[] {
+    return this.actionsByEventTarget.get(eventTarget, eventName)
   }
 }

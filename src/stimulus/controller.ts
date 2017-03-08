@@ -13,9 +13,6 @@ export class Controller implements InlineActionObserverDelegate {
   element: Element
   targets: TargetSet
 
-  // TODO: directActions should be a WeakMap<EventTarget, ActionSet>, and direct
-  // event listeners should be installed/uninstalled on connect/disconnect
-
   private directActions: ActionSet
   private delegatedActions: ActionSet
   private inlineActionObserver: InlineActionObserver
@@ -68,10 +65,10 @@ export class Controller implements InlineActionObserverDelegate {
   addAction(action: Action) {
     const actionSet = this.getActionSetForAction(action)
     if (!actionSet.has(action)) {
-      const firstActionOfEventType = !actionSet.hasActionsForEventName(action.eventName)
+      const firstAction = !actionSet.hasActionsForCurrentTargetAndEventName(action.currentTarget, action.eventName)
       actionSet.add(action)
 
-      if (firstActionOfEventType) {
+      if (firstAction) {
         this.addEventListenerForFirstAction(action)
       }
     }
@@ -81,9 +78,9 @@ export class Controller implements InlineActionObserverDelegate {
     const actionSet = this.getActionSetForAction(action)
     if (actionSet.has(action)) {
       actionSet.delete(action)
-      const lastActionOfEventType = !actionSet.hasActionsForEventName(action.eventName)
+      const lastAction = !actionSet.hasActionsForCurrentTargetAndEventName(action.currentTarget, action.eventName)
 
-      if (lastActionOfEventType) {
+      if (lastAction) {
         this.removeEventListenerForLastAction(action)
       }
     }
@@ -96,21 +93,13 @@ export class Controller implements InlineActionObserverDelegate {
   // Event handling
 
   private addEventListenerForFirstAction(action: Action) {
-    console.log("addEventListenerForFirstAction", action)
-    const eventTarget = this.getEventTargetForAction(action)
     const eventListener = this.getEventListenerForAction(action)
-    eventTarget.addEventListener(action.eventName, eventListener, false)
+    action.currentTarget.addEventListener(action.eventName, eventListener, false)
   }
 
   private removeEventListenerForLastAction(action: Action) {
-    console.log("removeEventListenerForLastAction", action)
-    const eventTarget = this.getEventTargetForAction(action)
     const eventListener = this.getEventListenerForAction(action)
-    eventTarget.removeEventListener(action.eventName, eventListener, false)
-  }
-
-  private getEventTargetForAction(action: Action): EventTarget {
-    return action.isDirect ? action.eventTarget : this.element
+    action.currentTarget.removeEventListener(action.eventName, eventListener, false)
   }
 
   private getEventListenerForAction(action: Action): EventListener {
@@ -118,25 +107,22 @@ export class Controller implements InlineActionObserverDelegate {
   }
 
   private handleDirectEvent(event: Event) {
-    const eventName = event.type
-    const actions = this.directActions.getActionsForEventNameAndEventTarget(eventName, event.currentTarget)
+    const actions = this.directActions.getActionsForCurrentTargetAndEventName(event.currentTarget, event.type)
     performActionsWithEvent(actions, event)
   }
 
   private handleDelegatedEvent(event: Event) {
-    const eventName = event.type
     const element = getElementForEventTarget(event.target)
-
     if (element) {
-      const actions = this.findClosestDelegatedActionsForEventNameAndElement(eventName, element)
+      const actions = this.findClosestDelegatedActionsForElementAndEventName(element, event.type)
       performActionsWithEvent(actions, event)
     }
   }
 
-  private findClosestDelegatedActionsForEventNameAndElement(eventName: string, element: Element): Action[] {
+  private findClosestDelegatedActionsForElementAndEventName(element: Element, eventName: string): Action[] {
     let currentElement: Element | null = element
     while (currentElement && currentElement != this.parentElement) {
-      const actions = this.delegatedActions.getActionsForEventNameAndEventTarget(eventName, element)
+      const actions = this.delegatedActions.getActionsForEventTargetAndEventName(element, eventName)
       if (actions.length > 0) {
         return actions
       } else {
