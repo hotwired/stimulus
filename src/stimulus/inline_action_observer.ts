@@ -93,7 +93,7 @@ export class InlineActionObserver implements AttributeObserverDelegate {
   private buildActionForElementWithDescriptorString(element: Element, descriptorString: string) {
     const descriptor = Descriptor.parse(descriptorString)
     const object = this.delegate.getObjectForInlineActionDescriptor(descriptor)
-    return new Action(object, element, descriptor)
+    return new Action(object, this.element, element, descriptor)
   }
 
   // Private

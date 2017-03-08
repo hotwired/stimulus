@@ -11,11 +11,13 @@ export class Action {
   }
 
   object: object
-  eventTarget: EventTarget
+  currentTarget: EventTarget  // target on which the event listener is installed (event.currentTarget)
+  eventTarget: EventTarget    // target on which the action is performed
   descriptor: Descriptor
 
-  constructor(object: object, eventTarget: EventTarget, descriptor: Descriptor) {
+  constructor(object: object, currentTarget: EventTarget, eventTarget: EventTarget, descriptor: Descriptor) {
     this.object = object
+    this.currentTarget = currentTarget
     this.eventTarget = eventTarget
     this.descriptor = descriptor
   }
@@ -40,11 +42,11 @@ export class Action {
   }
 
   get isDirect(): boolean {
-    return !this.isDelegated
+    return this.currentTarget == this.eventTarget
   }
 
   get isDelegated(): boolean {
-    return this.eventTarget instanceof Element
+    return !this.isDirect
   }
 
   isEqualTo(action?: Action): boolean {
