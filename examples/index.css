@@ -29,6 +29,13 @@ p {
   margin-top: 1em;
 }
 
+textarea {
+  font-size: inherit;
+  padding: 0.6em;
+  border-radius: 3px;
+  resize: none;
+}
+
 main {
   display: flex;
   flex-flow: row;

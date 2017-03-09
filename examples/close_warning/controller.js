@@ -17,7 +17,17 @@ app.register("close-warning", class extends Stimulus.Controller {
   }
 
   warn(event) {
-    event.returnValue = "Are you sure?"
-    return event.returnValue
+    if (this.hasUnsavedContent()) {
+      event.returnValue = "Are you sure?"
+      return event.returnValue
+    }
+  }
+
+  hasUnsavedContent() {
+    return this.getInput().length > 0
+  }
+
+  getInput() {
+    return this.targets.find("input").value
   }
 })
