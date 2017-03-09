@@ -4,21 +4,17 @@ export class Mask {
     return new Mask(elements)
   }
 
-  private elements: Element[]
+  private maskedElements: Element[]
 
-  constructor(elements: Element[]) {
-    this.elements = elements
+  constructor(maskedElements: Element[]) {
+    this.maskedElements = maskedElements
   }
 
   get length(): number {
-    return this.elements.length
+    return this.maskedElements.length
   }
 
-  has(element: Element): boolean {
-    return this.elements.indexOf(element) >= 0
-  }
-
-  covers(element: Element): boolean {
+  masks(element: Element): boolean {
     if (this.length) {
       return this.has(element) || this.contains(element)
     } else {
@@ -26,9 +22,13 @@ export class Mask {
     }
   }
 
+  private has(element: Element): boolean {
+    return this.maskedElements.indexOf(element) >= 0
+  }
+
   private contains(element: Element): boolean {
-    for (const memberElement of this.elements) {
-      if (element.compareDocumentPosition(memberElement) & Node.DOCUMENT_POSITION_CONTAINS) {
+    for (const maskedElement of this.maskedElements) {
+      if (element.compareDocumentPosition(maskedElement) & Node.DOCUMENT_POSITION_CONTAINS) {
         return true
       }
     }

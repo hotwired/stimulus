@@ -122,7 +122,7 @@ export class Router implements TokenListObserverDelegate, ControllerDelegate {
 
   controllerCanControlElement(controller: Controller, element: Element): boolean {
     const mask = this.fetchMaskForElement(controller.identifier, controller.element)
-    return !mask.covers(element)
+    return !mask.masks(element)
   }
 
   // Token list observer delegate
