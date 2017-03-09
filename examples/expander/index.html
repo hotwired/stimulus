@@ -1,25 +1,3 @@
-<style>
-  [data-controller~=expander] {
-    position: relative;
-    border: 2px dotted red;
-    border-radius: 5px;
-    padding: 15px;
-    margin-top: 15px;
-  }
-
-  [data-controller~=expander].expanded {
-    border-color: green;
-  }
-
-  [data-expander-target=expanded]:not(.expanded) {
-    display: none;
-  }
-
-  [data-expander-target=collapsed].expanded {
-    display: none;
-  }
-</style>
-
 <div data-controller="expander">
   <button type="button" data-expander-action="expand" data-expander-target="collapsed">Expand</button>
   <button type="button" data-expander-action="collapse" data-expander-target="expanded">Collapse</button>

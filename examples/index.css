@@ -1,0 +1,80 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  padding: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #333;
+  background-color: rgba(0,0,0,0.08);
+}
+
+a {
+  color: #333;
+}
+
+main {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-around;
+}
+
+.container {
+  flex-grow: 1;
+  border: 1px dashed #666;
+  border-radius: 3px;
+  min-height: 300px;
+  padding: 10px;
+  margin: 10px;
+  background-color: white;
+}
+
+[data-controller~=expander] {
+  position: relative;
+  border: 2px dotted red;
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+[data-controller~=expander].expanded {
+  border-color: green;
+}
+
+[data-expander-target=expanded]:not(.expanded) {
+  display: none;
+}
+
+[data-expander-target=collapsed].expanded {
+  display: none;
+}
+
+[data-shape-shifter-target~="shape"] {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  margin: 10px;
+}
+
+[data-shape-shifter-target~="shape"].triangle {
+  width: 0;
+  height: 0;
+  border-bottom: 80px solid steelblue;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+}
+
+[data-shape-shifter-target~="shape"].circle {
+  background-color: steelblue;
+  border-radius: 50%;
+}
+
+[data-controller=wizard] [data-wizard-target=step]:not([data-current-step]) {
+  display: none;
+}
