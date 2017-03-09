@@ -28,7 +28,7 @@ export class Mask {
 
   private contains(element: Element): boolean {
     for (const maskedElement of this.maskedElements) {
-      if (element.compareDocumentPosition(maskedElement) & Node.DOCUMENT_POSITION_CONTAINS) {
+      if (maskedElement.contains(element)) {
         return true
       }
     }
