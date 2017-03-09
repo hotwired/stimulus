@@ -1,5 +1,5 @@
 export interface TargetSetDelegate {
-  elementIsSignificant(element: Element)
+  canControlElement(element: Element)
 }
 
 export class TargetSet {
@@ -20,7 +20,7 @@ export class TargetSet {
   find(targetName: string): Element | null {
     const selector = this.getSelectorForTargetName(targetName)
     const element = this.element.querySelector(selector)
-    if (element && this.delegate.elementIsSignificant(element)) {
+    if (element && this.delegate.canControlElement(element)) {
       return element
     } else {
       return null
@@ -30,7 +30,7 @@ export class TargetSet {
   findAll(targetName: string): Element[] {
     const selector = this.getSelectorForTargetName(targetName)
     const elements = Array.from(this.element.querySelectorAll(selector))
-    return elements.filter(element => this.delegate.elementIsSignificant(element))
+    return elements.filter(element => this.delegate.canControlElement(element))
   }
 
   private getSelectorForTargetName(targetName: string): string {

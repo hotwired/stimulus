@@ -1,14 +1,16 @@
 import { TokenListObserver, TokenListObserverDelegate } from "sentinella"
-import { Controller, ControllerConstructor } from "./controller"
+import { Controller, ControllerConstructor, ControllerDelegate } from "./controller"
+import { Mask } from "./mask"
 
 type ControllerMap = Map<string, Controller>
 
-export class Router implements TokenListObserverDelegate {
+export class Router implements TokenListObserverDelegate, ControllerDelegate {
   private attributeName: string
   private tokenListObserver: TokenListObserver
   private controllerConstructors: Map<string, ControllerConstructor>
   private controllerMaps: WeakMap<Element, ControllerMap>
   private connectedControllers: Set<Controller>
+  private masks: WeakMap<Element, Mask>
 
   constructor(element: Element, attributeName: string) {
     this.attributeName = attributeName
@@ -16,6 +18,7 @@ export class Router implements TokenListObserverDelegate {
     this.controllerConstructors = new Map()
     this.controllerMaps = new WeakMap()
     this.connectedControllers = new Set()
+    this.masks = new WeakMap()
   }
 
   get element(): Element {
@@ -53,6 +56,7 @@ export class Router implements TokenListObserverDelegate {
     if (controller && !this.connectedControllers.has(controller)) {
       this.connectedControllers.add(controller)
       controller.connect()
+      this.resetMasksForIdentifier(identifier)
     }
   }
 
@@ -61,7 +65,12 @@ export class Router implements TokenListObserverDelegate {
     if (controller && this.connectedControllers.has(controller)) {
       this.connectedControllers.delete(controller)
       controller.disconnect()
+      this.resetMasksForIdentifier(identifier)
     }
+  }
+
+  private getConnectedControllersForIdentifier(identifier: string) {
+    return Array.from(this.connectedControllers).filter(controller => controller.identifier == identifier)
   }
 
   private fetchControllerForElement(identifier: string, element: Element): Controller | undefined {
@@ -71,7 +80,7 @@ export class Router implements TokenListObserverDelegate {
       let controller = controllerMap.get(identifier)
 
       if (!controller) {
-        controller = new constructor(identifier, element, this.attributeName)
+        controller = new constructor(identifier, element, this)
         controllerMap.set(identifier, controller)
       }
 
@@ -87,6 +96,33 @@ export class Router implements TokenListObserverDelegate {
     }
 
     return controllerMap
+  }
+
+  // Masks
+
+  private fetchMaskForElement(identifier: string, element: Element): Mask {
+    let mask = this.masks.get(element)
+    if (!mask) {
+      const selector = `[${this.attributeName}='${identifier}']`
+      mask = Mask.forElementWithSelector(element, selector)
+      this.masks.set(element, mask)
+    }
+
+    return mask
+  }
+
+  private resetMasksForIdentifier(identifier: string) {
+    const controllers = this.getConnectedControllersForIdentifier(identifier)
+    for (const controller of controllers) {
+      this.masks.delete(controller.element)
+    }
+  }
+
+  // Controller delegate
+
+  controllerCanControlElement(controller: Controller, element: Element): boolean {
+    const mask = this.fetchMaskForElement(controller.identifier, controller.element)
+    return !mask.covers(element)
   }
 
   // Token list observer delegate

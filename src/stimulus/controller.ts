@@ -5,25 +5,29 @@ import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_act
 import { TargetSet, TargetSetDelegate } from "./target_set"
 
 export interface ControllerConstructor {
-  new(identifier: string, element: Element, attributeName: string): Controller
+  new(identifier: string, element: Element, delegate: ControllerDelegate): Controller
+}
+
+export interface ControllerDelegate {
+  controllerCanControlElement(controller: Controller, element: Element): boolean
 }
 
 export class Controller implements InlineActionObserverDelegate, TargetSetDelegate {
   identifier: string
   element: Element
-  elementSelector: string
+  delegate: ControllerDelegate
   targets: TargetSet
 
   private directActions: ActionSet
   private delegatedActions: ActionSet
   private inlineActionObserver: InlineActionObserver
 
-  constructor(identifier: string, element: Element, attributeName: string) {
+  constructor(identifier: string, element: Element, delegate: ControllerDelegate) {
     this.identifier = identifier
     this.element = element
-    this.elementSelector = `[${attributeName}='${identifier}']`
-    this.targets = new TargetSet(identifier, element, this)
+    this.delegate = delegate
 
+    this.targets = new TargetSet(identifier, element, this)
     this.directActions = new ActionSet()
     this.delegatedActions = new ActionSet()
     this.inlineActionObserver = new InlineActionObserver(identifier, element, this)
@@ -64,8 +68,8 @@ export class Controller implements InlineActionObserverDelegate, TargetSetDelega
 
   // Inline action observer & target set delegate
 
-  elementIsSignificant(element: Element): boolean {
-    return element.closest(this.elementSelector) == this.element
+  canControlElement(element: Element): boolean {
+    return this.delegate.controllerCanControlElement(this, element)
   }
 
   // Actions

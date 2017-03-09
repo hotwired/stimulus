@@ -6,7 +6,7 @@ export interface InlineActionObserverDelegate {
   getObjectForInlineActionDescriptor(descriptor: Descriptor): object
   inlineActionConnected(action: Action)
   inlineActionDisconnected(action: Action)
-  elementIsSignificant(element: Element)
+  canControlElement(element: Element)
 }
 
 export class InlineActionObserver implements AttributeObserverDelegate {
@@ -43,13 +43,13 @@ export class InlineActionObserver implements AttributeObserverDelegate {
   // Attribute observer delegate
 
   elementMatchedAttribute(element: Element, attributeName: string) {
-    if (this.delegate.elementIsSignificant(element)) {
+    if (this.delegate.canControlElement(element)) {
       this.refreshActionForElement(element)
     }
   }
 
   elementAttributeValueChanged(element: Element, attributeName: string) {
-    if (this.delegate.elementIsSignificant(element)) {
+    if (this.delegate.canControlElement(element)) {
       this.refreshActionForElement(element)
     }
   }
