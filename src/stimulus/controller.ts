@@ -40,11 +40,17 @@ export class Controller implements InlineActionObserverDelegate, TargetSetDelega
   initialize() {
   }
 
-  connect() {
+  beforeConnect() {
     this.inlineActionObserver.start()
   }
 
+  connect() {
+  }
+
   disconnect() {
+  }
+
+  afterDisconnect() {
     this.inlineActionObserver.stop()
   }
 

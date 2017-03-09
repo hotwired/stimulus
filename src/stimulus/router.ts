@@ -55,8 +55,9 @@ export class Router implements TokenListObserverDelegate, ControllerDelegate {
     const controller = this.fetchControllerForElement(identifier, element)
     if (controller && !this.connectedControllers.has(controller)) {
       this.connectedControllers.add(controller)
-      controller.connect()
       this.resetMasksForIdentifier(identifier)
+      controller.beforeConnect()
+      controller.connect()
     }
   }
 
@@ -64,8 +65,9 @@ export class Router implements TokenListObserverDelegate, ControllerDelegate {
     const controller = this.fetchControllerForElement(identifier, element)
     if (controller && this.connectedControllers.has(controller)) {
       this.connectedControllers.delete(controller)
-      controller.disconnect()
       this.resetMasksForIdentifier(identifier)
+      controller.disconnect()
+      controller.afterDisconnect()
     }
   }
 
