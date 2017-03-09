@@ -5,26 +5,37 @@ app.register("example", class extends Stimulus.Controller {
     console.log("example#initialize", this.identifier, this.element)
   }
 
-  load(event) {
-    const url = event.target.href
-    const containerElement = this.targets.find("container")
+  get containerElement() {
+    return this.targets.find("container")
+  }
 
-    if (url === this.currentURL) {
-      const element = containerElement.firstChild
-      containerElement.removeChild(element)
-      containerElement.appendChild(element)
+  load(event) {
+    if (event.target == this.activeNavElement) {
+      this.reattach()
     } else {
-      fetch(url)
-        .then(function(response) {
-          return response.text()
-        }).then(function(body) {
-          containerElement.dataset.url = url
-          containerElement.innerHTML = "<div>" + body + "</div>"
-        })
+      this.setActiveNavElement(event.target)
+      this.loadExampleForActiveNavElement()
     }
   }
 
-  get currentURL() {
-    return this.targets.find("container").dataset.url
+  reattach() {
+    const {containerElement} = this
+    const {firstChild} = containerElement
+    containerElement.removeChild(firstChild)
+    containerElement.appendChild(firstChild)
+  }
+
+  setActiveNavElement(element) {
+    if (this.activeNavElement) {
+      this.activeNavElement.classList.remove("active")
+    }
+    element.classList.add("active")
+    this.activeNavElement = element
+  }
+
+  loadExampleForActiveNavElement() {
+    fetch(this.activeNavElement.href)
+      .then(response => response.text())
+      .then(body => this.containerElement.innerHTML = `<div>${body}</div>`)
   }
 })

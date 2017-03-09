@@ -1,5 +1,7 @@
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html, body {
@@ -19,10 +21,44 @@ a {
   color: #333;
 }
 
+button {
+  padding: 2px 6px 3px 6px;
+}
+
+p {
+  margin-top: 1em;
+}
+
 main {
   display: flex;
   flex-flow: row;
   justify-content: space-around;
+}
+
+.nav {
+  flex-basis: auto;
+  white-space: nowrap;
+  margin: 10px 20px;
+}
+
+.nav li {
+  list-style: none;
+  margin: 0 0 8px 0;
+}
+
+.nav a {
+  display: block;
+  position: relative;
+  text-decoration: none;
+}
+
+.nav a.active::before {
+  content: "👉";
+  display: inline-block;
+  position: absolute;
+  font-size: 28px;
+  left: -32px;
+  top: -6px;
 }
 
 .container {
