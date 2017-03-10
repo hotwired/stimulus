@@ -38,6 +38,7 @@ export class Controller implements InlineActionObserverDelegate, TargetSetDelega
   }
 
   beforeConnect() {
+    this.dispatcher.start()
     this.inlineActionObserver.start()
   }
 
@@ -51,6 +52,7 @@ export class Controller implements InlineActionObserverDelegate, TargetSetDelega
 
   afterDisconnect() {
     this.inlineActionObserver.stop()
+    this.dispatcher.stop()
   }
 
   get parentElement(): Element | null {

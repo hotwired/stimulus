@@ -4,12 +4,14 @@ import { Controller } from "./controller"
 
 export class Dispatcher {
   controller: Controller
+  started: boolean
 
   private directActions: ActionSet
   private delegatedActions: ActionSet
 
   constructor(controller: Controller) {
     this.controller = controller
+    this.started = false
 
     this.directActions = new ActionSet()
     this.delegatedActions = new ActionSet()
@@ -18,27 +20,35 @@ export class Dispatcher {
     this.handleDelegatedEvent = this.handleDelegatedEvent.bind(this)
   }
 
+  start() {
+    if (!this.started) {
+      this.addEventListeners()
+      this.started = true
+    }
+  }
+
+  stop() {
+    if (this.started) {
+      this.removeEventListeners()
+      this.started = false
+    }
+  }
+
+  // Action registration
+
   addAction(action: Action) {
     const actionSet = this.getActionSetForAction(action)
     if (!actionSet.has(action)) {
-      const firstAction = !actionSet.hasActionsForCurrentTargetAndEventName(action.currentTarget, action.eventName)
+      this.addEventListenerForAction(action)
       actionSet.add(action)
-
-      if (firstAction) {
-        this.addEventListenerForFirstAction(action)
-      }
     }
   }
 
   removeAction(action: Action) {
     const actionSet = this.getActionSetForAction(action)
     if (actionSet.has(action)) {
+      this.removeEventListenerForAction(action)
       actionSet.delete(action)
-      const lastAction = !actionSet.hasActionsForCurrentTargetAndEventName(action.currentTarget, action.eventName)
-
-      if (lastAction) {
-        this.removeEventListenerForLastAction(action)
-      }
     }
   }
 
@@ -46,16 +56,52 @@ export class Dispatcher {
     return action.isDirect ? this.directActions : this.delegatedActions
   }
 
-  // Event handling
-
-  private addEventListenerForFirstAction(action: Action) {
-    const eventListener = this.getEventListenerForAction(action)
-    action.currentTarget.addEventListener(action.eventName, eventListener, false)
+  private hasRelatedActionsForAction(action: Action): boolean {
+    return this.getRelatedActionsForAction(action).length > 0
   }
 
-  private removeEventListenerForLastAction(action: Action) {
-    const eventListener = this.getEventListenerForAction(action)
-    action.currentTarget.removeEventListener(action.eventName, eventListener, false)
+  private getRelatedActionsForAction(action: Action): Action[] {
+    const actionSet = this.getActionSetForAction(action)
+    const actions = actionSet.getActionsForCurrentTargetAndEventName(action.currentTarget, action.eventName)
+    return actions.filter(a => a != action)
+  }
+
+  // Event listeners
+
+  private addEventListeners() {
+    this.addEventListenersForActionSet(this.directActions)
+    this.addEventListenersForActionSet(this.delegatedActions)
+  }
+
+  private removeEventListeners() {
+    this.removeEventListenersForActionSet(this.delegatedActions)
+    this.removeEventListenersForActionSet(this.directActions)
+  }
+
+  private addEventListenersForActionSet(actionSet: ActionSet) {
+    for (const action of actionSet.actions) {
+      this.addEventListenerForAction(action)
+    }
+  }
+
+  private removeEventListenersForActionSet(actionSet: ActionSet) {
+    for (const action of actionSet.actions) {
+      this.removeEventListenerForAction(action)
+    }
+  }
+
+  private addEventListenerForAction(action: Action) {
+    if (!this.hasRelatedActionsForAction(action)) {
+      const eventListener = this.getEventListenerForAction(action)
+      action.currentTarget.addEventListener(action.eventName, eventListener, false)
+    }
+  }
+
+  private removeEventListenerForAction(action: Action) {
+    if (!this.hasRelatedActionsForAction(action)) {
+      const eventListener = this.getEventListenerForAction(action)
+      action.currentTarget.removeEventListener(action.eventName, eventListener, false)
+    }
   }
 
   private getEventListenerForAction(action: Action): EventListener {

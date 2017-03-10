@@ -39,10 +39,6 @@ export class ActionSet {
     return this.values.has(action)
   }
 
-  hasActionsForCurrentTargetAndEventName(currentTarget: EventTarget, eventName: EventName): boolean {
-    return this.actionsByCurrentTarget.get(currentTarget, eventName).length > 0
-  }
-
   getActionsForCurrentTargetAndEventName(currentTarget: EventTarget, eventName: EventName): Action[] {
     return this.actionsByCurrentTarget.get(currentTarget, eventName)
   }
