@@ -1,13 +1,13 @@
 import { Descriptor } from "./descriptor"
 
 export class Action {
-  static defaultEventNames = {
-    "a":        (e: Element) => "click",
-    "button":   (e: Element) => "click",
-    "form":     (e: Element) => "submit",
-    "input":    (e: Element) => e.getAttribute("type") == "submit" ? "click" : "change",
-    "select":   (e: Element) => "change",
-    "textarea": (e: Element) => "change"
+  static defaultEventNames: { [tagName: string]: (element: Element) => string } = {
+    "a":        e => "click",
+    "button":   e => "click",
+    "form":     e => "submit",
+    "input":    e => e.getAttribute("type") == "submit" ? "click" : "change",
+    "select":   e => "change",
+    "textarea": e => "change"
   }
 
   object: object
