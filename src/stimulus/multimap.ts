@@ -35,7 +35,7 @@ export class Multimap<K, V> {
 
   hasValue(value: V): boolean {
     const sets = Array.from(this.map.values())
-    return sets.some((set) => set.has(value))
+    return sets.some(set => set.has(value))
   }
 
   get(key: K): V[] {
@@ -86,7 +86,7 @@ export class Multimap2<K1, K2, V> {
 
   hasValue(value: V): boolean {
     const maps = Array.from(this.map.values())
-    return maps.some((map) => map.hasValue(value))
+    return maps.some(map => map.hasValue(value))
   }
 
   get(key1: K1, key2: K2): V[] {
