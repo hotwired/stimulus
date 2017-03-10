@@ -1,6 +1,7 @@
 import { Action } from "./action"
 import { ActionSet } from "./action_set"
 import { Controller } from "./controller"
+import { EventSet } from "./event_set"
 
 export class Dispatcher {
   controller: Controller
@@ -8,6 +9,7 @@ export class Dispatcher {
 
   private directActions: ActionSet
   private delegatedActions: ActionSet
+  private events: EventSet
 
   constructor(controller: Controller) {
     this.controller = controller
@@ -15,6 +17,7 @@ export class Dispatcher {
 
     this.directActions = new ActionSet()
     this.delegatedActions = new ActionSet()
+    this.events = new EventSet()
 
     this.handleDirectEvent = this.handleDirectEvent.bind(this)
     this.handleDelegatedEvent = this.handleDelegatedEvent.bind(this)
@@ -22,8 +25,8 @@ export class Dispatcher {
 
   start() {
     if (!this.started) {
-      this.addEventListeners()
       this.started = true
+      this.addEventListeners()
     }
   }
 
@@ -56,16 +59,6 @@ export class Dispatcher {
     return action.isDirect ? this.directActions : this.delegatedActions
   }
 
-  private hasRelatedActionsForAction(action: Action): boolean {
-    return this.getRelatedActionsForAction(action).length > 0
-  }
-
-  private getRelatedActionsForAction(action: Action): Action[] {
-    const actionSet = this.getActionSetForAction(action)
-    const actions = actionSet.getActionsForCurrentTargetAndEventName(action.currentTarget, action.eventName)
-    return actions.filter(a => a != action)
-  }
-
   // Event listeners
 
   private addEventListeners() {
@@ -91,16 +84,16 @@ export class Dispatcher {
   }
 
   private addEventListenerForAction(action: Action) {
-    if (!this.hasRelatedActionsForAction(action)) {
+    if (this.started) {
       const eventListener = this.getEventListenerForAction(action)
-      action.currentTarget.addEventListener(action.eventName, eventListener, false)
+      this.events.add(action.eventName, action.currentTarget, eventListener, false)
     }
   }
 
   private removeEventListenerForAction(action: Action) {
-    if (!this.hasRelatedActionsForAction(action)) {
+    if (this.started) {
       const eventListener = this.getEventListenerForAction(action)
-      action.currentTarget.removeEventListener(action.eventName, eventListener, false)
+      this.events.delete(action.eventName, action.currentTarget, eventListener, false)
     }
   }
 
