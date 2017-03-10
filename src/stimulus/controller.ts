@@ -34,6 +34,7 @@ export class Controller implements InlineActionObserverDelegate, TargetSetDelega
   }
 
   initialize() {
+    // Override in your subclass to set up initial controller state
   }
 
   beforeConnect() {
@@ -41,9 +42,11 @@ export class Controller implements InlineActionObserverDelegate, TargetSetDelega
   }
 
   connect() {
+    // Override in your subclass to respond when the controller is connected to the DOM
   }
 
   disconnect() {
+    // Override in your subclass to respond when the controller is disconnected from the DOM
   }
 
   afterDisconnect() {
