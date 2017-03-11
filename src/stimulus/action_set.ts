@@ -2,7 +2,6 @@ import { Action } from "./action"
 import { Multimap2 } from "./multimap"
 
 type EventName = string
-type ActionIndex = Multimap2<EventTarget, EventName, Action>
 
 export class ActionSet {
   values: Set<Action>
