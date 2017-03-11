@@ -11,14 +11,14 @@ export class Action {
   }
 
   object: object
-  currentTarget: EventTarget  // target on which the event listener is installed (event.currentTarget)
-  eventTarget: EventTarget    // target on which the action is performed
+  eventTarget: EventTarget        // target on which the event listener is installed (event.currentTarget)
+  delegatedTarget: EventTarget    // target on which the action is performed
   descriptor: Descriptor
 
-  constructor(object: object, currentTarget: EventTarget, eventTarget: EventTarget, descriptor: Descriptor) {
+  constructor(object: object, eventTarget: EventTarget, delegatedTarget: EventTarget, descriptor: Descriptor) {
     this.object = object
-    this.currentTarget = currentTarget
     this.eventTarget = eventTarget
+    this.delegatedTarget = delegatedTarget
     this.descriptor = descriptor
   }
 
@@ -42,7 +42,7 @@ export class Action {
   }
 
   get isDirect(): boolean {
-    return this.currentTarget == this.eventTarget
+    return this.eventTarget == this.delegatedTarget
   }
 
   get isDelegated(): boolean {
@@ -53,6 +53,7 @@ export class Action {
     return action != null &&
       action.object === this.object &&
       action.eventTarget == this.eventTarget &&
+      action.delegatedTarget == this.delegatedTarget &&
       action.eventName == this.eventName &&
       action.methodName == this.methodName
   }
@@ -64,11 +65,11 @@ export class Action {
   }
 
   private get defaultEventName(): string {
-    if (this.eventTarget instanceof Element) {
-      const tagName = this.eventTarget.tagName.toLowerCase()
+    if (this.delegatedTarget instanceof Element) {
+      const tagName = this.delegatedTarget.tagName.toLowerCase()
       const defaultEventName = Action.defaultEventNames[tagName]
       if (defaultEventName) {
-        return defaultEventName(this.eventTarget)
+        return defaultEventName(this.delegatedTarget)
       }
     }
 

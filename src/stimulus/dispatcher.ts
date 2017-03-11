@@ -86,14 +86,14 @@ export class Dispatcher {
   private addEventListenerForAction(action: Action) {
     if (this.started) {
       const eventListener = this.getEventListenerForAction(action)
-      this.events.add(action.eventName, action.currentTarget, eventListener, false)
+      this.events.add(action.eventName, action.eventTarget, eventListener, false)
     }
   }
 
   private removeEventListenerForAction(action: Action) {
     if (this.started) {
       const eventListener = this.getEventListenerForAction(action)
-      this.events.delete(action.eventName, action.currentTarget, eventListener, false)
+      this.events.delete(action.eventName, action.eventTarget, eventListener, false)
     }
   }
 
@@ -102,7 +102,7 @@ export class Dispatcher {
   }
 
   private handleDirectEvent(event: Event) {
-    const actions = this.directActions.getActionsForCurrentTargetAndEventName(event.currentTarget, event.type)
+    const actions = this.directActions.getActionsForEventTargetAndEventName(event.currentTarget, event.type)
     performActionsWithEvent(actions, event)
   }
 
@@ -118,7 +118,7 @@ export class Dispatcher {
     const parentElement = this.controller.parentElement
     let currentElement: Element | null = element
     while (currentElement && currentElement != parentElement) {
-      const actions = this.delegatedActions.getActionsForEventTargetAndEventName(element, eventName)
+      const actions = this.delegatedActions.getActionsForDelegatedTargetAndEventName(element, eventName)
       if (actions.length > 0) {
         return actions
       } else {
