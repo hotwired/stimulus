@@ -1,7 +1,7 @@
-const path = require('path')
-const webpack = require('webpack')
-const merge = require('webpack-merge')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require("path")
+const webpack = require("webpack")
+const merge = require("webpack-merge")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
 
 const config = {}
 
@@ -11,52 +11,49 @@ config.all = {
       {
         test: /\.ts$/,
         use: [
-          { loader: 'ts-loader' }
+          { loader: "ts-loader" }
         ]
       }
     ]
   },
 
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: [".ts", ".js"],
+    modules: ["src", "node_modules"]
   }
 }
 
 config.development = {
   entry: {
-    examples: './examples/index.js'
+    examples: "./examples/index.js"
   },
 
   output: {
-    filename: '[name].js'
+    filename: "[name].js"
   },
 
-  resolve: {
-    modules: [path.resolve(__dirname, "src"), "node_modules"]
-  },
-
-  devtool: 'inline-source-map',
+  devtool: "inline-source-map",
 
   devServer: {
-    contentBase: path.join(__dirname, 'examples'),
+    contentBase: "./examples",
     port: 9000
   },
 
   plugins: [
-    new HtmlWebpackPlugin({template: 'examples/index.html'})
+    new HtmlWebpackPlugin({template: "examples/index.html"})
   ]
 }
 
 config.production = {
   entry: {
-    stimulus: './src/stimulus/index.ts'
+    stimulus: "./src/stimulus/index.ts"
   },
 
   output: {
-    filename: '[name].js',
-    path: path.resolve(__dirname, './dist'),
-    library: 'Stimulus',
-    libraryTarget: 'umd'
+    filename: "[name].js",
+    path: "./dist",
+    library: "Stimulus",
+    libraryTarget: "umd"
   },
 
   plugins: [
