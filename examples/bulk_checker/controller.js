@@ -1,5 +1,5 @@
 import { app } from "../app"
-import { Controller } from "../../src/stimulus"
+import { Controller } from "stimulus"
 
 app.register("bulk-checker", class extends Controller {
   initialize() {

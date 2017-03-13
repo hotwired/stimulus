@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "stimulus": ["../src/stimulus"]
+    }
+  }
+}

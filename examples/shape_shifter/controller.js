@@ -1,5 +1,5 @@
 import { app } from "../app"
-import { Controller } from "../../src/stimulus"
+import { Controller } from "stimulus"
 
 const SHAPES = ["circle", "triangle"]
 

@@ -31,6 +31,10 @@ config.development = {
     filename: '[name].js'
   },
 
+  resolve: {
+    modules: [path.resolve(__dirname, "src"), "node_modules"]
+  },
+
   devtool: 'inline-source-map',
 
   devServer: {

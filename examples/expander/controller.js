@@ -1,5 +1,5 @@
 import { app } from "../app"
-import { Controller } from "../../src/stimulus"
+import { Controller } from "stimulus"
 
 app.register("expander", class extends Controller {
   initialize() {

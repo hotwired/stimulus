@@ -1,3 +1,3 @@
-import { Application } from "../src/stimulus"
+import { Application } from "stimulus"
 const app = Application.start()
 export { app }

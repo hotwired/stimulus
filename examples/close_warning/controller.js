@@ -1,5 +1,5 @@
 import { app } from "../app"
-import { Controller, Descriptor, Action } from "../../src/stimulus"
+import { Controller, Descriptor, Action } from "stimulus"
 
 app.register("close-warning", class extends Controller {
   initialize() {
