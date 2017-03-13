@@ -1,6 +1,7 @@
 import { app } from "../app"
+import { Controller } from "stimulus"
 
-app.register("bulk-checker", class extends Stimulus.Controller {
+app.register("bulk-checker", class extends Controller {
   initialize() {
     console.log("bulk-checker#initialize", this.identifier, this.element)
   }

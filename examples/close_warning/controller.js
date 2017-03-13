@@ -1,7 +1,7 @@
 import { app } from "../app"
-const { Descriptor, Action } = Stimulus
+import { Controller, Descriptor, Action } from "stimulus"
 
-app.register("close-warning", class extends Stimulus.Controller {
+app.register("close-warning", class extends Controller {
   initialize() {
     console.log("close-warning#initialize", this.identifier, this.element)
 

@@ -1,56 +1,61 @@
-const path = require('path')
-const webpack = require('webpack')
-const merge = require('webpack-merge')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require("path")
+const webpack = require("webpack")
+const merge = require("webpack-merge")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
 
 const config = {}
 
 config.all = {
-  entry: {
-    stimulus: './src/stimulus/index.ts',
-  },
-
-  output: {
-    filename: '[name].js',
-    path: path.resolve(__dirname, './dist'),
-    library: 'Stimulus',
-    libraryTarget: 'umd'
-  },
-
   module: {
     rules: [
       {
         test: /\.ts$/,
         use: [
-          { loader: 'ts-loader' }
+          { loader: "ts-loader" }
         ]
       }
     ]
   },
 
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: [".ts", ".js"],
+    modules: ["src", "node_modules"]
   }
 }
 
 config.development = {
   entry: {
-    examples: './examples/index.js'
+    examples: "./examples/index.js"
   },
 
-  devtool: 'inline-source-map',
+  output: {
+    filename: "[name].js"
+  },
+
+  devtool: "inline-source-map",
 
   devServer: {
-    contentBase: path.join(__dirname, 'examples'),
+    contentBase: "./examples",
     port: 9000
   },
 
   plugins: [
-    new HtmlWebpackPlugin({template: 'examples/index.html'})
+    new HtmlWebpackPlugin({template: "examples/index.html"})
   ]
 }
 
 config.production = {
+  entry: {
+    stimulus: "./src/stimulus/index.ts"
+  },
+
+  output: {
+    filename: "[name].js",
+    path: "./dist",
+    library: "Stimulus",
+    libraryTarget: "umd"
+  },
+
   plugins: [
     new webpack.optimize.UglifyJsPlugin()
   ]
