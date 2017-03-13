@@ -1,17 +1,17 @@
 import { Action } from "./action"
 import { ActionSet } from "./action_set"
-import { Controller } from "./controller"
+import { X } from "./x"
 import { EventSet } from "./event_set"
 
 export class Dispatcher {
-  controller: Controller
+  controller: X
   started: boolean
 
   private directActions: ActionSet
   private delegatedActions: ActionSet
   private events: EventSet
 
-  constructor(controller: Controller) {
+  constructor(controller: X) {
     this.controller = controller
     this.started = false
 

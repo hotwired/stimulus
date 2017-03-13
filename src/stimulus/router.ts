@@ -1,23 +1,24 @@
 import { TokenListObserver, TokenListObserverDelegate } from "sentinella"
-import { Controller, ControllerConstructor, ControllerDelegate } from "./controller"
+import { ControllerConstructor } from "./controller"
+import { X, XDelegate } from "./x"
 import { Mask } from "./mask"
 
-type ControllerMap = Map<string, Controller>
+type XMap = Map<string, X>
 
-export class Router implements TokenListObserverDelegate, ControllerDelegate {
+export class Router implements TokenListObserverDelegate, XDelegate {
   private attributeName: string
   private tokenListObserver: TokenListObserver
   private controllerConstructors: Map<string, ControllerConstructor>
-  private controllerMaps: WeakMap<Element, ControllerMap>
-  private connectedControllers: Set<Controller>
+  private xMaps: WeakMap<Element, XMap>
+  private connectedXs: Set<X>
   private masks: WeakMap<Element, Mask>
 
   constructor(element: Element, attributeName: string) {
     this.attributeName = attributeName
     this.tokenListObserver = new TokenListObserver(element, attributeName, this)
     this.controllerConstructors = new Map()
-    this.controllerMaps = new WeakMap()
-    this.connectedControllers = new Set()
+    this.xMaps = new WeakMap()
+    this.connectedXs = new Set()
     this.masks = new WeakMap()
   }
 
@@ -41,63 +42,61 @@ export class Router implements TokenListObserverDelegate, ControllerDelegate {
     }
 
     this.controllerConstructors.set(identifier, controllerConstructor)
-    this.connectControllers(identifier)
+    this.connectXs(identifier)
   }
 
-  private connectControllers(identifier: string) {
+  private connectXs(identifier: string) {
     const elements = this.tokenListObserver.getElementsMatchingToken(identifier)
     for (const element of elements) {
-      this.connectControllerForElement(identifier, element)
+      this.connectXForElement(identifier, element)
     }
   }
 
-  private connectControllerForElement(identifier: string, element: Element) {
-    const controller = this.fetchControllerForElement(identifier, element)
-    if (controller && !this.connectedControllers.has(controller)) {
-      this.connectedControllers.add(controller)
+  private connectXForElement(identifier: string, element: Element) {
+    const x = this.fetchXForElement(identifier, element)
+    if (x && !this.connectedXs.has(x)) {
+      this.connectedXs.add(x)
       this.resetMasksForIdentifier(identifier)
-      controller.beforeConnect()
-      controller.connect()
+      x.connect()
     }
   }
 
-  private disconnectControllerForElement(identifier: string, element: Element) {
-    const controller = this.fetchControllerForElement(identifier, element)
-    if (controller && this.connectedControllers.has(controller)) {
-      this.connectedControllers.delete(controller)
+  private disconnectXForElement(identifier: string, element: Element) {
+    const x = this.fetchXForElement(identifier, element)
+    if (x && this.connectedXs.has(x)) {
+      this.connectedXs.delete(x)
       this.resetMasksForIdentifier(identifier)
-      controller.disconnect()
-      controller.afterDisconnect()
+      x.disconnect()
     }
   }
 
-  private getConnectedControllersForIdentifier(identifier: string) {
-    return Array.from(this.connectedControllers).filter(controller => controller.identifier == identifier)
+  private getConnectedXsForIdentifier(identifier: string) {
+    return Array.from(this.connectedXs).filter(x => x.identifier == identifier)
   }
 
-  private fetchControllerForElement(identifier: string, element: Element): Controller | undefined {
+  private fetchXForElement(identifier: string, element: Element): X | undefined {
     const constructor = this.controllerConstructors.get(identifier)
     if (constructor) {
-      const controllerMap = this.fetchControllerMapForElement(element)
-      let controller = controllerMap.get(identifier)
+      const xMap = this.fetchXMapForElement(element)
+      let x = xMap.get(identifier)
 
-      if (!controller) {
-        controller = new constructor(identifier, element, this)
-        controllerMap.set(identifier, controller)
+      if (!x) {
+        x = new X(identifier, element, constructor, this)
+        xMap.set(identifier, x)
       }
 
-      return controller
+      return x
     }
   }
 
-  private fetchControllerMapForElement(element: Element): ControllerMap {
-    let controllerMap = this.controllerMaps.get(element)
-    if (!controllerMap) {
-      controllerMap = new Map()
-      this.controllerMaps.set(element, controllerMap)
+  private fetchXMapForElement(element: Element): XMap {
+    let xMap = this.xMaps.get(element)
+    if (!xMap) {
+      xMap = new Map()
+      this.xMaps.set(element, xMap)
     }
 
-    return controllerMap
+    return xMap
   }
 
   // Masks
@@ -114,7 +113,7 @@ export class Router implements TokenListObserverDelegate, ControllerDelegate {
   }
 
   private resetMasksForIdentifier(identifier: string) {
-    const controllers = this.getConnectedControllersForIdentifier(identifier)
+    const controllers = this.getConnectedXsForIdentifier(identifier)
     for (const controller of controllers) {
       this.masks.delete(controller.element)
     }
@@ -122,7 +121,7 @@ export class Router implements TokenListObserverDelegate, ControllerDelegate {
 
   // Controller delegate
 
-  controllerCanControlElement(controller: Controller, element: Element): boolean {
+  controllerCanControlElement(controller: X, element: Element): boolean {
     const mask = this.fetchMaskForElement(controller.identifier, controller.element)
     return !mask.masks(element)
   }
@@ -130,10 +129,10 @@ export class Router implements TokenListObserverDelegate, ControllerDelegate {
   // Token list observer delegate
 
   elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
-    this.connectControllerForElement(token, element)
+    this.connectXForElement(token, element)
   }
 
   elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
-    this.disconnectControllerForElement(token, element)
+    this.disconnectXForElement(token, element)
   }
 }
