@@ -6,17 +6,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const config = {}
 
 config.all = {
-  entry: {
-    stimulus: './src/stimulus/index.ts',
-  },
-
-  output: {
-    filename: '[name].js',
-    path: path.resolve(__dirname, './dist'),
-    library: 'Stimulus',
-    libraryTarget: 'umd'
-  },
-
   module: {
     rules: [
       {
@@ -38,6 +27,10 @@ config.development = {
     examples: './examples/index.js'
   },
 
+  output: {
+    filename: '[name].js'
+  },
+
   devtool: 'inline-source-map',
 
   devServer: {
@@ -51,6 +44,17 @@ config.development = {
 }
 
 config.production = {
+  entry: {
+    stimulus: './src/stimulus/index.ts'
+  },
+
+  output: {
+    filename: '[name].js',
+    path: path.resolve(__dirname, './dist'),
+    library: 'Stimulus',
+    libraryTarget: 'umd'
+  },
+
   plugins: [
     new webpack.optimize.UglifyJsPlugin()
   ]

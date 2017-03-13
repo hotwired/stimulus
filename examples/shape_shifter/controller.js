@@ -1,8 +1,9 @@
 import { app } from "../app"
+import { Controller } from "../../src/stimulus"
 
 const SHAPES = ["circle", "triangle"]
 
-app.register("shape-shifter", class extends Stimulus.Controller {
+app.register("shape-shifter", class extends Controller {
   initialize() {
     console.log("shape-shifter#initialize", this.identifier, this.element)
     this.targets.findAll("shape").forEach((element) => {
