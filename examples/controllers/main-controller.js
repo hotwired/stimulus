@@ -6,40 +6,58 @@ export default class extends Controller {
     console.log("main#initialize", this.identifier, this.element)
   }
 
-  get containerElement() {
-    return this.targets.find("container")
-  }
-
   load(event) {
-    if (event.target == this.activeNavElement) {
-      this.reattach()
+    if (event.target == this.currentNavElement) {
+      this.reattachContainerElement()
     } else {
-      this.setActiveNavElement(event.target)
-      this.containerElement.innerHTML = ""
-      installController(event.target.dataset.controllerIdentifier).then(() => {
-        this.loadExampleForActiveNavElement()
-      })
+      this.currentNavElement = event.target
+      this.loadExampleForCurrentNavElement()
     }
   }
 
-  reattach() {
+  reattachContainerElement() {
     const {containerElement} = this
     const {firstChild} = containerElement
     containerElement.removeChild(firstChild)
     containerElement.appendChild(firstChild)
   }
 
-  setActiveNavElement(element) {
-    if (this.activeNavElement) {
-      this.activeNavElement.classList.remove("active")
-    }
-    element.classList.add("active")
-    this.activeNavElement = element
+  loadExampleForCurrentNavElement() {
+    const identifier = this.currentControllerIdentifier
+    this.containerHTML = ""
+    installController(identifier).then(() => {
+      this.fetchView(identifier).then((body) => {
+        this.containerHTML = `<div>${body}</div>`
+      })
+    })
   }
 
-  loadExampleForActiveNavElement() {
-    fetch(`/views/${this.activeNavElement.dataset.controllerIdentifier}.html`)
-      .then(response => response.text())
-      .then(body => this.containerElement.innerHTML = `<div>${body}</div>`)
+  fetchView(name) {
+    return fetch(`/views/${name}.html`).then(response => response.text())
+  }
+
+  get containerElement() {
+    return this.targets.find("container")
+  }
+
+  set containerHTML(html) {
+    this.containerElement.innerHTML = html
+  }
+
+  set currentNavElement(element) {
+    if (this.currentNavElement) {
+      this.currentNavElement.classList.remove("active")
+    }
+    element.classList.add("active")
+    this._currentNavElement = element
+    return this.currentNavElement
+  }
+
+  get currentNavElement() {
+    return this._currentNavElement
+  }
+
+  get currentControllerIdentifier() {
+    return this.currentNavElement.dataset.controllerIdentifier
   }
 }
