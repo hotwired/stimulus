@@ -6,7 +6,7 @@ import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_act
 import { TargetSet, TargetSetDelegate } from "./target_set"
 
 export interface XDelegate {
-  controllerCanControlElement(controller: X, element: Element): boolean
+  xCanControlElement(controller: X, element: Element): boolean
 }
 
 export class X implements InlineActionObserverDelegate, TargetSetDelegate {
@@ -75,6 +75,6 @@ export class X implements InlineActionObserverDelegate, TargetSetDelegate {
   // Inline action observer & target set delegate
 
   canControlElement(element: Element): boolean {
-    return this.delegate.controllerCanControlElement(this, element)
+    return this.delegate.xCanControlElement(this, element)
   }
 }

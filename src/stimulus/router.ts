@@ -119,9 +119,9 @@ export class Router implements TokenListObserverDelegate, XDelegate {
     }
   }
 
-  // Controller delegate
+  // X delegate
 
-  controllerCanControlElement(controller: X, element: Element): boolean {
+  xCanControlElement(controller: X, element: Element): boolean {
     const mask = this.fetchMaskForElement(controller.identifier, controller.element)
     return !mask.masks(element)
   }
