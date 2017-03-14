@@ -1,6 +1,6 @@
-import Controller from "../controller"
+import Controller from "./controller"
 
-Controller.register("expander", class extends Controller {
+export default class extends Controller {
   initialize() {
     console.log("expander#initialize", this.identifier, this.element)
   }
@@ -26,4 +26,4 @@ Controller.register("expander", class extends Controller {
     const expandTargets = this.targets.findAll("expanded")
     return [this.element].concat(collapseTargets).concat(expandTargets)
   }
-})
+}

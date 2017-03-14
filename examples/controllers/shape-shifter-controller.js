@@ -1,8 +1,8 @@
-import Controller from "../controller"
+import Controller from "./controller"
 
 const SHAPES = ["circle", "triangle"]
 
-Controller.register("shape-shifter", class extends Controller {
+export default class extends Controller {
   initialize() {
     console.log("shape-shifter#initialize", this.identifier, this.element)
     this.targets.findAll("shape").forEach((element) => {
@@ -23,4 +23,4 @@ Controller.register("shape-shifter", class extends Controller {
   getRandomShape() {
     return SHAPES[Math.floor(Math.random() * SHAPES.length)]
   }
-})
+}

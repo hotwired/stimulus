@@ -1,1 +1,2 @@
-import "./main/controller"
+import { installController } from "./app"
+installController("main")

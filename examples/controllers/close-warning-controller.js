@@ -1,7 +1,7 @@
-import Controller from "../controller"
+import Controller from "./controller"
 import { Descriptor, Action } from "stimulus"
 
-Controller.register("close-warning", class extends Controller {
+export default class extends Controller {
   initialize() {
     console.log("close-warning#initialize", this.identifier, this.element)
 
@@ -24,4 +24,4 @@ Controller.register("close-warning", class extends Controller {
   getInput() {
     return this.targets.find("input").value
   }
-})
+}

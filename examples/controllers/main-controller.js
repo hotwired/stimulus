@@ -1,6 +1,7 @@
-import Controller from "../controller"
+import Controller from "./controller"
+import { installController } from "../app"
 
-Controller.register("main", class extends Controller {
+export default class extends Controller {
   initialize() {
     console.log("main#initialize", this.identifier, this.element)
   }
@@ -15,7 +16,7 @@ Controller.register("main", class extends Controller {
     } else {
       this.setActiveNavElement(event.target)
       this.containerElement.innerHTML = ""
-      Controller.import(event.target.pathname).then(() => {
+      installController(event.target.dataset.controllerIdentifier).then(() => {
         this.loadExampleForActiveNavElement()
       })
     }
@@ -37,8 +38,8 @@ Controller.register("main", class extends Controller {
   }
 
   loadExampleForActiveNavElement() {
-    fetch(this.activeNavElement.href)
+    fetch(`/views/${this.activeNavElement.dataset.controllerIdentifier}.html`)
       .then(response => response.text())
       .then(body => this.containerElement.innerHTML = `<div>${body}</div>`)
   }
-})
+}

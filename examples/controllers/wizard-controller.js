@@ -1,6 +1,6 @@
-import Controller from "../controller"
+import Controller from "./controller"
 
-Controller.register("wizard", class extends Controller {
+export default class extends Controller {
   initialize() {
     this.stepHistory = []
   }
@@ -47,4 +47,4 @@ Controller.register("wizard", class extends Controller {
   get currentStepIndex() {
     return this.stepElements.indexOf(this.currentStepElement)
   }
-})
+}

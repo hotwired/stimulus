@@ -1,22 +1,23 @@
-import Controller from "../controller"
+import Controller from "./controller"
+import { installController } from "../app"
 
-Controller.register("multiple", class extends Controller {
+export default class extends Controller {
   initialize() {
     console.log("multiple#initialize", this.identifier, this.element)
     this.element.style.opacity = "0.2"
 
-    Controller.import(...this.controllerNames).then(() => {
+    Promise.all([this.controllerIdentifiers.map(installController)]).then(() => {
       this.element.style.opacity = null
     })
   }
 
-  get controllerNames() {
+  get controllerIdentifiers() {
     const names = new Set()
     Array.from(this.element.querySelectorAll("[data-controller]")).forEach((element) => {
       names.add(element.dataset.controller)
     })
     return Array.from(names)
   }
-})
+}
 
 

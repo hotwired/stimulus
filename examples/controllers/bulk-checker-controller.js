@@ -1,6 +1,6 @@
-import Controller from "../controller"
+import Controller from "./controller"
 
-Controller.register("bulk-checker", class extends Controller {
+export default class extends Controller {
   initialize() {
     console.log("bulk-checker#initialize", this.identifier, this.element)
   }
@@ -16,4 +16,4 @@ Controller.register("bulk-checker", class extends Controller {
       element.checked = false
     }
   }
-})
+}
