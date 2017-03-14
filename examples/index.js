@@ -1,7 +1,5 @@
-import "./controller"
-import "./bulk_checker/controller"
-import "./expander/controller"
-import "./shape_shifter/controller"
-import "./wizard/controller"
-import "./close_warning/controller"
+function importAll (r) {
+  r.keys().forEach(r)
+}
 
+importAll(require.context(".", true, /controller\.(js|ts)$/))
