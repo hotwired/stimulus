@@ -29,7 +29,7 @@ config.development = {
   },
 
   output: {
-    filename: "[name].js"
+    filename: "[chunkhash]-[name].js"
   },
 
   devtool: "inline-source-map",

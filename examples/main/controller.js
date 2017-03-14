@@ -1,9 +1,9 @@
-import { app } from "./app"
+import { app, importController } from "../app"
 import { Controller } from "stimulus"
 
-app.register("example", class extends Controller {
+app.register("main", class extends Controller {
   initialize() {
-    console.log("example#initialize", this.identifier, this.element)
+    console.log("main#initialize", this.identifier, this.element)
   }
 
   get containerElement() {
@@ -15,7 +15,11 @@ app.register("example", class extends Controller {
       this.reattach()
     } else {
       this.setActiveNavElement(event.target)
-      this.loadExampleForActiveNavElement()
+      this.containerElement.innerHTML = ""
+      const controllerName = event.target.pathname.replace(/^\//, "")
+      importController(controllerName).then(() => {
+        this.loadExampleForActiveNavElement()
+      })
     }
   }
 
