@@ -1,2 +1,1 @@
-import { importController } from "./app"
-importController("main")
+import "./main/controller"

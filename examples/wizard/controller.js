@@ -1,7 +1,6 @@
-import { app } from "../app"
-import { Controller } from "stimulus"
+import Controller from "../controller"
 
-app.register("wizard", class extends Controller {
+Controller.register("wizard", class extends Controller {
   initialize() {
     this.stepHistory = []
   }

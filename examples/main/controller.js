@@ -1,7 +1,6 @@
-import { app, importController } from "../app"
-import { Controller } from "stimulus"
+import Controller from "../controller"
 
-app.register("main", class extends Controller {
+Controller.register("main", class extends Controller {
   initialize() {
     console.log("main#initialize", this.identifier, this.element)
   }
@@ -16,8 +15,7 @@ app.register("main", class extends Controller {
     } else {
       this.setActiveNavElement(event.target)
       this.containerElement.innerHTML = ""
-      const controllerName = event.target.pathname.replace(/^\//, "")
-      importController(controllerName).then(() => {
+      Controller.import(event.target.pathname).then(() => {
         this.loadExampleForActiveNavElement()
       })
     }

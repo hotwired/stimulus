@@ -1,7 +1,7 @@
-import { app } from "../app"
-import { Controller, Descriptor, Action } from "stimulus"
+import Controller from "../controller"
+import { Descriptor, Action } from "stimulus"
 
-app.register("close-warning", class extends Controller {
+Controller.register("close-warning", class extends Controller {
   initialize() {
     console.log("close-warning#initialize", this.identifier, this.element)
 

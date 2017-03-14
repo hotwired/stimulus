@@ -1,12 +1,11 @@
-import { app, importController } from "../app"
-import { Controller } from "stimulus"
+import Controller from "../controller"
 
-app.register("multiple", class extends Controller {
+Controller.register("multiple", class extends Controller {
   initialize() {
     console.log("multiple#initialize", this.identifier, this.element)
     this.element.style.opacity = "0.2"
 
-    importController(...this.controllerNames).then(() => {
+    Controller.import(...this.controllerNames).then(() => {
       this.element.style.opacity = null
     })
   }
