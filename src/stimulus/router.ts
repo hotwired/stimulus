@@ -61,7 +61,7 @@ export class Router implements TokenListObserverDelegate, ContextDelegate {
     }
   }
 
-  private disconnectXForElement(identifier: string, element: Element) {
+  private disconnectContextForElement(identifier: string, element: Element) {
     const context = this.fetchContextForElement(identifier, element)
     if (context && this.connectedContexts.has(context)) {
       this.connectedContexts.delete(context)
@@ -133,6 +133,6 @@ export class Router implements TokenListObserverDelegate, ContextDelegate {
   }
 
   elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
-    this.disconnectXForElement(token, element)
+    this.disconnectContextForElement(token, element)
   }
 }
