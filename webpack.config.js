@@ -2,6 +2,7 @@ const path = require("path")
 const webpack = require("webpack")
 const merge = require("webpack-merge")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
+const dts = require("dts-bundle")
 
 const config = {}
 
@@ -11,7 +12,14 @@ config.all = {
       {
         test: /\.ts$/,
         use: [
-          { loader: "ts-loader" }
+          {
+            loader: "ts-loader",
+            options: {
+              compilerOptions: {
+                outDir: "../build"
+              }
+            }
+          }
         ]
       }
     ]
@@ -57,7 +65,20 @@ config.production = {
   },
 
   plugins: [
-    new webpack.optimize.UglifyJsPlugin()
+    new webpack.optimize.UglifyJsPlugin(),
+    new class {
+      apply(compiler) {
+        compiler.plugin("done", () => {
+          dts.bundle({
+            name: "stimulus",
+            baseDir: __dirname,
+            main: "./build/index.d.ts",
+            out: "./dist/stimulus.d.ts",
+            outputAsModuleFolder: true
+          })
+        })
+      }
+    }
   ]
 }
 

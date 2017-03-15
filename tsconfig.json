@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "outDir": "../../build/stimulus",
     "target": "es5",
     "module": "es2015",
     "moduleResolution": "node",
@@ -8,6 +7,7 @@
     "pretty": true,
     "strictNullChecks": true,
     "experimentalDecorators": true,
-    "inlineSourceMap": true
+    "inlineSourceMap": true,
+    "declaration": true
   }
 }
