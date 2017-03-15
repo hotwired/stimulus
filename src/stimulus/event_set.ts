@@ -43,7 +43,7 @@ class EventObserver {
 }
 
 export class EventSet {
-  observers: Set<EventObserver>
+  private observers: Set<EventObserver>
 
   constructor() {
     this.observers = new Set<EventObserver>()
