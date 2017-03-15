@@ -23,7 +23,6 @@ class EventObserver {
 
   observe() {
     if (this.references == 0) {
-      console.log("addEventListener", this)
       this.target.addEventListener(this.name, this.listener, this.useCapture)
     }
     this.references++
@@ -33,7 +32,6 @@ class EventObserver {
   stopObserving() {
     if (this.references > 0) {
       if (this.references == 1) {
-        console.log("removeEventListener", this)
         this.target.removeEventListener(this.name, this.listener, this.useCapture)
       }
       this.references--
