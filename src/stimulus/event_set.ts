@@ -1,13 +1,11 @@
-type EventName = string
-
 class EventObserver {
-  name: EventName
+  name: string
   target: EventTarget
   listener: EventListener
   useCapture: boolean
   private references: number
 
-  constructor(name: EventName, target: EventTarget, listener: EventListener, usesCapture: boolean) {
+  constructor(name: string, target: EventTarget, listener: EventListener, usesCapture: boolean) {
     this.name = name
     this.target = target
     this.listener = listener
@@ -51,12 +49,12 @@ export class EventSet {
     this.observers = new Set<EventObserver>()
   }
 
-  add(name: EventName, target: EventTarget, listener: EventListener, useCapture: boolean) {
+  add(name: string, target: EventTarget, listener: EventListener, useCapture: boolean) {
     const observer = new EventObserver(name, target, listener, useCapture)
     this.addObserver(observer)
   }
 
-  delete(name: EventName, target: EventTarget, listener: EventListener, useCapture: boolean) {
+  delete(name: string, target: EventTarget, listener: EventListener, useCapture: boolean) {
     const observer = new EventObserver(name, target, listener, useCapture)
     this.deleteObserver(observer)
   }

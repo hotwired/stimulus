@@ -1,17 +1,15 @@
 import { Action } from "./action"
 import { Multimap2 } from "./multimap"
 
-type EventName = string
-
 export class ActionSet {
   values: Set<Action>
-  actionsByEventTarget: Multimap2<EventTarget, EventName, Action>
-  actionsByDelegatedTarget: Multimap2<EventTarget, EventName, Action>
+  actionsByEventTarget: Multimap2<EventTarget, string, Action>
+  actionsByDelegatedTarget: Multimap2<EventTarget, string, Action>
 
   constructor() {
     this.values = new Set<Action>()
-    this.actionsByEventTarget = new Multimap2<EventTarget, EventName, Action>()
-    this.actionsByDelegatedTarget = new Multimap2<EventTarget, EventName, Action>()
+    this.actionsByEventTarget = new Multimap2<EventTarget, string, Action>()
+    this.actionsByDelegatedTarget = new Multimap2<EventTarget, string, Action>()
   }
 
   get actions(): Action[] {
@@ -38,11 +36,11 @@ export class ActionSet {
     return this.values.has(action)
   }
 
-  getActionsForEventTargetAndEventName(eventTarget: EventTarget, eventName: EventName): Action[] {
+  getActionsForEventTargetAndEventName(eventTarget: EventTarget, eventName: string): Action[] {
     return this.actionsByEventTarget.get(eventTarget, eventName)
   }
 
-  getActionsForDelegatedTargetAndEventName(delegatedTarget: EventTarget, eventName: EventName): Action[] {
+  getActionsForDelegatedTargetAndEventName(delegatedTarget: EventTarget, eventName: string): Action[] {
     return this.actionsByDelegatedTarget.get(delegatedTarget, eventName)
   }
 }
