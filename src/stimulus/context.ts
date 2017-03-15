@@ -5,21 +5,21 @@ import { Dispatcher } from "./dispatcher"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
 import { TargetSet, TargetSetDelegate } from "./target_set"
 
-export interface XDelegate {
-  xCanControlElement(controller: X, element: Element): boolean
+export interface ContextDelegate {
+  contextCanControlElement(context: Context, element: Element): boolean
 }
 
-export class X implements InlineActionObserverDelegate, TargetSetDelegate {
+export class Context implements InlineActionObserverDelegate, TargetSetDelegate {
   identifier: string
   element: Element
-  delegate: XDelegate
+  delegate: ContextDelegate
 
   controller: Controller
   targets: TargetSet
   private dispatcher: Dispatcher
   private inlineActionObserver: InlineActionObserver
 
-  constructor(identifier: string, element: Element, controllerConstructor: ControllerConstructor, delegate: XDelegate) {
+  constructor(identifier: string, element: Element, controllerConstructor: ControllerConstructor, delegate: ContextDelegate) {
     this.identifier = identifier
     this.element = element
     this.delegate = delegate
@@ -75,6 +75,6 @@ export class X implements InlineActionObserverDelegate, TargetSetDelegate {
   // Inline action observer & target set delegate
 
   canControlElement(element: Element): boolean {
-    return this.delegate.xCanControlElement(this, element)
+    return this.delegate.contextCanControlElement(this, element)
   }
 }

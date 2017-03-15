@@ -1,18 +1,18 @@
 import { Action } from "./action"
 import { ActionSet } from "./action_set"
-import { X } from "./x"
+import { Context } from "./context"
 import { EventSet } from "./event_set"
 
 export class Dispatcher {
-  controller: X
+  context: Context
   started: boolean
 
   private directActions: ActionSet
   private delegatedActions: ActionSet
   private events: EventSet
 
-  constructor(controller: X) {
-    this.controller = controller
+  constructor(context: Context) {
+    this.context = context
     this.started = false
 
     this.directActions = new ActionSet()
@@ -115,7 +115,7 @@ export class Dispatcher {
   }
 
   private findClosestDelegatedActionsForElementAndEventName(element: Element, eventName: string): Action[] {
-    const parentElement = this.controller.parentElement
+    const parentElement = this.context.parentElement
     let currentElement: Element | null = element
     while (currentElement && currentElement != parentElement) {
       const actions = this.delegatedActions.getActionsForDelegatedTargetAndEventName(element, eventName)

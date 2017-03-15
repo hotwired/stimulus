@@ -1,27 +1,27 @@
 import { Action } from "./action"
-import { X } from "./x"
+import { Context } from "./context"
 
 export interface ControllerConstructor {
-  new(x: X): Controller
+  new(context: Context): Controller
 }
 
 export class Controller {
-  x: X
+  context: Context
 
-  constructor(x: X) {
-    this.x = x
+  constructor(context: Context) {
+    this.context = context
   }
 
   get element() {
-    return this.x.element
+    return this.context.element
   }
 
   get identifier() {
-    return this.x.identifier
+    return this.context.identifier
   }
 
   get targets() {
-    return this.x.targets
+    return this.context.targets
   }
 
   initialize() {
@@ -37,10 +37,10 @@ export class Controller {
   }
 
   addAction(action: Action) {
-    this.x.addAction(action)
+    this.context.addAction(action)
   }
 
   removeAction(action: Action) {
-    this.x.removeAction(action)
+    this.context.removeAction(action)
   }
 }

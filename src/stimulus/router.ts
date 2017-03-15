@@ -1,24 +1,24 @@
 import { TokenListObserver, TokenListObserverDelegate } from "sentinella"
 import { ControllerConstructor } from "./controller"
-import { X, XDelegate } from "./x"
+import { Context, ContextDelegate } from "./context"
 import { Mask } from "./mask"
 
-type XMap = Map<string, X>
+type ContextMap = Map<string, Context>
 
-export class Router implements TokenListObserverDelegate, XDelegate {
+export class Router implements TokenListObserverDelegate, ContextDelegate {
   private attributeName: string
   private tokenListObserver: TokenListObserver
   private controllerConstructors: Map<string, ControllerConstructor>
-  private xMaps: WeakMap<Element, XMap>
-  private connectedXs: Set<X>
+  private contextMaps: WeakMap<Element, ContextMap>
+  private connectedContexts: Set<Context>
   private masks: WeakMap<Element, Mask>
 
   constructor(element: Element, attributeName: string) {
     this.attributeName = attributeName
     this.tokenListObserver = new TokenListObserver(element, attributeName, this)
     this.controllerConstructors = new Map()
-    this.xMaps = new WeakMap()
-    this.connectedXs = new Set()
+    this.contextMaps = new WeakMap()
+    this.connectedContexts = new Set()
     this.masks = new WeakMap()
   }
 
@@ -42,61 +42,61 @@ export class Router implements TokenListObserverDelegate, XDelegate {
     }
 
     this.controllerConstructors.set(identifier, controllerConstructor)
-    this.connectXs(identifier)
+    this.connectContexts(identifier)
   }
 
-  private connectXs(identifier: string) {
+  private connectContexts(identifier: string) {
     const elements = this.tokenListObserver.getElementsMatchingToken(identifier)
     for (const element of elements) {
-      this.connectXForElement(identifier, element)
+      this.connectContextForElement(identifier, element)
     }
   }
 
-  private connectXForElement(identifier: string, element: Element) {
-    const x = this.fetchXForElement(identifier, element)
-    if (x && !this.connectedXs.has(x)) {
-      this.connectedXs.add(x)
+  private connectContextForElement(identifier: string, element: Element) {
+    const context = this.fetchContextForElement(identifier, element)
+    if (context && !this.connectedContexts.has(context)) {
+      this.connectedContexts.add(context)
       this.resetMasksForIdentifier(identifier)
-      x.connect()
+      context.connect()
     }
   }
 
   private disconnectXForElement(identifier: string, element: Element) {
-    const x = this.fetchXForElement(identifier, element)
-    if (x && this.connectedXs.has(x)) {
-      this.connectedXs.delete(x)
+    const context = this.fetchContextForElement(identifier, element)
+    if (context && this.connectedContexts.has(context)) {
+      this.connectedContexts.delete(context)
       this.resetMasksForIdentifier(identifier)
-      x.disconnect()
+      context.disconnect()
     }
   }
 
-  private getConnectedXsForIdentifier(identifier: string) {
-    return Array.from(this.connectedXs).filter(x => x.identifier == identifier)
+  private getConnectedContextsForIdentifier(identifier: string) {
+    return Array.from(this.connectedContexts).filter(context => context.identifier == identifier)
   }
 
-  private fetchXForElement(identifier: string, element: Element): X | undefined {
+  private fetchContextForElement(identifier: string, element: Element): Context | undefined {
     const constructor = this.controllerConstructors.get(identifier)
     if (constructor) {
-      const xMap = this.fetchXMapForElement(element)
-      let x = xMap.get(identifier)
+      const contextMap = this.fetchContextMapForElement(element)
+      let context = contextMap.get(identifier)
 
-      if (!x) {
-        x = new X(identifier, element, constructor, this)
-        xMap.set(identifier, x)
+      if (!context) {
+        context = new Context(identifier, element, constructor, this)
+        contextMap.set(identifier, context)
       }
 
-      return x
+      return context
     }
   }
 
-  private fetchXMapForElement(element: Element): XMap {
-    let xMap = this.xMaps.get(element)
-    if (!xMap) {
-      xMap = new Map()
-      this.xMaps.set(element, xMap)
+  private fetchContextMapForElement(element: Element): ContextMap {
+    let contextMap = this.contextMaps.get(element)
+    if (!contextMap) {
+      contextMap = new Map()
+      this.contextMaps.set(element, contextMap)
     }
 
-    return xMap
+    return contextMap
   }
 
   // Masks
@@ -113,23 +113,23 @@ export class Router implements TokenListObserverDelegate, XDelegate {
   }
 
   private resetMasksForIdentifier(identifier: string) {
-    const controllers = this.getConnectedXsForIdentifier(identifier)
+    const controllers = this.getConnectedContextsForIdentifier(identifier)
     for (const controller of controllers) {
       this.masks.delete(controller.element)
     }
   }
 
-  // X delegate
+  // Context delegate
 
-  xCanControlElement(controller: X, element: Element): boolean {
-    const mask = this.fetchMaskForElement(controller.identifier, controller.element)
+  contextCanControlElement(context: Context, element: Element): boolean {
+    const mask = this.fetchMaskForElement(context.identifier, context.element)
     return !mask.masks(element)
   }
 
   // Token list observer delegate
 
   elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
-    this.connectXForElement(token, element)
+    this.connectContextForElement(token, element)
   }
 
   elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
