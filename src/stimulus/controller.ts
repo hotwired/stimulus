@@ -1,45 +1,31 @@
 import { Action } from "./action"
-import { Descriptor } from "./descriptor"
-import { Dispatcher } from "./dispatcher"
-import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
-import { TargetSet, TargetSetDelegate } from "./target_set"
+import { Context } from "./context"
 
 export interface ControllerConstructor {
-  new(identifier: string, element: Element, delegate: ControllerDelegate): Controller
+  new(context: Context): Controller
 }
 
-export interface ControllerDelegate {
-  controllerCanControlElement(controller: Controller, element: Element): boolean
-}
+export class Controller {
+  context: Context
 
-export class Controller implements InlineActionObserverDelegate, TargetSetDelegate {
-  identifier: string
-  element: Element
-  delegate: ControllerDelegate
+  constructor(context: Context) {
+    this.context = context
+  }
 
-  targets: TargetSet
-  private dispatcher: Dispatcher
-  private inlineActionObserver: InlineActionObserver
+  get element() {
+    return this.context.element
+  }
 
-  constructor(identifier: string, element: Element, delegate: ControllerDelegate) {
-    this.identifier = identifier
-    this.element = element
-    this.delegate = delegate
+  get identifier() {
+    return this.context.identifier
+  }
 
-    this.targets = new TargetSet(identifier, element, this)
-    this.dispatcher = new Dispatcher(this)
-    this.inlineActionObserver = new InlineActionObserver(identifier, element, this)
-
-    this.initialize()
+  get targets() {
+    return this.context.targets
   }
 
   initialize() {
     // Override in your subclass to set up initial controller state
-  }
-
-  beforeConnect() {
-    this.dispatcher.start()
-    this.inlineActionObserver.start()
   }
 
   connect() {
@@ -50,42 +36,11 @@ export class Controller implements InlineActionObserverDelegate, TargetSetDelega
     // Override in your subclass to respond when the controller is disconnected from the DOM
   }
 
-  afterDisconnect() {
-    this.inlineActionObserver.stop()
-    this.dispatcher.stop()
-  }
-
-  get parentElement(): Element | null {
-    return this.element.parentElement
-  }
-
-  // Actions
-
   addAction(action: Action) {
-    this.dispatcher.addAction(action)
+    this.context.addAction(action)
   }
 
   removeAction(action: Action) {
-    this.dispatcher.removeAction(action)
-  }
-
-  // Inline action observer delegate
-
-  getObjectForInlineActionDescriptor(descriptor: Descriptor): object {
-    return this
-  }
-
-  inlineActionConnected(action: Action) {
-    this.addAction(action)
-  }
-
-  inlineActionDisconnected(action: Action) {
-    this.removeAction(action)
-  }
-
-  // Inline action observer & target set delegate
-
-  canControlElement(element: Element): boolean {
-    return this.delegate.controllerCanControlElement(this, element)
+    this.context.removeAction(action)
   }
 }
