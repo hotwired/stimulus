@@ -1,5 +1,6 @@
 import { Action } from "./action"
 import { Context } from "./context"
+import { TargetSet } from "./target_set"
 
 export interface ControllerConstructor {
   new(context: Context): Controller
@@ -12,15 +13,15 @@ export class Controller {
     this.context = context
   }
 
-  get element() {
+  get element(): Element {
     return this.context.element
   }
 
-  get identifier() {
+  get identifier(): string {
     return this.context.identifier
   }
 
-  get targets() {
+  get targets(): TargetSet {
     return this.context.targets
   }
 
