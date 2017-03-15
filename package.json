@@ -1,7 +1,8 @@
 {
   "name": "stimulus",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/stimulus.js",
+  "types": "dist/stimulus.d.ts",
   "license": "MIT",
   "devDependencies": {
     "dts-bundle": "^0.7.2",
