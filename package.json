@@ -7,6 +7,11 @@
   "devDependencies": {
     "dts-bundle": "^0.7.2",
     "html-webpack-plugin": "^2.28.0",
+    "karma": "^1.5.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-qunit": "^1.2.1",
+    "karma-typescript": "beta",
+    "qunitjs": "^2.2.0",
     "ts-loader": "^2.0.1",
     "tslint": "^4.5.1",
     "typescript": "^2.2.1",
@@ -21,6 +26,7 @@
     "lint": "tslint src/stimulus/*.ts",
     "prebuild": "yarn run lint",
     "build": "webpack --env.production",
-    "serve": "webpack-dev-server --env.development"
+    "serve": "webpack-dev-server --env.development",
+    "test": "karma start"
   }
 }
