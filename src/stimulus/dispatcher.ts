@@ -132,7 +132,7 @@ export class Dispatcher {
 function performActionsWithEvent(actions: Action[], event: Event) {
   for (const action of actions) {
     action.performWithEvent(event)
-    if (!action.allowsDefault) {
+    if (action.preventsDefault) {
       event.preventDefault()
     }
   }

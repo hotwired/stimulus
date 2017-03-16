@@ -1,29 +1,29 @@
 export class Descriptor {
   eventName: string | null
   methodName: string
-  allowsDefault: boolean
+  preventsDefault: boolean
 
   static parse(descriptorString: string): Descriptor {
     const matches = descriptorString.match(/^\s*(@)?\s*((.+?)\s*->)?\s*(.+)\s*$/)
     if (matches) {
       const eventName = matches[3]
       const methodName = matches[4]
-      const allowsDefault = matches[1]
+      const preventsDefault = matches[1] ? false : true
 
-      return new this(eventName, methodName, allowsDefault ? true : false)
+      return new this(eventName, methodName, preventsDefault)
     }
 
     throw new Error(`Invalid descriptor: "${descriptorString}"`)
   }
 
-  constructor(eventName: string | null, methodName: string, allowsDefault: boolean = false) {
+  constructor(eventName: string | null, methodName: string, preventsDefault: boolean) {
     this.eventName = eventName
     this.methodName = methodName
-    this.allowsDefault = allowsDefault
+    this.preventsDefault = preventsDefault
   }
 
   toString(): string {
-    return (this.allowsDefault ? "@" : "") +
+    return (this.preventsDefault ? "@" : "") +
       (this.eventName != null ? this.eventName + "->" : "") +
       (this.methodName)
   }

@@ -30,8 +30,8 @@ export class Action {
     return this.descriptor.methodName
   }
 
-  get allowsDefault(): boolean {
-    return this.descriptor.allowsDefault
+  get preventsDefault(): boolean {
+    return this.descriptor.preventsDefault
   }
 
   get method(): Function | undefined {
