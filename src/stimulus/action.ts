@@ -59,6 +59,10 @@ export class Action {
   }
 
   performWithEvent(event: Event) {
+    if (this.preventsDefault) {
+      event.preventDefault()
+    }
+
     if (this.method) {
       this.method.call(this.object, event, this)
     }
