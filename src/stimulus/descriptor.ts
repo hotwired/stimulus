@@ -23,7 +23,7 @@ export class Descriptor {
   }
 
   toString(): string {
-    return (this.preventsDefault ? "@" : "") +
+    return (this.preventsDefault ? "" : "@") +
       (this.eventName != null ? this.eventName + "->" : "") +
       (this.methodName)
   }
