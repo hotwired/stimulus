@@ -1,29 +1,22 @@
 import { Descriptor } from "./descriptor"
 
+export type EventTargetMatcher = (eventTarget: EventTarget) => boolean
+
 export class Action {
-  static defaultEventNames: { [tagName: string]: (element: Element) => string } = {
-    "a":        e => "click",
-    "button":   e => "click",
-    "form":     e => "submit",
-    "input":    e => e.getAttribute("type") == "submit" ? "click" : "change",
-    "select":   e => "change",
-    "textarea": e => "change"
-  }
-
-  object: object
-  eventTarget: EventTarget        // target on which the event listener is installed (event.currentTarget)
-  delegatedTarget: EventTarget    // target on which the action is performed
+  object: Object
   descriptor: Descriptor
+  eventTarget: EventTarget
+  delegatedTargetMatcher: EventTargetMatcher | null
 
-  constructor(object: object, eventTarget: EventTarget, delegatedTarget: EventTarget, descriptor: Descriptor) {
+  constructor(object: Object, descriptor: Descriptor, eventTarget: EventTarget, delegatedTargetMatcher: EventTargetMatcher) {
     this.object = object
-    this.eventTarget = eventTarget
-    this.delegatedTarget = delegatedTarget
     this.descriptor = descriptor
+    this.eventTarget = eventTarget
+    this.delegatedTargetMatcher = delegatedTargetMatcher
   }
 
   get eventName(): string {
-    return this.descriptor.eventName || this.defaultEventName
+    return this.descriptor.eventName
   }
 
   get methodName(): string {
@@ -34,28 +27,29 @@ export class Action {
     return this.descriptor.preventsDefault
   }
 
-  get method(): Function | undefined {
-    const value = this.object[this.methodName]
-    if (typeof value == "function") {
-      return <Function> value
-    }
-  }
-
   get isDirect(): boolean {
-    return this.eventTarget == this.delegatedTarget
+    return this.delegatedTargetMatcher == null
   }
 
   get isDelegated(): boolean {
     return !this.isDirect
   }
 
-  isEqualTo(action?: Action): boolean {
-    return action != null &&
-      action.object === this.object &&
-      action.eventTarget == this.eventTarget &&
-      action.delegatedTarget == this.delegatedTarget &&
-      action.eventName == this.eventName &&
-      action.methodName == this.methodName
+  get method(): Function {
+    const method = this.object[this.methodName]
+    if (typeof method == "function") {
+      return method
+    }
+    throw new Error(`Action references undefined method "${this.methodName}"`)
+  }
+
+  hasSameDescriptorAs(action: Action | null): boolean {
+    return action != null && action.descriptor.isEqualTo(this.descriptor)
+  }
+
+  matchDelegatedTarget(eventTarget: EventTarget) {
+    const matcher = this.delegatedTargetMatcher
+    return matcher ? matcher(eventTarget) : false
   }
 
   performWithEvent(event: Event) {
@@ -63,20 +57,6 @@ export class Action {
       event.preventDefault()
     }
 
-    if (this.method) {
-      this.method.call(this.object, event, this)
-    }
-  }
-
-  private get defaultEventName(): string {
-    if (this.delegatedTarget instanceof Element) {
-      const tagName = this.delegatedTarget.tagName.toLowerCase()
-      const defaultEventName = Action.defaultEventNames[tagName]
-      if (defaultEventName) {
-        return defaultEventName(this.delegatedTarget)
-      }
-    }
-
-    throw new Error(`Descriptor must include an event name: "${this}`)
+    this.method.call(this.object, event)
   }
 }

@@ -102,30 +102,53 @@ export class Dispatcher {
   }
 
   private handleDirectEvent(event: Event) {
-    const actions = this.directActions.getActionsForEventTargetAndEventName(event.currentTarget, event.type)
-    performActionsWithEvent(actions, event)
-  }
-
-  private handleDelegatedEvent(event: Event) {
-    const element = getElementForEventTarget(event.target)
-    if (element) {
-      const actions = this.findClosestDelegatedActionsForElementAndEventName(element, event.type)
+    if (this.canHandleEvent(event)) {
+      const actions = this.findDirectActionsForEvent(event)
       performActionsWithEvent(actions, event)
     }
   }
 
-  private findClosestDelegatedActionsForElementAndEventName(element: Element, eventName: string): Action[] {
-    const parentElement = this.context.parentElement
-    let currentElement: Element | null = element
-    while (currentElement && currentElement != parentElement) {
-      const actions = this.delegatedActions.getActionsForDelegatedTargetAndEventName(element, eventName)
-      if (actions.length > 0) {
-        return actions
-      } else {
-        currentElement = currentElement.parentElement
-      }
+  private handleDelegatedEvent(event: Event) {
+    if (this.canHandleEvent(event)) {
+      const actions = this.findDelegatedActionsForEvent(event)
+      performActionsWithEvent(actions, event)
     }
-    return []
+  }
+
+  private canHandleEvent(event: Event): boolean {
+    const element = getTargetElementForEvent(event)
+    if (element) {
+      return this.context.canControlElement(element)
+    } else {
+      return true
+    }
+  }
+
+  private findDirectActionsForEvent(event: Event): Action[] {
+    const actions = this.directActions.getActionsForEventName(event.type)
+    return actions.filter(action => action.eventTarget == event.currentTarget)
+  }
+
+  private findDelegatedActionsForEvent(event: Event): Action[] {
+    const actions = this.delegatedActions.getActionsForEventName(event.type)
+    const elements = this.getBubbledElementsForEvent(event)
+    return elements.reduce((delegatedActions, element) => {
+      return delegatedActions.concat(actions.filter(action => action.matchDelegatedTarget(element)))
+    }, <Action[]> [])
+  }
+
+  private getBubbledElementsForEvent(event: Event): Element[] {
+    const elements: Element[] = []
+    let element = getTargetElementForEvent(event)
+    while (element && element != this.parentElement) {
+      elements.push(element)
+      element = element.parentElement
+    }
+    return elements
+  }
+
+  private get parentElement() {
+    return this.context.parentElement
   }
 }
 
@@ -135,16 +158,13 @@ function performActionsWithEvent(actions: Action[], event: Event) {
   }
 }
 
-function getElementForEventTarget(eventTarget: EventTarget) {
-  if (eventTarget instanceof Node) {
-    return getElementForNode(eventTarget)
-  }
-}
-
-function getElementForNode(node: Node) {
-  if (node.nodeType == Node.ELEMENT_NODE) {
-    return <Element> node
+function getTargetElementForEvent(event: Event): Element | null {
+  const target = event.target
+  if (target instanceof Element) {
+    return target
+  } else if (target instanceof Node) {
+    return target.parentElement
   } else {
-    return node.parentElement
+    return null
   }
 }

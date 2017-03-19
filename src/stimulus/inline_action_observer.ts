@@ -67,7 +67,7 @@ export class InlineActionObserver implements AttributeObserverDelegate {
     } else {
       const newAction = this.buildActionForElementWithDescriptorString(element, descriptorString)
       const existingAction = this.getActionForElement(element)
-      if (!newAction.isEqualTo(existingAction)) {
+      if (!newAction.hasSameDescriptorAs(existingAction)) {
         this.disconnectActionForElement(element)
         this.connectActionForElement(newAction, element)
       }
@@ -87,13 +87,13 @@ export class InlineActionObserver implements AttributeObserverDelegate {
     }
   }
 
-  private getActionForElement(element: Element): Action | undefined {
-    return this.connectedActions.get(element)
+  private getActionForElement(element: Element): Action | null {
+    return this.connectedActions.get(element) || null
   }
 
   private buildActionForElementWithDescriptorString(element: Element, descriptorString: string) {
-    const descriptor = Descriptor.parse(descriptorString)
+    const descriptor = Descriptor.forElementWithInlineDescriptorString(element, descriptorString)
     const object = this.delegate.getObjectForInlineActionDescriptor(descriptor)
-    return new Action(object, this.element, element, descriptor)
+    return new Action(object, descriptor, this.element, eventTarget => eventTarget == element)
   }
 }

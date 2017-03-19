@@ -5,8 +5,8 @@ export default class extends Controller {
   initialize() {
     console.log("close-warning#initialize", this.identifier, this.element)
 
-    const descriptor = new Descriptor("beforeunload", "warn", true)
-    const warnAction = new Action(this, window, window, descriptor)
+    const descriptor = new Descriptor(null, "beforeunload", "warn", true)
+    const warnAction = new Action(this, descriptor, window, null)
     this.addAction(warnAction)
   }
 
