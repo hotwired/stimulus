@@ -121,3 +121,13 @@ main {
 [data-controller=wizard] [data-wizard-target=step]:not([data-current-step]) {
   display: none;
 }
+
+[data-controller="close-warning"] {
+  min-height: 300px;
+}
+
+[data-controller="close-warning"] .warning {
+  border-width: 2px;
+  border-color: rgba(255, 0, 0, 1);
+  background-color:  rgba(255, 0, 0, 0.02);
+}

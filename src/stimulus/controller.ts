@@ -38,23 +38,20 @@ export class Controller {
     // Override in your subclass to respond when the controller is disconnected from the DOM
   }
 
-  addAction(descriptorString: string, actionTarget: EventTarget = this.element) {
-    const descriptor = Descriptor.forDescriptorString(descriptorString)
-    let matcher
+  addAction(descriptorString: string, target: EventTarget | string = this.element) {
+    let eventTarget, matcher
 
-    if (actionTarget != window) {
-      const {targetName} = descriptor
-      if (targetName) {
-        const selector = `[data-${this.identifier}-target~='${targetName}']`
-        matcher = (eventTarget) => eventTarget.matches(selector) && this.context.canControlElement(eventTarget)
-      } else {
-        matcher = (eventTarget) => eventTarget == actionTarget
-      }
+    if (typeof target == "string") {
+      const targetName = target
+      eventTarget = this.element
+      matcher = (eventTarget) => this.targets.matchesElementWithTargetName(eventTarget, targetName)
+    } else {
+      eventTarget = target
     }
 
-    const action = new Action(this, descriptor, actionTarget, matcher)
+    const descriptor = Descriptor.forElementWithInlineDescriptorString(eventTarget, descriptorString)
+    const action = new Action(this, descriptor, eventTarget, matcher)
     this.context.addAction(action)
-    return action
   }
 
   removeAction(action: Action) {

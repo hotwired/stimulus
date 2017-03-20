@@ -33,6 +33,11 @@ export class TargetSet {
     return elements.filter(element => this.delegate.canControlElement(element))
   }
 
+  matchesElementWithTargetName(element: Element, targetName: string): boolean {
+    const selector = this.getSelectorForTargetName(targetName)
+    return element.matches(selector) && this.delegate.canControlElement(element)
+  }
+
   private getSelectorForTargetName(targetName: string): string {
     return `[data-${this.identifier}-target='${targetName}']`
   }

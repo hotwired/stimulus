@@ -29,15 +29,6 @@ export class Descriptor {
     )
   }
 
-  static forDescriptorString(descriptorString: string): Descriptor {
-    try {
-      const options = this.parseOptionsFromDescriptorString(descriptorString)
-      return Descriptor.forOptions(options)
-    } catch (error) {
-      throw new Error(`Invalid descriptor "${descriptorString}": ${error.message}`)
-    }
-  }
-
   static forElementWithInlineDescriptorString(element: Element, descriptorString: string): Descriptor {
     try {
       const options = this.parseOptionsFromInlineActionDescriptorString(descriptorString)
@@ -45,17 +36,6 @@ export class Descriptor {
       return Descriptor.forOptions(options)
     } catch (error) {
       throw new Error(`Invalid descriptor "${descriptorString}": ${error.message}`)
-    }
-  }
-
-  private static parseOptionsFromDescriptorString(descriptorString: string): DescriptorOptions {
-    const source = descriptorString.trim()
-    const matches = source.match(/^(~)?(\[(.+?)\])?(.+)->(.+)$/) || error("Invalid descriptor syntax")
-    return {
-      targetName: matches[3],
-      eventName: matches[4],
-      methodName: matches[5],
-      preventsDefault: matches[1] ? false : true
     }
   }
 
