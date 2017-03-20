@@ -131,3 +131,16 @@ main {
   border-color: rgba(255, 0, 0, 1);
   background-color:  rgba(255, 0, 0, 0.02);
 }
+
+[data-controller="close-warning"] [data-close-warning-target="autosave"] {
+  display: inline-block;
+  font-size: 1.2em;
+  border-radius: 4px;
+  background-color: highlight;
+  padding: 0.6em 1.2em;
+  margin: 1em 0;
+}
+
+[data-controller="close-warning"] [data-close-warning-target="autosave"].hidden {
+  display: none;
+}
