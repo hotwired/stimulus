@@ -9,5 +9,8 @@
     "experimentalDecorators": true,
     "inlineSourceMap": true,
     "declaration": true
-  }
+  },
+  "include": [
+    "src/**/*"
+  ]
 }
