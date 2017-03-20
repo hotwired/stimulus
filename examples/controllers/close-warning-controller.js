@@ -5,9 +5,8 @@ export default class extends Controller {
   initialize() {
     console.log("close-warning#initialize", this.identifier, this.element)
 
-    const descriptor = new Descriptor(null, "beforeunload", "warn", true)
-    const warnAction = new Action(this, descriptor, window, null)
-    this.addAction(warnAction)
+    this.addAction("beforeunload->warn", window)
+    this.addAction("[submit]click->process")
   }
 
   warn(event) {
@@ -15,6 +14,10 @@ export default class extends Controller {
       event.returnValue = "Are you sure?"
       return event.returnValue
     }
+  }
+
+  process(event) {
+    console.log("close-warning#process", event)
   }
 
   hasUnsavedContent() {
