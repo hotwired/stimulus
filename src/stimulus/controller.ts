@@ -7,6 +7,10 @@ export interface ControllerConstructor {
   new(context: Context): Controller
 }
 
+export interface ActionOptions {
+  targetName: string
+}
+
 export class Controller {
   context: Context
 
@@ -38,15 +42,16 @@ export class Controller {
     // Override in your subclass to respond when the controller is disconnected from the DOM
   }
 
-  addAction(descriptorString: string, target: EventTarget | string = this.element) {
+  addAction(descriptorString: string, options?: ActionOptions | EventTarget) {
     let eventTarget, matcher
 
-    if (typeof target == "string") {
-      const targetName = target
-      eventTarget = this.element
-      matcher = (eventTarget) => this.targets.matchesElementWithTargetName(eventTarget, targetName)
+    if (options instanceof EventTarget) {
+      eventTarget = options
     } else {
-      eventTarget = target
+      eventTarget = this.element
+      if (options) {
+        matcher = (element) => this.targets.matchesElementWithTargetName(element, options.targetName)
+      }
     }
 
     const descriptor = Descriptor.forElementWithInlineDescriptorString(eventTarget, descriptorString)

@@ -7,9 +7,9 @@ export default class extends Controller {
 
     this.addAction("beforeunload->warn", window)
     this.addAction("click->focusInput")
-    this.addAction("input->autosave", "input")
-    this.addAction("DOMFocusIn->clearWarning", "input")
-    this.addAction("DOMFocusOut->addWarning", "input")
+    this.addAction("input->autosave", { targetName: "input" })
+    this.addAction("DOMFocusIn->clearWarning", { targetName: "input" })
+    this.addAction("DOMFocusOut->addWarning", { targetName: "input" })
   }
 
   connect() {
