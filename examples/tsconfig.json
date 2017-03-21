@@ -7,5 +7,9 @@
     "paths": {
       "stimulus": ["../src/stimulus"]
     }
-  }
+  },
+  "include": [
+    "./**/*",
+    "../src/**/*"
+  ]
 }
