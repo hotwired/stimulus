@@ -3,11 +3,6 @@ import { ActionSet } from "./action_set"
 import { Context } from "./context"
 import { EventSet } from "./event_set"
 
-interface EventWithTargetPath extends Event {
-  composedPath?(): EventTarget[]
-  path?: EventTarget[]
-}
-
 export class Dispatcher {
   context: Context
   started: boolean
@@ -136,34 +131,20 @@ export class Dispatcher {
 
   private findDelegatedActionsForEvent(event: Event): Action[] {
     const actions = this.delegatedActions.getActionsForEventName(event.type)
-    const eventTargets = this.getComposedPathForEvent(event)
-    return eventTargets.reduce((delegatedActions, eventTarget) => {
-      return delegatedActions.concat(actions.filter(action => action.matchDelegatedTarget(eventTarget)))
+    const elements = this.getBubbledElementsForEvent(event)
+    return elements.reduce((delegatedActions, element) => {
+      return delegatedActions.concat(actions.filter(action => action.matchDelegatedTarget(element)))
     }, <Action[]> [])
   }
 
-  private getComposedPathForEvent(event: Event): EventTarget[] {
-    const eventTargets: EventTarget[] = []
-    const targetPath = getTargetPathForEvent(event)
-    if (targetPath) {
-      for (const eventTarget of targetPath) {
-        eventTargets.push(eventTarget)
-        if (eventTarget == this.element) {
-          break
-        }
-      }
-    } else {
-      let element = getTargetElementForEvent(event)
-      while (element && element != this.parentElement) {
-        eventTargets.push(element)
-        element = element.parentElement
-      }
+  private getBubbledElementsForEvent(event: Event): Element[] {
+    const elements: Element[] = []
+    let element = getTargetElementForEvent(event)
+    while (element && element != this.parentElement) {
+      elements.push(element)
+      element = element.parentElement
     }
-    return eventTargets
-  }
-
-  private get element() {
-    return this.context.element
+    return elements
   }
 
   private get parentElement() {
@@ -174,18 +155,6 @@ export class Dispatcher {
 function performActionsWithEvent(actions: Action[], event: Event) {
   for (const action of actions) {
     action.performWithEvent(event)
-  }
-}
-
-function getTargetPathForEvent(event: EventWithTargetPath): EventTarget[] | null {
-  if (typeof event.composedPath == "function") {
-    return event.composedPath()
-  } else if (typeof event.deepPath == "function") {
-    return event.deepPath()
-  } else if (event.path instanceof Array) {
-    return event.path
-  } else {
-    return null
   }
 }
 
