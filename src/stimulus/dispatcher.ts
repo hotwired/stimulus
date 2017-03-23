@@ -131,13 +131,13 @@ export class Dispatcher {
 
   private findDelegatedActionsForEvent(event: Event): Action[] {
     const actions = this.delegatedActions.getActionsForEventName(event.type)
-    const elements = this.getBubbledElementsForEvent(event)
+    const elements = this.getPathForEvent(event)
     return elements.reduce((delegatedActions, element) => {
       return delegatedActions.concat(actions.filter(action => action.matchDelegatedTarget(element)))
     }, <Action[]> [])
   }
 
-  private getBubbledElementsForEvent(event: Event): Element[] {
+  private getPathForEvent(event: Event): Element[] {
     const elements: Element[] = []
     let element = getTargetElementForEvent(event)
     while (element && element != this.parentElement) {
