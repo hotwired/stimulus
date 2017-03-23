@@ -34,11 +34,14 @@ export class TargetSet {
   }
 
   matchesElementWithTargetName(element: Element, targetName: string): boolean {
-    const selector = this.getSelectorForTargetName(targetName)
-    return element.matches(selector) && this.delegate.canControlElement(element)
+    return element.getAttribute(this.attributeName) == targetName && this.delegate.canControlElement(element)
+  }
+
+  private get attributeName(): string {
+    return `data-${this.identifier}-target`
   }
 
   private getSelectorForTargetName(targetName: string): string {
-    return `[data-${this.identifier}-target='${targetName}']`
+    return `[${this.attributeName}='${targetName}']`
   }
 }
