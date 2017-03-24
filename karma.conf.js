@@ -1,15 +1,22 @@
+const webpackConfig = require("./webpack.config")()
+
 module.exports = function(config) {
   config.set({
-    frameworks: ["qunit", "karma-typescript"],
+    frameworks: ["qunit"],
     files: [
-      { pattern: "src/**/*.ts" },
       { pattern: "test/**/*.ts" }
     ],
     preprocessors: {
-      "src/**/*.ts": ["karma-typescript"],
-      "test/**/*.ts": ["karma-typescript"]
+      "test/**/*.ts": ["webpack"]
     },
-    reporters: ["progress", "karma-typescript"],
+    webpack: {
+      module: webpackConfig.module,
+      resolve: webpackConfig.resolve
+    },
+    mime: {
+      "text/x-typescript": ["ts"]
+    },
+    reporters: ["progress"],
     browsers: ["Chrome"]
   })
 }
