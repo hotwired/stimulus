@@ -17,6 +17,6 @@ module.exports = function(config) {
       "text/x-typescript": ["ts"]
     },
     reporters: ["progress"],
-    browsers: ["Chrome"]
+    browsers: ["Chrome", "Firefox", "Safari"]
   })
 }
