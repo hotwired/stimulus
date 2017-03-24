@@ -1,28 +1,45 @@
 const webpackConfig = require("./webpack.config")()
 
-module.exports = function(config) {
-  config.set({
-    browsers: ["Chrome", "Firefox", "Safari"],
+const config = {
+  browsers: ["Chrome", "Firefox", "Safari"],
 
-    frameworks: ["qunit"],
+  frameworks: ["qunit"],
 
-    reporters: ["progress"],
+  reporters: ["progress"],
 
-    files: [
-      { pattern: "test/**/*_test.ts" }
-    ],
+  files: [
+    { pattern: "test/**/*_test.ts" }
+  ],
 
-    preprocessors: {
-      "test/**/*.ts": ["webpack"]
-    },
+  preprocessors: {
+    "test/**/*.ts": ["webpack"]
+  },
 
-    mime: {
-      "text/x-typescript": ["ts"]
-    },
+  mime: {
+    "text/x-typescript": ["ts"]
+  },
 
-    webpack: {
-      module: webpackConfig.module,
-      resolve: webpackConfig.resolve
+  webpack: {
+    module: webpackConfig.module,
+    resolve: webpackConfig.resolve
+  }
+}
+
+if (process.env.CI) {
+  config.customLaunchers = {
+    sl_chrome: {
+      base: "SauceLabs",
+      browserName: "chrome",
+      platform: "macOS 10.12",
+      version: "56"
     }
-  })
+  }
+  config.browsers = Object.keys(config.customLaunchers)
+  config.sauceLabs = { testName: "Stimulus Browser Tests" }
+  config.reporters = ["dots", "saucelabs"]
+  config.singleRun = true
+}
+
+module.exports = function(karmaConfig) {
+  karmaConfig.set(config)
 }
