@@ -45,7 +45,7 @@ if (process.env.CI) {
     },
     sl_edge: {
       base: "SauceLabs",
-      browserName: "edge",
+      browserName: "microsoftedge",
       platform: "Windows 10",
       version: "14.14393"
     }
