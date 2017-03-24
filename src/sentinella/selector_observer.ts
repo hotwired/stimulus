@@ -1,6 +1,7 @@
 import { ElementObserver, ElementObserverDelegate } from "./element_observer"
 import { Selector } from "./selector"
 import { Multimap } from "./multimap"
+import { elementMatchesSelector } from "./dom"
 
 export interface SelectorObserverDelegate {
   elementMatchedSelector(element: Element, selector: Selector)
@@ -78,11 +79,11 @@ export class SelectorObserver implements ElementObserverDelegate {
   // Element observer delegate
 
   matchElement(element: Element): boolean {
-    return element.matches(this.compositeSelector)
+    return elementMatchesSelector(element, this.compositeSelector)
   }
 
   matchElementsInTree(tree: Element): Element[] {
-    const match = tree.matches(this.compositeSelector) ? [tree] : []
+    const match = this.matchElement(tree) ? [tree] : []
     const matches = Array.from(tree.querySelectorAll(this.compositeSelector))
     return match.concat(matches)
   }

@@ -56,7 +56,7 @@ export class TokenListObserver implements ElementObserverDelegate {
   }
 
   matchElementsInTree(tree: Element): Element[] {
-    const match = tree.matches(this.selector) ? [tree] : []
+    const match = this.matchElement(tree) ? [tree] : []
     const matches = Array.from(tree.querySelectorAll(this.selector))
     return match.concat(matches)
   }

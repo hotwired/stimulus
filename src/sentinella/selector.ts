@@ -1,3 +1,5 @@
+import { elementMatchesSelector } from "./dom"
+
 export class Selector {
   private static selectors = new Map<string, Selector>()
 
@@ -35,7 +37,7 @@ export class Selector {
   }
 
   matches(element: Element): boolean {
-    return element.matches(this.source)
+    return elementMatchesSelector(element, this.source)
   }
 
   toString() {
