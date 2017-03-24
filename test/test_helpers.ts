@@ -30,3 +30,10 @@ export function setFixture(content: string | Element, callback) {
 
   requestAnimationFrame(callback)
 }
+
+export function createControllerElement(identifier: string, innerHTML: string = ""): HTMLDivElement {
+  const element = document.createElement("div")
+  element.setAttribute("data-controller", identifier)
+  element.innerHTML = innerHTML
+  return element
+}
