@@ -30,8 +30,24 @@ if (process.env.CI) {
     sl_chrome: {
       base: "SauceLabs",
       browserName: "chrome",
-      platform: "macOS 10.12",
       version: "56"
+    },
+    sl_firefox: {
+      base: "SauceLabs",
+      browserName: "firefox",
+      version: "51"
+    },
+    sl_safari: {
+      base: "SauceLabs",
+      browserName: "safari",
+      platform: "macOS 10.12",
+      version: "10.0"
+    },
+    sl_edge: {
+      base: "SauceLabs",
+      browserName: "edge",
+      platform: "Windows 10",
+      version: "14.14393"
     }
   }
   config.browsers = Object.keys(config.customLaunchers)
