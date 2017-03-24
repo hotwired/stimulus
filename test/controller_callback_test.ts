@@ -1,16 +1,8 @@
-import { Application, Controller } from "stimulus"
-import { setFixture } from "./test_helpers"
+import { Controller } from "stimulus"
+import { testGroup, test, setFixture } from "./test_helpers"
 
-QUnit.module("Controller callbacks", function(hooks) {
-  hooks.beforeEach(function() {
-    this.application = Application.start()
-  })
-
-  hooks.afterEach(function () {
-    this.application.stop()
-  })
-
-  QUnit.test("intialize, connect, disconnect", function (assert) {
+testGroup("Controller callbacks", function() {
+  test("intialize, connect, disconnect", function (assert) {
     const done = assert.async()
     const counts = { initialize: 0, connect: 0, disconnect: 0 }
 
