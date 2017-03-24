@@ -4,7 +4,7 @@ module.exports = function(config) {
   config.set({
     frameworks: ["qunit"],
     files: [
-      { pattern: "test/**/*.ts" }
+      { pattern: "test/**/*_test.ts" }
     ],
     preprocessors: {
       "test/**/*.ts": ["webpack"]
