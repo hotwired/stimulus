@@ -2,7 +2,7 @@ import { Controller } from "stimulus"
 import { testGroup, test, createControllerElement, setFixture } from "./test_helpers"
 
 testGroup("Controller callbacks", function() {
-  test("intialize, connect, disconnect", function (assert) {
+  test("intialize, connect, disconnect",  async function (assert) {
     const done = assert.async()
 
     const identifier = "test"
@@ -15,21 +15,18 @@ testGroup("Controller callbacks", function() {
       disconnect() { counts.disconnect++ }
     })
 
-    setFixture(element, function () {
-      assert.deepEqual(counts, { initialize: 1, connect: 1, disconnect: 0 })
+    await setFixture(element)
+    assert.deepEqual(counts, { initialize: 1, connect: 1, disconnect: 0 })
 
-      setFixture("", function () {
-        assert.deepEqual(counts, { initialize: 1, connect: 1, disconnect: 1 })
+    await setFixture("")
+    assert.deepEqual(counts, { initialize: 1, connect: 1, disconnect: 1 })
 
-        setFixture(element, function () {
-          assert.deepEqual(counts, { initialize: 1, connect: 2, disconnect: 1 })
-          done()
-        })
-      })
-    })
+    await setFixture(element)
+    assert.deepEqual(counts, { initialize: 1, connect: 2, disconnect: 1 })
+    done()
   })
 
-  test("inline action <button>", function (assert) {
+  test("inline action <button>", async function (assert) {
     const done = assert.async()
 
     const identifier = "test"
@@ -43,13 +40,11 @@ testGroup("Controller callbacks", function() {
       }
     })
 
-    setFixture(element, function() {
-      button.click()
-      assert.equal(events.length, 1)
-      assert.equal(events[0].type, "click")
-      assert.equal(events[0].defaultPrevented, true)
-      done()
-    })
+    await setFixture(element)
+    button.click()
+    assert.equal(events.length, 1)
+    assert.equal(events[0].type, "click")
+    assert.equal(events[0].defaultPrevented, true)
+    done()
   })
-
 })

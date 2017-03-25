@@ -21,14 +21,16 @@ export function getFixture(): HTMLDivElement {
   return document.getElementById("qunit-fixture") as HTMLDivElement
 }
 
-export function setFixture(content: string | Element, callback) {
-  if (typeof content == "string") {
-    getFixture().innerHTML = content
-  } else {
-    getFixture().appendChild(content)
-  }
+export function setFixture(content: string | Element): Promise<any> {
+  return new Promise(resolve => {
+    if (typeof content == "string") {
+      getFixture().innerHTML = content
+    } else {
+      getFixture().appendChild(content)
+    }
 
-  requestAnimationFrame(callback)
+    requestAnimationFrame(resolve)
+  })
 }
 
 export function createControllerElement(identifier: string, innerHTML: string = ""): HTMLDivElement {
