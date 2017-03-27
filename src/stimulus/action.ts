@@ -52,11 +52,11 @@ export class Action {
     return matcher ? matcher(eventTarget) : false
   }
 
-  performWithEvent(event: Event) {
+  invokeWithEventAndTarget(event: Event, eventTarget: EventTarget) {
     if (this.preventsDefault) {
       event.preventDefault()
     }
 
-    this.method.call(this.object, event)
+    this.method.call(this.object, event, eventTarget)
   }
 }

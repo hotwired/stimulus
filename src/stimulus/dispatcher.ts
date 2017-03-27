@@ -3,6 +3,8 @@ import { ActionSet } from "./action_set"
 import { Context } from "./context"
 import { EventSet } from "./event_set"
 
+type ActionInvocation = [Action, Event, EventTarget]
+
 export class Dispatcher {
   context: Context
   started: boolean
@@ -103,15 +105,15 @@ export class Dispatcher {
 
   private handleDirectEvent(event: Event) {
     if (this.canHandleEvent(event)) {
-      const actions = this.findDirectActionsForEvent(event)
-      performActionsWithEvent(actions, event)
+      const actionInvocations = this.findDirectActionInvocationsForEvent(event)
+      performActionInvocations(actionInvocations)
     }
   }
 
   private handleDelegatedEvent(event: Event) {
     if (this.canHandleEvent(event)) {
-      const actions = this.findDelegatedActionsForEvent(event)
-      performActionsWithEvent(actions, event)
+      const actionInvocations = this.findDelegatedActionInvocationsForEvent(event)
+      performActionInvocations(actionInvocations)
     }
   }
 
@@ -124,17 +126,30 @@ export class Dispatcher {
     }
   }
 
-  private findDirectActionsForEvent(event: Event): Action[] {
+  private findDirectActionInvocationsForEvent(event: Event): ActionInvocation[] {
     const actions = this.directActions.getActionsForEventName(event.type)
-    return actions.filter(action => action.eventTarget == event.currentTarget)
+    const eventTarget = event.currentTarget
+    const result: ActionInvocation[] = []
+    for (const action of actions) {
+      if (action.eventTarget == eventTarget) {
+        result.push([action, event, eventTarget])
+      }
+    }
+    return result
   }
 
-  private findDelegatedActionsForEvent(event: Event): Action[] {
+  private findDelegatedActionInvocationsForEvent(event: Event): ActionInvocation[] {
     const actions = this.delegatedActions.getActionsForEventName(event.type)
     const elements = this.getPathForEvent(event)
-    return elements.reduce((delegatedActions, element) => {
-      return delegatedActions.concat(actions.filter(action => action.matchDelegatedTarget(element)))
-    }, <Action[]> [])
+    const result: ActionInvocation[] = []
+    for (const element of elements) {
+      for (const action of actions) {
+        if (action.matchDelegatedTarget(element)) {
+          result.push([action, event, element])
+        }
+      }
+    }
+    return result
   }
 
   private getPathForEvent(event: Event): Element[] {
@@ -152,9 +167,9 @@ export class Dispatcher {
   }
 }
 
-function performActionsWithEvent(actions: Action[], event: Event) {
-  for (const action of actions) {
-    action.performWithEvent(event)
+function performActionInvocations(actionInvocations: ActionInvocation[]) {
+  for (const [action, event, eventTarget] of actionInvocations) {
+    action.invokeWithEventAndTarget(event, eventTarget)
   }
 }
 
