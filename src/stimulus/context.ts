@@ -9,6 +9,10 @@ export interface ContextDelegate {
   contextCanControlElement(context: Context, element: Element): boolean
 }
 
+export interface ActionOptions {
+  targetName: string
+}
+
 export class Context implements InlineActionObserverDelegate, TargetSetDelegate {
   identifier: string
   element: Element
@@ -50,8 +54,36 @@ export class Context implements InlineActionObserverDelegate, TargetSetDelegate 
 
   // Actions
 
-  addAction(action: Action) {
-    this.dispatcher.addAction(action)
+  addAction(action: Action)
+  addAction(descriptorString: string, options?: ActionOptions)
+  addAction(descriptorString: string, eventTarget: EventTarget)
+  addAction(actionOrDescriptorString, optionsOrEventTarget?) {
+    let action
+
+    if (actionOrDescriptorString instanceof Action) {
+      action = actionOrDescriptorString
+
+    } else if (typeof actionOrDescriptorString == "string") {
+      const descriptorString = actionOrDescriptorString
+      let eventTarget, matcher
+
+      if (optionsOrEventTarget instanceof EventTarget) {
+        eventTarget = optionsOrEventTarget
+      } else {
+        eventTarget = this.element
+        if (optionsOrEventTarget) {
+          const {targetName} = optionsOrEventTarget
+          matcher = (element) => this.targets.matchesElementWithTargetName(element, targetName)
+        }
+      }
+
+      const descriptor = Descriptor.forElementWithInlineDescriptorString(eventTarget, descriptorString)
+      action = new Action(this.controller, descriptor, eventTarget, matcher)
+    }
+
+    if (action) {
+      this.dispatcher.addAction(action)
+    }
   }
 
   removeAction(action: Action) {

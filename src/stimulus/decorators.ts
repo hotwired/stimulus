@@ -1,4 +1,4 @@
-import { ActionOptions } from "./controller"
+import { ActionOptions } from "./context"
 
 export function on(eventName: string, actionOptions?: ActionOptions) {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {

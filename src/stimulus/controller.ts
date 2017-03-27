@@ -1,14 +1,9 @@
 import { Action } from "./action"
-import { Context } from "./context"
-import { Descriptor } from "./descriptor"
+import { Context, ActionOptions } from "./context"
 import { TargetSet } from "./target_set"
 
 export interface ControllerConstructor {
   new(context: Context): Controller
-}
-
-export interface ActionOptions {
-  targetName: string
 }
 
 export class Controller {
@@ -42,21 +37,11 @@ export class Controller {
     // Override in your subclass to respond when the controller is disconnected from the DOM
   }
 
-  addAction(descriptorString: string, options?: ActionOptions | EventTarget) {
-    let eventTarget, matcher
-
-    if (options instanceof EventTarget) {
-      eventTarget = options
-    } else {
-      eventTarget = this.element
-      if (options) {
-        matcher = (element) => this.targets.matchesElementWithTargetName(element, options.targetName)
-      }
-    }
-
-    const descriptor = Descriptor.forElementWithInlineDescriptorString(eventTarget, descriptorString)
-    const action = new Action(this, descriptor, eventTarget, matcher)
-    this.context.addAction(action)
+  addAction(action: Action)
+  addAction(descriptorString: string, options?: ActionOptions)
+  addAction(descriptorString: string, eventTarget: EventTarget)
+  addAction(actionOrDescriptorString, optionsOrEventTarget?) {
+    this.context.addAction(actionOrDescriptorString, optionsOrEventTarget)
   }
 
   removeAction(action: Action) {
