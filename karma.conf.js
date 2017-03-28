@@ -10,6 +10,7 @@ const config = {
   reporters: ["progress"],
 
   files: [
+    "node_modules/babel-polyfill/dist/polyfill.js",
     { pattern: "test/**/*_test.ts" }
   ],
 
@@ -50,6 +51,12 @@ if (process.env.CI) {
       browserName: "microsoftedge",
       platform: "Windows 10",
       version: "14.14393"
+    },
+    sl_ie: {
+      base: "SauceLabs",
+      browserName: "internet explorer",
+      platform: "Windows 8.1",
+      version: "11"
     }
   }
   config.browsers = Object.keys(config.customLaunchers)
