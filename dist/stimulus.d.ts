@@ -24,7 +24,7 @@ export class Action {
     readonly method: Function;
     hasSameDescriptorAs(action: Action | null): boolean;
     matchDelegatedTarget(eventTarget: EventTarget): boolean;
-    performWithEvent(event: Event): void;
+    invokeWithEventAndTarget(event: Event, eventTarget: EventTarget): void;
 }
 
 export class Application {
@@ -38,9 +38,6 @@ export class Application {
 export interface ControllerConstructor {
     new (context: Context): Controller;
 }
-export interface ActionOptions {
-    targetName: string;
-}
 export class Controller {
     context: Context;
     constructor(context: Context);
@@ -50,7 +47,9 @@ export class Controller {
     initialize(): void;
     connect(): void;
     disconnect(): void;
-    addAction(descriptorString: string, options?: ActionOptions | EventTarget): void;
+    addAction(action: Action): any;
+    addAction(descriptorString: string, options?: ActionOptions): any;
+    addAction(descriptorString: string, eventTarget: EventTarget): any;
     removeAction(action: Action): void;
 }
 
@@ -72,19 +71,11 @@ export class Descriptor {
     toString(): string;
 }
 
-export class Router implements TokenListObserverDelegate, ContextDelegate {
-    constructor(element: Element, attributeName: string);
-    readonly element: Element;
-    start(): void;
-    stop(): void;
-    register(identifier: string, controllerConstructor: ControllerConstructor): void;
-    contextCanControlElement(context: Context, element: Element): boolean;
-    elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string): void;
-    elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string): void;
-}
-
 export interface ContextDelegate {
     contextCanControlElement(context: Context, element: Element): boolean;
+}
+export interface ActionOptions {
+    targetName: string;
 }
 export class Context implements InlineActionObserverDelegate, TargetSetDelegate {
     identifier: string;
@@ -96,12 +87,25 @@ export class Context implements InlineActionObserverDelegate, TargetSetDelegate 
     connect(): void;
     disconnect(): void;
     readonly parentElement: Element | null;
-    addAction(action: Action): void;
+    addAction(action: Action): any;
+    addAction(descriptorString: string, options?: ActionOptions): any;
+    addAction(descriptorString: string, eventTarget: EventTarget): any;
     removeAction(action: Action): void;
     getObjectForInlineActionDescriptor(descriptor: Descriptor): object;
     inlineActionConnected(action: Action): void;
     inlineActionDisconnected(action: Action): void;
     canControlElement(element: Element): boolean;
+}
+
+export class Router implements TokenListObserverDelegate, ContextDelegate {
+    constructor(element: Element, attributeName: string);
+    readonly element: Element;
+    start(): void;
+    stop(): void;
+    register(identifier: string, controllerConstructor: ControllerConstructor): void;
+    contextCanControlElement(context: Context, element: Element): boolean;
+    elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string): void;
+    elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string): void;
 }
 
 export interface TargetSetDelegate {
