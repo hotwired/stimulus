@@ -32,19 +32,50 @@ testGroup("Controller callbacks", function() {
     const identifier = "test"
     const element = createControllerElement(identifier, `<button data-${identifier}-action="nextStep">next</button>`)
     const button = element.firstElementChild as HTMLButtonElement
-    const events: Event[] = []
+
+    const actual = { eventCount: 0, eventType: null, eventPrevented: false, eventTarget: null, target: null }
+    const expected = { eventCount: 1, eventType: "click", eventPrevented: true, eventTarget: button, target: button }
 
     this.application.register(identifier, class extends Controller {
-      nextStep(event) {
-        events.push(event)
+      nextStep(event, target) {
+        actual.eventCount++
+        actual.eventType = event.type
+        actual.eventPrevented = event.defaultPrevented
+        actual.eventTarget = event.target
+        actual.target = target
       }
     })
 
     await setFixture(element)
     triggerEvent(button, "click")
-    assert.equal(events.length, 1)
-    assert.equal(events[0].type, "click")
-    assert.equal(events[0].defaultPrevented, true)
+    assert.deepEqual(actual, expected)
+    done()
+  })
+
+  test("inline action <button> with child element", async function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    const element = createControllerElement(identifier, `<button data-${identifier}-action="nextStep"><span>next</span></button>`)
+    const button = element.firstElementChild as HTMLButtonElement
+    const buttonChild = button.firstElementChild as HTMLSpanElement
+
+    const actual = { eventCount: 0, eventType: null, eventPrevented: false, eventTarget: null, target: null }
+    const expected = { eventCount: 1, eventType: "click", eventPrevented: true, eventTarget: buttonChild, target: button }
+
+    this.application.register(identifier, class extends Controller {
+      nextStep(event, target) {
+        actual.eventCount++
+        actual.eventType = event.type
+        actual.eventPrevented = event.defaultPrevented
+        actual.eventTarget = event.target
+        actual.target = target
+      }
+    })
+
+    await setFixture(element)
+    triggerEvent(buttonChild, "click")
+    assert.deepEqual(actual, expected)
     done()
   })
 })
