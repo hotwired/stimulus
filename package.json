@@ -37,6 +37,7 @@
     "prebuild": "yarn run lint",
     "build": "webpack --env.production",
     "serve": "webpack-dev-server --env.development",
+    "pretest": "yarn run lint",
     "test": "karma start"
   }
 }
