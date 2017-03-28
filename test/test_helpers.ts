@@ -39,3 +39,18 @@ export function createControllerElement(identifier: string, innerHTML: string = 
   element.innerHTML = innerHTML
   return element
 }
+
+export function triggerEvent(element: Element, type: string): Event {
+  const event = document.createEvent("Events")
+  event.initEvent(type, true, true)
+  // IE <= 11 does not set `defaultPrevented` when `preventDefault()` is called on synthetic events
+  event.preventDefault = function() {
+    Object.defineProperty(this, "defaultPrevented", {
+      get: function() {
+        return true
+      }
+    })
+  }
+  element.dispatchEvent(event)
+  return event
+}

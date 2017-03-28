@@ -1,5 +1,5 @@
 import { Controller } from "stimulus"
-import { testGroup, test, createControllerElement, setFixture } from "./test_helpers"
+import { testGroup, test, createControllerElement, setFixture, triggerEvent } from "./test_helpers"
 
 testGroup("Controller callbacks", function() {
   test("intialize, connect, disconnect",  async function (assert) {
@@ -41,7 +41,7 @@ testGroup("Controller callbacks", function() {
     })
 
     await setFixture(element)
-    button.click()
+    triggerEvent(button, "click")
     assert.equal(events.length, 1)
     assert.equal(events[0].type, "click")
     assert.equal(events[0].defaultPrevented, true)
