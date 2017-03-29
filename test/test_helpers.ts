@@ -39,9 +39,9 @@ export function nextFrame(): Promise<any> {
 
 let identifierId = 0
 
-export function createControllerFixture(innerHTML: string = "") {
+export function createControllerFixture(elementContentTemplate: string = "") {
   const identifier = `fixture-${identifierId++}`
-  const element = createControllerElement(identifier, innerHTML)
+  const element = createControllerElement(identifier, elementContentTemplate)
   const counts = { initialize: 0, connect: 0, disconnect: 0 }
 
   class constructor extends Controller {
@@ -53,11 +53,14 @@ export function createControllerFixture(innerHTML: string = "") {
   return { identifier, element, constructor, counts }
 }
 
-export function createControllerElement(identifier: string, innerHTML: string = ""): HTMLDivElement {
-  const element = document.createElement("div")
-  element.setAttribute("data-controller", identifier)
-  element.innerHTML = innerHTML
-  return element
+export function createControllerElement(identifier: string, contentTemplate: string = ""): HTMLDivElement {
+  const container = document.createElement("div")
+  container.innerHTML = `
+    <div data-controller="{{identifier}}">
+      ${contentTemplate}
+    </div>
+  `.trim().replace(/\{\{identifier\}\}/g, identifier)
+  return container.firstElementChild as HTMLDivElement
 }
 
 export function triggerEvent(element: Element, type: string): Event {
