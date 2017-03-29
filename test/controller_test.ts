@@ -1,8 +1,8 @@
 import { Controller } from "stimulus"
 import { testGroup, test, createControllerFixture, setFixture, triggerEvent } from "./test_helpers"
 
-testGroup("Controller callbacks", function() {
-  test("intialize, connect, disconnect",  async function (assert) {
+testGroup("Controller", function() {
+  test("intialize, connect, disconnect callbacks",  async function (assert) {
     const done = assert.async()
 
     const f1 = createControllerFixture()
