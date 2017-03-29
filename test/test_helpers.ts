@@ -1,4 +1,4 @@
-import { Application } from "stimulus"
+import { Application, Controller } from "stimulus"
 const { assert, module, test } = QUnit
 
 export { assert, test }
@@ -21,16 +21,36 @@ export function getFixture(): HTMLDivElement {
   return document.getElementById("qunit-fixture") as HTMLDivElement
 }
 
-export function setFixture(content: string | Element): Promise<any> {
-  return new Promise(resolve => {
-    if (typeof content == "string") {
-      getFixture().innerHTML = content
-    } else {
-      getFixture().appendChild(content)
-    }
+export function setFixture(content: string | Element) {
+  if (typeof content == "string") {
+    getFixture().innerHTML = content
+  } else {
+    getFixture().appendChild(content)
+  }
 
+  return nextFrame()
+}
+
+export function nextFrame(): Promise<any> {
+  return new Promise(resolve => {
     requestAnimationFrame(resolve)
   })
+}
+
+let identifierId = 0
+
+export function createControllerFixture(innerHTML: string = "") {
+  const identifier = `fixture-${identifierId++}`
+  const element = createControllerElement(identifier, innerHTML)
+  const counts = { initialize: 0, connect: 0, disconnect: 0 }
+
+  class constructor extends Controller {
+    initialize() { counts.initialize++ }
+    connect()    { counts.connect++ }
+    disconnect() { counts.disconnect++ }
+  }
+
+  return { identifier, element, constructor, counts }
 }
 
 export function createControllerElement(identifier: string, innerHTML: string = ""): HTMLDivElement {

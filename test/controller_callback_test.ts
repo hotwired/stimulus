@@ -1,42 +1,35 @@
 import { Controller } from "stimulus"
-import { testGroup, test, createControllerElement, setFixture, triggerEvent } from "./test_helpers"
+import { testGroup, test, createControllerFixture, setFixture, triggerEvent } from "./test_helpers"
 
 testGroup("Controller callbacks", function() {
   test("intialize, connect, disconnect",  async function (assert) {
     const done = assert.async()
 
-    const identifier = "test"
-    const element = createControllerElement(identifier)
-    const counts = { initialize: 0, connect: 0, disconnect: 0 }
+    const f1 = createControllerFixture()
+    this.application.register(f1.identifier, f1.constructor)
 
-    this.application.register(identifier, class extends Controller {
-      initialize() { counts.initialize++ }
-      connect()    { counts.connect++    }
-      disconnect() { counts.disconnect++ }
-    })
-
-    await setFixture(element)
-    assert.deepEqual(counts, { initialize: 1, connect: 1, disconnect: 0 })
+    await setFixture(f1.element)
+    assert.deepEqual(f1.counts, { initialize: 1, connect: 1, disconnect: 0 })
 
     await setFixture("")
-    assert.deepEqual(counts, { initialize: 1, connect: 1, disconnect: 1 })
+    assert.deepEqual(f1.counts, { initialize: 1, connect: 1, disconnect: 1 })
 
-    await setFixture(element)
-    assert.deepEqual(counts, { initialize: 1, connect: 2, disconnect: 1 })
+    await setFixture(f1.element)
+    assert.deepEqual(f1.counts, { initialize: 1, connect: 2, disconnect: 1 })
     done()
   })
 
   test("inline action <button>", async function (assert) {
     const done = assert.async()
 
-    const identifier = "test"
-    const element = createControllerElement(identifier, `<button data-${identifier}-action="nextStep">next</button>`)
-    const button = element.firstElementChild as HTMLButtonElement
+    const f1 = createControllerFixture()
+    f1.element.insertAdjacentHTML("afterbegin", `<button data-${f1.identifier}-action="nextStep">next</button>`)
+    const button = f1.element.firstElementChild as HTMLButtonElement
 
     const actual = { eventCount: 0, eventType: null, eventPrevented: false, eventTarget: null, target: null }
     const expected = { eventCount: 1, eventType: "click", eventPrevented: true, eventTarget: button, target: button }
 
-    this.application.register(identifier, class extends Controller {
+    this.application.register(f1.identifier, class extends Controller {
       nextStep(event, target) {
         actual.eventCount++
         actual.eventType = event.type
@@ -46,7 +39,7 @@ testGroup("Controller callbacks", function() {
       }
     })
 
-    await setFixture(element)
+    await setFixture(f1.element)
     triggerEvent(button, "click")
     assert.deepEqual(actual, expected)
     done()
@@ -55,15 +48,15 @@ testGroup("Controller callbacks", function() {
   test("inline action <button> with child element", async function (assert) {
     const done = assert.async()
 
-    const identifier = "test"
-    const element = createControllerElement(identifier, `<button data-${identifier}-action="nextStep"><span>next</span></button>`)
-    const button = element.firstElementChild as HTMLButtonElement
+    const f1 = createControllerFixture()
+    f1.element.insertAdjacentHTML("afterbegin", `<button data-${f1.identifier}-action="nextStep"><span>next</span></button>`)
+    const button = f1.element.firstElementChild as HTMLButtonElement
     const buttonChild = button.firstElementChild as HTMLSpanElement
 
     const actual = { eventCount: 0, eventType: null, eventPrevented: false, eventTarget: null, target: null }
     const expected = { eventCount: 1, eventType: "click", eventPrevented: true, eventTarget: buttonChild, target: button }
 
-    this.application.register(identifier, class extends Controller {
+    this.application.register(f1.identifier, class extends Controller {
       nextStep(event, target) {
         actual.eventCount++
         actual.eventType = event.type
@@ -73,7 +66,7 @@ testGroup("Controller callbacks", function() {
       }
     })
 
-    await setFixture(element)
+    await setFixture(f1.element)
     triggerEvent(buttonChild, "click")
     assert.deepEqual(actual, expected)
     done()
