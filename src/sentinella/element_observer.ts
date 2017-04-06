@@ -87,13 +87,13 @@ export class ElementObserver {
   }
 
   private processRemovedNodes(nodes: NodeList) {
-    for (const node of nodes) {
+    for (const node of Array.from(nodes)) {
       this.processNode(node, this.removeElement)
     }
   }
 
   private processAddedNodes(nodes: NodeList) {
-    for (const node of nodes) {
+    for (const node of Array.from(nodes)) {
       this.processNode(node, this.addElement)
     }
   }

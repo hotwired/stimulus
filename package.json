@@ -5,19 +5,31 @@
   "main": "dist/sentinella.js",
   "types": "dist/sentinella.d.ts",
   "scripts": {
-    "build": "make",
-    "clean": "make clean"
+    "clean": "rm -fr build dist",
+    "lint": "tslint src/sentinella/*.ts",
+    "prebuild": "yarn run lint",
+    "build": "webpack --env.production",
+    "pretest": "yarn run lint",
+    "test": "karma start"
   },
   "author": "Sam Stephenson",
   "license": "MIT",
   "devDependencies": {
     "@types/qunit": "^2.0.31",
-    "buble": "^0.15.2",
     "dts-bundle": "^0.7.2",
-    "rollup": "^0.41.4",
-    "testem": "^1.15.0",
+    "karma": "^1.6.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-qunit": "^1.2.1",
+    "karma-safari-launcher": "^1.0.0",
+    "karma-webpack": "^2.0.3",
+    "qunitjs": "^2.3.0",
+    "ts-loader": "^2.0.3",
     "tslint": "^4.5.1",
-    "typescript": "^2.2.1"
+    "typescript": "^2.2.2",
+    "webpack": "^2.3.3",
+    "webpack-merge": "^4.1.0"
   },
-  "repository": "git@github.com:basecamp/sentinella.git"
+  "repository": "git@github.com:basecamp/sentinella.git",
+  "dependencies": {}
 }

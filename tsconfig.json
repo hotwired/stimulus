@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "lib": ["dom", "es2015", "scripthost"],
+    "pretty": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "inlineSourceMap": true,
+    "declaration": true
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

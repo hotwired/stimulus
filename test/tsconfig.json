@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig",
+  "compilerOptions": {
+    "declaration": false,
+    "baseUrl": ".",
+    "paths": {
+      "sentinella": [
+        "../src/sentinella"
+      ]
+    }
+  },
+  "include": [
+    "./**/*",
+    "../src/**/*"
+  ]
+}
