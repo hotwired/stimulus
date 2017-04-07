@@ -24,6 +24,13 @@ const config = {
   webpack: {
     module: webpackConfig.module,
     resolve: webpackConfig.resolve
+  },
+
+  client: {
+    clearContext: false,
+    qunit: {
+      showUI: true
+    }
   }
 }
 
