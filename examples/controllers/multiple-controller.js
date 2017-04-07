@@ -3,7 +3,6 @@ import { installController } from "../app"
 
 export default class extends Controller {
   initialize() {
-    console.log("multiple#initialize", this.identifier, this.element)
     this.element.style.opacity = "0.2"
 
     Promise.all([this.controllerIdentifiers.map(installController)]).then(() => {

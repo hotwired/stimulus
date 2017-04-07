@@ -2,8 +2,11 @@ import { Action } from "./action"
 import { ActionSet } from "./action_set"
 import { Context } from "./context"
 import { EventSet } from "./event_set"
+import { Logger } from "./logger"
 
 type ActionInvocation = [Action, Event, EventTarget]
+
+const logger = Logger.create("action")
 
 export class Dispatcher {
   context: Context
@@ -106,14 +109,14 @@ export class Dispatcher {
   private handleDirectEvent(event: Event) {
     if (this.canHandleEvent(event)) {
       const actionInvocations = this.findDirectActionInvocationsForEvent(event)
-      performActionInvocations(actionInvocations)
+      this.performActionInvocations(actionInvocations)
     }
   }
 
   private handleDelegatedEvent(event: Event) {
     if (this.canHandleEvent(event)) {
       const actionInvocations = this.findDelegatedActionInvocationsForEvent(event)
-      performActionInvocations(actionInvocations)
+      this.performActionInvocations(actionInvocations)
     }
   }
 
@@ -152,6 +155,13 @@ export class Dispatcher {
     return result
   }
 
+  private performActionInvocations(actionInvocations: ActionInvocation[]) {
+    for (const [action, event, eventTarget] of actionInvocations) {
+      logger.log(`${this.context.identifier}#${action.methodName}`, `(on ${event.type})`, { event, eventTarget })
+      action.invokeWithEventAndTarget(event, eventTarget)
+    }
+  }
+
   private getPathForEvent(event: Event): Element[] {
     const elements: Element[] = []
     let element = getTargetElementForEvent(event)
@@ -164,12 +174,6 @@ export class Dispatcher {
 
   private get parentElement() {
     return this.context.parentElement
-  }
-}
-
-function performActionInvocations(actionInvocations: ActionInvocation[]) {
-  for (const [action, event, eventTarget] of actionInvocations) {
-    action.invokeWithEventAndTarget(event, eventTarget)
   }
 }
 

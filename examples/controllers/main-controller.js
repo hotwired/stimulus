@@ -2,10 +2,6 @@ import Controller from "./controller"
 import { installController } from "../app"
 
 export default class extends Controller {
-  initialize() {
-    console.log("main#initialize", this.identifier, this.element)
-  }
-
   load(event) {
     if (event.target == this.currentNavElement) {
       this.reattachContainerElement()

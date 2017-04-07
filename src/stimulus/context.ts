@@ -4,6 +4,7 @@ import { Descriptor } from "./descriptor"
 import { Dispatcher } from "./dispatcher"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
 import { TargetSet, TargetSetDelegate } from "./target_set"
+import { Logger } from "./logger"
 
 export interface ContextDelegate {
   contextCanControlElement(context: Context, element: Element): boolean
@@ -12,6 +13,8 @@ export interface ContextDelegate {
 export interface ActionOptions {
   targetName: string
 }
+
+const logger = Logger.create("controller")
 
 export class Context implements InlineActionObserverDelegate, TargetSetDelegate {
   identifier: string
@@ -31,21 +34,28 @@ export class Context implements InlineActionObserverDelegate, TargetSetDelegate 
     this.targets = new TargetSet(identifier, element, this)
     this.dispatcher = new Dispatcher(this)
     this.inlineActionObserver = new InlineActionObserver(identifier, element, this)
-
     this.controller = new controllerConstructor(this)
+
+    this.logCallback("initialize")
     this.controller.initialize()
   }
 
   connect() {
     this.dispatcher.start()
     this.inlineActionObserver.start()
+    this.logCallback("connect")
     this.controller.connect()
   }
 
   disconnect() {
+    this.logCallback("disconnect")
     this.controller.disconnect()
     this.inlineActionObserver.stop()
     this.dispatcher.stop()
+  }
+
+  private logCallback(methodName) {
+    logger.log(`${this.identifier}#${methodName}`, { element: this.element })
   }
 
   get parentElement(): Element | null {

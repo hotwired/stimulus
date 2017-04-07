@@ -4,7 +4,6 @@ const SHAPES = ["circle", "triangle"]
 
 export default class extends Controller {
   initialize() {
-    console.log("shape-shifter#initialize", this.identifier, this.element)
     this.targets.findAll("shape").forEach((element) => {
       const shape = this.getRandomShape()
       element.classList.add(shape)
