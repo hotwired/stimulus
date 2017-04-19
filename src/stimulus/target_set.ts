@@ -38,10 +38,10 @@ export class TargetSet {
   }
 
   private get attributeName(): string {
-    return `data-${this.identifier}-target`
+    return `data-target`
   }
 
   private getSelectorForTargetName(targetName: string): string {
-    return `[${this.attributeName}='${targetName}']`
+    return `[${this.attributeName}~='${this.identifier}.${targetName}']`
   }
 }
