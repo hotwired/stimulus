@@ -78,7 +78,7 @@ main {
   background-color: white;
 }
 
-[data-controller~=expander] {
+[data-controller~="expander"] {
   position: relative;
   border: 2px dotted red;
   border-radius: 5px;
@@ -86,26 +86,26 @@ main {
   margin-top: 15px;
 }
 
-[data-controller~=expander].expanded {
+[data-controller~="expander"].expanded {
   border-color: green;
 }
 
-[data-expander-target=expanded]:not(.expanded) {
+[data-target~="expander.expanded"]:not(.expanded) {
   display: none;
 }
 
-[data-expander-target=collapsed].expanded {
+[data-target~="expander.collapsed"].expanded {
   display: none;
 }
 
-[data-shape-shifter-target~="shape"] {
+[data-target~="shape-shifter.shape"] {
   display: inline-block;
   width: 80px;
   height: 80px;
   margin: 10px;
 }
 
-[data-shape-shifter-target~="shape"].triangle {
+[data-target~="shape-shifter.shape"].triangle {
   width: 0;
   height: 0;
   border-bottom: 80px solid steelblue;
@@ -113,26 +113,26 @@ main {
   border-right: 40px solid transparent;
 }
 
-[data-shape-shifter-target~="shape"].circle {
+[data-target~="shape-shifter.shape"].circle {
   background-color: steelblue;
   border-radius: 50%;
 }
 
-[data-controller=wizard] [data-wizard-target=step]:not([data-current-step]) {
+[data-controller~="wizard"] [data-target~="wizard.step"]:not([data-current-step]) {
   display: none;
 }
 
-[data-controller="close-warning"] {
+[data-controller~="close-warning"] {
   min-height: 300px;
 }
 
-[data-controller="close-warning"] .warning {
+[data-controller~="close-warning"] .warning {
   border-width: 2px;
   border-color: rgba(255, 0, 0, 1);
-  background-color:  rgba(255, 0, 0, 0.02);
+  background-color: rgba(255, 0, 0, 0.02);
 }
 
-[data-controller="close-warning"] [data-close-warning-target="autosave"] {
+[data-controller~="close-warning"] [data-target~="close-warning.autosave"] {
   display: inline-block;
   font-size: 1.2em;
   border-radius: 4px;
@@ -141,6 +141,6 @@ main {
   margin: 1em 0;
 }
 
-[data-controller="close-warning"] [data-close-warning-target="autosave"].hidden {
+[data-controller~="close-warning"] [data-target~="close-warning.autosave"].hidden {
   display: none;
 }
