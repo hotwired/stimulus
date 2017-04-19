@@ -29,7 +29,7 @@ export class InlineActionObserver implements AttributeObserverDelegate {
   }
 
   get attributeName(): string {
-    return `data-${this.identifier}-action`
+    return `data-action`
   }
 
   start() {
@@ -62,14 +62,18 @@ export class InlineActionObserver implements AttributeObserverDelegate {
 
   private refreshActionForElement(element: Element) {
     const descriptorString = element.getAttribute(this.attributeName)
-    if (descriptorString == null) {
+    if (descriptorString == null || descriptorString.trim().length == 0) {
       this.disconnectActionForElement(element)
     } else {
       const newAction = this.buildActionForElementWithDescriptorString(element, descriptorString)
-      const existingAction = this.getActionForElement(element)
-      if (!newAction.hasSameDescriptorAs(existingAction)) {
+      if (newAction) {
+        const existingAction = this.getActionForElement(element)
+        if (!newAction.hasSameDescriptorAs(existingAction)) {
+          this.disconnectActionForElement(element)
+          this.connectActionForElement(newAction, element)
+        }
+      } else {
         this.disconnectActionForElement(element)
-        this.connectActionForElement(newAction, element)
       }
     }
   }
@@ -93,7 +97,9 @@ export class InlineActionObserver implements AttributeObserverDelegate {
 
   private buildActionForElementWithDescriptorString(element: Element, descriptorString: string) {
     const descriptor = Descriptor.forElementWithInlineDescriptorString(element, descriptorString)
-    const object = this.delegate.getObjectForInlineActionDescriptor(descriptor)
-    return new Action(object, descriptor, this.element, eventTarget => eventTarget == element)
+    if (descriptor.identifier == this.identifier) {
+      const object = this.delegate.getObjectForInlineActionDescriptor(descriptor)
+      return new Action(object, descriptor, this.element, eventTarget => eventTarget == element)
+    }
   }
 }
