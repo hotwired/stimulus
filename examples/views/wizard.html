@@ -1,5 +1,5 @@
 <div data-controller="wizard">
-  <form method="get" action="/" data-wizard-action="nextStep" data-wizard-target="step" data-current-step="true">
+  <form method="get" action="/" data-action="wizard#nextStep" data-target="wizard.step" data-current-step="true">
     <h1>Step 1</h1>
 
     <select name="result">
@@ -12,24 +12,24 @@
     <button type="submit">Next Step →</button>
   </form>
 
-  <div data-wizard-target="step">
+  <div data-target="wizard.step">
     <h1>Step 2</h1>
 
     <p>
       <input type="text" name="result" placeholder="Enter something">
-      <button type="button" data-wizard-action="mousedown->nextStep">Next Step →</button>
+      <button type="button" data-action="mousedown->wizard#nextStep">Next Step →</button>
     </p>
   </div>
 
-  <div data-wizard-target="step">
+  <div data-target="wizard.step">
     <h1>Step 3</h1>
 
-    <a href="#WRONG" data-wizard-action="nextStep">See results →</a>
+    <a href="#WRONG" data-action="wizard#nextStep">See results →</a>
   </div>
 
-  <div data-wizard-target="step">
+  <div data-target="wizard.step">
     <h1>Results</h1>
 
-    <pre data-wizard-target="results"></pre>
+    <pre data-target="wizard.results"></pre>
   </div>
 </div>

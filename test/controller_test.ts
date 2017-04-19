@@ -22,7 +22,7 @@ testGroup("Controller", function() {
   test("inline action <button>", async function (assert) {
     const done = assert.async()
 
-    const f1 = createControllerFixture(`<button data-{{identifier}}-action="nextStep">next</button>`)
+    const f1 = createControllerFixture(`<button data-action="{{identifier}}#nextStep">next</button>`)
     const button = f1.element.firstElementChild as HTMLButtonElement
 
     const actual = { eventCount: 0, eventType: null, eventPrevented: false, eventTarget: null, target: null }
@@ -47,7 +47,7 @@ testGroup("Controller", function() {
   test("inline action <button> with child element", async function (assert) {
     const done = assert.async()
 
-    const f1 = createControllerFixture(`<button data-{{identifier}}-action="nextStep"><span>next</span></button>`)
+    const f1 = createControllerFixture(`<button data-action="{{identifier}}#nextStep"><span>next</span></button>`)
     const button = f1.element.firstElementChild as HTMLButtonElement
     const buttonChild = button.firstElementChild as HTMLSpanElement
 
