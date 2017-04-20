@@ -1,6 +1,7 @@
 import { Action } from "./action"
 import { Context, ActionOptions } from "./context"
 import { TargetSet } from "./target_set"
+import { DataSet } from "./data_set"
 
 export interface ControllerConstructor {
   new(context: Context): Controller
@@ -23,6 +24,10 @@ export class Controller {
 
   get targets(): TargetSet {
     return this.context.targets
+  }
+
+  get data(): DataSet {
+    return this.context.data
   }
 
   initialize() {

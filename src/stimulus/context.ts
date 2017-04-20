@@ -4,6 +4,7 @@ import { Descriptor } from "./descriptor"
 import { Dispatcher } from "./dispatcher"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
 import { TargetSet, TargetSetDelegate } from "./target_set"
+import { DataSet } from "./data_set"
 import { Logger } from "./logger"
 
 export interface ContextDelegate {
@@ -23,6 +24,7 @@ export class Context implements InlineActionObserverDelegate, TargetSetDelegate 
 
   controller: Controller
   targets: TargetSet
+  data: DataSet
   private dispatcher: Dispatcher
   private inlineActionObserver: InlineActionObserver
 
@@ -32,6 +34,7 @@ export class Context implements InlineActionObserverDelegate, TargetSetDelegate 
     this.delegate = delegate
 
     this.targets = new TargetSet(identifier, element, this)
+    this.data = new DataSet(identifier, element)
     this.dispatcher = new Dispatcher(this)
     this.inlineActionObserver = new InlineActionObserver(identifier, element, this)
     this.controller = new controllerConstructor(this)
