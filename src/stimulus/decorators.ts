@@ -3,7 +3,7 @@ import { ActionOptions } from "./context"
 export function on(eventName: string, actionOptions?: ActionOptions) {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     inject(target, "initialize", function() {
-      this.addAction(`${eventName}->${propertyKey}`, actionOptions)
+      this.addAction(`${eventName}->${this.identifier}#${propertyKey}`, actionOptions)
     })
   }
 }

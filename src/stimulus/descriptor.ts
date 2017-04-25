@@ -1,4 +1,5 @@
 export interface DescriptorOptions {
+  identifier?: string
   targetName?: string
   eventName?: string
   methodName?: string
@@ -15,6 +16,7 @@ export class Descriptor {
     "textarea": e => "change"
   }
 
+  identifier: string
   targetName: string | null
   eventName: string
   methodName: string
@@ -22,6 +24,7 @@ export class Descriptor {
 
   static forOptions(options: DescriptorOptions): Descriptor {
     return new Descriptor(
+      options.identifier || error("Missing identifier in descriptor"),
       options.targetName || null,
       options.eventName  || error("Missing event name in descriptor"),
       options.methodName || error("Missing method name in descriptor"),
@@ -41,10 +44,11 @@ export class Descriptor {
 
   private static parseOptionsFromInlineActionDescriptorString(descriptorString: string): DescriptorOptions {
     const source = descriptorString.trim()
-    const matches = source.match(/^(~)?((.+?)->)?(.+)$/) || error("Invalid descriptor syntax")
+    const matches = source.match(/^(~)?((.+?)->)?(.+?)#(.+)$/) || error("Invalid descriptor syntax")
     return {
+      identifier: matches[4],
       eventName: matches[3],
-      methodName: matches[4],
+      methodName: matches[5],
       preventsDefault: matches[1] ? false : true
     }
   }
@@ -53,7 +57,8 @@ export class Descriptor {
     return this.defaultEventNames[element.tagName.toLowerCase()](element)
   }
 
-  constructor(targetName: string | null, eventName: string, methodName: string, preventsDefault: boolean) {
+  constructor(identifier: string, targetName: string | null, eventName: string, methodName: string, preventsDefault: boolean) {
+    this.identifier = identifier
     this.targetName = targetName
     this.eventName = eventName
     this.methodName = methodName
@@ -62,6 +67,7 @@ export class Descriptor {
 
   isEqualTo(descriptor: Descriptor | null): boolean {
     return descriptor != null &&
+      descriptor.identifier == this.identifier &&
       descriptor.targetName == this.targetName &&
       descriptor.eventName == this.eventName &&
       descriptor.methodName == this.methodName &&
@@ -70,7 +76,7 @@ export class Descriptor {
 
   toString(): string {
     return (this.preventsDefault ? "" : "~") +
-      this.eventName + "->" + this.methodName
+      `${this.eventName}->${this.identifier}#${this.methodName}`
   }
 }
 
