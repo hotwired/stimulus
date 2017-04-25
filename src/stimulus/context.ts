@@ -1,4 +1,5 @@
 import { Action } from "./action"
+import { Application } from "./application"
 import { Controller, ControllerConstructor } from "./controller"
 import { Descriptor } from "./descriptor"
 import { Dispatcher } from "./dispatcher"
@@ -18,6 +19,7 @@ export interface ActionOptions {
 const logger = Logger.create("controller")
 
 export class Context implements InlineActionObserverDelegate, TargetSetDelegate {
+  application: Application
   identifier: string
   element: Element
   delegate: ContextDelegate
@@ -28,7 +30,8 @@ export class Context implements InlineActionObserverDelegate, TargetSetDelegate 
   private dispatcher: Dispatcher
   private inlineActionObserver: InlineActionObserver
 
-  constructor(identifier: string, element: Element, controllerConstructor: ControllerConstructor, delegate: ContextDelegate) {
+  constructor(application: Application, identifier: string, element: Element, controllerConstructor: ControllerConstructor, delegate: ContextDelegate) {
+    this.application = application
     this.identifier = identifier
     this.element = element
     this.delegate = delegate

@@ -1,4 +1,5 @@
 import { Action } from "./action"
+import { Application } from "./application"
 import { Context, ActionOptions } from "./context"
 import { TargetSet } from "./target_set"
 import { DataSet } from "./data_set"
@@ -12,6 +13,10 @@ export class Controller {
 
   constructor(context: Context) {
     this.context = context
+  }
+
+  get application(): Application {
+    return this.context.application
   }
 
   get element(): Element {

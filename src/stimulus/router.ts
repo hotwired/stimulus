@@ -91,7 +91,7 @@ export class Router implements TokenListObserverDelegate, ContextDelegate {
       let context = contextMap.get(identifier)
 
       if (!context) {
-        context = new Context(identifier, element, constructor, this)
+        context = new Context(this.application, identifier, element, constructor, this)
         contextMap.set(identifier, context)
       }
 
