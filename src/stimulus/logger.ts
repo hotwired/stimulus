@@ -1,7 +1,7 @@
 let enabled = false
 
 export class Logger {
-  private tags: Array<any>
+  private tags: any[]
 
   static enable() {
     enabled = true
@@ -15,7 +15,7 @@ export class Logger {
     return new Logger(tags)
   }
 
-  constructor(tags: Array<any> = []) {
+  constructor(tags: any[] = []) {
     this.tags = tags
   }
 
@@ -25,8 +25,22 @@ export class Logger {
 
   log(...messages) {
     if (enabled) {
-      console.log.apply(this, this.formattedTags.concat(messages))
+      console.log.apply(console, this.buildFormatArguments(messages))
     }
+  }
+
+  private buildFormatArguments(messages: any[]) {
+    const formatStrings: any[] = [], formatValues: any[] = []
+    for (const message of this.formattedTags.concat(messages)) {
+      const type = typeof message
+      if (type == "string" || type == "number" || type == "boolean") {
+        formatStrings.push("%s")
+      } else {
+        formatStrings.push("%o")
+      }
+      formatValues.push(message)
+    }
+    return [formatStrings.join(" "), ...formatValues]
   }
 
   private get formattedTags() {
