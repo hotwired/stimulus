@@ -17,7 +17,7 @@ export class Application {
 
   constructor(configurationOptions: ConfigurationOptions = {}) {
     this.configuration = createConfiguration(configurationOptions)
-    this.router = new Router(this.configuration)
+    this.router = new Router(this)
   }
 
   start() {

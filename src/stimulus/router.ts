@@ -1,3 +1,4 @@
+import { Application } from "./application"
 import { Configuration } from "./configuration"
 import { TokenListObserver, TokenListObserverDelegate } from "sentinella"
 import { ControllerConstructor } from "./controller"
@@ -7,20 +8,24 @@ import { Mask } from "./mask"
 type ContextMap = Map<string, Context>
 
 export class Router implements TokenListObserverDelegate, ContextDelegate {
-  private configuration: Configuration
+  application: Application
   private tokenListObserver: TokenListObserver
   private controllerConstructors: Map<string, ControllerConstructor>
   private contextMaps: WeakMap<Element, ContextMap>
   private connectedContexts: Set<Context>
   private masks: WeakMap<Element, Mask>
 
-  constructor(configuration: Configuration) {
-    this.configuration = configuration
+  constructor(application: Application) {
+    this.application = application
     this.tokenListObserver = new TokenListObserver(this.element, this.controllerAttribute, this)
     this.controllerConstructors = new Map()
     this.contextMaps = new WeakMap()
     this.connectedContexts = new Set()
     this.masks = new WeakMap()
+  }
+
+  get configuration(): Configuration {
+    return this.application.configuration
   }
 
   get element(): Element {
