@@ -1,3 +1,4 @@
+import { Configuration } from "./configuration"
 import { TokenListObserver, TokenListObserverDelegate } from "sentinella"
 import { ControllerConstructor } from "./controller"
 import { Context, ContextDelegate } from "./context"
@@ -6,16 +7,16 @@ import { Mask } from "./mask"
 type ContextMap = Map<string, Context>
 
 export class Router implements TokenListObserverDelegate, ContextDelegate {
-  private attributeName: string
+  private configuration: Configuration
   private tokenListObserver: TokenListObserver
   private controllerConstructors: Map<string, ControllerConstructor>
   private contextMaps: WeakMap<Element, ContextMap>
   private connectedContexts: Set<Context>
   private masks: WeakMap<Element, Mask>
 
-  constructor(element: Element, attributeName: string) {
-    this.attributeName = attributeName
-    this.tokenListObserver = new TokenListObserver(element, attributeName, this)
+  constructor(configuration: Configuration) {
+    this.configuration = configuration
+    this.tokenListObserver = new TokenListObserver(this.element, this.controllerAttribute, this)
     this.controllerConstructors = new Map()
     this.contextMaps = new WeakMap()
     this.connectedContexts = new Set()
@@ -23,7 +24,11 @@ export class Router implements TokenListObserverDelegate, ContextDelegate {
   }
 
   get element(): Element {
-    return this.tokenListObserver.element
+    return this.configuration.rootElement
+  }
+
+  get controllerAttribute(): string {
+    return this.configuration.controllerAttribute
   }
 
   start() {
@@ -104,7 +109,7 @@ export class Router implements TokenListObserverDelegate, ContextDelegate {
   private fetchMaskForElement(identifier: string, element: Element): Mask {
     let mask = this.masks.get(element)
     if (!mask) {
-      const selector = `[${this.attributeName}='${identifier}']`
+      const selector = `[${this.controllerAttribute}='${identifier}']`
       mask = Mask.forElementWithSelector(element, selector)
       this.masks.set(element, mask)
     }
