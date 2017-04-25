@@ -37,10 +37,10 @@ export class Context implements InlineActionObserverDelegate, TargetSetDelegate 
     this.element = element
     this.delegate = delegate
 
-    this.targets = new TargetSet(this.configuration.targetAttribute, identifier, element, this)
+    this.targets = new TargetSet(this.targetAttribute, identifier, element, this)
     this.data = new DataSet(identifier, element)
     this.dispatcher = new Dispatcher(this)
-    this.inlineActionObserver = new InlineActionObserver(identifier, element, this)
+    this.inlineActionObserver = new InlineActionObserver(this.actionAttribute, identifier, element, this)
     this.controller = new controllerConstructor(this)
 
     this.logCallback("initialize")
@@ -65,12 +65,20 @@ export class Context implements InlineActionObserverDelegate, TargetSetDelegate 
     logger.log(`${this.identifier}#${methodName}`, { element: this.element })
   }
 
-  get configuration(): Configuration {
+  get parentElement(): Element | null {
+    return this.element.parentElement
+  }
+
+  private get configuration(): Configuration {
     return this.application.configuration
   }
 
-  get parentElement(): Element | null {
-    return this.element.parentElement
+  private get actionAttribute(): string {
+    return this.configuration.actionAttribute
+  }
+
+  private get targetAttribute(): string {
+    return this.configuration.targetAttribute
   }
 
   // Actions

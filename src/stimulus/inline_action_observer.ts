@@ -10,26 +10,24 @@ export interface InlineActionObserverDelegate {
 }
 
 export class InlineActionObserver implements AttributeObserverDelegate {
+  attributeName: string
   identifier: string
   private delegate: InlineActionObserverDelegate
 
   private attributeObserver: AttributeObserver
   private connectedActions: Map<Element, Action>
 
-  constructor(identifier: string, element: Element, delegate: InlineActionObserverDelegate) {
+  constructor(attributeName: string, identifier: string, element: Element, delegate: InlineActionObserverDelegate) {
+    this.attributeName = attributeName
     this.identifier = identifier
     this.delegate = delegate
 
-    this.attributeObserver = new AttributeObserver(element, this.attributeName, this)
+    this.attributeObserver = new AttributeObserver(element, attributeName, this)
     this.connectedActions = new Map<Element, Action>()
   }
 
   get element(): Element {
     return this.attributeObserver.element
-  }
-
-  get attributeName(): string {
-    return `data-action`
   }
 
   start() {
