@@ -1,5 +1,6 @@
 import { Action } from "./action"
 import { Application } from "./application"
+import { Configuration } from "./configuration"
 import { Controller, ControllerConstructor } from "./controller"
 import { Descriptor } from "./descriptor"
 import { Dispatcher } from "./dispatcher"
@@ -36,7 +37,7 @@ export class Context implements InlineActionObserverDelegate, TargetSetDelegate 
     this.element = element
     this.delegate = delegate
 
-    this.targets = new TargetSet(identifier, element, this)
+    this.targets = new TargetSet(this.configuration.targetAttribute, identifier, element, this)
     this.data = new DataSet(identifier, element)
     this.dispatcher = new Dispatcher(this)
     this.inlineActionObserver = new InlineActionObserver(identifier, element, this)
@@ -62,6 +63,10 @@ export class Context implements InlineActionObserverDelegate, TargetSetDelegate 
 
   private logCallback(methodName) {
     logger.log(`${this.identifier}#${methodName}`, { element: this.element })
+  }
+
+  get configuration(): Configuration {
+    return this.application.configuration
   }
 
   get parentElement(): Element | null {

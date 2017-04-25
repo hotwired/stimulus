@@ -3,11 +3,13 @@ export interface TargetSetDelegate {
 }
 
 export class TargetSet {
+  attributeName: string
   identifier: string
   element: Element
   private delegate: TargetSetDelegate
 
-  constructor(identifier: string, element: Element, delegate: TargetSetDelegate) {
+  constructor(attributeName: string, identifier: string, element: Element, delegate: TargetSetDelegate) {
+    this.attributeName = attributeName
     this.identifier = identifier
     this.element = element
     this.delegate = delegate
@@ -35,10 +37,6 @@ export class TargetSet {
 
   matchesElementWithTargetName(element: Element, targetName: string): boolean {
     return element.getAttribute(this.attributeName) == targetName && this.delegate.canControlElement(element)
-  }
-
-  private get attributeName(): string {
-    return `data-target`
   }
 
   private getSelectorForTargetName(targetName: string): string {
