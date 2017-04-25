@@ -1,27 +1,28 @@
 export class DataSet {
   identifier: string
-  stringMap: DOMStringMap
+  element: Element
 
   constructor(identifier: string, element: Element) {
     this.identifier = identifier
-    this.stringMap = (element as HTMLElement).dataset
+    this.element = element
   }
 
-  get(key: string): string | undefined {
+  get(key: string): string | null {
     key = this.getFormattedKey(key)
-    return this.stringMap[key]
+    return this.element.getAttribute(key)
   }
 
-  set(key: string, value) {
+  set(key: string, value): string | null {
     key = this.getFormattedKey(key)
-    return this.stringMap[key] = value
+    this.element.setAttribute(key, value)
+    return this.get(key)
   }
 
-  private getFormattedKey(key: string): string {
-    return `${this.identifier}${capitalize(key)}`
+  private getFormattedKey(key): string {
+    return `data-${this.identifier}-${dasherize(key)}`
   }
 }
 
-function capitalize(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1)
+function dasherize(value) {
+  return value.toString().replace(/([A-Z])/g, (_, char) => `-${char.toLowerCase()}`)
 }
