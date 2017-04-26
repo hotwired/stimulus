@@ -2,8 +2,8 @@
 // Dependencies for this module:
 //   sentinella
 
-import { TokenListObserverDelegate } from "sentinella";
 import { AttributeObserverDelegate } from "sentinella";
+import { TokenListObserverDelegate } from "sentinella";
 
 export { decorators };
 
@@ -28,8 +28,9 @@ export class Action {
 }
 
 export class Application {
-    static start(): Application;
-    constructor(router: Router);
+    configuration: Configuration;
+    static start(configurationOptions?: ConfigurationOptions): Application;
+    constructor(configurationOptions?: ConfigurationOptions);
     start(): void;
     stop(): void;
     register(identifier: string, controllerConstructor: ControllerConstructor): void;
@@ -41,9 +42,11 @@ export interface ControllerConstructor {
 export class Controller {
     context: Context;
     constructor(context: Context);
+    readonly application: Application;
     readonly element: Element;
     readonly identifier: string;
     readonly targets: TargetSet;
+    readonly data: DataSet;
     initialize(): void;
     connect(): void;
     disconnect(): void;
@@ -54,38 +57,53 @@ export class Controller {
 }
 
 export interface DescriptorOptions {
+    identifier?: string;
     targetName?: string;
     eventName?: string;
     methodName?: string;
     preventsDefault?: boolean;
 }
 export class Descriptor {
+    identifier: string;
     targetName: string | null;
     eventName: string;
     methodName: string;
     preventsDefault: boolean;
     static forOptions(options: DescriptorOptions): Descriptor;
     static forElementWithInlineDescriptorString(element: Element, descriptorString: string): Descriptor;
-    constructor(targetName: string | null, eventName: string, methodName: string, preventsDefault: boolean);
+    constructor(identifier: string, targetName: string | null, eventName: string, methodName: string, preventsDefault: boolean);
     isEqualTo(descriptor: Descriptor | null): boolean;
     toString(): string;
 }
 
-export interface ContextDelegate {
-    contextCanControlElement(context: Context, element: Element): boolean;
+export class Logger {
+    static enable(): void;
+    static disable(): void;
+    static create(...tags: any[]): Logger;
+    constructor(tags?: any[]);
+    tag(...tags: any[]): Logger;
+    log(...messages: any[]): void;
 }
+
 export interface ActionOptions {
     targetName: string;
 }
-export class Context implements InlineActionObserverDelegate, TargetSetDelegate {
-    identifier: string;
+export class Context implements InlineActionObserverDelegate {
+    contextSet: ContextSet;
     element: Element;
-    delegate: ContextDelegate;
     controller: Controller;
     targets: TargetSet;
-    constructor(identifier: string, element: Element, controllerConstructor: ControllerConstructor, delegate: ContextDelegate);
+    data: DataSet;
+    constructor(contextSet: ContextSet, element: Element);
     connect(): void;
     disconnect(): void;
+    canControlElement(element: Element): boolean;
+    readonly application: Application;
+    readonly identifier: string;
+    readonly configuration: Configuration;
+    readonly controllerAttribute: string;
+    readonly actionAttribute: string;
+    readonly targetAttribute: string;
     readonly parentElement: Element | null;
     addAction(action: Action): any;
     addAction(descriptorString: string, options?: ActionOptions): any;
@@ -94,48 +112,84 @@ export class Context implements InlineActionObserverDelegate, TargetSetDelegate 
     getObjectForInlineActionDescriptor(descriptor: Descriptor): object;
     inlineActionConnected(action: Action): void;
     inlineActionDisconnected(action: Action): void;
-    canControlElement(element: Element): boolean;
 }
 
-export class Router implements TokenListObserverDelegate, ContextDelegate {
-    constructor(element: Element, attributeName: string);
-    readonly element: Element;
-    start(): void;
-    stop(): void;
-    register(identifier: string, controllerConstructor: ControllerConstructor): void;
-    contextCanControlElement(context: Context, element: Element): boolean;
-    elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string): void;
-    elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string): void;
+export interface Configuration {
+    rootElement: Element;
+    controllerAttribute: string;
+    actionAttribute: string;
+    targetAttribute: string;
 }
+export interface ConfigurationOptions {
+    rootElement?: Element;
+    controllerAttribute?: string;
+    actionAttribute?: string;
+    targetAttribute?: string;
+}
+export const defaultConfiguration: Configuration;
+export function createConfiguration(configuration: ConfigurationOptions): Configuration;
 
-export interface TargetSetDelegate {
-    canControlElement(element: Element): any;
-}
 export class TargetSet {
-    identifier: string;
-    element: Element;
-    constructor(identifier: string, element: Element, delegate: TargetSetDelegate);
+    context: Context;
+    constructor(context: Context);
+    readonly attributeName: string;
+    readonly element: Element;
+    readonly identifier: string;
     has(targetName: string): boolean;
     find(targetName: string): Element | null;
     findAll(targetName: string): Element[];
     matchesElementWithTargetName(element: Element, targetName: string): boolean;
 }
 
+export class DataSet {
+    context: Context;
+    constructor(context: Context);
+    readonly element: Element;
+    readonly identifier: string;
+    get(key: string): string | null;
+    set(key: string, value: any): string | null;
+}
+
+export class ContextSet {
+    router: Router;
+    identifier: string;
+    controllerConstructor: ControllerConstructor;
+    constructor(router: Router, identifier: string, controllerConstructor: ControllerConstructor);
+    readonly application: Application;
+    readonly size: number;
+    connect(element: Element): void;
+    disconnect(element: Element): void;
+}
+
 export interface InlineActionObserverDelegate {
     getObjectForInlineActionDescriptor(descriptor: Descriptor): object;
     inlineActionConnected(action: Action): any;
     inlineActionDisconnected(action: Action): any;
-    canControlElement(element: Element): any;
 }
 export class InlineActionObserver implements AttributeObserverDelegate {
-    identifier: string;
-    constructor(identifier: string, element: Element, delegate: InlineActionObserverDelegate);
-    readonly element: Element;
+    context: Context;
+    delegate: InlineActionObserverDelegate;
+    constructor(context: Context, delegate: InlineActionObserverDelegate);
     readonly attributeName: string;
+    readonly element: Element;
+    readonly identifier: string;
     start(): void;
     stop(): void;
     elementMatchedAttribute(element: Element, attributeName: string): void;
     elementAttributeValueChanged(element: Element, attributeName: string): void;
     elementUnmatchedAttribute(element: Element, attributeName: string): void;
+}
+
+export class Router implements TokenListObserverDelegate {
+    application: Application;
+    constructor(application: Application);
+    readonly configuration: Configuration;
+    readonly element: Element;
+    readonly controllerAttribute: string;
+    start(): void;
+    stop(): void;
+    register(identifier: string, controllerConstructor: ControllerConstructor): void;
+    elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string): void;
+    elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string): void;
 }
 
