@@ -1,27 +1,18 @@
 import { Application } from "./application"
 import { Configuration } from "./configuration"
-import { TokenListObserver, TokenListObserverDelegate } from "sentinella"
+import { ContextSet } from "./context_set"
 import { ControllerConstructor } from "./controller"
-import { Context, ContextDelegate } from "./context"
-import { Mask } from "./mask"
+import { TokenListObserver, TokenListObserverDelegate } from "sentinella"
 
-type ContextMap = Map<string, Context>
-
-export class Router implements TokenListObserverDelegate, ContextDelegate {
+export class Router implements TokenListObserverDelegate {
   application: Application
   private tokenListObserver: TokenListObserver
-  private controllerConstructors: Map<string, ControllerConstructor>
-  private contextMaps: WeakMap<Element, ContextMap>
-  private connectedContexts: Set<Context>
-  private masks: WeakMap<Element, Mask>
+  private contextSets: Map<string, ContextSet>
 
   constructor(application: Application) {
     this.application = application
     this.tokenListObserver = new TokenListObserver(this.element, this.controllerAttribute, this)
-    this.controllerConstructors = new Map()
-    this.contextMaps = new WeakMap()
-    this.connectedContexts = new Set()
-    this.masks = new WeakMap()
+    this.contextSets = new Map
   }
 
   get configuration(): Configuration {
@@ -44,105 +35,46 @@ export class Router implements TokenListObserverDelegate, ContextDelegate {
     this.tokenListObserver.stop()
   }
 
-  // Controllers
-
   register(identifier: string, controllerConstructor: ControllerConstructor) {
-    if (this.controllerConstructors.has(identifier)) {
+    if (this.contextSets.has(identifier)) {
       throw new Error(`Router already has a controller registered with the identifier '${identifier}'`)
     }
 
-    this.controllerConstructors.set(identifier, controllerConstructor)
-    this.connectContexts(identifier)
-  }
-
-  private connectContexts(identifier: string) {
-    const elements = this.tokenListObserver.getElementsMatchingToken(identifier)
-    for (const element of elements) {
-      this.connectContextForElement(identifier, element)
-    }
-  }
-
-  private connectContextForElement(identifier: string, element: Element) {
-    const context = this.fetchContextForElement(identifier, element)
-    if (context && !this.connectedContexts.has(context)) {
-      this.connectedContexts.add(context)
-      this.resetMasksForIdentifier(identifier)
-      context.connect()
-    }
-  }
-
-  private disconnectContextForElement(identifier: string, element: Element) {
-    const context = this.fetchContextForElement(identifier, element)
-    if (context && this.connectedContexts.has(context)) {
-      this.connectedContexts.delete(context)
-      this.resetMasksForIdentifier(identifier)
-      context.disconnect()
-    }
-  }
-
-  private getConnectedContextsForIdentifier(identifier: string) {
-    return Array.from(this.connectedContexts).filter(context => context.identifier == identifier)
-  }
-
-  private fetchContextForElement(identifier: string, element: Element): Context | undefined {
-    const constructor = this.controllerConstructors.get(identifier)
-    if (constructor) {
-      const contextMap = this.fetchContextMapForElement(element)
-      let context = contextMap.get(identifier)
-
-      if (!context) {
-        context = new Context(this.application, identifier, element, constructor, this)
-        contextMap.set(identifier, context)
-      }
-
-      return context
-    }
-  }
-
-  private fetchContextMapForElement(element: Element): ContextMap {
-    let contextMap = this.contextMaps.get(element)
-    if (!contextMap) {
-      contextMap = new Map()
-      this.contextMaps.set(element, contextMap)
-    }
-
-    return contextMap
-  }
-
-  // Masks
-
-  private fetchMaskForElement(identifier: string, element: Element): Mask {
-    let mask = this.masks.get(element)
-    if (!mask) {
-      const selector = `[${this.controllerAttribute}='${identifier}']`
-      mask = Mask.forElementWithSelector(element, selector)
-      this.masks.set(element, mask)
-    }
-
-    return mask
-  }
-
-  private resetMasksForIdentifier(identifier: string) {
-    const controllers = this.getConnectedContextsForIdentifier(identifier)
-    for (const controller of controllers) {
-      this.masks.delete(controller.element)
-    }
-  }
-
-  // Context delegate
-
-  contextCanControlElement(context: Context, element: Element): boolean {
-    const mask = this.fetchMaskForElement(context.identifier, context.element)
-    return !mask.masks(element)
+    const contextSet = new ContextSet(this, identifier, controllerConstructor)
+    this.contextSets.set(identifier, contextSet)
+    this.connectContextSet(contextSet)
   }
 
   // Token list observer delegate
 
   elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
-    this.connectContextForElement(token, element)
+    this.connectContextForIdentifierToElement(token, element)
   }
 
   elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
-    this.disconnectContextForElement(token, element)
+    this.disconnectContextForIdentifierFromElement(token, element)
+  }
+
+  // Contexts
+
+  private connectContextSet(contextSet: ContextSet) {
+    const elements = this.tokenListObserver.getElementsMatchingToken(contextSet.identifier)
+    for (const element of elements) {
+      contextSet.connect(element)
+    }
+  }
+
+  private connectContextForIdentifierToElement(identifier: string, element: Element) {
+    const contextSet = this.contextSets.get(identifier)
+    if (contextSet) {
+      contextSet.connect(element)
+    }
+  }
+
+  private disconnectContextForIdentifierFromElement(identifier: string, element: Element) {
+    const contextSet = this.contextSets.get(identifier)
+    if (contextSet) {
+      contextSet.disconnect(element)
+    }
   }
 }

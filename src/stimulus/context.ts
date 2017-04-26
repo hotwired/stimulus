@@ -1,17 +1,14 @@
 import { Action } from "./action"
 import { Application } from "./application"
 import { Configuration } from "./configuration"
-import { Controller, ControllerConstructor } from "./controller"
+import { ContextSet } from "./context_set"
+import { Controller } from "./controller"
 import { Descriptor } from "./descriptor"
 import { Dispatcher } from "./dispatcher"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
 import { TargetSet } from "./target_set"
 import { DataSet } from "./data_set"
 import { Logger } from "./logger"
-
-export interface ContextDelegate {
-  contextCanControlElement(context: Context, element: Element): boolean
-}
 
 export interface ActionOptions {
   targetName: string
@@ -20,10 +17,8 @@ export interface ActionOptions {
 const logger = Logger.create("controller")
 
 export class Context implements InlineActionObserverDelegate {
-  application: Application
-  identifier: string
+  contextSet: ContextSet
   element: Element
-  delegate: ContextDelegate
 
   controller: Controller
   targets: TargetSet
@@ -31,17 +26,15 @@ export class Context implements InlineActionObserverDelegate {
   private dispatcher: Dispatcher
   private inlineActionObserver: InlineActionObserver
 
-  constructor(application: Application, identifier: string, element: Element, controllerConstructor: ControllerConstructor, delegate: ContextDelegate) {
-    this.application = application
-    this.identifier = identifier
+  constructor(contextSet: ContextSet, element: Element) {
+    this.contextSet = contextSet
     this.element = element
-    this.delegate = delegate
 
     this.targets = new TargetSet(this)
     this.data = new DataSet(this)
     this.dispatcher = new Dispatcher(this)
     this.inlineActionObserver = new InlineActionObserver(this, this)
-    this.controller = new controllerConstructor(this)
+    this.controller = new contextSet.controllerConstructor(this)
 
     this.logCallback("initialize")
     this.controller.initialize()
@@ -61,16 +54,25 @@ export class Context implements InlineActionObserverDelegate {
     this.dispatcher.stop()
   }
 
-  private logCallback(methodName) {
-    logger.log(`${this.identifier}#${methodName}`, { element: this.element })
+  canControlElement(element: Element): boolean {
+    const selector = `[${this.controllerAttribute}~='${this.identifier}']`
+    return element.closest(selector) == this.element
   }
 
-  get parentElement(): Element | null {
-    return this.element.parentElement
+  get application(): Application {
+    return this.contextSet.application
+  }
+
+  get identifier(): string {
+    return this.contextSet.identifier
   }
 
   get configuration(): Configuration {
     return this.application.configuration
+  }
+
+  get controllerAttribute(): string {
+    return this.configuration.controllerAttribute
   }
 
   get actionAttribute(): string {
@@ -79,6 +81,10 @@ export class Context implements InlineActionObserverDelegate {
 
   get targetAttribute(): string {
     return this.configuration.targetAttribute
+  }
+
+  get parentElement(): Element | null {
+    return this.element.parentElement
   }
 
   // Actions
@@ -133,9 +139,9 @@ export class Context implements InlineActionObserverDelegate {
     this.removeAction(action)
   }
 
-  // Inline action observer & target set delegate
+  // Logging
 
-  canControlElement(element: Element): boolean {
-    return this.delegate.contextCanControlElement(this, element)
+  private logCallback(methodName) {
+    logger.log(`${this.identifier}#${methodName}`, { element: this.element })
   }
 }
