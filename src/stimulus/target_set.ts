@@ -1,18 +1,22 @@
-export interface TargetSetDelegate {
-  canControlElement(element: Element)
-}
+import { Context } from "./context"
 
 export class TargetSet {
-  attributeName: string
-  identifier: string
-  element: Element
-  private delegate: TargetSetDelegate
+  context: Context
 
-  constructor(attributeName: string, identifier: string, element: Element, delegate: TargetSetDelegate) {
-    this.attributeName = attributeName
-    this.identifier = identifier
-    this.element = element
-    this.delegate = delegate
+  constructor(context: Context) {
+    this.context = context
+  }
+
+  get attributeName(): string {
+    return this.context.targetAttribute
+  }
+
+  get element(): Element {
+    return this.context.element
+  }
+
+  get identifier(): string {
+    return this.context.identifier
   }
 
   has(targetName: string): boolean {
@@ -22,7 +26,7 @@ export class TargetSet {
   find(targetName: string): Element | null {
     const selector = this.getSelectorForTargetName(targetName)
     const element = this.element.querySelector(selector)
-    if (element && this.delegate.canControlElement(element)) {
+    if (element && this.context.canControlElement(element)) {
       return element
     } else {
       return null
@@ -32,11 +36,11 @@ export class TargetSet {
   findAll(targetName: string): Element[] {
     const selector = this.getSelectorForTargetName(targetName)
     const elements = Array.from(this.element.querySelectorAll(selector))
-    return elements.filter(element => this.delegate.canControlElement(element))
+    return elements.filter(element => this.context.canControlElement(element))
   }
 
   matchesElementWithTargetName(element: Element, targetName: string): boolean {
-    return element.getAttribute(this.attributeName) == targetName && this.delegate.canControlElement(element)
+    return element.getAttribute(this.attributeName) == targetName && this.context.canControlElement(element)
   }
 
   private getSelectorForTargetName(targetName: string): string {

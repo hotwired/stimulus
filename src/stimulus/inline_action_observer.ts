@@ -1,4 +1,5 @@
 import { Action } from "./action"
+import { Context } from "./context"
 import { Descriptor } from "./descriptor"
 import { AttributeObserver, AttributeObserverDelegate } from "sentinella"
 
@@ -6,28 +7,33 @@ export interface InlineActionObserverDelegate {
   getObjectForInlineActionDescriptor(descriptor: Descriptor): object
   inlineActionConnected(action: Action)
   inlineActionDisconnected(action: Action)
-  canControlElement(element: Element)
 }
 
 export class InlineActionObserver implements AttributeObserverDelegate {
-  attributeName: string
-  identifier: string
-  private delegate: InlineActionObserverDelegate
+  context: Context
+  delegate: InlineActionObserverDelegate
 
   private attributeObserver: AttributeObserver
   private connectedActions: Map<Element, Action>
 
-  constructor(attributeName: string, identifier: string, element: Element, delegate: InlineActionObserverDelegate) {
-    this.attributeName = attributeName
-    this.identifier = identifier
+  constructor(context: Context, delegate: InlineActionObserverDelegate) {
+    this.context = context
     this.delegate = delegate
 
-    this.attributeObserver = new AttributeObserver(element, attributeName, this)
+    this.attributeObserver = new AttributeObserver(this.element, this.attributeName, this)
     this.connectedActions = new Map<Element, Action>()
   }
 
+  get attributeName(): string {
+    return this.context.actionAttribute
+  }
+
   get element(): Element {
-    return this.attributeObserver.element
+    return this.context.element
+  }
+
+  get identifier(): string {
+    return this.context.identifier
   }
 
   start() {
@@ -41,13 +47,13 @@ export class InlineActionObserver implements AttributeObserverDelegate {
   // Attribute observer delegate
 
   elementMatchedAttribute(element: Element, attributeName: string) {
-    if (this.delegate.canControlElement(element)) {
+    if (this.context.canControlElement(element)) {
       this.refreshActionForElement(element)
     }
   }
 
   elementAttributeValueChanged(element: Element, attributeName: string) {
-    if (this.delegate.canControlElement(element)) {
+    if (this.context.canControlElement(element)) {
       this.refreshActionForElement(element)
     }
   }

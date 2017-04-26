@@ -5,7 +5,7 @@ import { Controller, ControllerConstructor } from "./controller"
 import { Descriptor } from "./descriptor"
 import { Dispatcher } from "./dispatcher"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
-import { TargetSet, TargetSetDelegate } from "./target_set"
+import { TargetSet } from "./target_set"
 import { DataSet } from "./data_set"
 import { Logger } from "./logger"
 
@@ -19,7 +19,7 @@ export interface ActionOptions {
 
 const logger = Logger.create("controller")
 
-export class Context implements InlineActionObserverDelegate, TargetSetDelegate {
+export class Context implements InlineActionObserverDelegate {
   application: Application
   identifier: string
   element: Element
@@ -37,10 +37,10 @@ export class Context implements InlineActionObserverDelegate, TargetSetDelegate 
     this.element = element
     this.delegate = delegate
 
-    this.targets = new TargetSet(this.targetAttribute, identifier, element, this)
-    this.data = new DataSet(identifier, element)
+    this.targets = new TargetSet(this)
+    this.data = new DataSet(this)
     this.dispatcher = new Dispatcher(this)
-    this.inlineActionObserver = new InlineActionObserver(this.actionAttribute, identifier, element, this)
+    this.inlineActionObserver = new InlineActionObserver(this, this)
     this.controller = new controllerConstructor(this)
 
     this.logCallback("initialize")
@@ -69,15 +69,15 @@ export class Context implements InlineActionObserverDelegate, TargetSetDelegate 
     return this.element.parentElement
   }
 
-  private get configuration(): Configuration {
+  get configuration(): Configuration {
     return this.application.configuration
   }
 
-  private get actionAttribute(): string {
+  get actionAttribute(): string {
     return this.configuration.actionAttribute
   }
 
-  private get targetAttribute(): string {
+  get targetAttribute(): string {
     return this.configuration.targetAttribute
   }
 

@@ -1,10 +1,18 @@
-export class DataSet {
-  identifier: string
-  element: Element
+import { Context } from "./context"
 
-  constructor(identifier: string, element: Element) {
-    this.identifier = identifier
-    this.element = element
+export class DataSet {
+  context: Context
+
+  constructor(context: Context) {
+    this.context = context
+  }
+
+  get element(): Element {
+    return this.context.element
+  }
+
+  get identifier(): string {
+    return this.context.identifier
   }
 
   get(key: string): string | null {
