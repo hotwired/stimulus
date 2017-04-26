@@ -9,7 +9,7 @@ export class Application {
   configuration: Configuration
   private router: Router
 
-  static start(configurationOptions: ConfigurationOptions): Application {
+  static start(configurationOptions?: ConfigurationOptions): Application {
     const application = new Application(configurationOptions)
     application.start()
     return application
