@@ -24,6 +24,10 @@ export class ContextSet {
     return this.router.application
   }
 
+  get size(): number {
+    return this.connectedContexts.size
+  }
+
   connect(element: Element) {
     const context = this.fetchContextForElement(element)
     if (context && !this.connectedContexts.has(context)) {
