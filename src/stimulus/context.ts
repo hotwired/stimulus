@@ -8,13 +8,10 @@ import { Dispatcher } from "./dispatcher"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
 import { TargetSet } from "./target_set"
 import { DataSet } from "./data_set"
-import { Logger } from "./logger"
 
 export interface ActionOptions {
   targetName: string
 }
-
-const logger = Logger.create("controller")
 
 export class Context implements InlineActionObserverDelegate {
   contextSet: ContextSet
@@ -36,19 +33,16 @@ export class Context implements InlineActionObserverDelegate {
     this.inlineActionObserver = new InlineActionObserver(this, this)
     this.controller = new contextSet.controllerConstructor(this)
 
-    this.logCallback("initialize")
     this.controller.initialize()
   }
 
   connect() {
     this.dispatcher.start()
     this.inlineActionObserver.start()
-    this.logCallback("connect")
     this.controller.connect()
   }
 
   disconnect() {
-    this.logCallback("disconnect")
     this.controller.disconnect()
     this.inlineActionObserver.stop()
     this.dispatcher.stop()
@@ -141,11 +135,5 @@ export class Context implements InlineActionObserverDelegate {
 
   inlineActionDisconnected(action: Action) {
     this.removeAction(action)
-  }
-
-  // Logging
-
-  private logCallback(methodName) {
-    logger.log(`${this.identifier}#${methodName}`, { element: this.element })
   }
 }

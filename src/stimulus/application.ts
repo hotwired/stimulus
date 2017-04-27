@@ -1,9 +1,6 @@
 import { Configuration, ConfigurationOptions, createConfiguration } from "./configuration"
 import { ControllerConstructor } from "./controller"
 import { Router } from "./router"
-import { Logger } from "./logger"
-
-const logger = Logger.create("application")
 
 export class Application {
   configuration: Configuration
@@ -21,17 +18,14 @@ export class Application {
   }
 
   start() {
-    logger.log("start")
     this.router.start()
   }
 
   stop() {
-    logger.log("stop")
     this.router.stop()
   }
 
   register(identifier: string, controllerConstructor: ControllerConstructor) {
-    logger.log("register", { identifier })
     this.router.register(identifier, controllerConstructor)
   }
 }

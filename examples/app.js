@@ -1,5 +1,4 @@
-import { Application, Logger } from "stimulus"
-Logger.enable()
+import { Application } from "stimulus"
 
 let application
 const controllerConstructors = new Map()
