@@ -1,4 +1,5 @@
 export interface Configuration {
+  developmentMode: boolean
   rootElement: Element
   controllerAttribute: string
   actionAttribute: string
@@ -6,6 +7,7 @@ export interface Configuration {
 }
 
 export interface ConfigurationOptions {
+  developmentMode?: boolean
   rootElement?: Element
   controllerAttribute?: string
   actionAttribute?: string
@@ -13,6 +15,7 @@ export interface ConfigurationOptions {
 }
 
 export const defaultConfiguration: Configuration = {
+  developmentMode: false,
   rootElement: document.documentElement,
   controllerAttribute: "data-controller",
   actionAttribute: "data-action",
