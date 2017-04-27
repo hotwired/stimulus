@@ -150,6 +150,6 @@ export class Context implements InlineActionObserverDelegate {
   }
 
   private get loggerTag(): LoggerTag {
-    return new LoggerTag(this.identifier, "#000", "#fc0")
+    return new LoggerTag(this.identifier, "#fff", "#38f")
   }
 }

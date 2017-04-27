@@ -82,7 +82,7 @@ export class Descriptor {
   }
 
   get loggerTag(): LoggerTag {
-    return new LoggerTag(this.toString(), "#fff", "#38f")
+    return new LoggerTag(this.toString(), "#000", "#fc0")
   }
 }
 
