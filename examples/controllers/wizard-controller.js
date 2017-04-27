@@ -1,6 +1,6 @@
 import Controller from "./controller"
 
-export default class extends Controller {
+export default class WizardController extends Controller {
   initialize() {
     this.stepHistory = []
   }

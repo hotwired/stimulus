@@ -1,6 +1,6 @@
 import Controller from "./controller"
 
-export default class extends Controller {
+export default class ExpanderController extends Controller {
   expand(event) {
     this.allTargets.forEach(e => e.classList.add("expanded"))
   }
