@@ -125,6 +125,7 @@ export class Context implements InlineActionObserverDelegate {
   }
 
   removeAction(action: Action) {
+    this.debug("Removing action", action.descriptor.toString(), action)
     this.dispatcher.removeAction(action)
   }
 
