@@ -145,6 +145,10 @@ export class Context implements InlineActionObserverDelegate {
     return this.logger.debug(this.loggerTag, ...args, this.controller, this.element)
   }
 
+  error(...args) {
+    return this.logger.error(this.loggerTag, ...args, this.controller, this.element)
+  }
+
   get logger(): Logger {
     return this.application.logger
   }

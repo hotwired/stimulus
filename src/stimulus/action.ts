@@ -63,13 +63,22 @@ export class Action {
       event.preventDefault()
     }
 
-    this.debug("Invoking action for event", event)
-    this.method.call(this.controller, event, eventTarget)
+    this.debug("Invoking action", this, event)
+
+    try {
+      this.method.call(this.controller, event, eventTarget)
+    } catch (error) {
+      this.error(error, "while invoking action", this, event)
+    }
   }
 
   // Logging
 
   debug(...args) {
     this.context.debug(this.descriptor.loggerTag, ...args)
+  }
+
+  error(...args) {
+    this.context.error(this.descriptor.loggerTag, ...args)
   }
 }
