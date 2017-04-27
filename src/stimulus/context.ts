@@ -3,11 +3,12 @@ import { Application } from "./application"
 import { Configuration } from "./configuration"
 import { ContextSet } from "./context_set"
 import { Controller } from "./controller"
+import { DataSet } from "./data_set"
 import { Descriptor } from "./descriptor"
 import { Dispatcher } from "./dispatcher"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
+import { Logger } from "./logger"
 import { TargetSet } from "./target_set"
-import { DataSet } from "./data_set"
 
 export interface ActionOptions {
   targetName: string
@@ -33,16 +34,19 @@ export class Context implements InlineActionObserverDelegate {
     this.inlineActionObserver = new InlineActionObserver(this, this)
     this.controller = new contextSet.controllerConstructor(this)
 
+    this.debug("Initializing controller")
     this.controller.initialize()
   }
 
   connect() {
+    this.debug("Connecting controller")
     this.dispatcher.start()
     this.inlineActionObserver.start()
     this.controller.connect()
   }
 
   disconnect() {
+    this.debug("Disconnecting controller")
     this.controller.disconnect()
     this.inlineActionObserver.stop()
     this.dispatcher.stop()
@@ -115,6 +119,7 @@ export class Context implements InlineActionObserverDelegate {
     }
 
     if (action) {
+      this.debug("Adding action", action.descriptor.toString(), action)
       this.dispatcher.addAction(action)
     }
   }
@@ -135,5 +140,19 @@ export class Context implements InlineActionObserverDelegate {
 
   inlineActionDisconnected(action: Action) {
     this.removeAction(action)
+  }
+
+  // Logging
+
+  debug(...args) {
+    return this.logger.debug(this.loggerTag, ...args, this.controller, this.element)
+  }
+
+  get logger(): Logger {
+    return this.application.logger
+  }
+
+  private get loggerTag(): string {
+    return `[${this.identifier}]`
   }
 }
