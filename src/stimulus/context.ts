@@ -7,7 +7,7 @@ import { DataSet } from "./data_set"
 import { Descriptor } from "./descriptor"
 import { Dispatcher } from "./dispatcher"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
-import { Logger } from "./logger"
+import { Logger, LoggerTag } from "./logger"
 import { TargetSet } from "./target_set"
 
 export interface ActionOptions {
@@ -152,7 +152,7 @@ export class Context implements InlineActionObserverDelegate {
     return this.application.logger
   }
 
-  private get loggerTag(): string {
-    return `[${this.identifier}]`
+  private get loggerTag(): LoggerTag {
+    return new LoggerTag(this.identifier, "#000", "#fc0")
   }
 }
