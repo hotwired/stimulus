@@ -115,7 +115,7 @@ export class Context implements InlineActionObserverDelegate {
       }
 
       const descriptor = Descriptor.forElementWithInlineDescriptorString(eventTarget, descriptorString)
-      action = new Action(this.controller, descriptor, eventTarget, matcher)
+      action = new Action(this, descriptor, eventTarget, matcher)
     }
 
     if (action) {
@@ -130,10 +130,6 @@ export class Context implements InlineActionObserverDelegate {
   }
 
   // Inline action observer delegate
-
-  getObjectForInlineActionDescriptor(descriptor: Descriptor): object {
-    return this.controller
-  }
 
   inlineActionConnected(action: Action) {
     this.addAction(action)

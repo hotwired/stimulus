@@ -4,7 +4,6 @@ import { Descriptor } from "./descriptor"
 import { AttributeObserver, AttributeObserverDelegate } from "sentinella"
 
 export interface InlineActionObserverDelegate {
-  getObjectForInlineActionDescriptor(descriptor: Descriptor): object
   inlineActionConnected(action: Action)
   inlineActionDisconnected(action: Action)
 }
@@ -102,8 +101,7 @@ export class InlineActionObserver implements AttributeObserverDelegate {
   private buildActionForElementWithDescriptorString(element: Element, descriptorString: string) {
     const descriptor = Descriptor.forElementWithInlineDescriptorString(element, descriptorString)
     if (descriptor.identifier == this.identifier) {
-      const object = this.delegate.getObjectForInlineActionDescriptor(descriptor)
-      return new Action(object, descriptor, this.element, eventTarget => eventTarget == element)
+      return new Action(this.context, descriptor, this.element, eventTarget => eventTarget == element)
     }
   }
 }
