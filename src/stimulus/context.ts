@@ -119,13 +119,13 @@ export class Context implements InlineActionObserverDelegate {
     }
 
     if (action) {
-      this.debug("Adding action", action.descriptor.toString(), action)
+      this.debug(action.descriptor.loggerTag, "Adding action", action)
       this.dispatcher.addAction(action)
     }
   }
 
   removeAction(action: Action) {
-    this.debug("Removing action", action.descriptor.toString(), action)
+    this.debug(action.descriptor.loggerTag, "Removing action", action)
     this.dispatcher.removeAction(action)
   }
 

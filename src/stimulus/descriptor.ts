@@ -1,3 +1,5 @@
+import { LoggerTag } from "./logger"
+
 export interface DescriptorOptions {
   identifier?: string
   targetName?: string
@@ -77,6 +79,10 @@ export class Descriptor {
   toString(): string {
     return (this.preventsDefault ? "" : "~") +
       `${this.eventName}->${this.identifier}#${this.methodName}`
+  }
+
+  get loggerTag(): LoggerTag {
+    return new LoggerTag(this.toString(), "#fff", "#38f")
   }
 }
 

@@ -63,6 +63,13 @@ export class Action {
       event.preventDefault()
     }
 
+    this.debug("Invoking action for event", event)
     this.method.call(this.controller, event, eventTarget)
+  }
+
+  // Logging
+
+  debug(...args) {
+    this.context.debug(this.descriptor.loggerTag, ...args)
   }
 }
