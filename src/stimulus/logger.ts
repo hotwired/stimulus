@@ -53,6 +53,9 @@ export class Logger {
       } else if (arg instanceof LoggerTag) {
         formatStrings.push(arg.formatString)
         formatValues.push(...arg.formatValues)
+      } else if (arg instanceof Error) {
+        formatStrings.push("\n\n%o\n\n")
+        formatValues.push(arg)
       } else {
         formatStrings.push("%O")
         formatValues.push(arg)
