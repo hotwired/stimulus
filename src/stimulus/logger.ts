@@ -45,24 +45,24 @@ export class Logger {
     for (const arg of [this.loggerTag, ...args]) {
       const type = typeof arg
       if (type == "string" || type == "number" || type == "boolean") {
-        formatStrings.push("%c%s%c")
+        formatStrings.push("%c%s%c ")
         formatValues.push("font-family: sans-serif; font-size: small; color: #888", arg, "")
       } else if (arg instanceof Node) {
         formatStrings.push("%o")
         formatValues.push(arg)
       } else if (arg instanceof LoggerTag) {
-        formatStrings.push(arg.formatString)
+        formatStrings.push(arg.formatString, " ")
         formatValues.push(...arg.formatValues)
       } else if (arg instanceof Error) {
         formatStrings.push("\n\n%o\n\n")
         formatValues.push(arg)
       } else {
-        formatStrings.push("%O")
+        formatStrings.push("%O ")
         formatValues.push(arg)
       }
     }
 
-    return [formatStrings.join(" "), ...formatValues]
+    return [formatStrings.join(""), ...formatValues]
   }
 
   private get loggerTag(): LoggerTag {
