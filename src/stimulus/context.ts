@@ -34,20 +34,34 @@ export class Context implements InlineActionObserverDelegate {
     this.inlineActionObserver = new InlineActionObserver(this, this)
     this.controller = new contextSet.controllerConstructor(this)
 
-    this.debug("Initializing controller")
-    this.controller.initialize()
+    try {
+      this.debug("Initializing controller")
+      this.controller.initialize()
+    } catch (error) {
+      this.error(error, "while initializing controller")
+    }
   }
 
   connect() {
-    this.debug("Connecting controller")
     this.dispatcher.start()
     this.inlineActionObserver.start()
-    this.controller.connect()
+
+    try {
+      this.debug("Connecting controller")
+      this.controller.connect()
+    } catch (error) {
+      this.error(error, "while connecting controller")
+    }
   }
 
   disconnect() {
-    this.debug("Disconnecting controller")
-    this.controller.disconnect()
+    try {
+      this.debug("Disconnecting controller")
+      this.controller.disconnect()
+    } catch (error) {
+      this.error(error, "while disconnecting controller")
+    }
+
     this.inlineActionObserver.stop()
     this.dispatcher.stop()
   }
