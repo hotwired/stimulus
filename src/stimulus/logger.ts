@@ -66,7 +66,7 @@ export class Logger {
   }
 
   private get loggerTag(): LoggerTag {
-    return new LoggerTag("STIMULUS")
+    return new LoggerTag("Stimulus")
   }
 }
 
