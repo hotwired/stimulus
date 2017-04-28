@@ -57,7 +57,7 @@ export class Logger {
         formatStrings.push("\n\n%o\n\n")
         formatValues.push(arg)
       } else {
-        formatStrings.push("%O ")
+        formatStrings.push("safari" in window ? "%O" : "%O ")
         formatValues.push(arg)
       }
     }
