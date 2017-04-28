@@ -99,9 +99,13 @@ export class InlineActionObserver implements AttributeObserverDelegate {
   }
 
   private buildActionForElementWithDescriptorString(element: Element, descriptorString: string) {
-    const descriptor = Descriptor.forElementWithInlineDescriptorString(element, descriptorString)
-    if (descriptor.identifier == this.identifier) {
-      return new Action(this.context, descriptor, this.element, eventTarget => eventTarget == element)
+    try {
+      const descriptor = Descriptor.forElementWithInlineDescriptorString(element, descriptorString)
+      if (descriptor.identifier == this.identifier) {
+        return new Action(this.context, descriptor, this.element, eventTarget => eventTarget == element)
+      }
+    } catch (error) {
+      this.context.error(error, "while parsing descriptor string for element", element)
     }
   }
 }

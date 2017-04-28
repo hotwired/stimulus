@@ -40,7 +40,7 @@ export class Descriptor {
       options.eventName = options.eventName || this.getDefaultEventNameForElement(element)
       return Descriptor.forOptions(options)
     } catch (error) {
-      throw new Error(`Invalid descriptor "${descriptorString}": ${error.message}`)
+      throw new Error(`Bad descriptor "${descriptorString}": ${error.message}`)
     }
   }
 
