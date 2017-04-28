@@ -79,7 +79,7 @@ export class LoggerTag {
   }
 
   get formatString(): string {
-    return `%c${this.name}%c`
+    return `%c${escapeFormatting(this.name)}%c`
   }
 
   get formatValues(): string[] {
@@ -98,4 +98,8 @@ export class LoggerTag {
       font-size: x-small;
     `
   }
+}
+
+function escapeFormatting(value: string): string {
+  return value.replace(/%/g, "%%")
 }
