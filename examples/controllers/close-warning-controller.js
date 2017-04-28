@@ -2,7 +2,7 @@ import Controller from "./controller"
 import { Descriptor, Action, decorators } from "stimulus"
 const { on } = decorators
 
-export default class extends Controller {
+export default class CloseWarningController extends Controller {
   connect() {
     if (this.autosavedValue && this.autosavedValue != this.inputValue) {
       this.showAutosaveDialog()

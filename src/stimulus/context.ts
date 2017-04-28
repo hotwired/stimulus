@@ -3,18 +3,16 @@ import { Application } from "./application"
 import { Configuration } from "./configuration"
 import { ContextSet } from "./context_set"
 import { Controller } from "./controller"
+import { DataSet } from "./data_set"
 import { Descriptor } from "./descriptor"
 import { Dispatcher } from "./dispatcher"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
+import { Logger, LoggerTag } from "./logger"
 import { TargetSet } from "./target_set"
-import { DataSet } from "./data_set"
-import { Logger } from "./logger"
 
 export interface ActionOptions {
   targetName: string
 }
-
-const logger = Logger.create("controller")
 
 export class Context implements InlineActionObserverDelegate {
   contextSet: ContextSet
@@ -36,20 +34,34 @@ export class Context implements InlineActionObserverDelegate {
     this.inlineActionObserver = new InlineActionObserver(this, this)
     this.controller = new contextSet.controllerConstructor(this)
 
-    this.logCallback("initialize")
-    this.controller.initialize()
+    try {
+      this.debug("Initializing controller")
+      this.controller.initialize()
+    } catch (error) {
+      this.error(error, "while initializing controller")
+    }
   }
 
   connect() {
     this.dispatcher.start()
     this.inlineActionObserver.start()
-    this.logCallback("connect")
-    this.controller.connect()
+
+    try {
+      this.debug("Connecting controller")
+      this.controller.connect()
+    } catch (error) {
+      this.error(error, "while connecting controller")
+    }
   }
 
   disconnect() {
-    this.logCallback("disconnect")
-    this.controller.disconnect()
+    try {
+      this.debug("Disconnecting controller")
+      this.controller.disconnect()
+    } catch (error) {
+      this.error(error, "while disconnecting controller")
+    }
+
     this.inlineActionObserver.stop()
     this.dispatcher.stop()
   }
@@ -117,23 +129,21 @@ export class Context implements InlineActionObserverDelegate {
       }
 
       const descriptor = Descriptor.forElementWithInlineDescriptorString(eventTarget, descriptorString)
-      action = new Action(this.controller, descriptor, eventTarget, matcher)
+      action = new Action(this, descriptor, eventTarget, matcher)
     }
 
     if (action) {
+      this.debug(action.descriptor.loggerTag, "Adding action", action)
       this.dispatcher.addAction(action)
     }
   }
 
   removeAction(action: Action) {
+    this.debug(action.descriptor.loggerTag, "Removing action", action)
     this.dispatcher.removeAction(action)
   }
 
   // Inline action observer delegate
-
-  getObjectForInlineActionDescriptor(descriptor: Descriptor): object {
-    return this.controller
-  }
 
   inlineActionConnected(action: Action) {
     this.addAction(action)
@@ -145,7 +155,19 @@ export class Context implements InlineActionObserverDelegate {
 
   // Logging
 
-  private logCallback(methodName) {
-    logger.log(`${this.identifier}#${methodName}`, { element: this.element })
+  debug(...args) {
+    return this.logger.debug(this.loggerTag, ...args, this.controller, this.element)
+  }
+
+  error(...args) {
+    return this.logger.error(this.loggerTag, ...args, this.controller, this.element)
+  }
+
+  get logger(): Logger {
+    return this.application.logger
+  }
+
+  private get loggerTag(): LoggerTag {
+    return new LoggerTag(this.identifier, "#fff", "#38f")
   }
 }

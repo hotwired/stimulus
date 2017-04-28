@@ -1,18 +1,24 @@
+import { Context } from "./context"
+import { Controller } from "./controller"
 import { Descriptor } from "./descriptor"
 
 export type EventTargetMatcher = (eventTarget: EventTarget) => boolean
 
 export class Action {
-  object: Object
+  context: Context
   descriptor: Descriptor
   eventTarget: EventTarget
   delegatedTargetMatcher: EventTargetMatcher | null
 
-  constructor(object: Object, descriptor: Descriptor, eventTarget: EventTarget, delegatedTargetMatcher: EventTargetMatcher) {
-    this.object = object
+  constructor(context: Context, descriptor: Descriptor, eventTarget: EventTarget, delegatedTargetMatcher: EventTargetMatcher) {
+    this.context = context
     this.descriptor = descriptor
     this.eventTarget = eventTarget
     this.delegatedTargetMatcher = delegatedTargetMatcher
+  }
+
+  get controller(): Controller {
+    return this.context.controller
   }
 
   get eventName(): string {
@@ -36,7 +42,7 @@ export class Action {
   }
 
   get method(): Function {
-    const method = this.object[this.methodName]
+    const method = this.controller[this.methodName]
     if (typeof method == "function") {
       return method
     }
@@ -57,6 +63,22 @@ export class Action {
       event.preventDefault()
     }
 
-    this.method.call(this.object, event, eventTarget)
+    this.debug("Invoking action", this, event)
+
+    try {
+      this.method.call(this.controller, event, eventTarget)
+    } catch (error) {
+      this.error(error, "while invoking action", this, event)
+    }
+  }
+
+  // Logging
+
+  debug(...args) {
+    this.context.debug(this.descriptor.loggerTag, ...args)
+  }
+
+  error(...args) {
+    this.context.error(this.descriptor.loggerTag, ...args)
   }
 }

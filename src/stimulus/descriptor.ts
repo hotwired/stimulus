@@ -1,3 +1,5 @@
+import { LoggerTag } from "./logger"
+
 export interface DescriptorOptions {
   identifier?: string
   targetName?: string
@@ -38,7 +40,7 @@ export class Descriptor {
       options.eventName = options.eventName || this.getDefaultEventNameForElement(element)
       return Descriptor.forOptions(options)
     } catch (error) {
-      throw new Error(`Invalid descriptor "${descriptorString}": ${error.message}`)
+      throw new Error(`Bad descriptor "${descriptorString}": ${error.message}`)
     }
   }
 
@@ -77,6 +79,10 @@ export class Descriptor {
   toString(): string {
     return (this.preventsDefault ? "" : "~") +
       `${this.eventName}->${this.identifier}#${this.methodName}`
+  }
+
+  get loggerTag(): LoggerTag {
+    return new LoggerTag(this.toString(), "#000", "#fc0")
   }
 }
 

@@ -2,7 +2,7 @@ import Controller from "./controller"
 
 const SHAPES = ["circle", "triangle"]
 
-export default class extends Controller {
+export default class ShapeShifterController extends Controller {
   initialize() {
     this.targets.findAll("shape").forEach((element) => {
       const shape = this.getRandomShape()

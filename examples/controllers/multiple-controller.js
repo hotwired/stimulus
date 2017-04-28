@@ -1,7 +1,7 @@
 import Controller from "./controller"
 import { installController } from "../app"
 
-export default class extends Controller {
+export default class MultipleController extends Controller {
   initialize() {
     this.element.style.opacity = "0.2"
 

@@ -1,5 +1,4 @@
-import { Application, Logger } from "stimulus"
-Logger.enable()
+import { Application, LogLevel } from "stimulus"
 
 let application
 const controllerConstructors = new Map()
@@ -7,6 +6,7 @@ const controllerConstructors = new Map()
 export function registerController(identifier, constructor) {
   if (!application) {
     application = Application.start()
+    application.logger.level = LogLevel.DEBUG
   }
 
   if (!controllerConstructors.has(identifier)) {

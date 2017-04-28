@@ -2,11 +2,8 @@ import { Action } from "./action"
 import { ActionSet } from "./action_set"
 import { Context } from "./context"
 import { EventSet } from "./event_set"
-import { Logger } from "./logger"
 
 type ActionInvocation = [Action, Event, EventTarget]
-
-const logger = Logger.create("action")
 
 export class Dispatcher {
   context: Context
@@ -157,7 +154,6 @@ export class Dispatcher {
 
   private performActionInvocations(actionInvocations: ActionInvocation[]) {
     for (const [action, event, eventTarget] of actionInvocations) {
-      logger.log(`${this.context.identifier}#${action.methodName}`, `(on ${event.type})`, { event, eventTarget })
       action.invokeWithEventAndTarget(event, eventTarget)
     }
   }

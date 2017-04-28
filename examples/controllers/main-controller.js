@@ -1,7 +1,7 @@
 import Controller from "./controller"
 import { installController } from "../app"
 
-export default class extends Controller {
+export default class MainController extends Controller {
   connect() {
     if (this.example) {
       this.loadExample()
