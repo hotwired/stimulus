@@ -1,5 +1,7 @@
+import { LogLevel } from "./logger"
+
 export interface Configuration {
-  developmentMode: boolean
+  logLevel: LogLevel
   rootElement: Element
   controllerAttribute: string
   actionAttribute: string
@@ -7,7 +9,7 @@ export interface Configuration {
 }
 
 export interface ConfigurationOptions {
-  developmentMode?: boolean
+  logLevel?: LogLevel
   rootElement?: Element
   controllerAttribute?: string
   actionAttribute?: string
@@ -15,7 +17,7 @@ export interface ConfigurationOptions {
 }
 
 export const defaultConfiguration: Configuration = {
-  developmentMode: false,
+  logLevel: LogLevel.WARN,
   rootElement: document.documentElement,
   controllerAttribute: "data-controller",
   actionAttribute: "data-action",

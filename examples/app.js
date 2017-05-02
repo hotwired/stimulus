@@ -5,8 +5,7 @@ const controllerConstructors = new Map()
 
 export function registerController(identifier, constructor) {
   if (!application) {
-    application = Application.start()
-    application.logger.level = LogLevel.DEBUG
+    application = Application.start({ logLevel: LogLevel.DEBUG })
   }
 
   if (!controllerConstructors.has(identifier)) {

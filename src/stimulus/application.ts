@@ -16,7 +16,7 @@ export class Application {
 
   constructor(configurationOptions: ConfigurationOptions = {}) {
     this.configuration = createConfiguration(configurationOptions)
-    this.logger = new Logger
+    this.logger = new Logger(this.configuration.logLevel)
     this.router = new Router(this)
   }
 
