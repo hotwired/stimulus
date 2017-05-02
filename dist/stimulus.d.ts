@@ -11,11 +11,12 @@ export function on(eventName: string, actionOptions?: ActionOptions): (target: a
 
 export type EventTargetMatcher = (eventTarget: EventTarget) => boolean;
 export class Action {
-    object: Object;
+    context: Context;
     descriptor: Descriptor;
     eventTarget: EventTarget;
     delegatedTargetMatcher: EventTargetMatcher | null;
-    constructor(object: Object, descriptor: Descriptor, eventTarget: EventTarget, delegatedTargetMatcher: EventTargetMatcher);
+    constructor(context: Context, descriptor: Descriptor, eventTarget: EventTarget, delegatedTargetMatcher: EventTargetMatcher);
+    readonly controller: Controller;
     readonly eventName: string;
     readonly methodName: string;
     readonly preventsDefault: boolean;
@@ -25,10 +26,13 @@ export class Action {
     hasSameDescriptorAs(action: Action | null): boolean;
     matchDelegatedTarget(eventTarget: EventTarget): boolean;
     invokeWithEventAndTarget(event: Event, eventTarget: EventTarget): void;
+    debug(...args: any[]): void;
+    error(...args: any[]): void;
 }
 
 export class Application {
     configuration: Configuration;
+    logger: Logger;
     static start(configurationOptions?: ConfigurationOptions): Application;
     constructor(configurationOptions?: ConfigurationOptions);
     start(): void;
@@ -74,15 +78,32 @@ export class Descriptor {
     constructor(identifier: string, targetName: string | null, eventName: string, methodName: string, preventsDefault: boolean);
     isEqualTo(descriptor: Descriptor | null): boolean;
     toString(): string;
+    readonly loggerTag: LoggerTag;
 }
 
+export enum LogLevel {
+    NONE = 0,
+    ERROR = 1,
+    WARN = 2,
+    INFO = 3,
+    DEBUG = 4,
+}
 export class Logger {
-    static enable(): void;
-    static disable(): void;
-    static create(...tags: any[]): Logger;
-    constructor(tags?: any[]);
-    tag(...tags: any[]): Logger;
-    log(...messages: any[]): void;
+    level: LogLevel;
+    console: Console;
+    constructor(level?: LogLevel, console?: Console);
+    debug(...args: any[]): void;
+    info(...args: any[]): void;
+    warn(...args: any[]): void;
+    error(...args: any[]): void;
+}
+export class LoggerTag {
+    name: string;
+    foregroundColor: string;
+    backgroundColor: string;
+    constructor(name: string, foregroundColor?: string, backgroundColor?: string);
+    readonly formatString: string;
+    readonly formatValues: string[];
 }
 
 export interface ActionOptions {
@@ -109,18 +130,22 @@ export class Context implements InlineActionObserverDelegate {
     addAction(descriptorString: string, options?: ActionOptions): any;
     addAction(descriptorString: string, eventTarget: EventTarget): any;
     removeAction(action: Action): void;
-    getObjectForInlineActionDescriptor(descriptor: Descriptor): object;
     inlineActionConnected(action: Action): void;
     inlineActionDisconnected(action: Action): void;
+    debug(...args: any[]): void;
+    error(...args: any[]): void;
+    readonly logger: Logger;
 }
 
 export interface Configuration {
+    logLevel: LogLevel;
     rootElement: Element;
     controllerAttribute: string;
     actionAttribute: string;
     targetAttribute: string;
 }
 export interface ConfigurationOptions {
+    logLevel?: LogLevel;
     rootElement?: Element;
     controllerAttribute?: string;
     actionAttribute?: string;
@@ -162,7 +187,6 @@ export class ContextSet {
 }
 
 export interface InlineActionObserverDelegate {
-    getObjectForInlineActionDescriptor(descriptor: Descriptor): object;
     inlineActionConnected(action: Action): any;
     inlineActionDisconnected(action: Action): any;
 }
