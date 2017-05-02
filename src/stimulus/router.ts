@@ -1,5 +1,6 @@
 import { Application } from "./application"
 import { Configuration } from "./configuration"
+import { Context } from "./context"
 import { ContextSet } from "./context_set"
 import { ControllerConstructor } from "./controller"
 import { TokenListObserver, TokenListObserverDelegate } from "sentinella"
@@ -56,6 +57,13 @@ export class Router implements TokenListObserverDelegate {
   }
 
   // Contexts
+
+  getContextForElementAndIdentifier(element: Element, identifier: string): Context | undefined {
+    const contextSet = this.contextSets.get(identifier)
+    if (contextSet) {
+      return contextSet.getContextForElement(element)
+    }
+  }
 
   private connectContextSet(contextSet: ContextSet) {
     const elements = this.tokenListObserver.getElementsMatchingToken(contextSet.identifier)

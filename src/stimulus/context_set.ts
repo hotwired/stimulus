@@ -24,6 +24,10 @@ export class ContextSet {
     return this.router.application
   }
 
+  get contexts(): Context[] {
+    return Array.from(this.connectedContexts)
+  }
+
   get size(): number {
     return this.connectedContexts.size
   }
@@ -42,6 +46,10 @@ export class ContextSet {
       this.connectedContexts.delete(context)
       context.disconnect()
     }
+  }
+
+  getContextForElement(element: Element): Context | undefined {
+    return this.contextsByElement.get(element)
   }
 
   private fetchContextForElement(element: Element): Context {

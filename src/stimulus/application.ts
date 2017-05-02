@@ -1,5 +1,5 @@
 import { Configuration, ConfigurationOptions, createConfiguration } from "./configuration"
-import { ControllerConstructor } from "./controller"
+import { Controller, ControllerConstructor } from "./controller"
 import { Logger } from "./logger"
 import { Router } from "./router"
 
@@ -30,5 +30,10 @@ export class Application {
 
   register(identifier: string, controllerConstructor: ControllerConstructor) {
     this.router.register(identifier, controllerConstructor)
+  }
+
+  getControllerForElementAndIdentifier(element: Element, identifier: string): Controller | null {
+    const context = this.router.getContextForElementAndIdentifier(element, identifier)
+    return context ? context.controller : null
   }
 }
