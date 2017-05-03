@@ -3,7 +3,7 @@ import { Application } from "./application"
 import { Configuration } from "./configuration"
 import { ContextSet } from "./context_set"
 import { Controller } from "./controller"
-import { DataSet } from "./data_set"
+import { DataMap } from "./data_map"
 import { Descriptor } from "./descriptor"
 import { Dispatcher } from "./dispatcher"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
@@ -20,7 +20,7 @@ export class Context implements InlineActionObserverDelegate {
 
   controller: Controller
   targets: TargetSet
-  data: DataSet
+  data: DataMap
   private dispatcher: Dispatcher
   private inlineActionObserver: InlineActionObserver
 
@@ -29,7 +29,7 @@ export class Context implements InlineActionObserverDelegate {
     this.element = element
 
     this.targets = new TargetSet(this)
-    this.data = new DataSet(this)
+    this.data = new DataMap(this)
     this.dispatcher = new Dispatcher(this)
     this.inlineActionObserver = new InlineActionObserver(this, this)
     this.controller = new contextSet.controllerConstructor(this)

@@ -2,7 +2,7 @@ import { Action } from "./action"
 import { Application } from "./application"
 import { Context, ActionOptions } from "./context"
 import { TargetSet } from "./target_set"
-import { DataSet } from "./data_set"
+import { DataMap } from "./data_map"
 
 export interface ControllerConstructor {
   new(context: Context): Controller
@@ -31,7 +31,7 @@ export class Controller {
     return this.context.targets
   }
 
-  get data(): DataSet {
+  get data(): DataMap {
     return this.context.data
   }
 

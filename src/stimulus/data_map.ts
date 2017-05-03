@@ -1,6 +1,6 @@
 import { Context } from "./context"
 
-export class DataSet {
+export class DataMap {
   context: Context
 
   constructor(context: Context) {
