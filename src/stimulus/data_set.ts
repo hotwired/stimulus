@@ -26,6 +26,21 @@ export class DataSet {
     return this.get(key)
   }
 
+  has(key: string): boolean {
+    key = this.getFormattedKey(key)
+    return this.element.hasAttribute(key)
+  }
+
+  delete(key: string): boolean {
+    if (this.has(key)) {
+      key = this.getFormattedKey(key)
+      this.element.removeAttribute(key)
+      return true
+    } else {
+      return false
+    }
+  }
+
   private getFormattedKey(key): string {
     return `data-${this.identifier}-${dasherize(key)}`
   }
