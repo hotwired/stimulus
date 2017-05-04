@@ -37,10 +37,11 @@
   ],
   "scripts": {
     "lint": "tslint src/stimulus/*.ts",
-    "prebuild": "yarn run lint",
+    "prebuild": "yarn lint",
     "build": "webpack --env.production",
     "serve": "webpack-dev-server --env.development",
-    "pretest": "yarn run lint",
-    "test": "karma start"
+    "pretest": "yarn lint",
+    "test": "karma start",
+    "prepare": "yarn build"
   }
 }
