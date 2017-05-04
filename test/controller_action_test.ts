@@ -40,7 +40,7 @@ testGroup("Controller action", function () {
 
     const element = queryFixture(getControllerSelector(identifier))
     const buttonElement = queryFixture(getActionSelector(identifier, "foo"))
-    const buttonChildElement = buttonElement.firstChild as Element
+    const buttonChildElement = queryFixture(getActionSelector(identifier, "foo") + " span")
     const controller = this.application.getControllerForElementAndIdentifier(element, identifier)
 
     triggerEvent(buttonChildElement, "click")
