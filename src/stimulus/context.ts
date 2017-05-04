@@ -67,8 +67,8 @@ export class Context implements InlineActionObserverDelegate {
   }
 
   canControlElement(element: Element): boolean {
-    const selector = `[${this.controllerAttribute}~='${this.identifier}']`
-    return element.closest(selector) == this.element
+    const controllerElement = findClosestElementMatchingAttributeAndValue(element, this.controllerAttribute, this.identifier)
+    return controllerElement == this.element
   }
 
   get application(): Application {
@@ -165,5 +165,22 @@ export class Context implements InlineActionObserverDelegate {
 
   private get loggerTag(): LoggerTag {
     return new LoggerTag(this.identifier, "#fff", "#38f")
+  }
+}
+
+function findClosestElementMatchingAttributeAndValue(element: Element, attribute: string, value: string): Element | null {
+  if (typeof element.closest == "function") {
+    const selector = `[${attribute}~='${value}']`
+    return element.closest(selector)
+  } else {
+    let parentElement: Element | null = element
+    while (parentElement) {
+      const tokenString = parentElement.getAttribute(attribute)
+      if (tokenString && tokenString.split(" ").indexOf(value) != -1) {
+        return parentElement
+      }
+      parentElement = parentElement.parentElement
+    }
+    return null
   }
 }
