@@ -49,4 +49,39 @@ testGroup("Controller action", function () {
 
     done()
   })
+
+  test("nested inline <button>s", async function (assert) {
+    const done = assert.async()
+
+    const identifier1 = "test1"
+    const identifier2 = "test2"
+    this.application.register(identifier1, TestController)
+    this.application.register(identifier2, TestController)
+
+    await setFixture(`
+      <div data-controller="${identifier1}">
+        <button data-action="${identifier1}#foo">Foo</button>
+        <div data-controller="${identifier2}">
+          <button data-action="${identifier2}#foo">Foo</button>
+        </div>
+      </div>
+    `)
+
+    const element1 = queryFixture(getControllerSelector(identifier1))
+    const element2 = queryFixture(getControllerSelector(identifier2))
+    const buttonElement1 = queryFixture(getActionSelector(identifier1, "foo"))
+    const buttonElement2 = queryFixture(getActionSelector(identifier2, "foo"))
+    const controller1 = this.application.getControllerForElementAndIdentifier(element1, identifier1)
+    const controller2 = this.application.getControllerForElementAndIdentifier(element2, identifier2)
+
+    triggerEvent(buttonElement1, "click")
+    assert.equal(controller1.actions.length, 1)
+    assert.equal(controller2.actions.length, 0)
+
+    triggerEvent(buttonElement2, "click")
+    assert.equal(controller1.actions.length, 1)
+    assert.equal(controller2.actions.length, 1)
+
+    done()
+  })
 })
