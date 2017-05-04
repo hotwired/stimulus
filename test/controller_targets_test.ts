@@ -68,4 +68,31 @@ testGroup("Controller targets", function () {
 
     setFixture(element)
   })
+
+  test("excludes child controller targets", function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    const element = document.createElement("div")
+    element.setAttribute("data-controller", identifier)
+
+    const targetElement = document.createElement("span")
+    targetElement.setAttribute("data-target", `${identifier}.foo`)
+    element.appendChild(targetElement)
+
+    const childElement = element.cloneNode(true)
+    element.appendChild(childElement)
+
+    let testCount = 0
+    this.application.register(identifier, class extends Controller {
+      connect() {
+        assert.equal(this.targets.findAll("foo").length, 1, `${this.element.outerHTML} should only have one "foo" target`)
+        if (++testCount == 2) {
+          done()
+        }
+      }
+    })
+
+    setFixture(element)
+  })
 })
