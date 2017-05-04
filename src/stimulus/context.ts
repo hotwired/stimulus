@@ -67,12 +67,8 @@ export class Context implements InlineActionObserverDelegate {
   }
 
   canControlElement(element: Element): boolean {
-    if (this.contextSet.size == 1) {
-      return this.element == element || this.element.contains(element)
-    } else {
-      const selector = `[${this.controllerAttribute}~='${this.identifier}']`
-      return element.closest(selector) == this.element
-    }
+    const selector = `[${this.controllerAttribute}~='${this.identifier}']`
+    return element.closest(selector) == this.element
   }
 
   get application(): Application {
