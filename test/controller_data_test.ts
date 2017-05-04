@@ -1,11 +1,13 @@
 import { Controller } from "stimulus"
-import { testGroup, test, setFixture, createControllerFixture } from "./test_helpers"
+import { testGroup, test, setFixture } from "./test_helpers"
 
 testGroup("Controller data API", function () {
   test("get", function (assert) {
     const done = assert.async()
 
-    const { identifier, element } = createControllerFixture()
+    const identifier = "test"
+    const element = document.createElement("div")
+    element.setAttribute("data-controller", identifier)
     element.setAttribute(`data-${identifier}-foo`, "bar")
 
     this.application.register(identifier, class extends Controller {
@@ -21,7 +23,9 @@ testGroup("Controller data API", function () {
   test("set", function (assert) {
     const done = assert.async()
 
-    const { identifier, element } = createControllerFixture()
+    const identifier = "test"
+    const element = document.createElement("div")
+    element.setAttribute("data-controller", identifier)
 
     this.application.register(identifier, class extends Controller {
       connect() {
@@ -38,7 +42,9 @@ testGroup("Controller data API", function () {
   test("has", function (assert) {
     const done = assert.async()
 
-    const { identifier, element } = createControllerFixture()
+    const identifier = "test"
+    const element = document.createElement("div")
+    element.setAttribute("data-controller", identifier)
     element.setAttribute(`data-${identifier}-foo`, "")
 
     this.application.register(identifier, class extends Controller {
@@ -55,7 +61,9 @@ testGroup("Controller data API", function () {
   test("delete", function (assert) {
     const done = assert.async()
 
-    const { identifier, element } = createControllerFixture()
+    const identifier = "test"
+    const element = document.createElement("div")
+    element.setAttribute("data-controller", identifier)
     element.setAttribute(`data-${identifier}-foo`, "")
 
     this.application.register(identifier, class extends Controller {

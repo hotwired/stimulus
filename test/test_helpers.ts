@@ -31,36 +31,27 @@ export function setFixture(content: string | Element) {
   return nextFrame()
 }
 
+export function queryFixture(selector: string): Element {
+  const element = getFixture().querySelector(selector)
+  if (element) {
+    return element
+  } else {
+    throw new Error(`No element found for ${JSON.stringify(selector)} in fixture`)
+  }
+}
+
+export function getControllerSelector(identifier: string): string {
+  return `[data-controller~="${identifier}"]`
+}
+
+export function getActionSelector(identifier: string, actionName: string): string {
+  return `[data-action~="${identifier}#${actionName}"]`
+}
+
 export function nextFrame(): Promise<any> {
   return new Promise(resolve => {
     requestAnimationFrame(resolve)
   })
-}
-
-let identifierId = 0
-
-export function createControllerFixture(elementContentTemplate: string = "") {
-  const identifier = `fixture-${identifierId++}`
-  const element = createControllerElement(identifier, elementContentTemplate)
-  const counts = { initialize: 0, connect: 0, disconnect: 0 }
-
-  class constructor extends Controller {
-    initialize() { counts.initialize++ }
-    connect()    { counts.connect++ }
-    disconnect() { counts.disconnect++ }
-  }
-
-  return { identifier, element, constructor, counts }
-}
-
-export function createControllerElement(identifier: string, contentTemplate: string = ""): HTMLDivElement {
-  const container = document.createElement("div")
-  container.innerHTML = `
-    <div data-controller="{{identifier}}">
-      ${contentTemplate}
-    </div>
-  `.trim().replace(/\{\{identifier\}\}/g, identifier)
-  return container.firstElementChild as HTMLDivElement
 }
 
 export function triggerEvent(element: Element, type: string): Event {
@@ -76,4 +67,35 @@ export function triggerEvent(element: Element, type: string): Event {
   }
   element.dispatchEvent(event)
   return event
+}
+
+export class TestController extends Controller {
+  lifecycle: { initialize: number, connect: number, disconnect: number }
+  actions: Array<{ eventType: string, eventPrevented: boolean, eventTarget: EventTarget, target: EventTarget }>
+
+  constructor(context) {
+    super(context)
+    this.lifecycle = { initialize: 0, connect: 0, disconnect: 0 }
+    this.actions = []
+  }
+
+  initialize() {
+    this.lifecycle.initialize++
+  }
+
+  connect() {
+    this.lifecycle.connect++
+  }
+
+  disconnect() {
+    this.lifecycle.disconnect++
+  }
+
+  foo(event, target) {
+    this.recordAction(event, target)
+  }
+
+  private recordAction(event: Event, target: EventTarget) {
+    this.actions.push({ eventType: event.type, eventPrevented: event.defaultPrevented, eventTarget: event.target, target: target })
+  }
 }

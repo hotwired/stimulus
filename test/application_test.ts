@@ -1,5 +1,5 @@
-import { testGroup, test, createControllerFixture, getFixture, nextFrame } from "./test_helpers"
 import { Application } from "stimulus"
+import { testGroup, test, getFixture, nextFrame, TestController } from "./test_helpers"
 
 testGroup("Application", function() {
   test("Application.start()", function(assert) {
@@ -9,31 +9,41 @@ testGroup("Application", function() {
 
   test("only connects controllers while started", async function(assert) {
     const done = assert.async()
-    const fixtureElement = getFixture()
 
-    const f1 = createControllerFixture()
-    this.application.register(f1.identifier, f1.constructor)
+    const identifier1 = "test1"
+    const identifier2 = "test2"
 
-    const f2 = createControllerFixture()
-    this.application.register(f2.identifier, f2.constructor)
+    this.application.register(identifier1, TestController)
+    this.application.register(identifier2, TestController)
 
-    fixtureElement.appendChild(f1.element)
+    const element1 = document.createElement("div")
+    element1.setAttribute("data-controller", identifier1)
+
+    const element2 = document.createElement("div")
+    element2.setAttribute("data-controller", identifier2)
+
+    getFixture().appendChild(element1)
     await nextFrame()
-    assert.deepEqual(f1.counts, { initialize: 1, connect: 1, disconnect: 0 })
-    assert.deepEqual(f2.counts, { initialize: 0, connect: 0, disconnect: 0 })
+
+    const controller1 = this.application.getControllerForElementAndIdentifier(element1, identifier1)
+    assert.ok(controller1)
+    assert.notOk(this.application.getControllerForElementAndIdentifier(element2, identifier2))
+    assert.deepEqual(controller1.lifecycle, { initialize: 1, connect: 1, disconnect: 0 })
 
     this.application.stop()
-    fixtureElement.appendChild(f2.element)
+    getFixture().appendChild(element2)
     await nextFrame()
 
-    assert.deepEqual(f1.counts, { initialize: 1, connect: 1, disconnect: 0 })
-    assert.deepEqual(f2.counts, { initialize: 0, connect: 0, disconnect: 0 })
+    assert.notOk(this.application.getControllerForElementAndIdentifier(element2, identifier2))
+    assert.deepEqual(controller1.lifecycle, { initialize: 1, connect: 1, disconnect: 0 })
 
     this.application.start()
     await nextFrame()
 
-    assert.deepEqual(f1.counts, { initialize: 1, connect: 1, disconnect: 0 })
-    assert.deepEqual(f2.counts, { initialize: 1, connect: 1, disconnect: 0 })
+    const controller2 = this.application.getControllerForElementAndIdentifier(element2, identifier2)
+    assert.ok(controller2)
+    assert.deepEqual(controller1.lifecycle, { initialize: 1, connect: 1, disconnect: 0 })
+    assert.deepEqual(controller2.lifecycle, { initialize: 1, connect: 1, disconnect: 0 })
 
     done()
   })
