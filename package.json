@@ -32,6 +32,9 @@
   "dependencies": {
     "sentinella": "git+ssh://git@github.com/basecamp/sentinella.git"
   },
+  "files": [
+    "dist/stimulus.js", "dist/stimulus.d.ts"
+  ],
   "scripts": {
     "lint": "tslint src/stimulus/*.ts",
     "prebuild": "yarn run lint",
