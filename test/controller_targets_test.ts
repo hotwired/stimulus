@@ -1,0 +1,71 @@
+import { Controller } from "stimulus"
+import { testGroup, test, setFixture } from "./test_helpers"
+
+testGroup("Controller targets", function () {
+  test("find", function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    const element = document.createElement("div")
+    element.setAttribute("data-controller", identifier)
+
+    const targetElement = document.createElement("span")
+    targetElement.setAttribute("data-target", `${identifier}.foo`)
+    element.appendChild(targetElement)
+
+    this.application.register(identifier, class extends Controller {
+      connect() {
+        assert.equal(this.targets.find("foo"), targetElement)
+        done()
+      }
+    })
+
+    setFixture(element)
+  })
+
+  test("findAll", function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    const element = document.createElement("div")
+    element.setAttribute("data-controller", identifier)
+
+    const targetElement1 = document.createElement("span")
+    targetElement1.setAttribute("data-target", `${identifier}.foo`)
+    element.appendChild(targetElement1)
+
+    const targetElement2 = targetElement1.cloneNode(true)
+    element.appendChild(targetElement2)
+
+    this.application.register(identifier, class extends Controller {
+      connect() {
+        assert.deepEqual(this.targets.findAll("foo"), [targetElement1, targetElement2])
+        done()
+      }
+    })
+
+    setFixture(element)
+  })
+
+  test("has", function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    const element = document.createElement("div")
+    element.setAttribute("data-controller", identifier)
+
+    const targetElement = document.createElement("span")
+    targetElement.setAttribute("data-target", `${identifier}.foo`)
+    element.appendChild(targetElement)
+
+    this.application.register(identifier, class extends Controller {
+      connect() {
+        assert.equal(this.targets.has("foo"), true)
+        assert.equal(this.targets.has("bar"), false)
+        done()
+      }
+    })
+
+    setFixture(element)
+  })
+})
