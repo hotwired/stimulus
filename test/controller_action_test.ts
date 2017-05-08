@@ -1,4 +1,4 @@
-import { testGroup, test, setFixture, queryFixture, getControllerSelector, getActionSelector, triggerEvent, TestController } from "./test_helpers"
+import { testGroup, test, setFixture, queryFixture, getControllerSelector, getActionSelector, getTargetSelector, triggerEvent, TestController } from "./test_helpers"
 
 testGroup("Controller action", function () {
   test("inline <button>", async function (assert) {
@@ -81,6 +81,68 @@ testGroup("Controller action", function () {
     triggerEvent(buttonElement2, "click")
     assert.equal(controller1.actions.length, 1)
     assert.equal(controller2.actions.length, 1)
+
+    done()
+  })
+
+  test("`on` decorator", async function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    this.application.register(identifier, TestController)
+
+    await setFixture(`<div data-controller="${identifier}"></div>`)
+
+    const element = queryFixture(getControllerSelector(identifier))
+    const controller = this.application.getControllerForElementAndIdentifier(element, identifier)
+
+    triggerEvent(element, "test:default")
+    assert.equal(controller.actions.length, 1)
+
+    done()
+  })
+
+  test("`on` decorator with target name option", async function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    const targetName = "foo"
+    this.application.register(identifier, TestController)
+
+    await setFixture(`
+      <div data-controller="${identifier}">
+        <span data-target="${identifier}.${targetName}">Foo</span>
+      </div>
+    `)
+
+    const element = queryFixture(getControllerSelector(identifier))
+    const targetElement = queryFixture(getTargetSelector(identifier, targetName))
+    const controller = this.application.getControllerForElementAndIdentifier(element, identifier)
+
+    triggerEvent(targetElement, "test:with-target-name")
+    assert.equal(controller.actions.length, 1)
+
+    done()
+  })
+
+  test("`on` decorator with event target option", async function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    this.application.register(identifier, TestController)
+
+    await setFixture(`<div data-controller="${identifier}"></div>`)
+
+    const element = queryFixture(getControllerSelector(identifier))
+    const controller = this.application.getControllerForElementAndIdentifier(element, identifier)
+
+    triggerEvent(window, "test:with-event-target")
+    assert.equal(controller.actions.length, 1)
+
+    await setFixture("")
+
+    triggerEvent(window, "test:with-event-target")
+    assert.equal(controller.actions.length, 1)
 
     done()
   })

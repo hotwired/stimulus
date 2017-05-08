@@ -1,4 +1,4 @@
-import { Application, Controller } from "stimulus"
+import { Application, Controller, on } from "stimulus"
 const { assert, module, test } = QUnit
 
 export { assert, test }
@@ -48,13 +48,17 @@ export function getActionSelector(identifier: string, actionName: string): strin
   return `[data-action~="${identifier}#${actionName}"]`
 }
 
+export function getTargetSelector(identifier: string, targetName: string): string {
+  return `[data-target~="${identifier}.${targetName}"]`
+}
+
 export function nextFrame(): Promise<any> {
   return new Promise(resolve => {
     requestAnimationFrame(resolve)
   })
 }
 
-export function triggerEvent(element: Element, type: string): Event {
+export function triggerEvent(eventTarget: EventTarget, type: string): Event {
   const event = document.createEvent("Events")
   event.initEvent(type, true, true)
   // IE <= 11 does not set `defaultPrevented` when `preventDefault()` is called on synthetic events
@@ -62,10 +66,11 @@ export function triggerEvent(element: Element, type: string): Event {
     Object.defineProperty(this, "defaultPrevented", {
       get: function() {
         return true
-      }
+      },
+      configurable: true
     })
   }
-  element.dispatchEvent(event)
+  eventTarget.dispatchEvent(event)
   return event
 }
 
@@ -91,6 +96,9 @@ export class TestController extends Controller {
     this.lifecycle.disconnect++
   }
 
+  @on("test:default")
+  @on("test:with-target-name", { targetName: "foo" })
+  @on("test:with-event-target", window)
   foo(event, target) {
     this.recordAction(event, target)
   }
