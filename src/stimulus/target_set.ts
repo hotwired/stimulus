@@ -40,7 +40,14 @@ export class TargetSet {
   }
 
   matchesElementWithTargetName(element: Element, targetName: string): boolean {
-    return element.getAttribute(this.attributeName) == targetName && this.context.canControlElement(element)
+    const tokenString = element.getAttribute(this.attributeName)
+    if (tokenString) {
+      const tokenList = tokenString.split(" ")
+      const token = `${this.identifier}.${targetName}`
+      return tokenList.indexOf(token) > -1 && this.context.canControlElement(element)
+    } else {
+      return false
+    }
   }
 
   private getSelectorForTargetName(targetName: string): string {
