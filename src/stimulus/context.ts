@@ -114,7 +114,7 @@ export class Context implements InlineActionObserverDelegate {
       const descriptorString = actionOrDescriptorString
       let eventTarget, matcher
 
-      if (optionsOrEventTarget instanceof EventTarget) {
+      if (isEventTarget(optionsOrEventTarget)) {
         eventTarget = optionsOrEventTarget
       } else {
         eventTarget = this.element
@@ -182,5 +182,15 @@ function findClosestElementMatchingAttributeAndValue(element: Element, attribute
       parentElement = parentElement.parentElement
     }
     return null
+  }
+}
+
+function isEventTarget(object: any): boolean {
+  if (!object) {
+    return false
+  } else if (typeof EventTarget != "undefined") {
+    return object instanceof EventTarget
+  } else {
+    return typeof object.addEventListener == "function"
   }
 }
