@@ -34,7 +34,6 @@ config.all = {
                 ["es2015", { modules: false }]
               ],
               plugins: [
-                "syntax-dynamic-import",
                 "transform-decorators-legacy"
               ]
             }

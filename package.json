@@ -24,7 +24,6 @@
     "@types/qunit": "^2.0.31",
     "babel-core": "^6.24.0",
     "babel-loader": "^6.4.1",
-    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.24.0",
