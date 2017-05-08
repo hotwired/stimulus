@@ -5,7 +5,9 @@
     "noImplicitAny": false,
     "baseUrl": ".",
     "paths": {
-      "stimulus": ["../src/stimulus"]
+      "stimulus": [
+        "../src/stimulus"
+      ]
     }
   },
   "include": [

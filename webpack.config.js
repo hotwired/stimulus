@@ -1,7 +1,6 @@
 const path = require("path")
 const webpack = require("webpack")
 const merge = require("webpack-merge")
-const HtmlWebpackPlugin = require("html-webpack-plugin")
 const dts = require("dts-bundle")
 
 const config = {}
@@ -53,23 +52,14 @@ config.all = {
 
 config.development = {
   entry: {
-    examples: "./examples/index.js"
+    main: "./examples/index.js"
   },
 
   output: {
-    filename: "[chunkhash]-[name].js"
+    filename: "[name].js"
   },
 
-  devtool: "inline-source-map",
-
-  devServer: {
-    contentBase: "./examples",
-    port: 9000
-  },
-
-  plugins: [
-    new HtmlWebpackPlugin({template: "examples/index.html"})
-  ]
+  devtool: "inline-source-map"
 }
 
 config.production = {
@@ -103,11 +93,6 @@ config.production = {
 }
 
 module.exports = function(env = {}) {
-  const configEnv = Object.keys(env)[0]
-
-  if (configEnv) {
-    return merge(config.all, config[configEnv])
-  } else {
-    return config.all
-  }
+  const configEnv = Object.keys(env)[0] || "development"
+  return merge(config.all, config[configEnv])
 }

@@ -4,9 +4,18 @@
   "description": "👉✨",
   "author": "Basecamp, LLC",
   "contributors": [
-    { "name": "David Heinemeier Hansson", "email": "david@basecamp.com" },
-    { "name": "Javan Makhmali", "email": "javan@javan.us" },
-    { "name": "Sam Stephenson", "email": "sstephenson@gmail.com" }
+    {
+      "name": "David Heinemeier Hansson",
+      "email": "david@basecamp.com"
+    },
+    {
+      "name": "Javan Makhmali",
+      "email": "javan@javan.us"
+    },
+    {
+      "name": "Sam Stephenson",
+      "email": "sstephenson@gmail.com"
+    }
   ],
   "main": "dist/stimulus.js",
   "types": "dist/stimulus.d.ts",
@@ -20,7 +29,8 @@
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.24.0",
     "dts-bundle": "^0.7.2",
-    "html-webpack-plugin": "^2.28.0",
+    "ejs": "^2.5.6",
+    "express": "^4.15.2",
     "karma": "^1.5.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-firefox-launcher": "^1.0.1",
@@ -31,22 +41,24 @@
     "qunitjs": "^2.2.0",
     "ts-loader": "^2.0.1",
     "tslint": "^4.5.1",
+    "turbolinks": "^5.0.3",
     "typescript": "^2.2.1",
     "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.4.1",
+    "webpack-dev-middleware": "^1.10.2",
     "webpack-merge": "^3.0.0"
   },
   "dependencies": {
     "sentinella": "git+ssh://git@github.com/basecamp/sentinella.git"
   },
   "files": [
-    "dist/stimulus.js", "dist/stimulus.d.ts"
+    "dist/stimulus.js",
+    "dist/stimulus.d.ts"
   ],
   "scripts": {
+    "start": "node examples/server.js",
     "lint": "tslint src/stimulus/*.ts",
     "prebuild": "yarn lint",
     "build": "webpack --env.production",
-    "serve": "webpack-dev-server --env.development",
     "pretest": "yarn lint",
     "test": "karma start",
     "prepare": "yarn build"
