@@ -10,7 +10,6 @@ const config = {
   reporters: ["progress"],
 
   files: [
-    "node_modules/babel-polyfill/dist/polyfill.js",
     { pattern: "test/**/*_test.ts" }
   ],
 
