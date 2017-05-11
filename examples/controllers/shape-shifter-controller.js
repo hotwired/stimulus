@@ -13,9 +13,11 @@ export default class ShapeShifterController extends Controller {
   toggle(event) {
     const {classList} = event.target
     SHAPES.forEach(function(shape) {
-      const isShape = classList.contains(shape)
-      classList.toggle(shape, !isShape)
-      classList.toggle(shape, !isShape)
+      if (classList.contains(shape)) {
+        classList.remove(shape)
+      } else {
+        classList.add(shape)
+      }
     })
   }
 

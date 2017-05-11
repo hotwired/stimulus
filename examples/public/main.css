@@ -118,8 +118,12 @@ main {
   border-radius: 50%;
 }
 
-[data-controller~="wizard"] [data-target~="wizard.step"]:not([data-current-step]) {
+[data-controller~="wizard"] [data-target~="wizard.step"] {
   display: none;
+}
+
+[data-controller~="wizard"] [data-target~="wizard.step"].current-step {
+  display: block;
 }
 
 [data-controller~="close-warning"] {

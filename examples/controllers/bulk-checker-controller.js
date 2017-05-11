@@ -2,14 +2,14 @@ import Controller from "./controller"
 
 export default class BulkCheckerController extends Controller {
   checkAll(event) {
-    for (const element of this.targets.findAll("checkbox")) {
+    this.targets.findAll("checkbox").forEach(element => {
       element.checked = true
-    }
+    })
   }
 
   uncheckAll(event) {
-    for (const element of this.targets.findAll("checkbox")) {
+    this.targets.findAll("checkbox").forEach(element => {
       element.checked = false
-    }
+    })
   }
 }

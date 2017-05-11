@@ -5,7 +5,11 @@ export default class NavigationController extends Controller {
     const { pathname } = window.location
     const elements = this.targets.findAll("example")
     elements.forEach(element => {
-      element.classList.toggle("active", element.pathname == pathname)
+      if (element.pathname == pathname) {
+        element.classList.add("active")
+      } else {
+        element.classList.remove("active")
+      }
     })
   }
 }

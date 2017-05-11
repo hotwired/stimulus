@@ -9,8 +9,8 @@ export default class WizardController extends Controller {
     this.recordStepHistory(event)
     const {currentStepElement, nextStepElement} = this
     if (nextStepElement) {
-      delete currentStepElement.dataset.currentStep
-      nextStepElement.dataset.currentStep = true
+      currentStepElement.classList.remove("current-step")
+      nextStepElement.classList.add("current-step")
     }
   }
 
@@ -37,7 +37,13 @@ export default class WizardController extends Controller {
   }
 
   get currentStepElement() {
-    return this.stepElements.find(e => e.dataset.currentStep)
+    let element
+    this.stepElements.some(stepElement => {
+      if (stepElement.classList.contains("current-step")) {
+        return element = stepElement
+      }
+    })
+    return element
   }
 
   get nextStepElement() {
