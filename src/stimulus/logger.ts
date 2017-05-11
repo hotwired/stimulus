@@ -6,6 +6,10 @@ export enum LogLevel {
   DEBUG
 }
 
+const isSafari = "safari" in window
+const isIEOrEdge = /(Trident|Edge)\//.test(navigator.userAgent)
+const supportsFormattedLogging = !isIEOrEdge
+
 export class Logger {
   level: LogLevel
   console: Console
@@ -40,6 +44,9 @@ export class Logger {
   }
 
   private formatArgs(args: any[]): any[] {
+    if (!supportsFormattedLogging) {
+      return args
+    }
     const formatStrings: any[] = [], formatValues: any[] = []
 
     for (const arg of [this.loggerTag, ...args]) {
@@ -57,7 +64,7 @@ export class Logger {
         formatStrings.push("\n\n%o\n\n")
         formatValues.push(arg)
       } else {
-        formatStrings.push("safari" in window ? "%O" : "%O ")
+        formatStrings.push(isSafari ? "%O" : "%O ")
         formatValues.push(arg)
       }
     }
