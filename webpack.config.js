@@ -81,7 +81,7 @@ config.production = {
           dts.bundle({
             name: "stimulus",
             baseDir: __dirname,
-            main: "./build/index.d.ts",
+            main: "./build/stimulus/index.d.ts",
             out: "./dist/stimulus.d.ts",
             outputAsModuleFolder: true
           })
