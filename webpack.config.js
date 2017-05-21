@@ -87,7 +87,15 @@ config.production = {
           })
         })
       }
-    }
+    },
+    new webpack.BannerPlugin({
+      banner: (() => {
+        const {version} = require('./package.json')
+        const year = new Date().getFullYear()
+        return `/*\nStimulus ${version}\nCopyright © ${year} Basecamp, LLC\n */`
+      })(),
+      raw: true
+    })
   ]
 }
 
