@@ -38,6 +38,7 @@
     "karma-sauce-launcher": "^1.1.0",
     "karma-webpack": "^2.0.3",
     "qunitjs": "^2.2.0",
+    "sentinella": "git+ssh://git@github.com/basecamp/sentinella.git",
     "ts-loader": "^2.0.1",
     "tslint": "^4.5.1",
     "turbolinks": "^5.0.3",
@@ -46,9 +47,7 @@
     "webpack-dev-middleware": "^1.10.2",
     "webpack-merge": "^3.0.0"
   },
-  "dependencies": {
-    "sentinella": "git+ssh://git@github.com/basecamp/sentinella.git"
-  },
+  "dependencies": {},
   "files": [
     "dist/stimulus.js",
     "dist/stimulus.d.ts"

@@ -2984,7 +2984,7 @@ send@0.15.1:
 
 "sentinella@git+ssh://git@github.com/basecamp/sentinella.git":
   version "0.1.0"
-  resolved "git+ssh://git@github.com/basecamp/sentinella.git#15b0b2d8de63cd8324899b2ec69255dc3d0edc14"
+  resolved "git+ssh://git@github.com/basecamp/sentinella.git#a6d5095d459ee8353bdc30a5d78b21b8c7165678"
 
 serve-static@1.12.1:
   version "1.12.1"
