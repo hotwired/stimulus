@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "",
   "main": "dist/sentinella.js",
-  "types": "dist/sentinella.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "clean": "rm -fr build dist",
+    "clean": "rm -fr dist",
     "lint": "tslint src/*.ts",
-    "prebuild": "yarn run lint",
+    "prebuild": "yarn run clean && yarn run lint",
     "build": "webpack --env.production",
     "pretest": "yarn run lint",
     "test": "karma start"
@@ -16,7 +16,6 @@
   "license": "MIT",
   "devDependencies": {
     "@types/qunit": "^2.0.31",
-    "dts-bundle": "^0.7.2",
     "karma": "^1.6.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-firefox-launcher": "^1.0.1",
@@ -31,5 +30,8 @@
     "webpack-merge": "^4.1.0"
   },
   "repository": "git@github.com:basecamp/sentinella.git",
-  "dependencies": {}
+  "dependencies": {},
+  "files": [
+    "dist"
+  ]
 }
