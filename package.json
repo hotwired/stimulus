@@ -25,7 +25,7 @@
     "karma-webpack": "^2.0.3",
     "qunitjs": "^2.3.0",
     "ts-loader": "^2.0.3",
-    "tslint": "^4.5.1",
+    "tslint": "^5.4.0",
     "typescript": "^2.2.2",
     "webpack": "^2.3.3",
     "webpack-merge": "^4.1.0"
