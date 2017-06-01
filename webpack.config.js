@@ -33,7 +33,7 @@ config.all = {
 
 config.production = {
   entry: {
-    "sentinella": root + "/src/sentinella/index.ts"
+    "sentinella": root + "/src/index.ts"
   },
 
   output: {

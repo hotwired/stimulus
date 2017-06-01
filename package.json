@@ -6,7 +6,7 @@
   "types": "dist/sentinella.d.ts",
   "scripts": {
     "clean": "rm -fr build dist",
-    "lint": "tslint src/sentinella/*.ts",
+    "lint": "tslint src/*.ts",
     "prebuild": "yarn run lint",
     "build": "webpack --env.production",
     "pretest": "yarn run lint",
