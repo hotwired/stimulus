@@ -54,8 +54,8 @@
   ],
   "scripts": {
     "start": "node examples/server.js",
-    "lint": "tslint src/stimulus/*.ts",
-    "clean": "rm -rf build && rm -rf dist",
+    "clean": "rm -fr build dist",
+    "lint": "tslint src/*.ts",
     "prebuild": "yarn run clean && yarn lint",
     "build": "webpack --env.production",
     "pretest": "yarn lint",

@@ -1,4 +1,4 @@
-import { Application } from "stimulus"
+import { Application } from "../src/application"
 import { testGroup, test, getFixture, nextFrame, TestController } from "./test_helpers"
 
 testGroup("Application", function() {

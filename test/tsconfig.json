@@ -1,16 +1,10 @@
 {
   "extends": "../tsconfig",
   "compilerOptions": {
-    "declaration": false,
-    "baseUrl": ".",
-    "paths": {
-      "stimulus": [
-        "../src/stimulus"
-      ]
-    }
+    "declaration": false
   },
   "include": [
-    "./**/*",
-    "../src/**/*"
+    "./*",
+    "../src/*"
   ]
 }

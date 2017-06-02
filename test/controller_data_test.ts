@@ -1,4 +1,4 @@
-import { Controller } from "stimulus"
+import { Controller } from "../src/controller"
 import { testGroup, test, setFixture } from "./test_helpers"
 
 testGroup("Controller data API", function () {

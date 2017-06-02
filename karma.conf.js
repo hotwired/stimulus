@@ -10,11 +10,11 @@ const config = {
   reporters: ["progress"],
 
   files: [
-    { pattern: "test/**/*_test.ts" }
+    { pattern: "test/*_test.ts" }
   ],
 
   preprocessors: {
-    "test/**/*.ts": ["webpack"]
+    "test/*.ts": ["webpack"]
   },
 
   mime: {

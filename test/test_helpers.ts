@@ -1,5 +1,5 @@
 import "polyfills"
-import { Application, Controller, on } from "stimulus"
+import { Application, Controller, on } from "../src"
 const { assert, module, test } = QUnit
 
 export { assert, test }

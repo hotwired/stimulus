@@ -63,7 +63,7 @@ config.development = {
 
 config.production = {
   entry: {
-    stimulus: "./src/stimulus/index.ts"
+    stimulus: "./src/index.ts"
   },
 
   output: {
