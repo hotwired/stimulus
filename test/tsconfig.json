@@ -5,12 +5,12 @@
     "baseUrl": ".",
     "paths": {
       "sentinella": [
-        "../src/sentinella"
+        "../src"
       ]
     }
   },
   "include": [
-    "./**/*",
-    "../src/**/*"
+    "./*",
+    "../src/*"
   ]
 }
