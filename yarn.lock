@@ -2948,9 +2948,9 @@ send@0.15.1:
     range-parser "~1.2.0"
     statuses "~1.3.1"
 
-"sentinella@git+ssh://git@github.com/basecamp/sentinella.git":
-  version "0.1.0"
-  resolved "git+ssh://git@github.com/basecamp/sentinella.git#a6d5095d459ee8353bdc30a5d78b21b8c7165678"
+sentinella@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/sentinella/-/sentinella-0.2.0.tgz#00a1f16773beedd327c0817fd05263423b62bdc1"
 
 serve-static@1.12.1:
   version "1.12.1"
