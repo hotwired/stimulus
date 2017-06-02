@@ -1,18 +1,20 @@
 {
   "name": "sentinella",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.2.0",
+  "description": "Practical wrappers around DOM MutationObserver",
+  "author": "Basecamp, LLC",
+  "contributors": [
+    {
+      "name": "Javan Makhmali",
+      "email": "javan@javan.us"
+    },
+    {
+      "name": "Sam Stephenson",
+      "email": "sstephenson@gmail.com"
+    }
+  ],
   "main": "dist/sentinella.js",
   "types": "dist/index.d.ts",
-  "scripts": {
-    "clean": "rm -fr dist",
-    "lint": "tslint src/*.ts",
-    "prebuild": "yarn run clean && yarn run lint",
-    "build": "webpack --env.production",
-    "pretest": "yarn run lint",
-    "test": "karma start"
-  },
-  "author": "Sam Stephenson",
   "license": "MIT",
   "devDependencies": {
     "@types/qunit": "^2.0.31",
@@ -29,9 +31,16 @@
     "webpack": "^2.3.3",
     "webpack-merge": "^4.1.0"
   },
-  "repository": "git@github.com:basecamp/sentinella.git",
-  "dependencies": {},
   "files": [
     "dist"
-  ]
+  ],
+  "scripts": {
+    "clean": "rm -fr dist",
+    "lint": "tslint src/*.ts",
+    "prebuild": "yarn run clean && yarn run lint",
+    "build": "webpack --env.production",
+    "pretest": "yarn run lint",
+    "test": "karma start",
+    "prepare": "yarn build"
+  }
 }
