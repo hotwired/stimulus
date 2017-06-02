@@ -43,7 +43,15 @@ config.production = {
   },
 
   plugins: [
-    new webpack.optimize.UglifyJsPlugin()
+    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.BannerPlugin({
+      banner: (() => {
+        const {version} = require('./package.json')
+        const year = new Date().getFullYear()
+        return `/*\nSentinella ${version}\nCopyright © ${year} Basecamp, LLC\n */`
+      })(),
+      raw: true
+    })
   ]
 }
 
