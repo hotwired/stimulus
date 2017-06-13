@@ -3,7 +3,7 @@ const webpackConfig = require("./webpack.config")()
 const config = {
   // Run `defaults write com.apple.Safari ApplePersistenceIgnoreState YES`
   // to work around Safari tab issue: https://github.com/karma-runner/karma-safari-launcher/issues/6
-  browsers: getBrowsersFromEnvironment(),
+  browsers: getBrowsersFromEnvironment() || ["ChromeHeadless"],
 
   frameworks: ["qunit"],
 
