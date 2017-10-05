@@ -1,4 +1,7 @@
 import Controller from "./controller"
+import { has } from "stimulus"
+
+@has("collapsedElements", "expandedElements")
 
 export default class ExpanderController extends Controller {
   expand(event) {
@@ -18,8 +21,6 @@ export default class ExpanderController extends Controller {
   }
 
   get allTargets() {
-    const collapseTargets = this.targets.findAll("collapsed")
-    const expandTargets = this.targets.findAll("expanded")
-    return [this.element].concat(collapseTargets).concat(expandTargets)
+    return [this.element].concat(this.collapsedElements, this.expandedElements)
   }
 }

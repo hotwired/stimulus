@@ -1,4 +1,7 @@
 import Controller from "./controller"
+import { has } from "stimulus"
+
+@has("stepElements", "resultsElement")
 
 export default class WizardController extends Controller {
   initialize() {
@@ -29,21 +32,11 @@ export default class WizardController extends Controller {
   }
 
   renderResults() {
-    this.targets.find("results").innerHTML = JSON.stringify(this.stepHistory, null, 2)
-  }
-
-  get stepElements() {
-    return this.targets.findAll("step")
+    this.resultsElement.innerHTML = JSON.stringify(this.stepHistory, null, 2)
   }
 
   get currentStepElement() {
-    let element
-    this.stepElements.some(stepElement => {
-      if (stepElement.classList.contains("current-step")) {
-        return element = stepElement
-      }
-    })
-    return element
+    return this.stepElements.find(element => element.classList.contains("current-step"))
   }
 
   get nextStepElement() {
