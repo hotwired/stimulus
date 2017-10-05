@@ -1,26 +1,27 @@
 import { Action } from "./action"
 import { Context } from "./context"
 import { Descriptor } from "./descriptor"
-import { AttributeObserver, AttributeObserverDelegate } from "sentinella"
+import { Multimap } from "./multimap"
+import { TokenListObserver, TokenListObserverDelegate } from "sentinella"
 
 export interface InlineActionObserverDelegate {
   inlineActionConnected(action: Action)
   inlineActionDisconnected(action: Action)
 }
 
-export class InlineActionObserver implements AttributeObserverDelegate {
+export class InlineActionObserver implements TokenListObserverDelegate {
   context: Context
   delegate: InlineActionObserverDelegate
 
-  private attributeObserver: AttributeObserver
-  private connectedActions: Map<Element, Action>
+  private tokenListObserver: TokenListObserver
+  private connectedActions: Multimap<Element, Action>
 
   constructor(context: Context, delegate: InlineActionObserverDelegate) {
     this.context = context
     this.delegate = delegate
 
-    this.attributeObserver = new AttributeObserver(this.element, this.attributeName, this)
-    this.connectedActions = new Map<Element, Action>()
+    this.tokenListObserver = new TokenListObserver(this.element, this.attributeName, this)
+    this.connectedActions = new Multimap<Element, Action>()
   }
 
   get attributeName(): string {
@@ -36,66 +37,38 @@ export class InlineActionObserver implements AttributeObserverDelegate {
   }
 
   start() {
-    this.attributeObserver.start()
+    this.tokenListObserver.start()
   }
 
   stop() {
-    this.attributeObserver.stop()
+    this.tokenListObserver.stop()
   }
 
-  // Attribute observer delegate
+  // Token list observer delegate
 
-  elementMatchedAttribute(element: Element, attributeName: string) {
+  elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
     if (this.context.canControlElement(element)) {
-      this.refreshActionForElement(element)
-    }
-  }
-
-  elementAttributeValueChanged(element: Element, attributeName: string) {
-    if (this.context.canControlElement(element)) {
-      this.refreshActionForElement(element)
-    }
-  }
-
-  elementUnmatchedAttribute(element: Element, attributeName: string) {
-    this.disconnectActionForElement(element)
-  }
-
-  // Connected actions
-
-  private refreshActionForElement(element: Element) {
-    const descriptorString = element.getAttribute(this.attributeName)
-    if (descriptorString == null || descriptorString.trim().length == 0) {
-      this.disconnectActionForElement(element)
-    } else {
-      const newAction = this.buildActionForElementWithDescriptorString(element, descriptorString)
-      if (newAction) {
-        const existingAction = this.getActionForElement(element)
-        if (!newAction.hasSameDescriptorAs(existingAction)) {
-          this.disconnectActionForElement(element)
-          this.connectActionForElement(newAction, element)
-        }
-      } else {
-        this.disconnectActionForElement(element)
+      const action = this.buildActionForElementWithDescriptorString(element, token)
+      if (action) {
+        this.connectedActions.add(element, action)
+        this.delegate.inlineActionConnected(action)
       }
     }
   }
 
-  private connectActionForElement(action: Action, element: Element) {
-    this.connectedActions.set(element, action)
-    this.delegate.inlineActionConnected(action)
-  }
-
-  private disconnectActionForElement(element: Element) {
-    const action = this.getActionForElement(element)
+  elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
+    const action = this.getConnectedActionForElementWithDescriptorString(element, token)
     if (action) {
-      this.connectedActions.delete(element)
+      this.connectedActions.delete(element, action)
       this.delegate.inlineActionDisconnected(action)
     }
   }
 
-  private getActionForElement(element: Element): Action | null {
-    return this.connectedActions.get(element) || null
+  private getConnectedActionForElementWithDescriptorString(element: Element, descriptorString: string) {
+    const newAction = this.buildActionForElementWithDescriptorString(element, descriptorString)
+    if (newAction) {
+      return this.connectedActions.get(element).find(action => action.hasSameDescriptorAs(newAction))
+    }
   }
 
   private buildActionForElementWithDescriptorString(element: Element, descriptorString: string) {

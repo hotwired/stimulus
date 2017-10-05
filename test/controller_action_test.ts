@@ -85,6 +85,34 @@ testGroup("Controller action", function () {
     done()
   })
 
+  test("multiple inline actions", async function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    this.application.register(identifier, TestController)
+
+    await setFixture(`
+      <div data-controller="${identifier}">
+        <button data-action="mousedown->${identifier}#foo mouseup->${identifier}#foo">Foo</button>
+      </div>
+    `)
+
+    const element = queryFixture(getControllerSelector(identifier))
+    const buttonElement = queryFixture("[data-action]")
+    const controller = this.application.getControllerForElementAndIdentifier(element, identifier)
+
+    triggerEvent(buttonElement, "mousedown")
+    triggerEvent(buttonElement, "mouseup")
+
+    assert.equal(controller.actions.length, 2)
+    assert.deepEqual(controller.actions, [
+      { eventType: "mousedown", eventPrevented: true, eventTarget: buttonElement, target: buttonElement },
+      { eventType: "mouseup", eventPrevented: true, eventTarget: buttonElement, target: buttonElement },
+    ])
+
+    done()
+  })
+
   test("inline action observer disabled by controller", async function (assert) {
     const done = assert.async()
 
