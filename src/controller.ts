@@ -35,11 +35,6 @@ export class Controller {
     return this.context.data
   }
 
-  get useInlineActionObserver(): boolean {
-    // Override in your subclass to disable observing for child action elements (data-action="…")
-    return true
-  }
-
   initialize() {
     // Override in your subclass to set up initial controller state
   }

@@ -44,10 +44,7 @@ export class Context implements InlineActionObserverDelegate {
 
   connect() {
     this.dispatcher.start()
-
-    if (this.controller.useInlineActionObserver) {
-      this.inlineActionObserver.start()
-    }
+    this.inlineActionObserver.start()
 
     try {
       this.debug("Connecting controller")

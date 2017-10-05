@@ -113,33 +113,6 @@ testGroup("Controller action", function () {
     done()
   })
 
-  test("inline action observer disabled by controller", async function (assert) {
-    const done = assert.async()
-
-    const identifier = "test"
-    this.application.register(identifier, class extends TestController {
-      get useInlineActionObserver() {
-        return false
-      }
-    })
-
-    await setFixture(`
-      <div data-controller="${identifier}">
-        <button data-action="${identifier}#foo">Foo</button>
-      </div>
-    `)
-
-    const element = queryFixture(getControllerSelector(identifier))
-    const buttonElement = queryFixture(getActionSelector(identifier, "foo"))
-    const controller = this.application.getControllerForElementAndIdentifier(element, identifier)
-
-    triggerEvent(buttonElement, "click")
-    assert.equal(controller.actions.length, 0)
-
-    await setFixture("")
-    done()
-  })
-
   test("`on` decorator", async function (assert) {
     const done = assert.async()
 
