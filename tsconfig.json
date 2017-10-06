@@ -8,7 +8,8 @@
     "strictNullChecks": true,
     "experimentalDecorators": true,
     "inlineSourceMap": true,
-    "declaration": true
+    "declaration": true,
+    "declarationDir": "."
   },
   "include": [
     "./src/*"

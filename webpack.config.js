@@ -10,14 +10,7 @@ config.all = {
       {
         test: /\.ts$/,
         use: [
-          {
-            loader: "ts-loader",
-            options: {
-              compilerOptions: {
-                outDir: "../dist"
-              }
-            }
-          }
+          { loader: "ts-loader" }
         ]
       },
       {
