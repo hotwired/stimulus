@@ -70,7 +70,7 @@ config.production = {
 
   output: {
     filename: "[name].js",
-    path: "./dist",
+    path: path.resolve("./dist"),
     library: "Stimulus",
     libraryTarget: "umd"
   },
