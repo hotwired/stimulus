@@ -10,11 +10,11 @@ export class Action {
   eventTarget: EventTarget
   delegatedTargetMatcher: EventTargetMatcher | null
 
-  constructor(context: Context, descriptor: Descriptor, eventTarget: EventTarget, delegatedTargetMatcher: EventTargetMatcher) {
+  constructor(context: Context, descriptor: Descriptor, eventTarget: EventTarget, delegatedTargetMatcher?: EventTargetMatcher) {
     this.context = context
     this.descriptor = descriptor
     this.eventTarget = eventTarget
-    this.delegatedTargetMatcher = delegatedTargetMatcher
+    this.delegatedTargetMatcher = delegatedTargetMatcher || null
   }
 
   get controller(): Controller {

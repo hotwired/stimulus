@@ -98,7 +98,6 @@ export class TestController extends Controller {
   }
 
   @on("test:default")
-  @on("test:with-target-name", { targetName: "foo" })
   @on("test:with-event-target", window)
   foo(event, target) {
     this.recordAction(event, target)
