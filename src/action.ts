@@ -8,13 +8,13 @@ export class Action {
   context: Context
   descriptor: Descriptor
   eventTarget: EventTarget
-  delegatedTargetMatcher: EventTargetMatcher | null
+  delegatedTargetMatcher?: EventTargetMatcher
 
   constructor(context: Context, descriptor: Descriptor, eventTarget: EventTarget, delegatedTargetMatcher?: EventTargetMatcher) {
     this.context = context
     this.descriptor = descriptor
     this.eventTarget = eventTarget
-    this.delegatedTargetMatcher = delegatedTargetMatcher || null
+    this.delegatedTargetMatcher = delegatedTargetMatcher
   }
 
   get controller(): Controller {
@@ -34,7 +34,7 @@ export class Action {
   }
 
   get isDirect(): boolean {
-    return this.delegatedTargetMatcher == null
+    return typeof this.delegatedTargetMatcher == "undefined"
   }
 
   get isDelegated(): boolean {
