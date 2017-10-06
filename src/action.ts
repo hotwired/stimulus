@@ -34,11 +34,11 @@ export class Action {
   }
 
   get isDirect(): boolean {
-    return typeof this.delegatedTargetMatcher == "undefined"
+    return !this.isDelegated
   }
 
   get isDelegated(): boolean {
-    return !this.isDirect
+    return typeof this.delegatedTargetMatcher == "function"
   }
 
   get method(): Function {
