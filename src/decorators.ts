@@ -1,9 +1,7 @@
-import { ActionOptions } from "./context"
-
-export function on(eventName: string, actionOptionsOrEventTarget?: ActionOptions | EventTarget) {
+export function on(eventName: string, eventTarget?: EventTarget) {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     inject(target, "initialize", function() {
-      this.addAction(`${eventName}->${this.identifier}#${propertyKey}`, actionOptionsOrEventTarget)
+      this.addAction(`${eventName}->${this.identifier}#${propertyKey}`, eventTarget)
     })
   }
 }

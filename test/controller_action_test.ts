@@ -130,29 +130,6 @@ testGroup("Controller action", function () {
     done()
   })
 
-  test("`on` decorator with target name option", async function (assert) {
-    const done = assert.async()
-
-    const identifier = "test"
-    const targetName = "foo"
-    this.application.register(identifier, TestController)
-
-    await setFixture(`
-      <div data-controller="${identifier}">
-        <span data-target="${identifier}.${targetName}">Foo</span>
-      </div>
-    `)
-
-    const element = queryFixture(getControllerSelector(identifier))
-    const targetElement = queryFixture(getTargetSelector(identifier, targetName))
-    const controller = this.application.getControllerForElementAndIdentifier(element, identifier)
-
-    triggerEvent(targetElement, "test:with-target-name")
-    assert.equal(controller.actions.length, 1)
-
-    done()
-  })
-
   test("`on` decorator with event target option", async function (assert) {
     const done = assert.async()
 

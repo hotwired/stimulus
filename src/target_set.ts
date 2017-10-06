@@ -39,17 +39,6 @@ export class TargetSet {
     return elements.filter(element => this.context.canControlElement(element))
   }
 
-  matchesElementWithTargetName(element: Element, targetName: string): boolean {
-    const tokenString = element.getAttribute(this.attributeName)
-    if (tokenString) {
-      const tokenList = tokenString.split(" ")
-      const token = `${this.identifier}.${targetName}`
-      return tokenList.indexOf(token) > -1 && this.context.canControlElement(element)
-    } else {
-      return false
-    }
-  }
-
   private getSelectorForTargetName(targetName: string): string {
     return `[${this.attributeName}~='${this.identifier}.${targetName}']`
   }

@@ -1,6 +1,6 @@
 import { Action } from "./action"
 import { Application } from "./application"
-import { Context, ActionOptions } from "./context"
+import { Context } from "./context"
 import { TargetSet } from "./target_set"
 import { DataMap } from "./data_map"
 
@@ -48,10 +48,9 @@ export class Controller {
   }
 
   addAction(action: Action)
-  addAction(descriptorString: string, options?: ActionOptions)
   addAction(descriptorString: string, eventTarget: EventTarget)
-  addAction(actionOrDescriptorString, optionsOrEventTarget?) {
-    this.context.addAction(actionOrDescriptorString, optionsOrEventTarget)
+  addAction(actionOrDescriptorString, eventTarget?) {
+    this.context.addAction(actionOrDescriptorString, eventTarget)
   }
 
   removeAction(action: Action) {

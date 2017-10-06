@@ -10,10 +10,6 @@ import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_act
 import { Logger, LoggerTag } from "./logger"
 import { TargetSet } from "./target_set"
 
-export interface ActionOptions {
-  targetName: string
-}
-
 export class Context implements InlineActionObserverDelegate {
   contextSet: ContextSet
   element: Element
@@ -102,9 +98,8 @@ export class Context implements InlineActionObserverDelegate {
   // Actions
 
   addAction(action: Action)
-  addAction(descriptorString: string, options?: ActionOptions)
   addAction(descriptorString: string, eventTarget: EventTarget)
-  addAction(actionOrDescriptorString, optionsOrEventTarget?) {
+  addAction(actionOrDescriptorString, eventTarget?) {
     let action
 
     if (actionOrDescriptorString instanceof Action) {
@@ -112,20 +107,11 @@ export class Context implements InlineActionObserverDelegate {
 
     } else if (typeof actionOrDescriptorString == "string") {
       const descriptorString = actionOrDescriptorString
-      let eventTarget, matcher
-
-      if (isEventTarget(optionsOrEventTarget)) {
-        eventTarget = optionsOrEventTarget
-      } else {
+      if (!isEventTarget(eventTarget)) {
         eventTarget = this.element
-        if (optionsOrEventTarget) {
-          const {targetName} = optionsOrEventTarget
-          matcher = (element) => this.targets.matchesElementWithTargetName(element, targetName)
-        }
       }
-
       const descriptor = Descriptor.forElementWithInlineDescriptorString(eventTarget, descriptorString)
-      action = new Action(this, descriptor, eventTarget, matcher)
+      action = new Action(this, descriptor, eventTarget)
     }
 
     if (action) {

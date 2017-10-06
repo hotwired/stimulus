@@ -28,24 +28,20 @@ export default class CloseWarningController extends Controller {
     }
   }
 
-  @on("click")
   focusInput(event) {
     this.inputElement.focus()
   }
 
-  @on("DOMFocusOut", { targetName: "input" })
   addWarning(event) {
     if (this.hasUnsavedContent) {
       this.inputElement.classList.add("warning")
     }
   }
 
-  @on("DOMFocusIn", { targetName: "input" })
   clearWarning(event) {
     this.inputElement.classList.remove("warning")
   }
 
-  @on("input", { targetName: "input" })
   autosave() {
     this.autosavedValue = this.inputValue
   }

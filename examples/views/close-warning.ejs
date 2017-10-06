@@ -1,9 +1,11 @@
-<div data-controller="close-warning">
+<div data-controller="close-warning" data-action="click->close-warning#focusInput">
   <p data-target="close-warning.autosave" class="hidden">
     Would you like to restore your autosaved masterpiece?
     <button data-action="close-warning#restoreFromAutosave">Yes</button>
     <button data-action="close-warning#discardAutosave">No</button>
   </p>
 
-  <textarea data-target="close-warning.input" style="width: 75%" rows="10" placeholder="Type something and reload…"></textarea>
+  <textarea style="width: 75%" rows="10" placeholder="Type something and reload…"
+    data-target="close-warning.input"
+    data-action="input->close-warning#autosave DOMFocusOut->close-warning#addWarning DOMFocusIn->close-warning#clearWarning"></textarea>
 </div>
