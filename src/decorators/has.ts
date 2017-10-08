@@ -28,7 +28,8 @@ function compileAttributeDescriptor(attributeName: string): PropertyDescriptor {
 
 function findAttributeDescriptorSuffix(attributeName: string): string | undefined {
   for (const suffix in attributeDescriptorCompilers) {
-    if (attributeName.endsWith(suffix)) {
+    const tail = attributeName.slice(-suffix.length)
+    if (tail === suffix) {
       return suffix
     }
   }
