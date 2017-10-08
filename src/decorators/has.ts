@@ -1,6 +1,6 @@
 import { extend } from "../helpers/extend"
 
-export function has(...attributes: string[]) {
+export function has(...attributes: string[]): any {
   return function(constructor: Function) {
     const properties = compileAttributeDescriptorMap(attributes)
     return extend(constructor, properties)
