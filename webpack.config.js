@@ -69,6 +69,7 @@ config.production = {
   },
 
   plugins: [
+    new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.optimize.UglifyJsPlugin(),
     new webpack.BannerPlugin({
       banner: (() => {
