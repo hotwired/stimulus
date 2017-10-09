@@ -2,16 +2,7 @@
   "extends": "../tsconfig",
   "compilerOptions": {
     "allowJs": true,
-    "noImplicitAny": false,
-    "baseUrl": ".",
-    "paths": {
-      "stimulus": [
-        "../src/stimulus"
-      ]
-    }
+    "noImplicitAny": false
   },
-  "include": [
-    "./**/*",
-    "../src/**/*"
-  ]
+  "include": ["**/*"]
 }

@@ -9,9 +9,11 @@
     "experimentalDecorators": true,
     "inlineSourceMap": true,
     "declaration": true,
-    "declarationDir": "."
+    "declarationDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "stimulus": ["src/index"]
+    }
   },
-  "include": [
-    "./src/*"
-  ]
+  "include": ["src/**/*"]
 }
