@@ -9,7 +9,7 @@
     "experimentalDecorators": true,
     "inlineSourceMap": true,
     "declaration": true,
-    "declarationDir": ".",
+    "declarationDir": "types",
     "baseUrl": ".",
     "paths": {
       "stimulus": ["src/index"]

@@ -18,7 +18,7 @@
     }
   ],
   "main": "dist/stimulus.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "license": "MIT",
   "devDependencies": {
     "@types/qunit": "^2.0.31",
