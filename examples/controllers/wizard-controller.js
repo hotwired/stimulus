@@ -6,6 +6,7 @@ export default class WizardController extends Controller {
   }
 
   nextStep(event) {
+    event.preventDefault()
     this.recordStepHistory(event)
     const {currentStepElement, nextStepElement} = this
     if (nextStepElement) {

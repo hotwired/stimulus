@@ -19,7 +19,7 @@ testGroup("Controller action", function () {
 
     triggerEvent(buttonElement, "click")
     assert.equal(controller.actions.length, 1)
-    assert.deepEqual(controller.actions[0], { eventType: "click", eventPrevented: true, eventTarget: buttonElement, target: buttonElement })
+    assert.deepEqual(controller.actions[0], { eventType: "click", eventPrevented: false, eventTarget: buttonElement, target: buttonElement })
 
     done()
   })
@@ -45,7 +45,7 @@ testGroup("Controller action", function () {
 
     triggerEvent(buttonChildElement, "click")
     assert.equal(controller.actions.length, 1)
-    assert.deepEqual(controller.actions[0], { eventType: "click", eventPrevented: true, eventTarget: buttonChildElement, target: buttonElement })
+    assert.deepEqual(controller.actions[0], { eventType: "click", eventPrevented: false, eventTarget: buttonChildElement, target: buttonElement })
 
     done()
   })
@@ -106,8 +106,8 @@ testGroup("Controller action", function () {
 
     assert.equal(controller.actions.length, 2)
     assert.deepEqual(controller.actions, [
-      { eventType: "mousedown", eventPrevented: true, eventTarget: buttonElement, target: buttonElement },
-      { eventType: "mouseup", eventPrevented: true, eventTarget: buttonElement, target: buttonElement },
+      { eventType: "mousedown", eventPrevented: false, eventTarget: buttonElement, target: buttonElement },
+      { eventType: "mouseup", eventPrevented: false, eventTarget: buttonElement, target: buttonElement },
     ])
 
     done()
