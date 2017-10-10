@@ -1,4 +1,4 @@
-const webpackConfig = require("./webpack.config")()
+const webpackConfig = require("./webpack.config")
 
 const config = {
   // Run `defaults write com.apple.Safari ApplePersistenceIgnoreState YES`

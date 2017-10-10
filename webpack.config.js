@@ -1,35 +1,24 @@
 const path = require("path")
 const webpack = require("webpack")
-const merge = require("webpack-merge")
 
-const config = {}
+module.exports = {
+  entry: {
+    stimulus: "./src/index.ts"
+  },
 
-config.all = {
+  output: {
+    filename: "[name].js",
+    path: path.resolve("./dist"),
+    library: "Stimulus",
+    libraryTarget: "umd"
+  },
+
   module: {
     rules: [
       {
         test: /\.ts$/,
         use: [
           { loader: "ts-loader" }
-        ]
-      },
-      {
-        test: /\.js$/,
-        exclude: [
-          /node_modules/
-        ],
-        use: [
-          {
-            loader: "babel-loader",
-            options: {
-              presets: [
-                ["es2015", { modules: false }]
-              ],
-              plugins: [
-                "transform-decorators-legacy"
-              ]
-            }
-          }
         ]
       }
     ]
@@ -41,31 +30,6 @@ config.all = {
     alias: {
       "stimulus": path.resolve(__dirname, "src/index.ts")
     }
-  }
-}
-
-config.development = {
-  entry: {
-    main: "./examples/index.js"
-  },
-
-  output: {
-    filename: "[name].js"
-  },
-
-  devtool: "inline-source-map"
-}
-
-config.production = {
-  entry: {
-    stimulus: "./src/index.ts"
-  },
-
-  output: {
-    filename: "[name].js",
-    path: path.resolve("./dist"),
-    library: "Stimulus",
-    libraryTarget: "umd"
   },
 
   plugins: [
@@ -80,9 +44,4 @@ config.production = {
       raw: true
     })
   ]
-}
-
-module.exports = function(env = {}) {
-  const configEnv = Object.keys(env)[0] || "development"
-  return merge(config.all, config[configEnv])
 }

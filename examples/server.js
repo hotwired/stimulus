@@ -3,7 +3,7 @@ const path = require("path")
 const express = require("express")
 const webpack = require("webpack")
 const webpackMiddleware = require("webpack-dev-middleware")
-const webpackConfig = require("../webpack.config")()
+const webpackConfig = require("./webpack.config")
 
 const app = express()
 const port = 9000

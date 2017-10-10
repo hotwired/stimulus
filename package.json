@@ -22,13 +22,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/qunit": "^2.0.31",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-preset-es2015": "^6.24.1",
     "core-js": "^2.5.1",
-    "ejs": "^2.5.7",
-    "express": "^4.16.1",
     "karma": "^1.7.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-firefox-launcher": "^1.0.1",
@@ -39,11 +33,8 @@
     "qunitjs": "^2.4.0",
     "ts-loader": "^2.3.7",
     "tslint": "^5.7.0",
-    "turbolinks": "^5.0.3",
     "typescript": "^2.5.3",
-    "webpack": "^3.6.0",
-    "webpack-dev-middleware": "^1.12.0",
-    "webpack-merge": "^4.1.0"
+    "webpack": "^3.6.0"
   },
   "dependencies": {
     "sentinella": "^0.2.0"
@@ -52,11 +43,10 @@
     "dist"
   ],
   "scripts": {
-    "start": "node examples/server.js",
     "clean": "rm -fr build dist",
     "lint": "tslint --project tsconfig.json --type-check src/*.ts",
     "prebuild": "yarn run clean && yarn lint",
-    "build": "webpack --env.production",
+    "build": "webpack",
     "pretest": "yarn lint",
     "test": "karma start",
     "prepare": "yarn build"
