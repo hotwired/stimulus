@@ -13,6 +13,15 @@ module.exports = {
     libraryTarget: "umd"
   },
 
+  externals: {
+    sentinella: {
+      commonjs: "sentinella",
+      commonjs2: "sentinella",
+      amd: "sentinella",
+      root: "Sentinella"
+    }
+  },
+
   module: {
     rules: [
       {
