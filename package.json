@@ -31,6 +31,7 @@
     "karma-sauce-launcher": "^1.2.0",
     "karma-webpack": "^2.0.4",
     "qunitjs": "^2.4.0",
+    "rimraf": "^2.6.2",
     "ts-loader": "^2.3.7",
     "tslint": "^5.7.0",
     "typescript": "^2.5.3",
@@ -43,7 +44,7 @@
     "dist"
   ],
   "scripts": {
-    "clean": "rm -fr build dist",
+    "clean": "rimraf dist",
     "lint": "tslint --project tsconfig.json --type-check src/*.ts",
     "prebuild": "yarn run clean && yarn lint",
     "build": "webpack",
