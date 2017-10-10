@@ -5,7 +5,6 @@ export interface DescriptorOptions {
   targetName?: string
   eventName?: string
   methodName?: string
-  preventsDefault?: boolean
 }
 
 export class Descriptor {
@@ -22,7 +21,6 @@ export class Descriptor {
   targetName: string | null
   eventName: string
   methodName: string
-  preventsDefault: boolean
 
   static forOptions(options: DescriptorOptions): Descriptor {
     return new Descriptor(
@@ -30,7 +28,6 @@ export class Descriptor {
       options.targetName || null,
       options.eventName  || error("Missing event name in descriptor"),
       options.methodName || error("Missing method name in descriptor"),
-      options.preventsDefault || false
     )
   }
 
@@ -46,12 +43,11 @@ export class Descriptor {
 
   private static parseOptionsFromInlineActionDescriptorString(descriptorString: string): DescriptorOptions {
     const source = descriptorString.trim()
-    const matches = source.match(/^(~)?((.+?)->)?(.+?)#(.+)$/) || error("Invalid descriptor syntax")
+    const matches = source.match(/^((.+?)->)?(.+?)#(.+)$/) || error("Invalid descriptor syntax")
     return {
-      identifier: matches[4],
-      eventName: matches[3],
-      methodName: matches[5],
-      preventsDefault: matches[1] ? false : true
+      identifier: matches[3],
+      eventName: matches[2],
+      methodName: matches[4]
     }
   }
 
@@ -59,12 +55,11 @@ export class Descriptor {
     return this.defaultEventNames[element.tagName.toLowerCase()](element)
   }
 
-  constructor(identifier: string, targetName: string | null, eventName: string, methodName: string, preventsDefault: boolean) {
+  constructor(identifier: string, targetName: string | null, eventName: string, methodName: string) {
     this.identifier = identifier
     this.targetName = targetName
     this.eventName = eventName
     this.methodName = methodName
-    this.preventsDefault = preventsDefault
   }
 
   isEqualTo(descriptor: Descriptor | null): boolean {
@@ -72,13 +67,11 @@ export class Descriptor {
       descriptor.identifier == this.identifier &&
       descriptor.targetName == this.targetName &&
       descriptor.eventName == this.eventName &&
-      descriptor.methodName == this.methodName &&
-      descriptor.preventsDefault == this.preventsDefault
+      descriptor.methodName == this.methodName
   }
 
   toString(): string {
-    return (this.preventsDefault ? "" : "~") +
-      `${this.eventName}->${this.identifier}#${this.methodName}`
+    return `${this.eventName}->${this.identifier}#${this.methodName}`
   }
 
   get loggerTag(): LoggerTag {

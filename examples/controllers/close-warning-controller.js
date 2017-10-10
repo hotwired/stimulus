@@ -19,7 +19,7 @@ export default class CloseWarningController extends Controller {
     }
   }
 
-  @on("~turbolinks:before-visit", document)
+  @on("turbolinks:before-visit", document)
   warnBeforeVisit(event) {
     if (this.hasUnsavedContent) {
       if (!window.confirm("Are you sure?")) {

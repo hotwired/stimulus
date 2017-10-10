@@ -29,10 +29,6 @@ export class Action {
     return this.descriptor.methodName
   }
 
-  get preventsDefault(): boolean {
-    return this.descriptor.preventsDefault
-  }
-
   get isDirect(): boolean {
     return !this.isDelegated
   }
@@ -59,10 +55,6 @@ export class Action {
   }
 
   invokeWithEventAndTarget(event: Event, eventTarget: EventTarget) {
-    if (this.preventsDefault) {
-      event.preventDefault()
-    }
-
     this.debug("Invoking action", this, event)
 
     try {
