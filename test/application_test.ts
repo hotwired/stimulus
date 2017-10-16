@@ -47,5 +47,32 @@ testGroup("Application", function() {
 
     done()
   })
-})
 
+  test("register and unregister", async function(assert) {
+    const done = assert.async()
+
+    const element = document.createElement("div")
+    element.setAttribute("data-controller", "test")
+    getFixture().appendChild(element)
+    await nextFrame()
+
+    this.application.register("test", TestController)
+    const controller1 = this.application.getControllerForElementAndIdentifier(element, "test")
+    assert.ok(controller1)
+    assert.deepEqual(controller1.lifecycle, { initialize: 1, connect: 1, disconnect: 0 })
+
+    this.application.unregister("test")
+    assert.deepEqual(controller1.lifecycle, { initialize: 1, connect: 1, disconnect: 1 })
+
+    const controller2 = this.application.getControllerForElementAndIdentifier(element, "test")
+    assert.notOk(controller2)
+
+    this.application.register("test", TestController)
+    const controller3 = this.application.getControllerForElementAndIdentifier(element, "test")
+    assert.ok(controller3)
+    assert.deepEqual(controller3.lifecycle, { initialize: 1, connect: 1, disconnect: 0 })
+    assert.notEqual(controller1, controller3)
+
+    done()
+  })
+})

@@ -46,6 +46,14 @@ export class Router implements TokenListObserverDelegate {
     this.connectContextSet(contextSet)
   }
 
+  unregister(identifier: string) {
+    const contextSet = this.contextSets.get(identifier)
+    if (contextSet) {
+      this.disconnectContextSet(contextSet)
+      this.contextSets.delete(identifier)
+    }
+  }
+
   // Token list observer delegate
 
   elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
@@ -69,6 +77,13 @@ export class Router implements TokenListObserverDelegate {
     const elements = this.tokenListObserver.getElementsMatchingToken(contextSet.identifier)
     for (const element of elements) {
       contextSet.connect(element)
+    }
+  }
+
+  private disconnectContextSet(contextSet: ContextSet) {
+    const contexts = contextSet.contexts
+    for (const { element } of contexts) {
+      contextSet.disconnect(element)
     }
   }
 
