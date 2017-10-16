@@ -1,6 +1,7 @@
 export { Action } from "./action"
 export { Application } from "./application"
-export { Controller } from "./controller"
+export { Context } from "./context"
+export { Controller, ControllerConstructor } from "./controller"
 export { Descriptor } from "./descriptor"
 export { Logger, LogLevel } from "./logger"
 export { on } from "./decorators"
