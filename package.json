@@ -30,13 +30,13 @@
     "karma-qunit": "^1.2.1",
     "karma-safari-launcher": "^1.0.0",
     "karma-sauce-launcher": "^1.2.0",
-    "karma-webpack": "^2.0.4",
+    "karma-webpack": "^2.0.5",
     "qunitjs": "^2.4.0",
     "rimraf": "^2.6.2",
-    "ts-loader": "^2.3.7",
+    "ts-loader": "^3.0.2",
     "tslint": "^5.7.0",
     "typescript": "^2.5.3",
-    "webpack": "^3.6.0"
+    "webpack": "^3.8.1"
   },
   "dependencies": {
     "sentinella": "^0.2.0"

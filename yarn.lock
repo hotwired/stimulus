@@ -1635,9 +1635,9 @@ karma-sauce-launcher@^1.2.0:
     saucelabs "^1.4.0"
     wd "^1.4.0"
 
-karma-webpack@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/karma-webpack/-/karma-webpack-2.0.4.tgz#3e2d4f48ba94a878e1c66bb8e1ae6128987a175b"
+karma-webpack@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/karma-webpack/-/karma-webpack-2.0.5.tgz#4f56887e32cf4f9583391c2388415de06af06efd"
   dependencies:
     async "~0.9.0"
     loader-utils "^0.2.5"
@@ -2750,9 +2750,9 @@ tough-cookie@~2.3.0:
   dependencies:
     punycode "^1.4.1"
 
-ts-loader@^2.3.7:
-  version "2.3.7"
-  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-2.3.7.tgz#a9028ced473bee12f28a75f9c5b139979d33f2fc"
+ts-loader@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-3.0.2.tgz#e4aa476f54c4197bee0251cd53a783ed3665a629"
   dependencies:
     chalk "^2.0.1"
     enhanced-resolve "^3.0.0"
@@ -2954,9 +2954,9 @@ webpack-sources@^1.0.1:
     source-list-map "^2.0.0"
     source-map "~0.5.3"
 
-webpack@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-3.6.0.tgz#a89a929fbee205d35a4fa2cc487be9cbec8898bc"
+webpack@^3.8.1:
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-3.8.1.tgz#b16968a81100abe61608b0153c9159ef8bb2bd83"
   dependencies:
     acorn "^5.0.0"
     acorn-dynamic-import "^2.0.0"
