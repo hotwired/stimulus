@@ -1,24 +1,24 @@
 const path = require("path")
 const webpack = require("webpack")
-const merge = require("webpack-merge")
 
-const root = __dirname
-const config = {}
+module.exports = {
+  entry: {
+    sentinella: "./src/index.ts"
+  },
 
-config.all = {
+  output: {
+    filename: "[name].js",
+    path: path.resolve("./dist"),
+    library: "Sentinella",
+    libraryTarget: "umd"
+  },
+
   module: {
     rules: [
       {
-        test: /\.[jt]s$/,
+        test: /\.ts$/,
         use: [
-          {
-            loader: "ts-loader",
-            options: {
-              compilerOptions: {
-                outDir: "../dist"
-              }
-            }
-          }
+          { loader: "ts-loader" }
         ]
       }
     ]
@@ -27,40 +27,18 @@ config.all = {
   resolve: {
     extensions: [".ts", ".js"],
     modules: ["src", "node_modules"]
-  }
-}
-
-config.production = {
-  entry: {
-    "sentinella": root + "/src/index.ts"
-  },
-
-  output: {
-    filename: "[name].js",
-    path: root + "/dist",
-    library: "Sentinella",
-    libraryTarget: "umd"
   },
 
   plugins: [
+    new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.optimize.UglifyJsPlugin(),
     new webpack.BannerPlugin({
       banner: (() => {
-        const {version} = require('./package.json')
+        const { version } = require('./package.json')
         const year = new Date().getFullYear()
         return `/*\nSentinella ${version}\nCopyright © ${year} Basecamp, LLC\n */`
       })(),
       raw: true
     })
   ]
-}
-
-module.exports = function(env = {}) {
-  const configEnv = Object.keys(env)[0]
-
-  if (configEnv) {
-    return merge(config.all, config[configEnv])
-  } else {
-    return config.all
-  }
 }

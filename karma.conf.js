@@ -1,20 +1,20 @@
-const webpackConfig = require("./webpack.config")()
+const webpackConfig = require("./webpack.config")
 
 const config = {
   // Run `defaults write com.apple.Safari ApplePersistenceIgnoreState YES`
   // to work around Safari tab issue: https://github.com/karma-runner/karma-safari-launcher/issues/6
-  browsers: getBrowsersFromEnvironment(),
+  browsers: getBrowsersFromEnvironment() || ["ChromeHeadless"],
 
   frameworks: ["qunit"],
 
   reporters: ["progress"],
 
   files: [
-    { pattern: "test/**/*_test.ts" }
+    { pattern: "test/*_test.ts" }
   ],
 
   preprocessors: {
-    "test/**/*.ts": ["webpack"]
+    "test/*.ts": ["webpack"]
   },
 
   mime: {
@@ -39,12 +39,12 @@ if (process.env.CI) {
     sl_chrome: {
       base: "SauceLabs",
       browserName: "chrome",
-      version: "56"
+      version: "61"
     },
     sl_firefox: {
       base: "SauceLabs",
       browserName: "firefox",
-      version: "51"
+      version: "56"
     },
     sl_safari: {
       base: "SauceLabs",
@@ -56,7 +56,7 @@ if (process.env.CI) {
       base: "SauceLabs",
       browserName: "microsoftedge",
       platform: "Windows 10",
-      version: "14.14393"
+      version: "15.15063"
     },
     sl_ie: {
       base: "SauceLabs",
