@@ -54,8 +54,18 @@ export class TestEnvironment {
     return Promise.resolve(ok => requestAnimationFrame(ok))
   }
 
-  async triggerEvent(eventName: string, descriptor: ElementQueryDescriptor) {
+  async triggerEvent(event: string | Event, descriptor: ElementQueryDescriptor): Promise<Event> {
+    if (typeof event == "string") {
+      return this.triggerEvent(createEvent(event), descriptor)
+    }
 
+    const element = this.findElement(descriptor)
+    if (element) {
+      element.dispatchEvent(event)
+      return Promise.resolve(event)
+    } else {
+      return Promise.reject("couldn't find element")
+    }
   }
 
   findController(identifier: string): Controller | undefined {
@@ -77,4 +87,19 @@ export class TestEnvironment {
   private get configuration() {
     return this.application.configuration
   }
+}
+
+function createEvent(eventType: string): Event {
+  const event = document.createEvent("Events")
+  event.initEvent(eventType, true, true)
+  // IE <= 11 does not set `defaultPrevented` when `preventDefault()` is called on synthetic events
+  event.preventDefault = function() {
+    Object.defineProperty(this, "defaultPrevented", {
+      get: function() {
+        return true
+      },
+      configurable: true
+    })
+  }
+  return event
 }
