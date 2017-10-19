@@ -43,7 +43,7 @@ export class TestEnvironment {
     }
   }
 
-  async loadFixture(fixture: string | Node) {
+  async loadFixture(fixture: string | Node): Promise<any> {
     if (typeof fixture == "string") {
       this.rootElement.innerHTML = fixture
     } else {
@@ -51,7 +51,7 @@ export class TestEnvironment {
       this.rootElement.appendChild(fixture)
     }
 
-    return Promise.resolve(ok => requestAnimationFrame(ok))
+    return this.nextFrame()
   }
 
   async triggerEvent(event: string | Event, descriptor: ElementQueryDescriptor): Promise<Event> {
@@ -66,6 +66,10 @@ export class TestEnvironment {
     } else {
       return Promise.reject("couldn't find element")
     }
+  }
+
+  async nextFrame(): Promise<any> {
+    return new Promise(resolve => requestAnimationFrame(resolve))
   }
 
   findController(identifier: string): Controller | undefined {
