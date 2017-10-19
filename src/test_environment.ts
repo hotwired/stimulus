@@ -1,9 +1,20 @@
 import { Application } from "./application"
+import { ConfigurationOptions } from "./configuration"
 import { ControllerConstructor } from "./controller"
 import { ElementQuery, ElementQueryDescriptor } from "./element_query"
 
+export type ControllerConstructorMap = { [identifier: string]: ControllerConstructor }
+
 export class TestEnvironment {
   application: Application
+
+  static setup(configurationOptions: ConfigurationOptions, controllerConstructors: ControllerConstructorMap): TestEnvironment {
+    const application = new Application(configurationOptions)
+    const testEnvironment = new this(application)
+    testEnvironment.register(controllerConstructors)
+    testEnvironment.setup()
+    return testEnvironment
+  }
 
   constructor(application: Application) {
     this.application = application
@@ -17,7 +28,7 @@ export class TestEnvironment {
     this.application.stop()
   }
 
-  register(controllerConstructors: { [identifier: string]: ControllerConstructor }) {
+  register(controllerConstructors: ControllerConstructorMap) {
     for (const identifier in controllerConstructors) {
       const controllerConstructor = controllerConstructors[identifier]
       this.application.register(identifier, controllerConstructor)
