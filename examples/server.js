@@ -33,8 +33,9 @@ app.listen(port, () => {
 
 function readView(page) {
   return new Promise((resolve, reject) => {
-    const file = path.join(viewPath, `${page}.${viewEngine}`)
-    fs.readFile(file, "utf8", (error, body) => {
+    const basename = page.replace(/-/g, "_")
+    const filename = path.join(viewPath, `${basename}.${viewEngine}`)
+    fs.readFile(filename, "utf8", (error, body) => {
       error ? reject(error) : resolve(body)
     })
   })
