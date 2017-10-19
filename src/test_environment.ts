@@ -2,6 +2,7 @@ import { Application } from "./application"
 import { ConfigurationOptions, createConfiguration } from "./configuration"
 import { Controller, ControllerConstructor } from "./controller"
 import { ElementQuery, ElementQueryDescriptor } from "./element_query"
+import { createEvent } from "./event"
 
 export type ControllerConstructorMap = { [identifier: string]: ControllerConstructor }
 
@@ -91,19 +92,4 @@ export class TestEnvironment {
   private get configuration() {
     return this.application.configuration
   }
-}
-
-function createEvent(eventType: string): Event {
-  const event = document.createEvent("Events")
-  event.initEvent(eventType, true, true)
-  // IE <= 11 does not set `defaultPrevented` when `preventDefault()` is called on synthetic events
-  event.preventDefault = function() {
-    Object.defineProperty(this, "defaultPrevented", {
-      get: function() {
-        return true
-      },
-      configurable: true
-    })
-  }
-  return event
 }
