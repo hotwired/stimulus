@@ -1,6 +1,6 @@
 import { Application } from "./application"
-import { ConfigurationOptions } from "./configuration"
-import { Controller,  ControllerConstructor } from "./controller"
+import { ConfigurationOptions, createConfiguration } from "./configuration"
+import { Controller, ControllerConstructor } from "./controller"
 import { ElementQuery, ElementQueryDescriptor } from "./element_query"
 
 export type ControllerConstructorMap = { [identifier: string]: ControllerConstructor }
@@ -67,11 +67,11 @@ export class TestEnvironment {
   }
 
   findElement(descriptor: ElementQueryDescriptor, rootElement: Element = this.rootElement) {
-    return new ElementQuery(rootElement, this.configuration, descriptor).firstElement
+    return new ElementQuery(createConfiguration(this.configuration, rootElement), descriptor).firstElement
   }
 
   findAllElements(descriptor: ElementQueryDescriptor, rootElement: Element = this.rootElement) {
-    return new ElementQuery(rootElement, this.configuration, descriptor).allElements
+    return new ElementQuery(createConfiguration(this.configuration, rootElement), descriptor).allElements
   }
 
   private get configuration() {

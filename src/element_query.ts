@@ -8,12 +8,10 @@ export type ElementQueryOptions = {
 }
 
 export class ElementQuery {
-  rootElement: Element
   configuration: Configuration
   descriptor: ElementQueryDescriptor
 
-  constructor(rootElement: Element, configuration: Configuration, descriptor: ElementQueryDescriptor) {
-    this.rootElement = rootElement
+  constructor(configuration: Configuration, descriptor: ElementQueryDescriptor) {
     this.configuration = configuration
     this.descriptor = descriptor
   }
@@ -75,6 +73,10 @@ export class ElementQuery {
     return getTokensForAttribute(element, this.actionAttribute).some(token => {
       return token.replace(/^(.+?)->/, "") == tokenValue
     })
+  }
+
+  private get rootElement() {
+    return this.configuration.rootElement
   }
 
   private get controllerAttribute() {

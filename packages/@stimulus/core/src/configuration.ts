@@ -24,10 +24,10 @@ export const defaultConfiguration: Configuration = {
   targetAttribute: "data-target"
 }
 
-export function createConfiguration(configuration: ConfigurationOptions): Configuration {
-  if (configuration instanceof Element) {
-    return createConfiguration({ rootElement: configuration })
+export function createConfiguration(baseConfiguration: ConfigurationOptions, additionalConfiguration?: ConfigurationOptions): Configuration {
+  if (additionalConfiguration instanceof Element) {
+    return createConfiguration(baseConfiguration, { rootElement: additionalConfiguration })
   } else {
-    return Object.assign({}, defaultConfiguration, configuration)
+    return Object.assign({}, defaultConfiguration, baseConfiguration, additionalConfiguration)
   }
 }
