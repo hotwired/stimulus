@@ -1,6 +1,6 @@
 import { Application } from "./application"
 import { ControllerConstructor } from "./controller"
-import { ElementQueryDescriptor } from "./element_query"
+import { ElementQuery, ElementQueryDescriptor } from "./element_query"
 
 export class TestEnvironment {
   application: Application
@@ -48,11 +48,11 @@ export class TestEnvironment {
   }
 
   findElement(descriptor: ElementQueryDescriptor, rootElement: Element = this.rootElement) {
-
+    return new ElementQuery(rootElement, this.configuration, descriptor).firstElement
   }
 
   findAllElements(descriptor: ElementQueryDescriptor, rootElement: Element = this.rootElement) {
-
+    return new ElementQuery(rootElement, this.configuration, descriptor).allElements
   }
 
   private get rootElement() {
