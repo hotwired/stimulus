@@ -1,6 +1,6 @@
 import { Application } from "./application"
 import { ConfigurationOptions } from "./configuration"
-import { ControllerConstructor } from "./controller"
+import { Controller,  ControllerConstructor } from "./controller"
 import { ElementQuery, ElementQueryDescriptor } from "./element_query"
 
 export type ControllerConstructorMap = { [identifier: string]: ControllerConstructor }
@@ -18,6 +18,14 @@ export class TestEnvironment {
 
   constructor(application: Application) {
     this.application = application
+  }
+
+  get controllers(): Controller[] {
+    return this.application.controllers
+  }
+
+  get rootElement(): Element {
+    return this.configuration.rootElement
   }
 
   setup() {
@@ -50,12 +58,12 @@ export class TestEnvironment {
 
   }
 
-  findController(identifier: string) {
-
+  findController(identifier: string): Controller | undefined {
+    return this.controllers.find(controller => controller.identifier == identifier)
   }
 
-  findAllControllers(identifier: string) {
-
+  findAllControllers(identifier: string): Controller[] {
+    return this.controllers.filter(controller => controller.identifier == identifier)
   }
 
   findElement(descriptor: ElementQueryDescriptor, rootElement: Element = this.rootElement) {
@@ -64,10 +72,6 @@ export class TestEnvironment {
 
   findAllElements(descriptor: ElementQueryDescriptor, rootElement: Element = this.rootElement) {
     return new ElementQuery(rootElement, this.configuration, descriptor).allElements
-  }
-
-  private get rootElement() {
-    return this.configuration.rootElement
   }
 
   private get configuration() {
