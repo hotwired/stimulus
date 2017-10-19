@@ -8,7 +8,7 @@ export interface Configuration {
   targetAttribute: string
 }
 
-export interface ConfigurationOptions {
+export type ConfigurationOptions = Element | {
   logLevel?: LogLevel
   rootElement?: Element
   controllerAttribute?: string
@@ -25,5 +25,9 @@ export const defaultConfiguration: Configuration = {
 }
 
 export function createConfiguration(configuration: ConfigurationOptions): Configuration {
-  return Object.assign({}, defaultConfiguration, configuration)
+  if (configuration instanceof Element) {
+    return createConfiguration({ rootElement: configuration })
+  } else {
+    return Object.assign({}, defaultConfiguration, configuration)
+  }
 }
