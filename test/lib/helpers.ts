@@ -1,5 +1,6 @@
-const { test } = QUnit
-export { test }
+const { test, module } = QUnit
+
+export { test, module as testGroup }
 
 export function getFixture(): HTMLDivElement {
   return document.getElementById("qunit-fixture") as HTMLDivElement
@@ -11,8 +12,6 @@ export function setFixture(content: string | Element) {
   } else {
     getFixture().appendChild(content)
   }
-
-  return nextFrame()
 }
 
 export function nextFrame(): Promise<number> {

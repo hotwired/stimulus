@@ -26,7 +26,10 @@ module.exports = {
 
   resolve: {
     extensions: [".ts", ".js"],
-    modules: ["src", "node_modules"]
+    modules: ["src", "node_modules"],
+    alias: {
+      "sentinella": path.resolve(__dirname, "src/index.ts")
+    }
   },
 
   plugins: [
