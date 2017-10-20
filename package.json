@@ -18,6 +18,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/qunit": "^2.0.31",
+    "core-js": "^2.5.1",
     "karma": "^1.7.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-firefox-launcher": "^1.0.1",

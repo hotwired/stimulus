@@ -1,5 +1,6 @@
-const { test, module } = QUnit
+import "polyfills"
 
+const { test, module } = QUnit
 export { test, module as testGroup }
 
 export function getFixture(): HTMLDivElement {
