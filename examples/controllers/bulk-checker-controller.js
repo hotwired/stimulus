@@ -1,15 +1,14 @@
 import Controller from "./controller"
+import { has } from "stimulus"
+
+@has("checkboxElements")
 
 export default class BulkCheckerController extends Controller {
   checkAll(event) {
-    this.targets.findAll("checkbox").forEach(element => {
-      element.checked = true
-    })
+    this.checkboxElements.forEach(element => element.checked = true)
   }
 
   uncheckAll(event) {
-    this.targets.findAll("checkbox").forEach(element => {
-      element.checked = false
-    })
+    this.checkboxElements.forEach(element => element.checked = false)
   }
 }

@@ -1,5 +1,7 @@
 import Controller from "./controller"
-import { Descriptor, Action, on } from "stimulus"
+import { Descriptor, Action, on, has } from "stimulus"
+
+@has("inputElement", "autosaveElement")
 
 export default class CloseWarningController extends Controller {
   connect() {
@@ -70,10 +72,6 @@ export default class CloseWarningController extends Controller {
     this.inputElement.value = value
   }
 
-  get inputElement() {
-    return this.targets.find("input")
-  }
-
   // Autosave
 
   showAutosaveDialog() {
@@ -82,10 +80,6 @@ export default class CloseWarningController extends Controller {
 
   hideAutosaveDialog() {
     this.autosaveElement.classList.add("hidden")
-  }
-
-  get autosaveElement() {
-    return this.targets.find("autosave")
   }
 
   get autosaveKey() {
