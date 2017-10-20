@@ -31,7 +31,11 @@ const config = {
     qunit: {
       showUI: true
     }
-  }
+  },
+
+  browserDisconnectTolerance: 2,
+  browserDisconnectTimeout: 10000,
+  browserNoActivityTimeout: 20000
 }
 
 if (process.env.CI) {
