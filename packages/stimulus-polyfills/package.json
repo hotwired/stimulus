@@ -8,6 +8,6 @@
     "element-closest": "^2.0.2"
   },
   "scripts": {
-    "test": "echo 0"
+    "test": "echo 👌 && exit 0"
   }
 }
