@@ -3,7 +3,7 @@ const webpack = require("webpack")
 
 module.exports = {
   entry: {
-    stimulus: "./src/index.ts"
+    stimulus: "./index.ts"
   },
 
   output: {
