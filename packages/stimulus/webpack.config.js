@@ -35,10 +35,7 @@ module.exports = {
 
   resolve: {
     extensions: [".ts", ".js"],
-    modules: ["src", "node_modules"],
-    alias: {
-      "stimulus": path.resolve(__dirname, "src/index.ts")
-    }
+    modules: ["src", "node_modules"]
   },
 
   plugins: [

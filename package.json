@@ -1,29 +1,19 @@
 {
   "name": "stimulus",
+  "private": true,
   "version": "0.4.0",
-  "description": "👉✨",
-  "author": "Basecamp, LLC",
-  "contributors": [
-    {
-      "name": "David Heinemeier Hansson",
-      "email": "david@basecamp.com"
-    },
-    {
-      "name": "Javan Makhmali",
-      "email": "javan@javan.us"
-    },
-    {
-      "name": "Sam Stephenson",
-      "email": "sstephenson@gmail.com"
-    }
-  ],
-  "main": "dist/stimulus.js",
-  "types": "dist/types/index.d.ts",
   "license": "MIT",
+  "scripts": {
+    "lint": "tslint --project tsconfig.json",
+    "pretest": "yarn lint",
+    "test": "lerna run --stream test",
+    "build": "lerna run build"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "@types/qunit": "^2.0.31",
-    "core-js": "^2.5.1",
-    "element-closest": "^2.0.2",
     "karma": "^1.7.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-firefox-launcher": "^1.0.1",
@@ -31,26 +21,12 @@
     "karma-safari-launcher": "^1.0.0",
     "karma-sauce-launcher": "^1.2.0",
     "karma-webpack": "^2.0.5",
+    "lerna": "^2.4.0",
     "qunitjs": "^2.4.0",
     "rimraf": "^2.6.2",
     "ts-loader": "^3.0.2",
     "tslint": "^5.7.0",
     "typescript": "^2.5.3",
     "webpack": "^3.8.1"
-  },
-  "dependencies": {
-    "sentinella": "^0.2.0"
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "clean": "rimraf dist",
-    "lint": "tslint --project tsconfig.json --type-check src/*.ts",
-    "prebuild": "yarn run clean && yarn lint",
-    "build": "webpack",
-    "pretest": "yarn lint",
-    "test": "karma start",
-    "prepare": "yarn build"
   }
 }
