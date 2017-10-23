@@ -1,4 +1,4 @@
-import "polyfills"
+import "stimulus-polyfills"
 import { Application, LogLevel } from "stimulus"
 import Turbolinks from "turbolinks"
 

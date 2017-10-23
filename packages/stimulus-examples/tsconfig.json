@@ -1,8 +1,7 @@
 {
-  "extends": "../tsconfig",
+  "extends": "../../tsconfig",
   "compilerOptions": {
     "allowJs": true,
     "noImplicitAny": false
-  },
-  "include": ["**/*"]
+  }
 }

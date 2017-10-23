@@ -8,12 +8,15 @@
     "strictNullChecks": true,
     "experimentalDecorators": true,
     "inlineSourceMap": true,
-    "declaration": true,
-    "declarationDir": "types",
-    "baseUrl": ".",
+    "rootDir": "packages",
+    "baseUrl": "packages",
+    "declaration": false,
     "paths": {
-      "stimulus": ["src/index"]
+      "*": ["*/src", "*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": [
+    "packages/*/src/**/*.ts",
+    "packages/*/index.ts"
+  ]
 }
