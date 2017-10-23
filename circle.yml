@@ -8,6 +8,9 @@ machine:
     PATH: "${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin:${PATH}"
 
 dependencies:
+  pre:
+    - curl -o- -L https://yarnpkg.com/install.sh | bash
+    - yarn --version
   override:
     - yarn
   cache_directories:
