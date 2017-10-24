@@ -7,13 +7,13 @@ const tsconfigPath = path.join(rootPath, "tsconfig.json")
 const tsconfig = require(tsconfigPath)
 const { outDir, declarationDir, rootDir } = tsconfig.compilerOptions
 
-const sourcePackagesPath = path.join(rootPath, outDir)
+const sourceModulesPath = path.join(rootPath, outDir)
 const sourceTypesPath = path.join(rootPath, declarationDir)
 const packagesPath = path.join(rootPath, rootDir)
 
 // Copy compiled .js files to packages/*/dist/module
-fs.readdirSync(sourcePackagesPath).forEach(packageName => {
-  const srcPath = path.join(sourcePackagesPath, packageName)
+fs.readdirSync(sourceModulesPath).forEach(packageName => {
+  const srcPath = path.join(sourceModulesPath, packageName)
   const destPath = path.join(packagesPath, packageName, "dist", "module")
   fs.ensureDirSync(destPath)
   fs.copySync(srcPath, destPath)

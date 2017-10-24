@@ -11,7 +11,7 @@
     "declaration": true,
     "rootDir": "packages",
     "baseUrl": "packages",
-    "outDir": "dist/packages",
+    "outDir": "dist/modules",
     "declarationDir": "dist/types",
     "paths": {
       "*": ["*"]
