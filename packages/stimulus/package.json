@@ -18,6 +18,7 @@
     }
   ],
   "main": "dist/stimulus.js",
+  "module": "dist/module/index.js",
   "types": "dist/types/index.d.ts",
   "license": "MIT",
   "dependencies": {
@@ -27,10 +28,7 @@
     "dist"
   ],
   "scripts": {
-    "clean": "rimraf dist",
-    "prebuild": "yarn run clean",
     "build": "webpack",
-    "test": "karma start",
-    "prepare": "yarn build"
+    "test": "karma start"
   }
 }

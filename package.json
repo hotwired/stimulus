@@ -7,6 +7,15 @@
     "lint": "tslint --project tsconfig.json",
     "pretest": "yarn lint",
     "test": "lerna run --stream test",
+    "clean": "rimraf dist packages/*/dist",
+    "precompile": "yarn clean",
+    "compile": "tsc",
+    "predist": "yarn compile",
+    "dist": "yarn dist:prepare && yarn dist:modules && yarn dist:types",
+    "dist:prepare": "for dir in packages/*; do mkdir -p \"$dir/dist\"; done;",
+    "dist:modules": "cd dist/packages && for package in *; do cp -R \"$package\" \"../../packages/$package/dist/module\"; done;",
+    "dist:types": "cd dist/types && for package in *; do cp -R \"$package\" \"../../packages/$package/dist/types\"; done;",
+    "prebuild": "yarn lint && yarn dist",
     "build": "lerna run build"
   },
   "workspaces": [

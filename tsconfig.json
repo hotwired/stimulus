@@ -8,11 +8,13 @@
     "strictNullChecks": true,
     "experimentalDecorators": true,
     "inlineSourceMap": true,
+    "declaration": true,
     "rootDir": "packages",
     "baseUrl": "packages",
-    "declaration": false,
+    "outDir": "dist/packages",
+    "declarationDir": "dist/types",
     "paths": {
-      "*": ["*/src", "*"]
+      "*": ["*"]
     }
   },
   "include": [
