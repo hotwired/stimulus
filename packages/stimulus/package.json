@@ -28,7 +28,6 @@
     "dist"
   ],
   "scripts": {
-    "build": "webpack",
-    "test": "karma start"
+    "build": "webpack"
   }
 }

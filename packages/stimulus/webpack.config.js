@@ -22,22 +22,6 @@ module.exports = {
     }
   },
 
-  module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        use: [
-          { loader: "ts-loader" }
-        ]
-      }
-    ]
-  },
-
-  resolve: {
-    extensions: [".ts", ".js"],
-    modules: ["src", "node_modules"]
-  },
-
   plugins: [
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.optimize.UglifyJsPlugin(),

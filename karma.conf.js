@@ -1,5 +1,3 @@
-const webpackConfig = require("./webpack.config")
-
 const config = {
   // Run `defaults write com.apple.Safari ApplePersistenceIgnoreState YES`
   // to work around Safari tab issue: https://github.com/karma-runner/karma-safari-launcher/issues/6
@@ -10,11 +8,11 @@ const config = {
   reporters: ["progress"],
 
   files: [
-    { pattern: "test/*_test.ts" }
+    { pattern: "packages/*/test/**/*_test.ts" }
   ],
 
   preprocessors: {
-    "test/*.ts": ["webpack"]
+    "packages/**/*.ts": ["webpack"]
   },
 
   mime: {
@@ -22,8 +20,20 @@ const config = {
   },
 
   webpack: {
-    module: webpackConfig.module,
-    resolve: webpackConfig.resolve
+    module: {
+      rules: [
+        {
+          test: /\.ts$/,
+          use: [
+            { loader: "ts-loader" }
+          ]
+        }
+      ]
+    },
+
+    resolve: {
+      extensions: [".ts", ".js"]
+    }
   },
 
   client: {

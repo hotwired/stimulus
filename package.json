@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "pretest": "yarn lint",
-    "test": "lerna run --stream test",
+    "test": "karma start",
     "clean": "rimraf dist packages/.*/dist",
     "precompile": "yarn clean",
     "compile": "tsc",

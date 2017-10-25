@@ -6,8 +6,5 @@
   "devDependencies": {
     "core-js": "^2.5.1",
     "element-closest": "^2.0.2"
-  },
-  "scripts": {
-    "test": "echo 👌 && exit 0"
   }
 }
