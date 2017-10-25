@@ -1,3 +1,5 @@
+<% include layout/head %>
+
 <div data-controller="close-warning" data-action="click->close-warning#focusInput">
   <p data-target="close-warning.autosave" class="hidden">
     Would you like to restore your autosaved masterpiece?
@@ -9,3 +11,5 @@
     data-target="close-warning.input"
     data-action="input->close-warning#autosave DOMFocusOut->close-warning#addWarning DOMFocusIn->close-warning#clearWarning"></textarea>
 </div>
+
+<% include layout/tail %>

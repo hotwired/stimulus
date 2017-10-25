@@ -1,3 +1,5 @@
+<% include layout/head %>
+
 <div data-controller="wizard">
   <form method="get" action="/" data-action="wizard#nextStep" data-target="wizard.step" class="current-step">
     <h1>Step 1</h1>
@@ -33,3 +35,5 @@
     <pre data-target="wizard.results"></pre>
   </div>
 </div>
+
+<% include layout/tail %>

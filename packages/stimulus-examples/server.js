@@ -22,20 +22,9 @@ app.get("/", (req, res) => {
 })
 
 app.get("/:page", (req, res, next) => {
-  readView(req.params.page).catch(next).then(content => {
-    res.render("layout", { content })
-  })
+  res.render(req.params.page)
 })
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`)
 })
-
-function readView(page) {
-  return new Promise((resolve, reject) => {
-    const file = path.join(viewPath, `${page}.${viewEngine}`)
-    fs.readFile(file, "utf8", (error, body) => {
-      error ? reject(error) : resolve(body)
-    })
-  })
-}

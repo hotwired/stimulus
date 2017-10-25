@@ -1,3 +1,5 @@
+<% include layout/head %>
+
 <div data-controller="expander">
   <button type="button" data-action="expander#expand" data-target="expander.collapsed">Expand</button>
   <button type="button" data-action="expander#collapse" data-target="expander.expanded">Collapse</button>
@@ -41,3 +43,5 @@
   <button type="button" data-action="expander#toggle">Toggle</button>
   <p data-target="expander.expanded">Expanded! 👋</p>
 </div>
+
+<% include layout/tail %>
