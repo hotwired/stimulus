@@ -4,6 +4,7 @@
   "version": "0.4.0",
   "license": "MIT",
   "scripts": {
+    "start": "lerna run --scope stimulus-examples --stream start",
     "lint": "tslint --project tsconfig.json",
     "pretest": "yarn lint",
     "test": "karma start",
