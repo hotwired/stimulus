@@ -4,11 +4,11 @@
   "version": "0.4.0",
   "license": "MIT",
   "scripts": {
-    "start": "lerna run --scope stimulus-examples --stream start",
+    "start": "lerna run --scope @stimulus/examples --stream start",
     "lint": "tslint --project tsconfig.json",
     "pretest": "yarn lint",
     "test": "karma start",
-    "clean": "rimraf dist packages/.*/dist",
+    "clean": "rimraf dist packages/*/**/dist",
     "precompile": "yarn clean",
     "compile": "tsc",
     "predist": "yarn compile",
@@ -17,7 +17,8 @@
     "build": "lerna run build"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/@stimulus/*"
   ],
   "devDependencies": {
     "@types/qunit": "^2.0.31",

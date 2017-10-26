@@ -1,13 +1,9 @@
 {
-  "name": "stimulus",
+  "name": "@stimulus/webpack",
   "version": "0.4.0",
   "description": "👉✨",
   "author": "Basecamp, LLC",
   "contributors": [
-    {
-      "name": "David Heinemeier Hansson",
-      "email": "david@basecamp.com"
-    },
     {
       "name": "Javan Makhmali",
       "email": "javan@javan.us"
@@ -20,10 +16,6 @@
   "main": "dist/module/index.js",
   "types": "dist/types/index.d.ts",
   "license": "MIT",
-  "dependencies": {
-    "@stimulus/core": "0.4.0",
-    "@stimulus/webpack": "0.4.0"
-  },
   "files": [
     "dist"
   ]
