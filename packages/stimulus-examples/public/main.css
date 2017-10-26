@@ -78,6 +78,18 @@ main {
   background-color: white;
 }
 
+[data-controller~="bulk-checker"] form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  line-height: 1.6;
+  margin-top: 1em;
+}
+
+[data-controller~="bulk-checker"] form label {
+  width: 10em;
+}
+
 [data-controller~="expander"] {
   position: relative;
   border: 2px dotted red;

@@ -2,13 +2,17 @@
 
 <div data-controller="bulk-checker">
   <div>
-    <button type="button" data-action="bulk-checker#checkAll">Check all</button> |
+    <button type="button" data-action="bulk-checker#checkAll">Check all</button>
     <button type="button" data-action="bulk-checker#uncheckAll">Uncheck all</button>
   </div>
 
   <form>
-    <input type="checkbox" data-target="bulk-checker.checkbox" value="Jason"> Jason<br>
-    <input type="checkbox" data-target="bulk-checker.checkbox" value="David"> David
+    <% for (let i = 0; i < 80; i++) { %>
+      <label>
+        <input type="checkbox" data-target="bulk-checker.checkbox" value="<%= i %>">
+        <%= (new Date(Math.random() * 1000000000000)).toString().split(" ").slice(1,4).join(" ") %>
+      </label>
+    <% } %>
   </form>
 </div>
 
