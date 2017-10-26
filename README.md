@@ -1,6 +1,6 @@
 # Sentinella
 
-Sentinella is a JavaScript library of **practical wrappers around the DOM `MutationObserver` API**. It watches the document and can notify you of changes scoped by:
+Sentinella is a JavaScript library of practical wrappers around the DOM `MutationObserver` API. It watches the document and can **notify you of changes scoped by:**
 
 * **Attribute**. Use [AttributeObserver](#attributeobserver) to track when elements with a given attribute appear or disappear from the document, and when the values of those attributes change.
 * **Token list**. A token list is an attribute whose value is a space-separated set of tokens (like the HTML `class` attribute). Use [TokenListObserver](#tokenlistobserver) to be notified as tokens come and go.
