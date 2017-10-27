@@ -49,7 +49,7 @@ export class SelectorObserver implements ElementObserverDelegate {
   }
 
   get compositeSelector(): string {
-    const compositeSelector = Array.from(this.selectorSet).join(", ")
+    const compositeSelector = this.selectors.join(", ")
     return compositeSelector.length == 0 ? ":not(*)" : compositeSelector
   }
 
@@ -91,7 +91,7 @@ export class SelectorObserver implements ElementObserverDelegate {
     for (const selector of this.selectors) {
       if (!this.elements.has(selector, element)) {
         if (selector.matches(element)) {
-          this.recordMatch(selector, element)
+          this.elementMatchedSelector(element, selector)
         }
       }
     }
@@ -100,7 +100,7 @@ export class SelectorObserver implements ElementObserverDelegate {
   elementUnmatched(element: Element) {
     for (const selector of this.selectors) {
       if (this.elements.has(selector, element)) {
-        this.recordUnmatch(selector, element)
+        this.elementUnmatchedSelector(element, selector)
       }
     }
   }
@@ -111,21 +111,21 @@ export class SelectorObserver implements ElementObserverDelegate {
       const present = this.elements.has(selector, element)
 
       if (matched && !present) {
-        this.recordMatch(selector, element)
+        this.elementMatchedSelector(element, selector)
       } else if (present && !matched) {
-        this.recordUnmatch(selector, element)
+        this.elementUnmatchedSelector(element, selector)
       }
     }
   }
 
   // Element bookkeeping
 
-  private recordMatch(selector: Selector, element: Element) {
+  private elementMatchedSelector(element: Element, selector: Selector) {
     this.elements.add(selector, element)
     this.delegate.elementMatchedSelector(element, selector)
   }
 
-  private recordUnmatch(selector: Selector, element: Element) {
+  private elementUnmatchedSelector(element: Element, selector: Selector) {
     this.elements.delete(selector, element)
     this.delegate.elementUnmatchedSelector(element, selector)
   }
