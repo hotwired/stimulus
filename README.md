@@ -2,11 +2,11 @@
 
 Sentinella is a JavaScript library of practical wrappers around the DOM `MutationObserver` API. It watches the document and can **notify you of changes scoped by:**
 
-* **Attribute**. Use [AttributeObserver](#attributeobserver) to track when elements with a given attribute appear or disappear from the document, and when the values of those attributes change.
-* **Token list**. A token list is an attribute whose value is a space-separated set of tokens (like the HTML `class` attribute). Use [TokenListObserver](#tokenlistobserver) to be notified as tokens come and go.
-* **CSS selector**. Use [SelectorObserver](#selectorobserver) to track when elements match or stop matching a set of CSS simple selectors.
+* **Attribute**. Use [`AttributeObserver`](#attributeobserver) to track when elements with a given attribute appear or disappear from the document, and when the values of those attributes change.
+* **Token list**. A token list is an attribute whose value is a space-separated set of tokens (like the HTML `class` attribute). Use [`TokenListObserver`](#tokenlistobserver) to be notified as tokens come and go.
+* **CSS selector**. Use [`SelectorObserver`](#selectorobserver) to track when elements match or stop matching a set of CSS simple selectors.
 
-If the built-in observers don't suit your needs, you can roll your own using the low-level [ElementObserver](#elementobserver), which helps you efficiently match and track arbitrary DOM changes.
+If the built-in observers don't suit your needs, you can roll your own using the low-level [`ElementObserver`](#elementobserver), which helps you efficiently match and track arbitrary DOM changes.
 
 ## Installation
 
@@ -16,7 +16,7 @@ Or, load the `sentinella.js` browser bundle in a `<script>` tag directly and acc
 
 ## Usage
 
-Sentinella consists of a set of _observer_ classes which track the state of the document according to particular criteria with a DOM [MutationObserver](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver).
+Sentinella consists of a set of _observer_ classes which track the state of the document according to particular criteria with a DOM [`MutationObserver`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver).
 
 #### Trees Scope the Set of Observed Elements
 
@@ -36,7 +36,7 @@ _Mention TypeScript types_
 
 The browser batches `MutationObserver` records and delivers them in a [microtask](https://www.w3.org/TR/html51/webappapis.html#microtask-queue) following the mutation itself.
 
-That means Sentinella observers do not invoke their delegates' methods synchronously as changes happen, but rather at the end of the current run of the JavaScript event loop.
+That means Sentinella observers do not invoke their delegates' methods synchronously as DOM changes happen, but rather at the end of the current run of the JavaScript event loop.
 
 Delegates may be anonymous objects, or they may be instances of classes ...
 
