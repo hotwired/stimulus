@@ -118,7 +118,7 @@ export class SelectorObserver implements ElementObserverDelegate {
     }
   }
 
-  // Element bookkeeping
+  // Private
 
   private elementMatchedSelector(element: Element, selector: Selector) {
     this.elements.add(selector, element)

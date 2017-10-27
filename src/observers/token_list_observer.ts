@@ -64,14 +64,14 @@ export class TokenListObserver implements ElementObserverDelegate {
   elementMatched(element: Element) {
     const newTokens = Array.from(this.readTokenSetForElement(element))
     for (const token of newTokens) {
-      this.addTokenForElement(token, element)
+      this.elementMatchedToken(element, token)
     }
   }
 
   elementUnmatched(element: Element) {
     const tokens = this.getTokensForElement(element)
     for (const token of tokens) {
-      this.removeTokenForElement(token, element)
+      this.elementUnmatchedToken(element, token)
     }
   }
 
@@ -79,19 +79,19 @@ export class TokenListObserver implements ElementObserverDelegate {
     const newTokenSet = this.readTokenSetForElement(element)
 
     for (const token of Array.from(newTokenSet)) {
-      this.addTokenForElement(token, element)
+      this.elementMatchedToken(element, token)
     }
 
     for (const token of this.getTokensForElement(element)) {
       if (!newTokenSet.has(token)) {
-        this.removeTokenForElement(token, element)
+        this.elementUnmatchedToken(element, token)
       }
     }
   }
 
   // Private
 
-  addTokenForElement(token: string, element: Element) {
+  private elementMatchedToken(element: Element, token: string) {
     if (!this.tokensByElement.has(element, token)) {
       this.tokensByElement.add(element, token)
       if (this.delegate.elementMatchedTokenForAttribute) {
@@ -100,7 +100,7 @@ export class TokenListObserver implements ElementObserverDelegate {
     }
   }
 
-  removeTokenForElement(token: string, element: Element) {
+  private elementUnmatchedToken(element: Element, token: string) {
     if (this.tokensByElement.has(element, token)) {
       this.tokensByElement.delete(element, token)
       if (this.delegate.elementUnmatchedTokenForAttribute) {
@@ -109,11 +109,11 @@ export class TokenListObserver implements ElementObserverDelegate {
     }
   }
 
-  getTokensForElement(element: Element): string[] {
+  private getTokensForElement(element: Element): string[] {
     return this.tokensByElement.getValuesForKey(element)
   }
 
-  readTokenSetForElement(element: Element): Set<string> {
+  private readTokenSetForElement(element: Element): Set<string> {
     const tokens = new Set
     const value = element.getAttribute(this.attributeName) || ""
     for (const token of value.split(/\s+/)) {
