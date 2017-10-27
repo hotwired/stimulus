@@ -1,4 +1,10 @@
-import { elementMatchesSelector } from "./dom"
+const matches = Element.prototype.matches
+  || Element.prototype.webkitMatchesSelector
+  || Element.prototype.msMatchesSelector
+
+export function elementMatchesSelector(element: Element, selector: string): boolean {
+  return matches.call(element, selector)
+}
 
 export class Selector {
   private static selectors = new Map<string, Selector>()
