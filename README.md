@@ -10,25 +10,39 @@ If the built-in observers don't suit your needs, you can roll your own using the
 
 ## Installation
 
-Include the [`sentinella` npm package](https://www.npmjs.com/package/sentinella) in your JavaScript bundle.
+Include the [`sentinella` npm package](https://www.npmjs.com/package/sentinella) in your application using your preferred asset bundling tool.
 
-Or, load `sentinella.js` in a `<script>` tag directly and access the API through the `window.Sentinella` global.
+Or, load the `sentinella.js` browser bundle in a `<script>` tag directly and access the API through the `window.Sentinella` global.
 
 ## Usage
 
-Sentinella consists of a set of _observer_ classes ...
+Sentinella consists of a set of _observer_ classes which track the state of the document according to particular criteria with a DOM [MutationObserver](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver).
 
-The first argument to an observer's constructor is the _root element_. ...
+#### Trees Scope the Set of Observed Elements
+
+The first argument to a Sentinella observer's constructor is the _tree_—the DOM element which scopes the set of observed elements.
+
+Observers track changes to the tree element along with changes to any of its child elements.
+
+#### Delegate Objects Respond to Observed Changes
 
 Each Sentinella observer class has its own _delegate interface_, which is the set of callback methods that notify you of relevant changes to the document.
 
 To use an observer, you must provide an object which impelements its delegate interface. This object is known as a _delegate_ and is always the last argument of the observer's constructor.
 
+_Mention TypeScript types_
+
+#### Delegate Method Invocations are Deferred
+
+The browser batches `MutationObserver` records and delivers them in a [microtask](https://www.w3.org/TR/html51/webappapis.html#microtask-queue) following the mutation itself.
+
+That means Sentinella observers do not invoke their delegates' methods synchronously as changes happen, but rather at the end of the current run of the JavaScript event loop.
+
+Delegates may be anonymous objects, or they may be instances of classes ...
+
 _Define match and unmatch_
 
 _Mention starting and stopping_
-
-_Mention TypeScript types_
 
 ### `AttributeObserver`
 
@@ -37,7 +51,7 @@ The `AttributeObserver` class observes all elements in a tree with a particular 
 ```js
 import { AttributeObserver } from "sentinella"
 
-const element = document.documentElement
+const tree = document.documentElement
 const attributeName = "data-example"
 const delegate = {
   elementMatchedAttribute(element, attributeName) {
@@ -51,7 +65,7 @@ const delegate = {
   }
 }
 
-const observer = new AttributeObserver(element, attributeName, delegate)
+const observer = new AttributeObserver(tree, attributeName, delegate)
 observer.start()
 ```
 
@@ -62,5 +76,3 @@ Since each delegate method receives the matching element and attribute name, it 
 ### `SelectorObserver`
 
 ### `ElementObserver`
-
-Delegates may be anonymous objects, or they may be instances of classes ...
