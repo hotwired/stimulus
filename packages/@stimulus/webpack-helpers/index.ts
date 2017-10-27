@@ -1,4 +1,4 @@
-import { Application } from "stimulus"
+import { Application } from "@stimulus/core"
 
 // https://webpack.js.org/guides/dependency-management/#require-context
 export interface ContextModule {
