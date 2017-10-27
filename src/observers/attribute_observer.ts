@@ -1,9 +1,9 @@
 import { ElementObserver, ElementObserverDelegate } from "./element_observer"
 
 export interface AttributeObserverDelegate {
-  elementMatchedAttribute(element: Element, attributeName: string)
-  elementAttributeValueChanged(element: Element, attributeName: string)
-  elementUnmatchedAttribute(element: Element, attributeName: string)
+  elementMatchedAttribute?(element: Element, attributeName: string)
+  elementAttributeValueChanged?(element: Element, attributeName: string)
+  elementUnmatchedAttribute?(element: Element, attributeName: string)
 }
 
 export class AttributeObserver implements ElementObserverDelegate {
@@ -48,15 +48,19 @@ export class AttributeObserver implements ElementObserverDelegate {
   }
 
   elementMatched(element: Element) {
-    this.delegate.elementMatchedAttribute(element, this.attributeName)
+    if (this.delegate.elementMatchedAttribute) {
+      this.delegate.elementMatchedAttribute(element, this.attributeName)
+    }
   }
 
   elementUnmatched(element: Element) {
-    this.delegate.elementUnmatchedAttribute(element, this.attributeName)
+    if (this.delegate.elementUnmatchedAttribute) {
+      this.delegate.elementUnmatchedAttribute(element, this.attributeName)
+    }
   }
 
   elementAttributeChanged(element: Element, attributeName: string) {
-    if (attributeName == this.attributeName) {
+    if (this.delegate.elementAttributeValueChanged && this.attributeName == attributeName) {
       this.delegate.elementAttributeValueChanged(element, attributeName)
     }
   }

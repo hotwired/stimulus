@@ -3,8 +3,8 @@ import { Selector, elementMatchesSelector } from "../support/selector"
 import { Multimap } from "../support/multimap"
 
 export interface SelectorObserverDelegate {
-  elementMatchedSelector(element: Element, selector: Selector)
-  elementUnmatchedSelector(element: Element, selector: Selector)
+  elementMatchedSelector?(element: Element, selector: Selector)
+  elementUnmatchedSelector?(element: Element, selector: Selector)
 }
 
 export class SelectorObserver implements ElementObserverDelegate {
@@ -122,11 +122,15 @@ export class SelectorObserver implements ElementObserverDelegate {
 
   private elementMatchedSelector(element: Element, selector: Selector) {
     this.elements.add(selector, element)
-    this.delegate.elementMatchedSelector(element, selector)
+    if (this.delegate.elementMatchedSelector) {
+      this.delegate.elementMatchedSelector(element, selector)
+    }
   }
 
   private elementUnmatchedSelector(element: Element, selector: Selector) {
     this.elements.delete(selector, element)
-    this.delegate.elementUnmatchedSelector(element, selector)
+    if (this.delegate.elementUnmatchedSelector) {
+      this.delegate.elementUnmatchedSelector(element, selector)
+    }
   }
 }

@@ -2,8 +2,8 @@ import { ElementObserver, ElementObserverDelegate } from "./element_observer"
 import { Multimap } from "../support/multimap"
 
 export interface TokenListObserverDelegate {
-  elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string)
-  elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string)
+  elementMatchedTokenForAttribute?(element: Element, token: string, attributeName: string)
+  elementUnmatchedTokenForAttribute?(element: Element, token: string, attributeName: string)
 }
 
 export class TokenListObserver implements ElementObserverDelegate {
@@ -94,14 +94,18 @@ export class TokenListObserver implements ElementObserverDelegate {
   addTokenForElement(token: string, element: Element) {
     if (!this.tokensByElement.has(element, token)) {
       this.tokensByElement.add(element, token)
-      this.delegate.elementMatchedTokenForAttribute(element, token, this.attributeName)
+      if (this.delegate.elementMatchedTokenForAttribute) {
+        this.delegate.elementMatchedTokenForAttribute(element, token, this.attributeName)
+      }
     }
   }
 
   removeTokenForElement(token: string, element: Element) {
     if (this.tokensByElement.has(element, token)) {
       this.tokensByElement.delete(element, token)
-      this.delegate.elementUnmatchedTokenForAttribute(element, token, this.attributeName)
+      if (this.delegate.elementUnmatchedTokenForAttribute) {
+        this.delegate.elementUnmatchedTokenForAttribute(element, token, this.attributeName)
+      }
     }
   }
 

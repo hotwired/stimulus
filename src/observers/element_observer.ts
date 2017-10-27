@@ -2,9 +2,9 @@ export interface ElementObserverDelegate {
   matchElement(element: Element): boolean
   matchElementsInTree(tree: Element): Element[]
 
-  elementMatched(element: Element)
-  elementUnmatched(element: Element)
-  elementAttributeChanged(element: Element, attributeName: string)
+  elementMatched?(element: Element)
+  elementUnmatched?(element: Element)
+  elementAttributeChanged?(element: Element, attributeName: string)
 }
 
 export class ElementObserver {
@@ -76,7 +76,7 @@ export class ElementObserver {
   private processAttributeChange(node: Node, attributeName: string) {
     const element = node as Element
     if (this.elements.has(element)) {
-      if (this.matchElement(element)) {
+      if (this.delegate.elementAttributeChanged && this.matchElement(element)) {
         this.delegate.elementAttributeChanged(element, attributeName)
       } else {
         this.removeElement(element)
@@ -128,14 +128,18 @@ export class ElementObserver {
   private addElement(element: Element) {
     if (!this.elements.has(element)) {
       this.elements.add(element)
-      this.delegate.elementMatched(element)
+      if (this.delegate.elementMatched) {
+        this.delegate.elementMatched(element)
+      }
     }
   }
 
   private removeElement(element: Element) {
     if (this.elements.has(element)) {
       this.elements.delete(element)
-      this.delegate.elementUnmatched(element)
+      if (this.delegate.elementUnmatched) {
+        this.delegate.elementUnmatched(element)
+      }
     }
   }
 }
