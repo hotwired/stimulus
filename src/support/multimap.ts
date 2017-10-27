@@ -3,8 +3,8 @@ export class Multimap<Key, Value> {
   keysByValue: Map<Value, Set<Key>>
 
   constructor() {
-    this.valuesByKey = new Map<Key, Set<Value>>()
-    this.keysByValue = new Map<Value, Set<Key>>()
+    this.valuesByKey = new Map
+    this.keysByValue = new Map
   }
 
   add(key: Key, value: Value) {
@@ -44,7 +44,7 @@ function add<A, B>(a: A, b: B, bsByA: Map<A, Set<B>>) {
   if (bsByA.has(a)) {
     bs = bsByA.get(a)
   } else {
-    bs = new Set<B>()
+    bs = new Set
     bsByA.set(a, bs)
   }
 

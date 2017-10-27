@@ -19,9 +19,9 @@ export class SelectorObserver implements ElementObserverDelegate {
     this.delegate = delegate
 
     this.elementObserver = new ElementObserver(element, this)
-    this.selectorSet = new Set<Selector>()
-    this.elements = new Multimap<Selector, Element>()
-    this.attributes = new Multimap<Selector, string>()
+    this.selectorSet = new Set
+    this.elements = new Multimap
+    this.attributes = new Multimap
   }
 
   get started(): boolean {

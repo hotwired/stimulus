@@ -7,7 +7,7 @@ export function elementMatchesSelector(element: Element, selector: string): bool
 }
 
 export class Selector {
-  private static selectors = new Map<string, Selector>()
+  private static selectors = new Map
 
   static get(source) {
     let selector: Selector
@@ -142,7 +142,7 @@ class Token {
 }
 
 function attributesFromTokens(tokens: Token[]): Set<string> {
-  const result = new Set<string>()
+  const result = new Set
   for (const token of tokens) {
     const attribute = token.attribute
     if (attribute != undefined) {

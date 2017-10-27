@@ -15,6 +15,6 @@ export function setFixture(content: string | Element) {
   }
 }
 
-export function nextFrame(): Promise<number> {
+export function nextFrame() {
   return new Promise(requestAnimationFrame)
 }

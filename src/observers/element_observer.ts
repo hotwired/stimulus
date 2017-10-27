@@ -20,7 +20,7 @@ export class ElementObserver {
     this.started = false
     this.delegate = delegate
 
-    this.elements = new Set<Element>()
+    this.elements = new Set
     this.mutationObserver = new MutationObserver((mutations) => this.processMutations(mutations))
   }
 
@@ -42,7 +42,7 @@ export class ElementObserver {
 
   refresh() {
     if (this.started) {
-      const matches = new Set<Element>(this.matchElementsInTree())
+      const matches = new Set(this.matchElementsInTree())
 
       for (const element of Array.from(this.elements)) {
         if (!matches.has(element)) {

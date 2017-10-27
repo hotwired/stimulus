@@ -6,7 +6,7 @@ import {
 } from "sentinella"
 
 export class Recorder {
-  entries: Array<object>
+  entries: object[]
 
   constructor() {
     this.reset()
@@ -16,7 +16,7 @@ export class Recorder {
     return this.entries[this.entries.length - 1]
   }
 
-  record(methodName: string, args: Array<any>) {
+  record(methodName: string, args: any[]) {
     const entry = {}
     entry[methodName] = args
     this.entries.push(entry)

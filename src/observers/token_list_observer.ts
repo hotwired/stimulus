@@ -18,7 +18,7 @@ export class TokenListObserver implements ElementObserverDelegate {
     this.delegate = delegate
 
     this.elementObserver = new ElementObserver(element, this)
-    this.tokensByElement = new Multimap<Element, string>()
+    this.tokensByElement = new Multimap
   }
 
   get started(): boolean {
@@ -110,7 +110,7 @@ export class TokenListObserver implements ElementObserverDelegate {
   }
 
   readTokenSetForElement(element: Element): Set<string> {
-    const tokens = new Set<string>()
+    const tokens = new Set
     const value = element.getAttribute(this.attributeName) || ""
     for (const token of value.split(/\s+/)) {
       if (token.length) {
