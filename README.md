@@ -20,33 +20,33 @@ Sentinella consists of a set of _observer_ classes which track the state of the 
 
 #### Trees Scope the Set of Observed Elements
 
-The first argument to a Sentinella observer's constructor is the _tree_—the DOM element which scopes the set of observed elements.
+The first argument to a Sentinella observer's constructor is the _tree_—the DOM element which scopes the set of observed elements. Observers track changes to the tree element and all of its children.
 
-Observers track changes to the tree element along with changes to any of its child elements.
+To observe changes to the entire document, pass `document.documentElement` as the tree element.
 
 #### Delegate Objects Respond to Observed Changes
 
 Each Sentinella observer class has its own _delegate interface_, which is the set of callback methods that notify you of relevant changes to the document.
 
-To use an observer, you must provide an object which impelements its delegate interface. This object is known as a _delegate_ and is always the last argument of the observer's constructor.
+To use an observer, you must provide an object which implements its delegate interface. This object is known as a _delegate_ and is always the last argument of the observer's constructor.
 
-_Mention TypeScript types_
+Delegates may be anonymous objects, or they may be instances of classes with other associated methods and state. In some cases, it may be appropriate for a single object to serve as the delegate for multiple observers.
 
 #### Delegate Method Invocations are Deferred
 
-The browser batches `MutationObserver` records and delivers them in a [microtask](https://www.w3.org/TR/html51/webappapis.html#microtask-queue) following the mutation itself.
+The browser batches `MutationObserver` change notifications and delivers them in a [microtask](https://www.w3.org/TR/html51/webappapis.html#microtask-queue) following the mutation itself.
 
 That means Sentinella observers do not invoke their delegates' methods synchronously as DOM changes happen, but rather at the end of the current run of the JavaScript event loop.
-
-Delegates may be anonymous objects, or they may be instances of classes ...
 
 _Define match and unmatch_
 
 _Mention starting and stopping_
 
-### `AttributeObserver`
+### Using `AttributeObserver` to Track Attribute Presence and Value Changes
 
 The `AttributeObserver` class observes all elements in a tree with a particular attribute.
+
+#### Example
 
 ```js
 import { AttributeObserver } from "sentinella"
@@ -71,8 +71,9 @@ observer.start()
 
 Since each delegate method receives the matching element and attribute name, it is possible to connect multiple `AttributeObserver` instances to a single delegate object.
 
-### `TokenListObserver`
+### Using `TokenListObserver` to Track Space-Separated Tokens in Attribute Values
 
-### `SelectorObserver`
+### Using `SelectorObserver` to Track Presence of Elements Matching CSS Selectors
 
-### `ElementObserver`
+### Using `ElementObserver` to Build Custom Tracking Behavior
+
