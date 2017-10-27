@@ -22,7 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "@stimulus/core": "0.4.0",
-    "@stimulus/webpack": "0.4.0"
+    "@stimulus/webpack-helpers": "0.4.0"
   },
   "files": [
     "dist"
