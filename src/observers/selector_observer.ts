@@ -1,7 +1,7 @@
 import { ElementObserver, ElementObserverDelegate } from "./element_observer"
-import { Selector } from "../selector"
-import { Multimap } from "../multimap"
-import { elementMatchesSelector } from "../dom"
+import { Selector } from "../support/selector"
+import { Multimap } from "../support/multimap"
+import { elementMatchesSelector } from "../support/dom"
 
 export interface SelectorObserverDelegate {
   elementMatchedSelector(element: Element, selector: Selector)
