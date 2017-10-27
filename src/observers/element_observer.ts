@@ -74,7 +74,7 @@ export class ElementObserver {
   }
 
   private processAttributeChange(node: Node, attributeName: string) {
-    const element = <Element>node
+    const element = node as Element
     if (this.elements.has(element)) {
       if (this.matchElement(element)) {
         this.delegate.elementAttributeChanged(element, attributeName)
@@ -119,7 +119,7 @@ export class ElementObserver {
 
   private elementFromNode(node: Node): Element | undefined {
     if (node.nodeType == Node.ELEMENT_NODE) {
-      return <Element>node
+      return node as Element
     }
   }
 
