@@ -22,7 +22,7 @@
   "types": "dist/types/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "sentinella": "^0.2.0"
+    "@stimulus/sentinella": "0.4.0"
   },
   "files": [
     "dist"

@@ -2,7 +2,7 @@ import { Action } from "./action"
 import { Context } from "./context"
 import { Descriptor } from "./descriptor"
 import { Multimap } from "./multimap"
-import { TokenListObserver, TokenListObserverDelegate } from "sentinella"
+import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/sentinella"
 
 export interface InlineActionObserverDelegate {
   inlineActionConnected(action: Action)
