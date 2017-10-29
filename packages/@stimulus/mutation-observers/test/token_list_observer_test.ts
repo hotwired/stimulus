@@ -1,7 +1,7 @@
 import { test, testGroup, nextFrame } from "./lib/helpers"
 import { TestEnvironment } from "./lib/environment"
 import { TokenListObserverRecorder } from "./lib/delegate_recorders"
-import { TokenListObserver } from "@stimulus/sentinella"
+import { TokenListObserver } from "@stimulus/mutation-observers"
 
 testGroup("TokenListObserver", hooks => {
   hooks.beforeEach(() => { this.env = TestEnvironment.setup(TokenListObserver, TokenListObserverRecorder) })

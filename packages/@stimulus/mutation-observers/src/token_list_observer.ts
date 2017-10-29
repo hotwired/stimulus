@@ -1,5 +1,5 @@
 import { ElementObserver, ElementObserverDelegate } from "./element_observer"
-import { Multimap } from "../support/multimap"
+import { Multimap } from "@stimulus/multimap"
 
 export interface TokenListObserverDelegate {
   elementMatchedTokenForAttribute?(element: Element, token: string, attributeName: string)

@@ -22,7 +22,7 @@
   "types": "dist/types/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@stimulus/sentinella": "0.4.0"
+    "@stimulus/mutation-observers": "0.4.0"
   },
   "files": [
     "dist"

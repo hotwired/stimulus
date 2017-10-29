@@ -3,7 +3,7 @@ import { Configuration } from "./configuration"
 import { Context } from "./context"
 import { ContextSet } from "./context_set"
 import { ControllerConstructor } from "./controller"
-import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/sentinella"
+import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation-observers"
 
 export class Router implements TokenListObserverDelegate {
   application: Application
