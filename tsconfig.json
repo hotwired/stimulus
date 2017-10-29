@@ -19,6 +19,8 @@
   },
   "include": [
     "packages/*/src/**/*.ts",
-    "packages/*/index.ts"
+    "packages/*/index.ts",
+    "packages/@stimulus/*/src/**/*.ts",
+    "packages/@stimulus/*/index.ts"
   ]
 }

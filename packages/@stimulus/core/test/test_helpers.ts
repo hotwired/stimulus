@@ -1,4 +1,4 @@
-import "stimulus-polyfills"
+import "@stimulus/polyfills"
 import { Application, Controller, on } from "stimulus"
 const { assert, module, test } = QUnit
 
