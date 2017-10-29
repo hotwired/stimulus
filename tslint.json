@@ -1,9 +1,0 @@
-{
-  "rules": {
-    "no-unused-expression": true,
-    "no-unused-variable": true,
-    "prefer-const": true,
-    "semicolon": [true, "never"],
-    "quotemark": [true, "double", "avoid-escape"]
-  }
-}

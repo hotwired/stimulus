@@ -1,4 +1,4 @@
-import "polyfills"
+import "@stimulus/polyfills"
 
 const { test, module } = QUnit
 export { test, module as testGroup }

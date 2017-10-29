@@ -1,7 +1,7 @@
 import { test, testGroup, nextFrame } from "./lib/helpers"
 import { TestEnvironment } from "./lib/environment"
 import { AttributeObserverRecorder } from "./lib/delegate_recorders"
-import { AttributeObserver } from "sentinella"
+import { AttributeObserver } from "@stimulus/sentinella"
 
 testGroup("AttributeObserver", hooks => {
   hooks.beforeEach(() => { this.env = TestEnvironment.setup(AttributeObserver, AttributeObserverRecorder) })

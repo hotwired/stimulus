@@ -3,7 +3,7 @@ import {
   AttributeObserverDelegate,
   TokenListObserver,
   TokenListObserverDelegate
-} from "sentinella"
+} from "@stimulus/sentinella"
 
 export class Recorder {
   entries: object[]
