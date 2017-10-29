@@ -1,5 +1,5 @@
 import { ElementObserver, ElementObserverDelegate } from "./element_observer"
-import { Multimap } from "@stimulus/multimap"
+import { IndexedMultimap } from "@stimulus/multimap"
 
 export interface TokenListObserverDelegate {
   elementMatchedTokenForAttribute?(element: Element, token: string, attributeName: string)
@@ -11,14 +11,14 @@ export class TokenListObserver implements ElementObserverDelegate {
   private delegate: TokenListObserverDelegate
 
   private elementObserver: ElementObserver
-  private tokensByElement: Multimap<Element, string>
+  private tokensByElement: IndexedMultimap<Element, string>
 
   constructor(element: Element, attributeName: string, delegate: TokenListObserverDelegate) {
     this.attributeName = attributeName
     this.delegate = delegate
 
     this.elementObserver = new ElementObserver(element, this)
-    this.tokensByElement = new Multimap
+    this.tokensByElement = new IndexedMultimap
   }
 
   get started(): boolean {
