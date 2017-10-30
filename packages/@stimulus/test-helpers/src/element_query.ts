@@ -1,4 +1,4 @@
-import { Configuration } from "./configuration"
+import { Configuration } from "@stimulus/core"
 
 export type ElementQueryDescriptor = string | ElementQueryOptions
 export type ElementQueryOptions = {

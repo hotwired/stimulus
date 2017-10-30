@@ -1,6 +1,8 @@
-import { Application } from "./application"
-import { ConfigurationOptions, createConfiguration } from "./configuration"
-import { Controller, ControllerConstructor } from "./controller"
+import {
+  Application,
+  ConfigurationOptions, createConfiguration,
+  Controller, ControllerConstructor
+} from "@stimulus/core"
 import { ElementQuery, ElementQueryDescriptor } from "./element_query"
 import { createEvent } from "./event"
 
