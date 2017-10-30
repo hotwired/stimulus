@@ -3,7 +3,7 @@ import {
   AttributeObserverDelegate,
   TokenListObserver,
   TokenListObserverDelegate
-} from "@stimulus/sentinella"
+} from "@stimulus/mutation-observers"
 
 export class Recorder {
   entries: object[]
