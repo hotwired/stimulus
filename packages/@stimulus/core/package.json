@@ -1,6 +1,6 @@
 {
   "name": "@stimulus/core",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "👉✨",
   "author": "Basecamp, LLC",
   "contributors": [
@@ -21,7 +21,7 @@
   "types": "dist/types/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@stimulus/mutation-observers": "0.4.0"
+    "@stimulus/mutation-observers": "^0.5.0"
   },
   "files": [
     "dist"
