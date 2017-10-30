@@ -1,6 +1,6 @@
 import { Action } from "./action"
+import { ActionDescriptor } from "./action_descriptor"
 import { Context } from "./context"
-import { Descriptor } from "./descriptor"
 import { Multimap } from "@stimulus/multimap"
 import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation-observers"
 
@@ -73,7 +73,7 @@ export class InlineActionObserver implements TokenListObserverDelegate {
 
   private buildActionForElementWithDescriptorString(element: Element, descriptorString: string) {
     try {
-      const descriptor = Descriptor.forElementWithInlineDescriptorString(element, descriptorString)
+      const descriptor = ActionDescriptor.forElementWithInlineDescriptorString(element, descriptorString)
       if (descriptor.identifier == this.identifier) {
         return new Action(this.context, descriptor, this.element, eventTarget => eventTarget == element)
       }

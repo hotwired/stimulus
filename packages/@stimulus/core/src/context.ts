@@ -1,10 +1,10 @@
 import { Action } from "./action"
+import { ActionDescriptor } from "./action_descriptor"
 import { Application } from "./application"
 import { Configuration } from "./configuration"
 import { ContextSet } from "./context_set"
 import { Controller } from "./controller"
 import { DataMap } from "./data_map"
-import { Descriptor } from "./descriptor"
 import { Dispatcher } from "./dispatcher"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
 import { Logger, LoggerTag } from "./logger"
@@ -113,7 +113,7 @@ export class Context implements InlineActionObserverDelegate {
       if (!isEventTarget(eventTarget)) {
         eventTarget = this.element
       }
-      const descriptor = Descriptor.forElementWithInlineDescriptorString(eventTarget, descriptorString)
+      const descriptor = ActionDescriptor.forElementWithInlineDescriptorString(eventTarget, descriptorString)
       action = new Action(this, descriptor, eventTarget)
     }
 

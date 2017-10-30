@@ -1,16 +1,16 @@
+import { ActionDescriptor } from "./action_descriptor"
 import { Context } from "./context"
 import { Controller } from "./controller"
-import { Descriptor } from "./descriptor"
 
 export type EventTargetMatcher = (eventTarget: EventTarget) => boolean
 
 export class Action {
   context: Context
-  descriptor: Descriptor
+  descriptor: ActionDescriptor
   eventTarget: EventTarget
   delegatedTargetMatcher?: EventTargetMatcher
 
-  constructor(context: Context, descriptor: Descriptor, eventTarget: EventTarget, delegatedTargetMatcher?: EventTargetMatcher) {
+  constructor(context: Context, descriptor: ActionDescriptor, eventTarget: EventTarget, delegatedTargetMatcher?: EventTargetMatcher) {
     this.context = context
     this.descriptor = descriptor
     this.eventTarget = eventTarget
