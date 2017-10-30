@@ -7,7 +7,7 @@ export interface DescriptorOptions {
   methodName?: string
 }
 
-export class Descriptor {
+export class ActionDescriptor {
   private static defaultEventNames: { [tagName: string]: (element: Element) => string } = {
     "a":        e => "click",
     "button":   e => "click",
@@ -22,8 +22,8 @@ export class Descriptor {
   eventName: string
   methodName: string
 
-  static forOptions(options: DescriptorOptions): Descriptor {
-    return new Descriptor(
+  static forOptions(options: DescriptorOptions): ActionDescriptor {
+    return new ActionDescriptor(
       options.identifier || error("Missing identifier in descriptor"),
       options.targetName || null,
       options.eventName  || error("Missing event name in descriptor"),
@@ -31,11 +31,11 @@ export class Descriptor {
     )
   }
 
-  static forElementWithInlineDescriptorString(element: Element, descriptorString: string): Descriptor {
+  static forElementWithInlineDescriptorString(element: Element, descriptorString: string): ActionDescriptor {
     try {
       const options = this.parseOptionsFromInlineActionDescriptorString(descriptorString)
       options.eventName = options.eventName || this.getDefaultEventNameForElement(element)
-      return Descriptor.forOptions(options)
+      return ActionDescriptor.forOptions(options)
     } catch (error) {
       throw new Error(`Bad descriptor "${descriptorString}": ${error.message}`)
     }
@@ -62,7 +62,7 @@ export class Descriptor {
     this.methodName = methodName
   }
 
-  isEqualTo(descriptor: Descriptor | null): boolean {
+  isEqualTo(descriptor: ActionDescriptor | null): boolean {
     return descriptor != null &&
       descriptor.identifier == this.identifier &&
       descriptor.targetName == this.targetName &&

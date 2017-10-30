@@ -1,6 +1,6 @@
 import { Application } from "./application"
 import { Context } from "./context"
-import { ControllerConstructor } from "./controller"
+import { Controller, ControllerConstructor } from "./controller"
 import { Router } from "./router"
 
 export class ContextSet {
@@ -26,6 +26,10 @@ export class ContextSet {
 
   get contexts(): Context[] {
     return Array.from(this.connectedContexts)
+  }
+
+  get controllers(): Controller[] {
+    return this.contexts.map(context => context.controller)
   }
 
   get size(): number {
