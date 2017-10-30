@@ -2,18 +2,18 @@ import { Application } from "./application"
 import { Configuration } from "./configuration"
 import { Context } from "./context"
 import { ContextSet } from "./context_set"
-import { ControllerConstructor } from "./controller"
+import { Controller, ControllerConstructor } from "./controller"
 import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation-observers"
 
 export class Router implements TokenListObserverDelegate {
   application: Application
   private tokenListObserver: TokenListObserver
-  private contextSets: Map<string, ContextSet>
+  private contextSetsByIdentifier: Map<string, ContextSet>
 
   constructor(application: Application) {
     this.application = application
     this.tokenListObserver = new TokenListObserver(this.element, this.controllerAttribute, this)
-    this.contextSets = new Map
+    this.contextSetsByIdentifier = new Map
   }
 
   get configuration(): Configuration {
@@ -28,6 +28,14 @@ export class Router implements TokenListObserverDelegate {
     return this.configuration.controllerAttribute
   }
 
+  get controllers(): Controller[] {
+    return this.contextSets.reduce((contextSets, contextSet) => contextSets.concat(contextSet.controllers), [] as Controller[])
+  }
+
+  get contextSets(): ContextSet[] {
+    return Array.from(this.contextSetsByIdentifier.values())
+  }
+
   start() {
     this.tokenListObserver.start()
   }
@@ -37,20 +45,20 @@ export class Router implements TokenListObserverDelegate {
   }
 
   register(identifier: string, controllerConstructor: ControllerConstructor) {
-    if (this.contextSets.has(identifier)) {
+    if (this.contextSetsByIdentifier.has(identifier)) {
       throw new Error(`Router already has a controller registered with the identifier '${identifier}'`)
     }
 
     const contextSet = new ContextSet(this, identifier, controllerConstructor)
-    this.contextSets.set(identifier, contextSet)
+    this.contextSetsByIdentifier.set(identifier, contextSet)
     this.connectContextSet(contextSet)
   }
 
   unregister(identifier: string) {
-    const contextSet = this.contextSets.get(identifier)
+    const contextSet = this.contextSetsByIdentifier.get(identifier)
     if (contextSet) {
       this.disconnectContextSet(contextSet)
-      this.contextSets.delete(identifier)
+      this.contextSetsByIdentifier.delete(identifier)
     }
   }
 
@@ -67,7 +75,7 @@ export class Router implements TokenListObserverDelegate {
   // Contexts
 
   getContextForElementAndIdentifier(element: Element, identifier: string): Context | undefined {
-    const contextSet = this.contextSets.get(identifier)
+    const contextSet = this.contextSetsByIdentifier.get(identifier)
     if (contextSet) {
       return contextSet.getContextForElement(element)
     }
@@ -88,14 +96,14 @@ export class Router implements TokenListObserverDelegate {
   }
 
   private connectContextForIdentifierToElement(identifier: string, element: Element) {
-    const contextSet = this.contextSets.get(identifier)
+    const contextSet = this.contextSetsByIdentifier.get(identifier)
     if (contextSet) {
       contextSet.connect(element)
     }
   }
 
   private disconnectContextForIdentifierFromElement(identifier: string, element: Element) {
-    const contextSet = this.contextSets.get(identifier)
+    const contextSet = this.contextSetsByIdentifier.get(identifier)
     if (contextSet) {
       contextSet.disconnect(element)
     }
