@@ -27,5 +27,8 @@
   "scripts": {
     "prepublish": "yarn run build",
     "build": "webpack"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
