@@ -3,23 +3,14 @@ const webpack = require("webpack")
 
 module.exports = {
   entry: {
-    stimulus: "./dist/module/index.js"
+    stimulus: "./index.js"
   },
 
   output: {
-    filename: "[name].js",
+    filename: "[name].umd.js",
     path: path.resolve("./dist"),
     library: "Stimulus",
     libraryTarget: "umd"
-  },
-
-  externals: {
-    sentinella: {
-      commonjs: "sentinella",
-      commonjs2: "sentinella",
-      amd: "sentinella",
-      root: "Sentinella"
-    }
   },
 
   plugins: [
@@ -27,7 +18,7 @@ module.exports = {
     new webpack.optimize.UglifyJsPlugin(),
     new webpack.BannerPlugin({
       banner: (() => {
-        const {version} = require('./package.json')
+        const { version } = require('../../lerna.json')
         const year = new Date().getFullYear()
         return `/*\nStimulus ${version}\nCopyright © ${year} Basecamp, LLC\n */`
       })(),

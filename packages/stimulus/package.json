@@ -17,9 +17,14 @@
       "email": "sstephenson@gmail.com"
     }
   ],
+  "main": "dist/stimulus.umd.js",
+  "module": "index.js",
   "license": "MIT",
   "dependencies": {
     "@stimulus/core": "0.4.0",
     "@stimulus/webpack-helpers": "0.4.0"
+  },
+  "scripts": {
+    "build": "webpack"
   }
 }

@@ -17,8 +17,7 @@
       "email": "sstephenson@gmail.com"
     }
   ],
-  "main": "dist/stimulus.js",
-  "module": "dist/module/index.js",
+  "main": "dist/module/index.js",
   "types": "dist/types/index.d.ts",
   "license": "MIT",
   "dependencies": {
@@ -26,8 +25,5 @@
   },
   "files": [
     "dist"
-  ],
-  "scripts": {
-    "build": "webpack"
-  }
+  ]
 }
