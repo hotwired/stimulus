@@ -1,13 +1,9 @@
 {
-  "name": "@stimulus/core",
+  "name": "@stimulus/mutation-observers",
   "version": "0.4.0",
-  "description": "👉✨",
+  "description": "Practical wrappers around DOM MutationObserver",
   "author": "Basecamp, LLC",
   "contributors": [
-    {
-      "name": "David Heinemeier Hansson",
-      "email": "david@basecamp.com"
-    },
     {
       "name": "Javan Makhmali",
       "email": "javan@javan.us"
@@ -17,17 +13,13 @@
       "email": "sstephenson@gmail.com"
     }
   ],
-  "main": "dist/stimulus.js",
-  "module": "dist/module/index.js",
+  "main": "dist/module/index.js",
   "types": "dist/types/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@stimulus/mutation-observers": "0.4.0"
+    "@stimulus/multimap": "0.4.0"
   },
   "files": [
     "dist"
-  ],
-  "scripts": {
-    "build": "webpack"
-  }
+  ]
 }

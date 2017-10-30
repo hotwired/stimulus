@@ -1,8 +1,8 @@
 import { Action } from "./action"
 import { Context } from "./context"
 import { Descriptor } from "./descriptor"
-import { Multimap } from "./multimap"
-import { TokenListObserver, TokenListObserverDelegate } from "sentinella"
+import { Multimap } from "@stimulus/multimap"
+import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation-observers"
 
 export interface InlineActionObserverDelegate {
   inlineActionConnected(action: Action)
@@ -67,7 +67,7 @@ export class InlineActionObserver implements TokenListObserverDelegate {
   private getConnectedActionForElementWithDescriptorString(element: Element, descriptorString: string) {
     const newAction = this.buildActionForElementWithDescriptorString(element, descriptorString)
     if (newAction) {
-      return this.connectedActions.get(element).find(action => action.hasSameDescriptorAs(newAction))
+      return this.connectedActions.getValuesForKey(element).find(action => action.hasSameDescriptorAs(newAction))
     }
   }
 

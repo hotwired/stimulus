@@ -1,5 +1,5 @@
 import { Action } from "./action"
-import { Multimap } from "./multimap"
+import { Multimap } from "@stimulus/multimap"
 
 export class ActionSet {
   private actionsByEventName: Multimap<string, Action>
@@ -25,6 +25,6 @@ export class ActionSet {
   }
 
   getActionsForEventName(eventName: string): Action[] {
-    return this.actionsByEventName.get(eventName)
+    return this.actionsByEventName.getValuesForKey(eventName)
   }
 }
