@@ -17,6 +17,9 @@
   "types": "dist/types/index.d.ts",
   "license": "MIT",
   "files": [
-    "dist"
+    "dist/module/index.js",
+    "dist/module/src/*.js",
+    "dist/module/types/index.d.ts",
+    "dist/module/types/src/*.d.ts"
   ]
 }

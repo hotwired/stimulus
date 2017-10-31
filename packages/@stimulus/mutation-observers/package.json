@@ -20,6 +20,9 @@
     "@stimulus/multimap": "0.4.0"
   },
   "files": [
-    "dist"
+    "dist/module/index.js",
+    "dist/module/src/*.js",
+    "dist/module/types/index.d.ts",
+    "dist/module/types/src/*.d.ts"
   ]
 }
