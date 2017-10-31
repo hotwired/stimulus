@@ -6,7 +6,7 @@
   "scripts": {
     "start": "lerna run --scope @stimulus/examples --stream start",
     "lint": "tslint --project tsconfig.json",
-    "pretest": "yarn lint",
+    "pretest": "yarn clean && yarn lint",
     "test": "karma start",
     "clean": "rimraf dist packages/*/dist packages/*/**/dist",
     "precompile": "yarn clean",
