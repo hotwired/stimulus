@@ -5,17 +5,22 @@
   "license": "MIT",
   "scripts": {
     "start": "lerna run --scope @stimulus/examples --stream start",
+    "clean": "rimraf dist packages/*/dist packages/*/**/dist",
     "lint": "tslint --project tsconfig.json",
+
     "pretest": "yarn clean && yarn lint",
     "test": "karma start",
-    "clean": "rimraf dist packages/*/dist packages/*/**/dist",
+
     "precompile": "yarn clean",
     "compile": "tsc",
+
     "predist": "yarn compile",
     "dist": "node script/dist-to-packages.js",
+
     "prebuild": "yarn lint && yarn dist",
     "build": "lerna run build",
-    "prerelease": "yarn run build",
+
+    "prerelease": "yarn build",
     "release": "lerna publish"
   },
   "workspaces": [
