@@ -1,4 +1,4 @@
-import { testGroup, test, setFixture, queryFixture, getControllerSelector, getActionSelector, getTargetSelector, triggerEvent, TestController } from "./test_helpers"
+import { testGroup, test, setFixture, queryFixture, getControllerSelector, getActionSelector, triggerEvent, TestController } from "./test_helpers"
 
 testGroup("Controller action", function () {
   test("inline <button>", async function (assert) {
