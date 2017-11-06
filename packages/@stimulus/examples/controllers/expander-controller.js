@@ -1,4 +1,4 @@
-import Controller from "./controller"
+import Controller from "stimulus"
 
 export default class ExpanderController extends Controller {
   expand(event) {

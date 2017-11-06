@@ -1,5 +1,4 @@
-import Controller from "./controller"
-import { Descriptor, Action, on } from "stimulus"
+import { Action, Controller, Descriptor, on } from "stimulus"
 
 export default class CloseWarningController extends Controller {
   connect() {

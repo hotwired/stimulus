@@ -1,4 +1,4 @@
-import Controller from "./controller"
+import Controller from "stimulus"
 
 export default class BulkCheckerController extends Controller {
   checkAll(event) {
