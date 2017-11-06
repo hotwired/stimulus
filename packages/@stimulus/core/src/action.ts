@@ -42,7 +42,7 @@ export class Action {
     if (typeof method == "function") {
       return method
     }
-    throw new Error(`Action references undefined method "${this.methodName}"`)
+    throw new Error(`Action "${this.descriptor}" references undefined method "${this.methodName}"`)
   }
 
   hasSameDescriptorAs(action: Action | null): boolean {
@@ -55,22 +55,10 @@ export class Action {
   }
 
   invokeWithEventAndTarget(event: Event, eventTarget: EventTarget) {
-    this.debug("Invoking action", this, event)
-
     try {
       this.method.call(this.controller, event, eventTarget)
     } catch (error) {
-      this.error(error, "while invoking action", this, event)
+      this.context.reportError(error, `invoking action "${this.descriptor}"`, event, this)
     }
-  }
-
-  // Logging
-
-  debug(...args) {
-    this.context.debug(this.descriptor.loggerTag, ...args)
-  }
-
-  error(...args) {
-    this.context.error(this.descriptor.loggerTag, ...args)
   }
 }
