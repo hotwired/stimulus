@@ -1,9 +1,16 @@
+# Hello, Stimulus
+
+## Prerequisites
+
+* Glitch pointed to the sandbox repo
+* Or, sandbox cloned locally from Git
+
 ## It All Starts With HTML
 
 * Let's build a simple example: a text field with a button
 * When you click the button, we'll display the value of the text field in the console
 * We'll start with markup, then annotate it for Stimulus
-* Clone a new project from Glitch and add this to `src/index.html`:
+* Clone a new playground from Glitch and add this to `public/index.html`:
 
 ```html
 <div>
@@ -200,5 +207,4 @@ export default class HelloController extends Controller {
 ### Wrap-Up and Next Steps
 
 * Congratulations! You've just written your first Stimulus controller
-* Those are the basics; see below for details and additional APIs
-* ...
+* We've covered the basics; keep reading to learn more
