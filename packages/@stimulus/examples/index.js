@@ -1,12 +1,9 @@
 import "@stimulus/polyfills"
-import { Application, LogLevel } from "stimulus"
+import { Application } from "stimulus"
 import { autoload } from "stimulus/webpack-helpers"
 import Turbolinks from "turbolinks"
 
-const application = new Application({ logLevel: LogLevel.DEBUG })
+const application = Application.start()
+autoload(require.context("./controllers", true, /\.js$/), application)
 
-const context = require.context("./controllers", true, /\.js$/)
-autoload(context, application)
-
-application.start()
 Turbolinks.start()

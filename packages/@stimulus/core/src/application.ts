@@ -1,11 +1,9 @@
 import { Configuration, ConfigurationOptions, createConfiguration } from "./configuration"
 import { Controller, ControllerConstructor } from "./controller"
-import { Logger } from "./logger"
 import { Router } from "./router"
 
 export class Application {
   configuration: Configuration
-  logger: Logger
   private router: Router
 
   static start(configurationOptions?: ConfigurationOptions): Application {
@@ -16,7 +14,6 @@ export class Application {
 
   constructor(configurationOptions: ConfigurationOptions = {}) {
     this.configuration = createConfiguration(configurationOptions)
-    this.logger = new Logger(this.configuration.logLevel)
     this.router = new Router(this)
   }
 

@@ -7,7 +7,6 @@ import { DataMap } from "./data_map"
 import { Descriptor } from "./descriptor"
 import { Dispatcher } from "./dispatcher"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
-import { Logger, LoggerTag } from "./logger"
 import { TargetSet } from "./target_set"
 
 export class Context implements InlineActionObserverDelegate {
@@ -31,10 +30,9 @@ export class Context implements InlineActionObserverDelegate {
     this.controller = new contextSet.controllerConstructor(this)
 
     try {
-      this.debug("Initializing controller")
       this.controller.initialize()
     } catch (error) {
-      this.error(error, "while initializing controller")
+      this.reportError(error, `initializing controller "${this.identifier}"`)
     }
   }
 
@@ -43,19 +41,17 @@ export class Context implements InlineActionObserverDelegate {
     this.inlineActionObserver.start()
 
     try {
-      this.debug("Connecting controller")
       this.controller.connect()
     } catch (error) {
-      this.error(error, "while connecting controller")
+      this.reportError(error, `connecting controller "${this.identifier}"`)
     }
   }
 
   disconnect() {
     try {
-      this.debug("Disconnecting controller")
       this.controller.disconnect()
     } catch (error) {
-      this.error(error, "while disconnecting controller")
+      this.reportError(error, `disconnecting controller "${this.identifier}"`)
     }
 
     this.inlineActionObserver.stop()
@@ -118,13 +114,11 @@ export class Context implements InlineActionObserverDelegate {
     }
 
     if (action) {
-      this.debug(action.descriptor.loggerTag, "Adding action", action)
       this.dispatcher.addAction(action)
     }
   }
 
   removeAction(action: Action) {
-    this.debug(action.descriptor.loggerTag, "Removing action", action)
     this.dispatcher.removeAction(action)
   }
 
@@ -140,20 +134,10 @@ export class Context implements InlineActionObserverDelegate {
 
   // Logging
 
-  debug(...args) {
-    return this.logger.debug(this.loggerTag, ...args, this.controller, this.element)
-  }
-
-  error(...args) {
-    return this.logger.error(this.loggerTag, ...args, this.controller, this.element)
-  }
-
-  get logger(): Logger {
-    return this.application.logger
-  }
-
-  private get loggerTag(): LoggerTag {
-    return new LoggerTag(this.identifier, "#fff", "#38f")
+  reportError(error, message, ...args) {
+    const argsFormat = args.map(arg => "%o").join("\n")
+    const format = `Error %s\n\n%o\n\n${argsFormat}\n%o\n%o`
+    return console.error(format, message, error, ...args, this.controller, this.element)
   }
 }
 
