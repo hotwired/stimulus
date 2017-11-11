@@ -1,6 +1,5 @@
 export interface ActionDescriptorOptions {
   identifier?: string
-  targetName?: string
   eventName?: string
   methodName?: string
 }
@@ -16,14 +15,12 @@ export class ActionDescriptor {
   }
 
   identifier: string
-  targetName: string | null
   eventName: string
   methodName: string
 
   static forOptions(options: ActionDescriptorOptions): ActionDescriptor {
     return new ActionDescriptor(
       options.identifier || error("Missing identifier in action descriptor"),
-      options.targetName || null,
       options.eventName  || error("Missing event name in action descriptor"),
       options.methodName || error("Missing method name in action descriptor"),
     )
@@ -53,9 +50,8 @@ export class ActionDescriptor {
     return this.defaultEventNames[element.tagName.toLowerCase()](element)
   }
 
-  constructor(identifier: string, targetName: string | null, eventName: string, methodName: string) {
+  constructor(identifier: string, eventName: string, methodName: string) {
     this.identifier = identifier
-    this.targetName = targetName
     this.eventName = eventName
     this.methodName = methodName
   }
@@ -63,7 +59,6 @@ export class ActionDescriptor {
   isEqualTo(descriptor: ActionDescriptor | null): boolean {
     return descriptor != null &&
       descriptor.identifier == this.identifier &&
-      descriptor.targetName == this.targetName &&
       descriptor.eventName == this.eventName &&
       descriptor.methodName == this.methodName
   }
