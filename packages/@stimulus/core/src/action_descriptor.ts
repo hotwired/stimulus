@@ -1,11 +1,11 @@
-export interface DescriptorOptions {
+export interface ActionDescriptorOptions {
   identifier?: string
   targetName?: string
   eventName?: string
   methodName?: string
 }
 
-export class Descriptor {
+export class ActionDescriptor {
   private static defaultEventNames: { [tagName: string]: (element: Element) => string } = {
     "a":        e => "click",
     "button":   e => "click",
@@ -20,28 +20,28 @@ export class Descriptor {
   eventName: string
   methodName: string
 
-  static forOptions(options: DescriptorOptions): Descriptor {
-    return new Descriptor(
-      options.identifier || error("Missing identifier in descriptor"),
+  static forOptions(options: ActionDescriptorOptions): ActionDescriptor {
+    return new ActionDescriptor(
+      options.identifier || error("Missing identifier in action descriptor"),
       options.targetName || null,
-      options.eventName  || error("Missing event name in descriptor"),
-      options.methodName || error("Missing method name in descriptor"),
+      options.eventName  || error("Missing event name in action descriptor"),
+      options.methodName || error("Missing method name in action descriptor"),
     )
   }
 
-  static forElementWithInlineDescriptorString(element: Element, descriptorString: string): Descriptor {
+  static forElementWithInlineDescriptorString(element: Element, descriptorString: string): ActionDescriptor {
     try {
       const options = this.parseOptionsFromInlineActionDescriptorString(descriptorString)
       options.eventName = options.eventName || this.getDefaultEventNameForElement(element)
-      return Descriptor.forOptions(options)
+      return ActionDescriptor.forOptions(options)
     } catch (error) {
-      throw new Error(`Bad descriptor "${descriptorString}": ${error.message}`)
+      throw new Error(`Bad action descriptor "${descriptorString}": ${error.message}`)
     }
   }
 
-  private static parseOptionsFromInlineActionDescriptorString(descriptorString: string): DescriptorOptions {
+  private static parseOptionsFromInlineActionDescriptorString(descriptorString: string): ActionDescriptorOptions {
     const source = descriptorString.trim()
-    const matches = source.match(/^((.+?)->)?(.+?)#(.+)$/) || error("Invalid descriptor syntax")
+    const matches = source.match(/^((.+?)->)?(.+?)#(.+)$/) || error("Invalid action descriptor syntax")
     return {
       identifier: matches[3],
       eventName: matches[2],
@@ -60,7 +60,7 @@ export class Descriptor {
     this.methodName = methodName
   }
 
-  isEqualTo(descriptor: Descriptor | null): boolean {
+  isEqualTo(descriptor: ActionDescriptor | null): boolean {
     return descriptor != null &&
       descriptor.identifier == this.identifier &&
       descriptor.targetName == this.targetName &&
