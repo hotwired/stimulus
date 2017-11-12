@@ -2,7 +2,10 @@ export interface ActionDescriptorOptions {
   identifier?: string
   eventName?: string
   methodName?: string
+  eventTarget?: EventTarget
 }
+
+const pattern = /^(((window|document):)?(.+?)->)?(.+?)#(.+)$/
 
 export class ActionDescriptor {
   private static defaultEventNames: { [tagName: string]: (element: Element) => string } = {
@@ -17,12 +20,14 @@ export class ActionDescriptor {
   identifier: string
   eventName: string
   methodName: string
+  eventTarget?: EventTarget
 
   static forOptions(options: ActionDescriptorOptions): ActionDescriptor {
     return new ActionDescriptor(
       options.identifier || error("Missing identifier in action descriptor"),
       options.eventName  || error("Missing event name in action descriptor"),
       options.methodName || error("Missing method name in action descriptor"),
+      options.eventTarget
     )
   }
 
@@ -38,11 +43,12 @@ export class ActionDescriptor {
 
   private static parseOptionsFromInlineActionDescriptorString(descriptorString: string): ActionDescriptorOptions {
     const source = descriptorString.trim()
-    const matches = source.match(/^((.+?)->)?(.+?)#(.+)$/) || error("Invalid action descriptor syntax")
+    const matches = source.match(pattern) || error("Invalid action descriptor syntax")
     return {
-      identifier: matches[3],
-      eventName: matches[2],
-      methodName: matches[4]
+      identifier:  matches[5],
+      eventName:   matches[4],
+      methodName:  matches[6],
+      eventTarget: parseEventTarget(matches[3])
     }
   }
 
@@ -50,24 +56,47 @@ export class ActionDescriptor {
     return this.defaultEventNames[element.tagName.toLowerCase()](element)
   }
 
-  constructor(identifier: string, eventName: string, methodName: string) {
+  constructor(identifier: string, eventName: string, methodName: string, eventTarget?: EventTarget) {
     this.identifier = identifier
     this.eventName = eventName
     this.methodName = methodName
+    this.eventTarget = eventTarget
+  }
+
+  get eventTargetName(): string | undefined {
+    return stringifyEventTarget(this.eventTarget)
   }
 
   isEqualTo(descriptor: ActionDescriptor | null): boolean {
     return descriptor != null &&
       descriptor.identifier == this.identifier &&
       descriptor.eventName == this.eventName &&
-      descriptor.methodName == this.methodName
+      descriptor.methodName == this.methodName &&
+      descriptor.eventTarget == this.eventTarget
   }
 
   toString(): string {
-    return `${this.eventName}->${this.identifier}#${this.methodName}`
+    const eventTargetPrefix = this.eventTarget ? `${this.eventTargetName}:` : ""
+    return `${eventTargetPrefix}${this.eventName}->${this.identifier}#${this.methodName}`
   }
 }
 
 function error(message: string): never {
   throw new Error(message)
+}
+
+function parseEventTarget(eventTargetName: string): EventTarget | undefined {
+  if (eventTargetName == "window") {
+    return window
+  } else if (eventTargetName == "document") {
+    return document
+  }
+}
+
+function stringifyEventTarget(eventTarget?: EventTarget) {
+  if (eventTarget == window) {
+    return "window"
+  } else if (eventTarget == document) {
+    return "document"
+  }
 }
