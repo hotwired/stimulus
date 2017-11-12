@@ -1,4 +1,4 @@
-import Controller from "stimulus"
+import { Controller } from "stimulus"
 
 const SHAPES = ["circle", "triangle"]
 
