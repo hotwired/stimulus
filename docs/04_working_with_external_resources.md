@@ -1,5 +1,5 @@
 # Working With External Resources
 
-(Timers, Requests, chaining)
+COVERS: Timers, Requests, chaining
 
 Example: RemoteContentController

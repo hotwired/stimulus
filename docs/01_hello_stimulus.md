@@ -10,7 +10,7 @@
 * Let's build a simple example: a text field with a button
 * When you click the button, we'll display the value of the text field in the console
 * We'll start with markup, then annotate it for Stimulus
-* Clone a new playground from Glitch and add this to `public/index.html`:
+* Clone a new playground and add this to `public/index.html`:
 
 ```html
 <div>

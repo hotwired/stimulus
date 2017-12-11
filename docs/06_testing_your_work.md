@@ -1,5 +1,5 @@
 # Testing Your Work
 
-(TestEnvironment)
+COVERS: TestEnvironment
 
 Example: Test ListSelectionController

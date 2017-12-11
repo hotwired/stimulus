@@ -1,5 +1,5 @@
 # Managing State
 
-(Data API)
+COVERS: Data API
 
 Example: ListSelectionController
