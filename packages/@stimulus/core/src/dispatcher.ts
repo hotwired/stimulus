@@ -105,20 +105,18 @@ export class Dispatcher {
   }
 
   private handleDirectEvent(event: Event) {
-    if (this.canHandleEvent(event)) {
-      const actionInvocations = this.findDirectActionInvocationsForEvent(event)
-      this.performActionInvocations(actionInvocations)
-    }
+    const actionInvocations = this.findDirectActionInvocationsForEvent(event)
+    this.performActionInvocations(actionInvocations)
   }
 
   private handleDelegatedEvent(event: Event) {
-    if (this.canHandleEvent(event)) {
+    if (this.canHandleDelegatedEvent(event)) {
       const actionInvocations = this.findDelegatedActionInvocationsForEvent(event)
       this.performActionInvocations(actionInvocations)
     }
   }
 
-  private canHandleEvent(event: Event): boolean {
+  private canHandleDelegatedEvent(event: Event): boolean {
     const element = getTargetElementForEvent(event)
     if (element) {
       return this.scope.containsElement(element)

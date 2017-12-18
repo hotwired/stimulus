@@ -1,4 +1,4 @@
-import { Controller, on } from "stimulus"
+import { Controller } from "stimulus"
 
 export default class CloseWarningController extends Controller {
   connect() {
@@ -10,7 +10,6 @@ export default class CloseWarningController extends Controller {
 
   // Action methods
 
-  @on("beforeunload", window)
   warnBeforeUnload(event) {
     if (this.hasUnsavedContent) {
       event.returnValue = "Are you sure?"
@@ -18,7 +17,6 @@ export default class CloseWarningController extends Controller {
     }
   }
 
-  @on("turbolinks:before-visit", document)
   warnBeforeVisit(event) {
     if (this.hasUnsavedContent) {
       if (!window.confirm("Are you sure?")) {

@@ -1,6 +1,6 @@
 <% include layout/head %>
 
-<div data-controller="close-warning" data-action="click->close-warning#focusInput">
+<div data-controller="close-warning" data-action="click->close-warning#focusInput beforeunload@window->close-warning#warnBeforeUnload turbolinks:before-visit@window->close-warning#warnBeforeVisit">
   <p data-target="close-warning.autosave" class="hidden">
     Would you like to restore your autosaved masterpiece?
     <button data-action="close-warning#restoreFromAutosave">Yes</button>
@@ -9,7 +9,7 @@
 
   <textarea style="width: 75%" rows="10" placeholder="Type something and reload…"
     data-target="close-warning.input"
-    data-action="input->close-warning#autosave DOMFocusOut->close-warning#addWarning DOMFocusIn->close-warning#clearWarning"></textarea>
+    data-action="input->close-warning#autosave focusout->close-warning#addWarning focusin->close-warning#clearWarning"></textarea>
 </div>
 
 <% include layout/tail %>

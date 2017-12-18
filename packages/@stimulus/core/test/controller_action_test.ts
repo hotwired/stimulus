@@ -1,7 +1,7 @@
 import { testGroup, test, setFixture, queryFixture, getControllerSelector, getActionSelector, getTargetSelector, triggerEvent, TestController } from "./test_helpers"
 
 testGroup("Controller action", function () {
-  test("inline <button>", async function (assert) {
+  test("inline action", async function (assert) {
     const done = assert.async()
 
     const identifier = "test"
@@ -24,7 +24,7 @@ testGroup("Controller action", function () {
     done()
   })
 
-  test("inline <button> with child element", async function (assert) {
+  test("inline action: bubbling from child element", async function (assert) {
     const done = assert.async()
 
     const identifier = "test"
@@ -50,7 +50,7 @@ testGroup("Controller action", function () {
     done()
   })
 
-  test("nested inline <button>s", async function (assert) {
+  test("nested inline actions", async function (assert) {
     const done = assert.async()
 
     const identifier1 = "test1"
@@ -104,10 +104,41 @@ testGroup("Controller action", function () {
     triggerEvent(buttonElement, "mousedown")
     triggerEvent(buttonElement, "mouseup")
 
-    assert.equal(controller.actions.length, 2)
     assert.deepEqual(controller.actions, [
       { eventType: "mousedown", eventPrevented: false, eventTarget: buttonElement, target: buttonElement },
       { eventType: "mouseup", eventPrevented: false, eventTarget: buttonElement, target: buttonElement },
+    ])
+
+    done()
+  })
+
+  test("global inline actions", async function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    this.application.register(identifier, TestController)
+
+    await setFixture(`
+      <div id="outer">
+        <div data-controller="${identifier}" data-action="click@window->${identifier}#foo">
+          <button data-target="${identifier}.button">Hello</button>
+        </div>
+      </div>
+    `)
+
+    const outerElement = document.getElementById("outer")!
+    const element = queryFixture(getControllerSelector(identifier))
+    const buttonElement = queryFixture("button")
+    const controller = this.application.getControllerForElementAndIdentifier(element, identifier)
+
+    triggerEvent(window, "click")
+    triggerEvent(outerElement, "click")
+    triggerEvent(buttonElement, "click")
+
+    assert.deepEqual(controller.actions, [
+      { eventType: "click", eventPrevented: false, eventTarget: window, target: window },
+      { eventType: "click", eventPrevented: false, eventTarget: outerElement, target: window },
+      { eventType: "click", eventPrevented: false, eventTarget: buttonElement, target: window },
     ])
 
     done()
