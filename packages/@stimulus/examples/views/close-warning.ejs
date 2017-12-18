@@ -1,6 +1,6 @@
 <% include layout/head %>
 
-<div data-controller="close-warning" data-action="click->close-warning#focusInput window:beforeunload->close-warning#warnBeforeUnload window:turbolinks:before-visit->close-warning#warnBeforeVisit">
+<div data-controller="close-warning" data-action="click->close-warning#focusInput beforeunload@window->close-warning#warnBeforeUnload turbolinks:before-visit@window->close-warning#warnBeforeVisit">
   <p data-target="close-warning.autosave" class="hidden">
     Would you like to restore your autosaved masterpiece?
     <button data-action="close-warning#restoreFromAutosave">Yes</button>

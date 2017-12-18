@@ -5,7 +5,8 @@ export interface ActionDescriptorOptions {
   eventTarget?: EventTarget
 }
 
-const pattern = /^(((window|document):)?(.+?)->)?(.+?)#(.+)$/
+// capture nos.:  12   23 4               43   1 5   5 6  6
+const pattern = /^((.+?)(@(window|document))?->)?(.+?)#(.+)$/
 
 export class ActionDescriptor {
   private static defaultEventNames: { [tagName: string]: (element: Element) => string } = {
@@ -46,9 +47,9 @@ export class ActionDescriptor {
     const matches = source.match(pattern) || error("Invalid action descriptor syntax")
     return {
       identifier:  matches[5],
-      eventName:   matches[4],
+      eventName:   matches[2],
       methodName:  matches[6],
-      eventTarget: parseEventTarget(matches[3])
+      eventTarget: parseEventTarget(matches[4])
     }
   }
 
@@ -76,8 +77,8 @@ export class ActionDescriptor {
   }
 
   toString(): string {
-    const eventTargetPrefix = this.eventTarget ? `${this.eventTargetName}:` : ""
-    return `${eventTargetPrefix}${this.eventName}->${this.identifier}#${this.methodName}`
+    const eventNameSuffix = this.eventTarget ? `@${this.eventTargetName}` : ""
+    return `${this.eventName}${eventNameSuffix}->${this.identifier}#${this.methodName}`
   }
 }
 
