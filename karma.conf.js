@@ -63,8 +63,8 @@ if (process.env.CI) {
     sl_safari: {
       base: "SauceLabs",
       browserName: "safari",
-      platform: "macOS 10.12",
-      version: "10.0"
+      platform: "macOS 10.13",
+      version: "11"
     },
     sl_edge: {
       base: "SauceLabs",
