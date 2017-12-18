@@ -1,3 +1,7 @@
+declare var CSS: {
+  escape(string: string): string
+}
+
 export function attributeValueContainsToken(attributeName: string, token: string) {
-  return `[${attributeName}~="${token}"]`
+  return `[${CSS.escape(attributeName)}~="${CSS.escape(token)}"]`
 }

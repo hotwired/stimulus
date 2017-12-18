@@ -5,6 +5,7 @@
   "license": "MIT",
   "devDependencies": {
     "core-js": "^2.5.1",
-    "element-closest": "^2.0.2"
+    "element-closest": "^2.0.2",
+    "css.escape": "^1.5.1"
   }
 }
