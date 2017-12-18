@@ -37,9 +37,17 @@ testGroup("Controller targets", function () {
     const targetElement2 = targetElement1.cloneNode(true)
     element.appendChild(targetElement2)
 
+    const targetElement3 = document.createElement("span")
+    targetElement3.setAttribute("data-target", `${identifier}.bar`)
+    element.appendChild(targetElement3)
+
+    const targetElement4 = document.createElement("span")
+    targetElement4.setAttribute("data-target", "x.bar")
+    element.appendChild(targetElement4)
+
     this.application.register(identifier, class extends Controller {
       connect() {
-        assert.deepEqual(this.targets.findAll("foo"), [targetElement1, targetElement2])
+        assert.deepEqual(this.targets.findAll("foo", "bar"), [targetElement1, targetElement2, targetElement3])
         done()
       }
     })

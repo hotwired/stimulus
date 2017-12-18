@@ -25,14 +25,18 @@ export class TargetSet {
     return this.find(targetName) != null
   }
 
-  find(targetName: string): Element | undefined {
-    const selector = this.getSelectorForTargetName(targetName)
+  find(...targetNames: string[]): Element | undefined {
+    const selector = this.getSelectorForTargetNames(targetNames)
     return this.scope.findElement(selector)
   }
 
-  findAll(targetName: string): Element[] {
-    const selector = this.getSelectorForTargetName(targetName)
+  findAll(...targetNames: string[]): Element[] {
+    const selector = this.getSelectorForTargetNames(targetNames)
     return this.scope.findAllElements(selector)
+  }
+
+  private getSelectorForTargetNames(targetNames: string[]): string {
+    return targetNames.map(targetName => this.getSelectorForTargetName(targetName)).join(", ")
   }
 
   private getSelectorForTargetName(targetName: string): string {
