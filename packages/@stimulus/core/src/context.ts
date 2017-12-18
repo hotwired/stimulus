@@ -3,33 +3,26 @@ import { Application } from "./application"
 import { Configuration } from "./configuration"
 import { ContextSet } from "./context_set"
 import { Controller } from "./controller"
-import { DataMap } from "./data_map"
 import { Descriptor } from "./descriptor"
 import { Dispatcher } from "./dispatcher"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
-import { TargetSet } from "./target_set"
+import { Scope } from "./scope"
 
 export class Context implements InlineActionObserverDelegate {
   contextSet: ContextSet
-  element: Element
-
+  scope: Scope
   controller: Controller
-  targets: TargetSet
-  data: DataMap
   private dispatcher: Dispatcher
   private inlineActionObserver: InlineActionObserver
 
   constructor(contextSet: ContextSet, element: Element) {
     this.contextSet = contextSet
-    this.element = element
-
-    this.targets = new TargetSet(this)
-    this.data = new DataMap(this)
+    this.scope = new Scope(this.configuration, this.identifier, element)
     this.dispatcher = new Dispatcher(this)
     this.inlineActionObserver = new InlineActionObserver(this, this)
-    this.controller = new contextSet.controllerConstructor(this)
 
     try {
+      this.controller = new contextSet.controllerConstructor(this)
       this.controller.initialize()
     } catch (error) {
       this.reportError(error, `initializing controller "${this.identifier}"`)
@@ -58,10 +51,6 @@ export class Context implements InlineActionObserverDelegate {
     this.dispatcher.stop()
   }
 
-  canControlElement(element: Element): boolean {
-    return element.closest(this.selector) == this.element
-  }
-
   get application(): Application {
     return this.contextSet.application
   }
@@ -74,24 +63,12 @@ export class Context implements InlineActionObserverDelegate {
     return this.application.configuration
   }
 
-  get controllerAttribute(): string {
-    return this.configuration.controllerAttribute
-  }
-
-  get actionAttribute(): string {
-    return this.configuration.actionAttribute
-  }
-
-  get targetAttribute(): string {
-    return this.configuration.targetAttribute
+  get element(): Element {
+    return this.scope.element
   }
 
   get parentElement(): Element | null {
     return this.element.parentElement
-  }
-
-  get selector(): string {
-    return `[${this.controllerAttribute}~='${this.identifier}']`
   }
 
   // Actions

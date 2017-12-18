@@ -1,8 +1,9 @@
 import { Action } from "./action"
 import { Application } from "./application"
 import { Context } from "./context"
-import { TargetSet } from "./target_set"
 import { DataMap } from "./data_map"
+import { Scope } from "./scope"
+import { TargetSet } from "./target_set"
 
 export interface ControllerConstructor {
   new(context: Context): Controller
@@ -19,20 +20,24 @@ export class Controller {
     return this.context.application
   }
 
+  get scope(): Scope {
+    return this.context.scope
+  }
+
   get element(): Element {
-    return this.context.element
+    return this.scope.element
   }
 
   get identifier(): string {
-    return this.context.identifier
+    return this.scope.identifier
   }
 
   get targets(): TargetSet {
-    return this.context.targets
+    return this.scope.targets
   }
 
   get data(): DataMap {
-    return this.context.data
+    return this.scope.data
   }
 
   initialize() {

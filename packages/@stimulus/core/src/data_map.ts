@@ -1,18 +1,18 @@
-import { Context } from "./context"
+import { Scope } from "./scope"
 
 export class DataMap {
-  context: Context
+  scope: Scope
 
-  constructor(context: Context) {
-    this.context = context
+  constructor(scope: Scope) {
+    this.scope = scope
   }
 
   get element(): Element {
-    return this.context.element
+    return this.scope.element
   }
 
   get identifier(): string {
-    return this.context.identifier
+    return this.scope.identifier
   }
 
   get(key: string): string | null {

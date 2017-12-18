@@ -2,6 +2,7 @@ import { Action } from "./action"
 import { ActionSet } from "./action_set"
 import { Context } from "./context"
 import { EventSet } from "./event_set"
+import { Scope } from "./scope"
 
 type ActionInvocation = [Action, Event, EventTarget]
 
@@ -120,7 +121,7 @@ export class Dispatcher {
   private canHandleEvent(event: Event): boolean {
     const element = getTargetElementForEvent(event)
     if (element) {
-      return this.context.canControlElement(element)
+      return this.scope.containsElement(element)
     } else {
       return true
     }
@@ -166,6 +167,10 @@ export class Dispatcher {
       element = element.parentElement
     }
     return elements
+  }
+
+  private get scope() {
+    return this.context.scope
   }
 
   private get parentElement() {

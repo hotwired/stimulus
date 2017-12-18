@@ -1,7 +1,9 @@
 import { Action } from "./action"
+import { Configuration } from "./configuration"
 import { Context } from "./context"
 import { Descriptor } from "./descriptor"
 import { Multimap } from "@stimulus/multimap"
+import { Scope } from "./scope"
 import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation-observers"
 
 export interface InlineActionObserverDelegate {
@@ -12,28 +14,34 @@ export interface InlineActionObserverDelegate {
 export class InlineActionObserver implements TokenListObserverDelegate {
   context: Context
   delegate: InlineActionObserverDelegate
-
   private tokenListObserver: TokenListObserver
   private connectedActions: Multimap<Element, Action>
 
   constructor(context: Context, delegate: InlineActionObserverDelegate) {
     this.context = context
     this.delegate = delegate
-
     this.tokenListObserver = new TokenListObserver(this.element, this.attributeName, this)
     this.connectedActions = new Multimap<Element, Action>()
   }
 
+  get scope(): Scope {
+    return this.context.scope
+  }
+
+  get configuration(): Configuration {
+    return this.scope.configuration
+  }
+
   get attributeName(): string {
-    return this.context.actionAttribute
+    return this.configuration.actionAttribute
   }
 
   get element(): Element {
-    return this.context.element
+    return this.scope.element
   }
 
   get identifier(): string {
-    return this.context.identifier
+    return this.scope.identifier
   }
 
   start() {
@@ -47,7 +55,7 @@ export class InlineActionObserver implements TokenListObserverDelegate {
   // Token list observer delegate
 
   elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
-    if (this.context.canControlElement(element)) {
+    if (this.scope.containsElement(element)) {
       const action = this.buildActionForElementWithDescriptorString(element, token)
       if (action) {
         this.connectedActions.add(element, action)
