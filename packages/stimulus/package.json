@@ -1,6 +1,6 @@
 {
   "name": "stimulus",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "👉✨",
   "author": "Basecamp, LLC",
   "contributors": [
@@ -21,14 +21,17 @@
   "module": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@stimulus/core": "^0.5.0",
+    "@stimulus/core": "^0.6.0",
     "@stimulus/webpack-helpers": "^0.5.0"
   },
   "scripts": {
     "prepublish": "yarn run build",
-    "build": "webpack"
+    "build": "yarn exec webpack"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "webpack": "^3.8.1"
   }
 }

@@ -1,11 +1,11 @@
 {
   "name": "@stimulus/polyfills",
   "private": true,
-  "version": "0.5.0",
+  "version": "0.6.0",
   "license": "MIT",
   "devDependencies": {
     "core-js": "^2.5.1",
-    "element-closest": "^2.0.2",
-    "css.escape": "^1.5.1"
+    "css.escape": "^1.5.1",
+    "element-closest": "^2.0.2"
   }
 }
