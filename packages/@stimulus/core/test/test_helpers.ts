@@ -1,5 +1,5 @@
 import "@stimulus/polyfills"
-import { Application, Controller, on } from "stimulus"
+import { Application, Controller } from "stimulus"
 const { assert, module, test } = QUnit
 
 export { assert, test }
@@ -97,8 +97,6 @@ export class TestController extends Controller {
     this.lifecycle.disconnect++
   }
 
-  @on("test:default")
-  @on("test:with-event-target", window)
   foo(event, target) {
     this.recordAction(event, target)
   }
