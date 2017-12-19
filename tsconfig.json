@@ -6,7 +6,6 @@
     "lib": ["dom", "es2015", "scripthost"],
     "pretty": true,
     "strictNullChecks": true,
-    "experimentalDecorators": true,
     "inlineSourceMap": true,
     "declaration": true,
     "rootDir": "packages",

@@ -143,43 +143,4 @@ testGroup("Controller action", function () {
 
     done()
   })
-
-  test("`on` decorator", async function (assert) {
-    const done = assert.async()
-
-    const identifier = "test"
-    this.application.register(identifier, TestController)
-
-    await setFixture(`<div data-controller="${identifier}"></div>`)
-
-    const element = queryFixture(getControllerSelector(identifier))
-    const controller = this.application.getControllerForElementAndIdentifier(element, identifier)
-
-    triggerEvent(element, "test:default")
-    assert.equal(controller.actions.length, 1)
-
-    done()
-  })
-
-  test("`on` decorator with event target option", async function (assert) {
-    const done = assert.async()
-
-    const identifier = "test"
-    this.application.register(identifier, TestController)
-
-    await setFixture(`<div data-controller="${identifier}"></div>`)
-
-    const element = queryFixture(getControllerSelector(identifier))
-    const controller = this.application.getControllerForElementAndIdentifier(element, identifier)
-
-    triggerEvent(window, "test:with-event-target")
-    assert.equal(controller.actions.length, 1)
-
-    await setFixture("")
-
-    triggerEvent(window, "test:with-event-target")
-    assert.equal(controller.actions.length, 1)
-
-    done()
-  })
 })
