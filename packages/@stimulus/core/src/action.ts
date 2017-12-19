@@ -2,19 +2,15 @@ import { ActionDescriptor } from "./action_descriptor"
 import { Context } from "./context"
 import { Controller } from "./controller"
 
-export type EventTargetMatcher = (eventTarget: EventTarget) => boolean
-
-export class Action {
+export class Action implements EventListenerObject {
   context: Context
   descriptor: ActionDescriptor
   eventTarget: EventTarget
-  delegatedTargetMatcher?: EventTargetMatcher
 
-  constructor(context: Context, descriptor: ActionDescriptor, eventTarget: EventTarget, delegatedTargetMatcher?: EventTargetMatcher) {
+  constructor(context: Context, descriptor: ActionDescriptor, eventTarget: EventTarget) {
     this.context = context
     this.descriptor = descriptor
     this.eventTarget = eventTarget
-    this.delegatedTargetMatcher = delegatedTargetMatcher
   }
 
   get controller(): Controller {
@@ -29,14 +25,6 @@ export class Action {
     return this.descriptor.methodName
   }
 
-  get isDirect(): boolean {
-    return !this.isDelegated
-  }
-
-  get isDelegated(): boolean {
-    return typeof this.delegatedTargetMatcher == "function"
-  }
-
   get method(): Function {
     const method = this.controller[this.methodName]
     if (typeof method == "function") {
@@ -49,14 +37,17 @@ export class Action {
     return action != null && action.descriptor.isEqualTo(this.descriptor)
   }
 
-  matchDelegatedTarget(eventTarget: EventTarget) {
-    const matcher = this.delegatedTargetMatcher
-    return matcher ? matcher(eventTarget) : false
+  addEventListener() {
+    this.eventTarget.addEventListener(this.eventName, this, false)
   }
 
-  invokeWithEventAndTarget(event: Event, eventTarget: EventTarget) {
+  removeEventListener() {
+    this.eventTarget.removeEventListener(this.eventName, this, false)
+  }
+
+  handleEvent(event: Event) {
     try {
-      this.method.call(this.controller, event, eventTarget)
+      this.method.call(this.controller, event, event.currentTarget)
     } catch (error) {
       this.context.reportError(error, `invoking action "${this.descriptor}"`, event, this)
     }

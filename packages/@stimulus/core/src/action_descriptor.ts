@@ -21,14 +21,14 @@ export class ActionDescriptor {
   identifier: string
   eventName: string
   methodName: string
-  eventTarget?: EventTarget
+  eventTarget: EventTarget
 
   static forOptions(options: ActionDescriptorOptions): ActionDescriptor {
     return new ActionDescriptor(
-      options.identifier || error("Missing identifier in action descriptor"),
-      options.eventName  || error("Missing event name in action descriptor"),
-      options.methodName || error("Missing method name in action descriptor"),
-      options.eventTarget
+      options.identifier  || error("Missing identifier in action descriptor"),
+      options.eventName   || error("Missing event name in action descriptor"),
+      options.methodName  || error("Missing method name in action descriptor"),
+      options.eventTarget || error("Missing event target in action descriptor")
     )
   }
 
@@ -36,6 +36,7 @@ export class ActionDescriptor {
     try {
       const options = this.parseOptionsFromInlineActionDescriptorString(descriptorString)
       options.eventName = options.eventName || this.getDefaultEventNameForElement(element)
+      options.eventTarget = options.eventTarget || element
       return ActionDescriptor.forOptions(options)
     } catch (error) {
       throw new Error(`Bad action descriptor "${descriptorString}": ${error.message}`)
@@ -57,7 +58,7 @@ export class ActionDescriptor {
     return this.defaultEventNames[element.tagName.toLowerCase()](element)
   }
 
-  constructor(identifier: string, eventName: string, methodName: string, eventTarget?: EventTarget) {
+  constructor(identifier: string, eventName: string, methodName: string, eventTarget: EventTarget) {
     this.identifier = identifier
     this.eventName = eventName
     this.methodName = methodName
@@ -77,7 +78,7 @@ export class ActionDescriptor {
   }
 
   toString(): string {
-    const eventNameSuffix = this.eventTarget ? `@${this.eventTargetName}` : ""
+    const eventNameSuffix = this.eventTargetName ? `@${this.eventTargetName}` : ""
     return `${this.eventName}${eventNameSuffix}->${this.identifier}#${this.methodName}`
   }
 }

@@ -83,11 +83,7 @@ export class InlineActionObserver implements TokenListObserverDelegate {
     try {
       const descriptor = ActionDescriptor.forElementWithInlineDescriptorString(element, descriptorString)
       if (descriptor.identifier == this.identifier) {
-        if (descriptor.eventTarget) {
-          return new Action(this.context, descriptor, descriptor.eventTarget)
-        } else {
-          return new Action(this.context, descriptor, this.element, eventTarget => eventTarget == element)
-        }
+        return new Action(this.context, descriptor, descriptor.eventTarget)
       }
     } catch (error) {
       this.context.reportError(error, `parsing descriptor string "${descriptorString}" for element`, element)
