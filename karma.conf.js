@@ -60,7 +60,19 @@ if (process.env.CI) {
       browserName: "firefox",
       version: "56"
     },
-    sl_safari: {
+    sl_safari_9: {
+      base: "SauceLabs",
+      browserName: "safari",
+      platform: "OS X 10.11",
+      version: "9"
+    },
+    sl_safari_10_1: {
+      base: "SauceLabs",
+      browserName: "safari",
+      platform: "macOS 10.12",
+      version: "10.1"
+    },
+    sl_safari_11: {
       base: "SauceLabs",
       browserName: "safari",
       platform: "macOS 10.13",
