@@ -130,14 +130,6 @@ main {
   border-radius: 50%;
 }
 
-[data-controller~="wizard"] [data-target~="wizard.step"] {
-  display: none;
-}
-
-[data-controller~="wizard"] [data-target~="wizard.step"].current-step {
-  display: block;
-}
-
 [data-controller~="close-warning"] {
   min-height: 300px;
 }
@@ -159,4 +151,13 @@ main {
 
 [data-controller~="close-warning"] [data-target~="close-warning.autosave"].hidden {
   display: none;
+}
+
+.slide {
+  display: none;
+  font-size: 6rem;
+}
+
+.slide.slide--current {
+  display: block;
 }
