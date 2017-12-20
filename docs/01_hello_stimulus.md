@@ -2,15 +2,14 @@
 
 ## Prerequisites
 
-* Glitch pointed to the sandbox repo
-* Or, sandbox cloned locally from Git
+* (Glitch pointed to the sandbox repo, or sandbox cloned locally from Git)
 
 ## It All Starts With HTML
 
 * Let's build a simple example: a text field with a button
 * When you click the button, we'll display the value of the text field in the console
 * We'll start with markup, then annotate it for Stimulus
-* Clone a new playground and add this to `public/index.html`:
+* Add this to `public/index.html`:
 
 ```html
 <div>
@@ -47,23 +46,8 @@ export default class HelloController extends Controller {
 ```
 
 * In Stimulus, identifiers serve as the link between elements and controllers
-
-## The Application Automatically Instantiates Controllers
-
-* You associate controllers with identifiers by registering them with an object called the _application_
-* We'll set up the application in the file `src/index.js`:
-
-```js
-// src/index.js
-import { Application } from "stimulus"
-import HelloController from "./controllers/hello_controller"
-
-const application = Application.start()
-application.register("hello", HelloController)
-```
-
 * The application continually watches the page for changes
-* When it finds an element with `hello` in its `data-controller` attribute, the application creates a new instance of `HelloController` for the element
+* When it finds an element with `hello` in its `data-controller` attribute, the application creates a new instance of the controller (explain filename association)
 
 ## Is This Thing On?
 
