@@ -2,4 +2,4 @@
 
 COVERS: Data API
 
-Example: ListSelectionController
+Example: SlideshowController
