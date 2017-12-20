@@ -53,12 +53,12 @@ if (process.env.CI) {
     sl_chrome: {
       base: "SauceLabs",
       browserName: "chrome",
-      version: "61"
+      version: "63"
     },
     sl_firefox: {
       base: "SauceLabs",
       browserName: "firefox",
-      version: "56"
+      version: "57"
     },
     sl_safari_9: {
       base: "SauceLabs",
