@@ -98,15 +98,15 @@ main {
   margin-top: 15px;
 }
 
-[data-controller~="expander"].expanded {
+[data-controller~="expander"][data-expander-expanded] {
   border-color: green;
 }
 
-[data-target~="expander.expanded"]:not(.expanded) {
+[data-controller~="expander"][data-expander-expanded] > [data-target~="expander.collapsed"] {
   display: none;
 }
 
-[data-target~="expander.collapsed"].expanded {
+[data-controller~="expander"]:not([data-expander-expanded]) > [data-target~="expander.expanded"] {
   display: none;
 }
 
