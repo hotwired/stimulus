@@ -1,7 +1,5 @@
 # Building Something Real
 
-COVERS: Behavioral CSS, progressive enhancement
-
 * Logging hello to the console isn't very exciting
 * Let's build something we might actually use
 * We'll go over a real example from Basecamp
@@ -24,18 +22,21 @@ COVERS: Behavioral CSS, progressive enhancement
 </div>
 ```
 
-* Next we'll create a Stimulus controller called `ClipboardController` to perform the copying
+* Next we'll create a Stimulus controller to perform the copying
 * Create `src/controllers/clipboard_controller.js` and add an empty method `copy`:
 
 ```js
-export default class ClipboardController extends Controller {
+// src/controllers/clipboard_controller.js
+import { Controller } from "stimulus"
+
+export default class extends Controller {
   copy() {
   }
 }
 ```
 
 * Now we can wire up the controller to our markup
-* Add `data-controller="clipboard"` to the outer `<div>`. Any time this attribute appears on an element, Stimulus will connect a `ClipboardController`
+* Add `data-controller="clipboard"` to the outer `<div>`. Any time this attribute appears on an element, Stimulus will connect our controller
 * Add `data-target="clipboard.source"` to the text field so that we can refer to it by the logical name `source`
 * Add `data-action="clipboard#copy"` to the button so clicking it calls the `copy` method
 
@@ -51,7 +52,10 @@ export default class ClipboardController extends Controller {
 * Now we can implement the `copy` action:
 
 ```js
-export default class ClipboardController extends Controller {
+// src/controllers/clipboard_controller.js
+import { Controller } from "stimulus"
+
+export default class extends Controller {
   copy() {
     this.sourceElement.select()
     document.execCommand("copy")
@@ -66,18 +70,23 @@ export default class ClipboardController extends Controller {
 * (Demonstrate the functionality)
 
 * The last thing we'd like to do is hide the input field
-* We could hide the input element with JavaScript instead by applying an inline style to it
-* Stimulus encourages you to use behavioral CSS instead by matching `data-target` attributes
-* Here we select all elements which have `clipboard.source` in the `data-target` attribute and mark them as invisible:
+* We'll do this with CSS
+* Start by adding `class="clipboard-source"` to the input field:
+
+```html
+<div data-controller="clipboard">
+  <input data-target="clipboard.source" class="clipboard-source" type="text" value="https://basecamp.com/">
+  <button data-action="clipboard#copy">Copy to Clipboard</button>
+</div>
+```
+
+* Then add the following style to `public/css/main.css`:
 
 ```css
-[data-target~="clipboard.source"] {
+.clipboard-source {
   display: none;
 }
 ```
-
-* Behavioral CSS should apply _intrinsic_ styles only: whether an element is visible or not, or sometimes how it is positioned, but _not_ what it looks like
-* To style appearance, always use CSS class names
 
 * (Demonstrate that the input field is invisible now)
 
