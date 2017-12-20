@@ -2,34 +2,6 @@
 
 COVERS: Multiple controllers, findAll, colocating, nesting
 
-* So far we've just seen a single controller on the page at a time
-* The controllers we've built are reusable
-* Any time we want to provide a way to copy a bit of text to the clipboard, all we need is markup on the page with the right annotations
-* Let's go ahead and add another one to the page
-* Copy and paste the markup, then change the URL in the `value` attribute:
-
-```html
-<div data-controller="clipboard">
-  <input data-target="clipboard.source" class="copy-to-clipboard__input" type="text" value="https://stimulusjs.org/">
-  <button data-action="clipboard#copy">Copy to Clipboard</button>
-</div>
-```
-
-* (Demonstrate)
-* (Explain that these are two separate controller instances)
-* Now let's add one more. This time we'll use a link instead of a button:
-
-```html
-<div data-controller="clipboard">
-  <input data-target="clipboard.source" class="copy-to-clipboard__input" type="text" value="https://rubyonrails.org/">
-  <a href="#" data-action="clipboard#copy">Copy to Clipboard</button>
-</div>
-```
-
-* (Demonstrate)
-* We can use any kind of element we want as the trigger, as long as it has the `data-action` attribute on it
-* We could even have multiple elements with the same action
-
 * Now let's look at other ways controllers can be combined on the page
 * We'll build a controller that wraps up a common front-end pattern: toggling the expanded or collapsed state of an element
 * We'll do this by annotating child elements that should be visible or hidden depending on whether the element is in a collapsed or expanded state
