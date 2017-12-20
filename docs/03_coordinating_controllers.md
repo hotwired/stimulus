@@ -41,6 +41,7 @@ COVERS: Multiple controllers, findAll, colocating, nesting
   <form data-target="expandable.expanded">
     <textarea></textarea>
     <input type="submit" value="Add this comment">
+    <input data-action="expandable#toggle" type="reset" value="Nevermind">
   </form>
 </div>
 ```
@@ -48,70 +49,54 @@ COVERS: Multiple controllers, findAll, colocating, nesting
 * We'll write a controller whose `toggle` action toggles visibility of the collapsed or expanded targets:
 
 ```js
+// src/controllers/expander_controller.js
 import { Controller } from "stimulus"
 
-export default class ExpandableController extends Controller {
+export default class extends Controller {
   toggle() {
-    if (this.isExpanded) {
-      this.collapse()
-    } else {
-      this.expand()
-    }
+    this.isExpanded ? this.collapse() : this.expand()
   }
 }
 ```
 
-* Now we'll design the behavioral styles for the expanded and collapsed states
-* Our base styles assume the expandable is in the collapsed state, so we'll hide the expanded targets:
+* Now we'll design the behavioral styles for the expanded and collapsed states:
 
 ```css
-[data-target~="expandable.expanded"] {
+[data-controller~="expander"][data-expander-expanded] > [data-target~="expander.collapsed"] {
+  display: none;
+}
+
+[data-controller~="expander"]:not([data-expander-expanded]) > [data-target~="expander.expanded"] {
   display: none;
 }
 ```
 
-* When the expandable is in the expanded state, each target element will have an `expanded` class, so we'll hide the collapsed targets and show the expanded targets:
-
-```css
-[data-target=~"expandable.collapsed"] {
-  display: none;
-}
-
-[data-target=~"expandable.expanded"].expanded {
-  display: initial;
-}
-```
-
-* With the CSS in place, we can now implement the missing controller methods
-* The `expand` and `collapse` methods just add or remove the `expanded` class on our target elements
+* To toggle the target elements we need to add or remove a `data-expander-expanded` attribute
+* We'll do that using the built-in data API
+* The data API reads and writes DOM data attibutes and automatically prefixes them with the controller's identifier
+* Let's implement the missing controller methods:
 
 ```js
+export default class extends Controller {
+  toggle() {
+    this.isExpanded ? this.collapse() : this.expand()
+  }
+
   expand() {
-    this.allTargets.forEach(target => target.classList.add("expanded"))
+    this.data.set("expanded", true)
   }
 
   collapse() {
-    this.allTargets.forEach(target => target.classList.remove("expanded"))
+    this.data.delete("expanded")
   }
+
+  get isExpanded() {
+    return this.data.has("expanded")
+  }
+}
 ```
 
-* The `isExpanded` computed property will return `true` if all targets have the `expanded` class name
-
-```js
-   get isExpanded() {
-     return this.allTargets.all(target => target.classList.contains("expanded"))
-   }
-```
-
-* Finally, the `allTargets` getter will return an array of all target elements
-
-```js
-   get allTargets() {
-     return this.targets.findAll("expanded", "collapsed")
-   }
-```
-
-(TODO: Make findAll work with multiple arguments)
+* The `expand` method writes a `data-expander-expanded` attribute on the element, the `collapse` method removes it, and the `isExpanded` getter checks for its presence
 
 * (Demonstrate)
 * (Explain reflecting initial state during rendering)
