@@ -6,10 +6,10 @@
 
 ## Encapsulating the DOM Clipboard API
 
-* We have various bits of data in Basecamp, like URLs, that we want to be able to copy to the clipboard with one click
+* We have various bits of data in Basecamp that we want to be able to copy to the clipboard with one click
 * The web platform now has an API for this that is supported across all the current major browsers
 * If a text input field has a selection, you can call `document.execCommand("copy")` to copy the selected text
-* Let's implement a Stimulus controller that uses a hidden text input field to copy a value
+* Let's implement a Stimulus controller that uses text input field to copy a value
 * It should look like a button:
 
 [screenshot]
@@ -18,7 +18,7 @@
 
 ```html
 <div>
-  <input type="text" value="https://basecamp.com/">
+  PIN Number: <input type="text" value="1234" readonly>
   <button>Copy to Clipboard</button>
 </div>
 ```
@@ -44,7 +44,7 @@ export default class extends Controller {
 
 ```html
 <div data-controller="clipboard">
-  <input data-target="clipboard.source" type="text" value="https://basecamp.com/">
+  PIN Number: <input data-target="clipboard.source" type="text" value="1234" readonly>
   <button data-action="clipboard#copy">Copy to Clipboard</button>
 </div>
 ```
@@ -75,40 +75,55 @@ export default class extends Controller {
 
 * (Demonstrate the functionality)
 
-## Hiding the Implementation Details
-
-* The last thing we'd like to do is hide the input field
-* We'll do this with CSS
-* Start by adding `class="clipboard-source"` to the input field:
-
-```html
-<div data-controller="clipboard">
-  <input data-target="clipboard.source" class="clipboard-source" type="text" value="https://basecamp.com/">
-  <button data-action="clipboard#copy">Copy to Clipboard</button>
-</div>
-```
-
-* Then add the following style to `public/css/main.css`:
-
-```css
-.clipboard-source {
-  display: none;
-}
-```
-
-* (Demonstrate that the input field is invisible now)
-
-## Understanding Progressive Enhancement
+## Progressive Ehancement
 
 * What if the browser doesn't support the copy API?
 * What if JavaScript failed to load due to a CDN issue? What if it's disabled entirely?
 * We can account for these cases using progressive enhancement techniques
-* We'll _feature-test_ support for the API
-* If it's supported, we'll add a class name to the element
-* Then we'll condition our behavioral CSS to require that class
+* We'll hide "Copy to Clipboard" button initially
+* Then we'll _feature-test_ support for the API
+* If it's supported, we'll add a class name to the element to reveal the button
+* Start by adding `class="clipboard-button"` to the button element:
 
-* (Example)
-* (Demonstrate by commenting out the script tag)
+```html
+<div data-controller="clipboard">
+  PIN Number: <input data-target="clipboard.source" type="text" value="1234" readonly>
+  <button data-action="clipboard#copy" class="cliboard-button">Copy to Clipboard</button>
+</div>
+```
+
+* Then add the following styles to `public/main.css`:
+
+```css
+.clipboard-button {
+  display: none;
+}
+
+.clipboard--supported .clipboard-button {
+  display: initial;
+}
+```
+
+* Now we'll add an `initialize` method to do the feature test
+
+```js
+export default class extends Controller {
+  initialize() {
+    if (document.queryCommandSupported("copy")) {
+      this.element.classList.add("clipboard--supported")
+    }
+  }
+
+  copy() {
+    this.sourceElement.select()
+    document.execCommand("copy")
+  }
+
+  get sourceElement() {
+    return this.targets.find("source")
+  }
+}
+```
 
 ## Stimulus Controllers are Reusable
 
@@ -116,12 +131,12 @@ export default class extends Controller {
 * The controllers we've built are reusable
 * Any time we want to provide a way to copy a bit of text to the clipboard, all we need is markup on the page with the right annotations
 * Let's go ahead and add another one to the page
-* Copy and paste the markup, then change the URL in the `value` attribute:
+* Copy and paste the markup, then change the `value` attribute:
 
 ```html
 <div data-controller="clipboard">
-  <input data-target="clipboard.source" class="clipboard-source" type="text" value="https://stimulusjs.org/">
-  <button data-action="clipboard#copy">Copy to Clipboard</button>
+  PIN Number: <input data-target="clipboard.source" type="text" value="3737" readonly>
+  <button data-action="clipboard#copy" class="cliboard-button">Copy to Clipboard</button>
 </div>
 ```
 
@@ -137,7 +152,7 @@ export default class extends Controller {
 
 ```html
 <div data-controller="clipboard">
-  <input data-target="clipboard.source" class="clipboard-source" type="text" value="https://rubyonrails.org/">
+  PIN Number: <input data-target="clipboard.source" type="text" value="3737" readonly>
   <a href="#" data-action="clipboard#copy">Copy to Clipboard</button>
 </div>
 ```
