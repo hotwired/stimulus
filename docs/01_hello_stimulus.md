@@ -23,13 +23,13 @@
 * Stimulus automatically connects DOM elements to JavaScript objects
 * Those objects are called _controllers_
 * Let's create our first controller by extending Stimulus' `Controller` class
-* We'll call it `HelloController` and place it in `src/controllers/hello_controller.js`:
+* We'll place it in `src/controllers/hello_controller.js`:
 
 ```js
 // src/controllers/hello_controller.js
 import { Controller } from "stimulus"
 
-export default class HelloController extends Controller {
+export default class extends Controller {
 }
 ```
 
@@ -58,7 +58,7 @@ export default class HelloController extends Controller {
 // src/controllers/hello_controller.js
 import { Controller } from "stimulus"
 
-export default class HelloController extends Controller {
+export default class extends Controller {
   connect() {
     console.log("Hello, Stimulus!", this.element)
   }
@@ -77,7 +77,7 @@ export default class HelloController extends Controller {
 // src/controllers/hello_controller.js
 import { Controller } from "stimulus"
 
-export default class HelloController extends Controller {
+export default class extends Controller {
   greet() {
     console.log("Hello, Stimulus!", this.element)
   }
@@ -135,7 +135,7 @@ export default class HelloController extends Controller {
 // src/controllers/hello_controller.js
 import { Controller } from "stimulus"
 
-export default class HelloController extends Controller {
+export default class extends Controller {
   greet() {
     const element = this.targets.find("name")
     const name = element.value
@@ -155,7 +155,7 @@ export default class HelloController extends Controller {
 // src/controllers/hello_controller.js
 import { Controller } from "stimulus"
 
-export default class HelloController extends Controller {
+export default class extends Controller {
   greet() {
     const name = this.inputElement.value
     console.log(`Hello, ${name}!`)
@@ -173,7 +173,7 @@ export default class HelloController extends Controller {
 // src/controllers/hello_controller.js
 import { Controller } from "stimulus"
 
-export default class HelloController extends Controller {
+export default class extends Controller {
   greet() {
     console.log(`Hello, ${this.name}!`)
   }
