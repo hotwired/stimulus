@@ -78,6 +78,23 @@ main {
   background-color: white;
 }
 
+.clipboard-button {
+  display: none;
+}
+
+.clipboard--supported .clipboard-button {
+  display: initial;
+}
+
+.clipboard-source {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  color: inherit;
+  font-size: inherit;
+}
+
 [data-controller~="bulk-checker"] form {
   display: flex;
   flex-wrap: wrap;
