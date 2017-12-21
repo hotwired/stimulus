@@ -5,6 +5,14 @@ export default class extends Controller {
     this.showSlideAtIndex(this.currentIndex)
   }
 
+  navigate(event) {
+    if (event.keyCode == 37) {
+      this.previous()
+    } else if (event.keyCode == 39) {
+      this.next()
+    }
+  }
+
   next() {
     this.showSlideAtIndex(this.nextIndex)
   }

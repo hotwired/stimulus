@@ -1,6 +1,9 @@
 <% include layout/head %>
 
-<div data-controller="slideshow" data-slideshow-index="2">
+<div data-controller="slideshow"
+     data-action="keydown@window->slideshow#navigate"
+     data-slideshow-index="2">
+
   <button data-action="slideshow#previous">←</button>
   <button data-action="slideshow#next">→</button>
 
