@@ -115,38 +115,6 @@ main {
   margin-top: 15px;
 }
 
-[data-controller~="expander"][data-expander-expanded] {
-  border-color: green;
-}
-
-[data-controller~="expander"][data-expander-expanded] > [data-target~="expander.collapsed"] {
-  display: none;
-}
-
-[data-controller~="expander"]:not([data-expander-expanded]) > [data-target~="expander.expanded"] {
-  display: none;
-}
-
-[data-target~="shape-shifter.shape"] {
-  display: inline-block;
-  width: 80px;
-  height: 80px;
-  margin: 10px;
-}
-
-[data-target~="shape-shifter.shape"].triangle {
-  width: 0;
-  height: 0;
-  border-bottom: 80px solid steelblue;
-  border-left: 40px solid transparent;
-  border-right: 40px solid transparent;
-}
-
-[data-target~="shape-shifter.shape"].circle {
-  background-color: steelblue;
-  border-radius: 50%;
-}
-
 [data-controller~="close-warning"] {
   min-height: 300px;
 }

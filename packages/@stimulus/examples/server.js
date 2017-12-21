@@ -18,7 +18,7 @@ app.use(express.static(publicPath))
 app.use(webpackMiddleware(webpack(webpackConfig), { lazy: true }))
 
 app.get("/", (req, res) => {
-  res.redirect("/expander")
+  res.redirect("/clipboard")
 })
 
 app.get("/:page", (req, res, next) => {
