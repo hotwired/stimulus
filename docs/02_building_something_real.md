@@ -10,9 +10,6 @@
 * The web platform now has an API for this that is supported across all the current major browsers
 * If a text input field has a selection, you can call `document.execCommand("copy")` to copy the selected text
 * Let's implement a Stimulus controller that uses text input field to copy a value
-* It should look like a button:
-
-[screenshot]
 
 * We'll start with basic HTML:
 
@@ -73,7 +70,7 @@ export default class extends Controller {
 }
 ```
 
-* (Demonstrate the functionality)
+* Let's see our new controller in action: ![copy](https://user-images.githubusercontent.com/5355/34271849-0b645dfc-e65c-11e7-899d-b01bf9019d5c.gif)
 
 ## Progressive Ehancement
 
