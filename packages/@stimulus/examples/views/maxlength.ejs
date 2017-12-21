@@ -1,0 +1,10 @@
+<% include layout/head %>
+
+<textarea
+  data-controller="maxlength"
+  data-action="input->maxlength#enforceLimit"
+  data-maxlength-limit="20"
+  placeholder="20 character max…"
+  cols="25"></textarea>
+
+<% include layout/tail %>
