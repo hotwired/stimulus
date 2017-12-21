@@ -47,7 +47,8 @@ export default class extends Controller {
 
 * In Stimulus, identifiers serve as the link between elements and controllers
 * The application continually watches the page for changes
-* When it finds an element with `hello` in its `data-controller` attribute, the application creates a new instance of the controller (explain filename association)
+* When it finds an element with `hello` in its `data-controller` attribute, the application creates a new instance of the controller
+* Under the hood, Stimulus automatically maps the filename `hello_controller.js` to the identifier `hello`
 
 ## Is This Thing On?
 
