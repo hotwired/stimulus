@@ -4,10 +4,11 @@
 * Let's build something we might actually use
 * We'll go over a real example from Basecamp
 
+## Encapsulating the DOM Clipboard API
+
 * We have various bits of data in Basecamp, like URLs, that we want to be able to copy to the clipboard with one click
 * The web platform now has an API for this that is supported across all the current major browsers
 * If a text input field has a selection, you can call `document.execCommand("copy")` to copy the selected text
-
 * Let's implement a Stimulus controller that uses a hidden text input field to copy a value
 * It should look like a button:
 
@@ -22,8 +23,7 @@
 </div>
 ```
 
-* Next we'll create a Stimulus controller to perform the copying
-* Create `src/controllers/clipboard_controller.js` and add an empty method `copy`:
+* Next, create `src/controllers/clipboard_controller.js` and add an empty method `copy`:
 
 ```js
 // src/controllers/clipboard_controller.js
@@ -34,6 +34,8 @@ export default class extends Controller {
   }
 }
 ```
+
+## Connecting the Controller
 
 * Now we can wire up the controller to our markup
 * Add `data-controller="clipboard"` to the outer `<div>`. Any time this attribute appears on an element, Stimulus will connect our controller
@@ -47,7 +49,11 @@ export default class extends Controller {
 </div>
 ```
 
+### Common Actions Have a Shorthand Notation
+
 * (Describe why we can omit `click->` from the `data-action` attribute)
+
+## Implementing the Copy Action
 
 * Now we can implement the `copy` action:
 
@@ -68,6 +74,8 @@ export default class extends Controller {
 ```
 
 * (Demonstrate the functionality)
+
+## Hiding the Implementation Details
 
 * The last thing we'd like to do is hide the input field
 * We'll do this with CSS
@@ -90,6 +98,8 @@ export default class extends Controller {
 
 * (Demonstrate that the input field is invisible now)
 
+## Understanding Progressive Enhancement
+
 * What if the browser doesn't support the copy API?
 * What if JavaScript failed to load due to a CDN issue? What if it's disabled entirely?
 * We can account for these cases using progressive enhancement techniques
@@ -99,6 +109,8 @@ export default class extends Controller {
 
 * (Example)
 * (Demonstrate by commenting out the script tag)
+
+## Stimulus Controllers are Reusable
 
 * So far we've just seen a single controller on the page at a time
 * The controllers we've built are reusable
@@ -114,7 +126,13 @@ export default class extends Controller {
 ```
 
 * (Demonstrate)
+
+## Each Controller Instance is a Unique Object
+
 * (Explain that these are two separate controller instances)
+
+## Actions and Targets Can Go on Any Kind of Element
+
 * Now let's add one more. This time we'll use a link instead of a button:
 
 ```html
