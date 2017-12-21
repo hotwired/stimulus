@@ -2,7 +2,18 @@
 
 ## Prerequisites
 
-* (Glitch pointed to the sandbox repo, or sandbox cloned locally from Git)
+To follow along, you'll need a running copy of the [stimulus-starter](https://github.com/stimulusjs/stimulus-starter) project. For a simple one-click solution, remix it on Glitch. Or, clone the repository and run it locally.
+
+<a href="https://glitch.com/edit/#!/remix/stimulus-starter"><img src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fremix%402x.png?1513093958726" alt="remix button" aria-label="remix" height="33"></a>
+
+*or*
+
+```sh
+$ git clone https://github.com/stimulusjs/stimulus-starter.git
+$ cd stimulus-starter/
+$ yarn install
+$ yarn start
+```
 
 ## It All Starts With HTML
 
