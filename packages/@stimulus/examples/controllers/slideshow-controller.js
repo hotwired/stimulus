@@ -2,10 +2,10 @@ import { Controller } from "stimulus"
 
 export default class extends Controller {
   connect() {
-    this.showSlideAtIndex(this.currentIndex)
+    this.render()
   }
 
-  navigate(event) {
+  navigateWithKeyboard(event) {
     if (event.keyCode == 37) {
       this.previous()
     } else if (event.keyCode == 39) {
@@ -14,39 +14,39 @@ export default class extends Controller {
   }
 
   next() {
-    this.showSlideAtIndex(this.nextIndex)
+    this.index++
   }
 
   previous() {
-    this.showSlideAtIndex(this.previousIndex)
+    this.index--
   }
 
-  showSlideAtIndex(index) {
-    this.currentSlideElement.classList.remove("slide--current")
-    this.data.set("index", index)
-    this.currentSlideElement.classList.add("slide--current")
+  render() {
+    this.slideElements.forEach((element, index) => {
+      element.classList.toggle("slide--current", index == this.index)
+    })
   }
 
-  get currentIndex() {
-    if (this.data.has("index")) {
-      return Number(this.data.get("index"))
-    } else {
-      return 0
+  get index() {
+    return parseInt(this.data.get("index") || 0)
+  }
+
+  set index(value) {
+    if (value < 0) {
+      value = this.lastIndex
+    } else if (value > this.lastIndex) {
+      value = 0
     }
+    this.data.set("index", value)
+    this.render()
   }
 
-  get nextIndex() {
-    const index = this.currentIndex + 1
-    return this.slideElements[index] ? index : 0
+  get lastIndex() {
+    return this.length - 1
   }
 
-  get previousIndex() {
-    const index = this.currentIndex - 1
-    return this.slideElements[index] ? index : this.slideElements.length - 1
-  }
-
-  get currentSlideElement() {
-    return this.slideElements[this.currentIndex]
+  get length() {
+    return this.slideElements.length
   }
 
   get slideElements() {
