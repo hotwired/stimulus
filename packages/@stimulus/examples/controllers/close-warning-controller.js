@@ -1,6 +1,6 @@
 import { Controller } from "stimulus"
 
-export default class CloseWarningController extends Controller {
+export default class extends Controller {
   connect() {
     if (this.autosavedValue && this.autosavedValue != this.inputValue) {
       this.showAutosaveDialog()

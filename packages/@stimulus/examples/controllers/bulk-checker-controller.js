@@ -1,6 +1,6 @@
 import { Controller } from "stimulus"
 
-export default class BulkCheckerController extends Controller {
+export default class extends Controller {
   checkAll(event) {
     this.targets.findAll("checkbox").forEach(element => {
       element.checked = true

@@ -1,6 +1,6 @@
 import { Controller } from "stimulus"
 
-export default class SlideshowController extends Controller {
+export default class extends Controller {
   connect() {
     this.showSlideAtIndex(this.currentIndex)
   }

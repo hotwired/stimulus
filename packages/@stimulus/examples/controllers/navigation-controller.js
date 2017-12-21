@@ -1,6 +1,6 @@
 import { Controller } from "stimulus"
 
-export default class NavigationController extends Controller {
+export default class extends Controller {
   connect() {
     const { pathname } = window.location
     const elements = this.targets.findAll("example")
