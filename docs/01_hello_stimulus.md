@@ -99,7 +99,7 @@ export default class extends Controller {
 * We've created an _action_ method called `greet()`
 * Action methods are event handlers
 * Let's connect the action method to the button's click event
-* Open `src/index.html` and add a `data-action` annotation to the button:
+* Open `public/index.html` and add a `data-action` annotation to the button:
 
 ```html
 <div data-controller="hello">
