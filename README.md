@@ -4,8 +4,6 @@
 
 Stimulus is a front-end framework with a structured set of conventions for handling events and tracking the lifecycle of DOM elements.
 
-## What it looks like
-
 ```html
 <div data-controller="hello">
   <input data-target="hello.name" type="text">
