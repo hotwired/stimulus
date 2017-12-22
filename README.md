@@ -1,6 +1,40 @@
-# Stimulus ✨
+# Stimulus
 
-Stimulus is framework for adding JavaScript behavior to your HTML. It’s a system for controlling the events and lifecycle of elements in the DOM, and a set of conventions for structuring your code. Stimulus provides just enough formality to save you from JavaScript soup.
+### Save yourself from JavaScript soup.
+
+Stimulus is a front-end framework with a structured set of conventions for handling events and tracking the lifecycle of DOM elements.
+
+## What it looks like
+
+```html
+<div data-controller="hello">
+  <input data-target="hello.name" type="text">
+  <button data-action="click->hello#greet">Greet</button>
+</div>
+```
+
+Annotate your HTML with controller, target, and action attributes. Then write a compatible controller. Stimulus wires it up for you automatically:
+
+```js
+// hello_controller.js
+import { Controller } from "stimulus"
+
+export default class extends Controller {
+  greet() {
+    console.log(`Hello, ${this.name}!`)
+  }
+
+  get name() {
+    return this.inputElement.value
+  }
+
+  get inputElement() {
+    return this.targets.find("name")
+  }
+}
+```
+
+You can write your first controller in five minutes by diving straight into [the Stimulus manual](docs/01_hello_stimulus.md).
 
 ## Installation
 
@@ -8,103 +42,6 @@ Include the [`stimulus` npm package](https://www.npmjs.com/package/stimulus) in 
 
 Or, load the [`stimulus.umd.js`](https://unpkg.com/stimulus/dist/stimulus.umd.js) browser bundle in a `<script>` tag directly and access the API through the `window.Stimulus` global.
 
-## Usage
-
-* [Controllers](#controllers)
-  * [Identifiers](#identifiers)
-  * [Actions](#actions)
-  * [Targets](#targets)
-  * [Data](#data)
-* [Applications](#applications)
-
-### Controllers
-```js
-import { Controller } from "stimulus"
-
-export default class DemoController extends Controller {
-  initialize() {
-
-  }
-
-  connect() {
-
-  }
-
-  disconnect() {
-
-  }
-}
-```
-
-#### Identifiers
-
-```html
-<div data-controller="demo"></div>
-```
-
-#### Actions
-
-```html
-<div data-controller="demo">
-  <button data-action="demo#run">Run</button>
-</div>
-```
-
-```js
-export default class DemoController extends Controller {
-  run() {
-    const message = "It works!"
-    alert(message)
-  }
-}
-```
-
-#### Targets
-
-```html
-<div data-controller="demo">
-  <input data-target="demo.message" type="text" value="It works!">
-  <button data-action="demo#run">Run</button>
-</div>
-```
-
-```js
-export default class DemoController extends Controller {
-  run() {
-    const message = this.targets.find("message").value
-    alert(message)
-  }
-}
-```
-
-#### Data
-
-```html
-<div data-controller="demo" data-demo-message="It works!">
-  <button data-action="demo#run">Run</button>
-</div>
-```
-
-```js
-export default class DemoController extends Controller {
-  run() {
-    const message = this.data.get("message")
-    alert(message)
-  }
-}
-```
-
-### Applications
-
-```js
-import { Application } from "stimulus"
-import DemoController from "./controllers/demo_controller"
-
-const application = new Application()
-application.register("demo", DemoController)
-application.start()
-```
-
 ---
 
-© 2017 Basecamp, LLC.
+© 2018 Basecamp, LLC. Stimulus is [MIT-licensed](LICENSE.md) software.
