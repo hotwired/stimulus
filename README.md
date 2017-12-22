@@ -32,7 +32,7 @@ export default class extends Controller {
 }
 ```
 
-You can write your first controller in five minutes by diving straight into [The Stimulus Handbook](docs/README.md).
+You can write your first controller in five minutes by diving straight into [The Stimulus Handbook](handbook/README.md).
 
 ## Installation
 
