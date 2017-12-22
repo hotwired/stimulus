@@ -1,4 +1,4 @@
-#### The Stimulus Handbook | [Stimulus](../README.md)
+#### [Stimulus](../README.md) | The Stimulus Handbook
 
 ---
 
