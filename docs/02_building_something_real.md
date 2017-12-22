@@ -1,4 +1,8 @@
-# Building Something Real
+#### [The Stimulus Handbook](README.md)
+
+---
+
+# 2 Building Something Real
 
 * Logging hello to the console isn't very exciting
 * Let's build something we might actually use

@@ -1,4 +1,8 @@
-# Managing State
+#### [The Stimulus Handbook](README.md)
+
+---
+
+# 3 Managing State
 
 * Let's start by making a controller that increments a counter when you click a button
 * Add this to `public/index.html`:

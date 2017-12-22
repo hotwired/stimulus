@@ -1,4 +1,8 @@
-# Hello, Stimulus
+#### [The Stimulus Handbook](README.md)
+
+---
+
+# 1 Hello, Stimulus
 
 ## Prerequisites
 
