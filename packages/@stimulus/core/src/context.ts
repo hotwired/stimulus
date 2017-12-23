@@ -1,10 +1,10 @@
 import { Action } from "./action"
 import { ActionDescriptor } from "./action_descriptor"
+import { ActionSet } from "./action_set"
 import { Application } from "./application"
 import { Configuration } from "./configuration"
 import { ContextSet } from "./context_set"
 import { Controller } from "./controller"
-import { Dispatcher } from "./dispatcher"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
 import { Scope } from "./scope"
 
@@ -12,13 +12,13 @@ export class Context implements InlineActionObserverDelegate {
   contextSet: ContextSet
   scope: Scope
   controller: Controller
-  private dispatcher: Dispatcher
+  private actions: ActionSet
   private inlineActionObserver: InlineActionObserver
 
   constructor(contextSet: ContextSet, element: Element) {
     this.contextSet = contextSet
     this.scope = new Scope(this.configuration, this.identifier, element)
-    this.dispatcher = new Dispatcher(this)
+    this.actions = new ActionSet(this)
     this.inlineActionObserver = new InlineActionObserver(this, this)
 
     try {
@@ -30,7 +30,7 @@ export class Context implements InlineActionObserverDelegate {
   }
 
   connect() {
-    this.dispatcher.start()
+    this.actions.start()
     this.inlineActionObserver.start()
 
     try {
@@ -48,7 +48,7 @@ export class Context implements InlineActionObserverDelegate {
     }
 
     this.inlineActionObserver.stop()
-    this.dispatcher.stop()
+    this.actions.stop()
   }
 
   get application(): Application {
@@ -91,12 +91,12 @@ export class Context implements InlineActionObserverDelegate {
     }
 
     if (action) {
-      this.dispatcher.addAction(action)
+      this.actions.add(action)
     }
   }
 
   removeAction(action: Action) {
-    this.dispatcher.removeAction(action)
+    this.actions.delete(action)
   }
 
   // Inline action observer delegate

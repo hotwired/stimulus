@@ -37,11 +37,11 @@ export class Action implements EventListenerObject {
     return action != null && action.descriptor.isEqualTo(this.descriptor)
   }
 
-  addEventListener() {
+  connect() {
     this.eventTarget.addEventListener(this.eventName, this, false)
   }
 
-  removeEventListener() {
+  disconnect() {
     this.eventTarget.removeEventListener(this.eventName, this, false)
   }
 

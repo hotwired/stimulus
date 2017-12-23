@@ -1,7 +1,7 @@
 import { Action } from "./action"
 import { Context } from "./context"
 
-export class Dispatcher {
+export class ActionSet {
   context: Context
   started: boolean
   actions: Set<Action>
@@ -15,36 +15,36 @@ export class Dispatcher {
   start() {
     if (!this.started) {
       this.started = true
-      this.addEventListeners()
+      this.connectActions()
     }
   }
 
   stop() {
     if (this.started) {
-      this.removeEventListeners()
+      this.disconnectActions()
       this.started = false
     }
   }
 
-  addAction(action: Action) {
+  add(action: Action) {
     if (!this.actions.has(action)) {
-      action.addEventListener()
+      action.connect()
       this.actions.add(action)
     }
   }
 
-  removeAction(action: Action) {
+  delete(action: Action) {
     if (this.actions.has(action)) {
       this.actions.delete(action)
-      action.removeEventListener()
+      action.disconnect()
     }
   }
 
-  private addEventListeners() {
-    this.actions.forEach(action => action.addEventListener())
+  private connectActions() {
+    this.actions.forEach(action => action.connect())
   }
 
-  private removeEventListeners() {
-    this.actions.forEach(action => action.removeEventListener())
+  private disconnectActions() {
+    this.actions.forEach(action => action.disconnect())
   }
 }
