@@ -43,9 +43,10 @@ const config = {
     }
   },
 
-  browserDisconnectTolerance: 2,
-  browserDisconnectTimeout: 10000,
-  browserNoActivityTimeout: 20000
+  captureTimeout: 180000,
+  browserDisconnectTimeout: 180000,
+  browserDisconnectTolerance: 3,
+  browserNoActivityTimeout: 300000
 }
 
 if (process.env.CI) {
