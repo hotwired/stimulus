@@ -75,7 +75,8 @@ export class InlineActionObserver implements TokenListObserverDelegate {
   private getConnectedActionForElementWithDescriptorString(element: Element, descriptorString: string) {
     const newAction = this.buildActionForElementWithDescriptorString(element, descriptorString)
     if (newAction) {
-      return this.connectedActions.getValuesForKey(element).find(action => action.hasSameDescriptorAs(newAction))
+      const actions = this.connectedActions.getValuesForKey(element)
+      return actions.find(action => action.hasSameDescriptorAs(newAction))
     }
   }
 

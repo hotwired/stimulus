@@ -143,4 +143,36 @@ testGroup("Controller action", function () {
 
     done()
   })
+
+  test("inline actions ignore events triggered in child scopes", async function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    this.application.register(identifier, TestController)
+
+    await setFixture(`
+      <div id="${identifier}_outer" data-controller="${identifier}" data-action="click->${identifier}#foo">
+        <a id="${identifier}_outer_link" data-action="click->${identifier}#foo">
+          <div id="${identifier}_inner" data-controller="${identifier}" data-action="click->${identifier}#foo">
+            <a id="${identifier}_inner_link" data-action="click->${identifier}#foo"></a>
+          </div>
+        </a>
+      </div>
+    `)
+
+    const innerLinkElement = document.getElementById(`${identifier}_inner_link`)!
+    const innerController = this.application.getControllerForElementAndIdentifier(innerLinkElement.parentElement, identifier)
+    const outerLinkElement = document.getElementById(`${identifier}_outer_link`)!
+    const outerController = this.application.getControllerForElementAndIdentifier(outerLinkElement.parentElement, identifier)
+
+    triggerEvent(innerLinkElement, "click")
+
+    assert.deepEqual(outerController.actions, [])
+    assert.deepEqual(innerController.actions, [
+      { eventType: "click", eventPrevented: false, eventTarget: innerLinkElement, target: innerLinkElement },
+      { eventType: "click", eventPrevented: false, eventTarget: innerLinkElement, target: innerLinkElement.parentElement },
+    ])
+
+    done()
+  })
 })
