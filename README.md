@@ -32,6 +32,8 @@ export default class extends Controller {
 }
 ```
 
+Unlike other frameworks, Stimulus is _render-agnostic_: it doesn't matter where your HTML comes from or when it appears on the page. That makes it a great fit for static sites, server-rendered applications, and Turbolinks-style SPAs.
+
 You can write your first controller in five minutes by diving straight into [The Stimulus Handbook](handbook/README.md).
 
 ## Installation
