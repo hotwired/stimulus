@@ -2,7 +2,7 @@
 
 ### Save yourself from JavaScript soup.
 
-Stimulus is a front-end framework with a structured set of conventions for handling events and tracking the lifecycle of DOM elements.
+Stimulus is a front-end framework with structured conventions for handling events and tracking the lifecycle of DOM elements.
 
 ```html
 <div data-controller="hello">
@@ -11,7 +11,7 @@ Stimulus is a front-end framework with a structured set of conventions for handl
 </div>
 ```
 
-Annotate your HTML with controller, target, and action attributes. Then write a compatible controller. Stimulus wires it up for you automatically:
+Sprinkle your HTML with magic controller, target, and action attributes. Then write a compatible controller. Stimulus brings it to life for you automatically:
 
 ```js
 // hello_controller.js
