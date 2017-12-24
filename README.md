@@ -2,7 +2,7 @@
 
 ### Save yourself from JavaScript soup.
 
-Stimulus is a front-end framework with structured conventions for handling events and tracking the lifecycle of DOM elements.
+Stimulus is a front-end framework with structured conventions for handling events and tracking the lifecycle of DOM elements. Sprinkle your HTML with magic controller, target, and action attributes:
 
 ```html
 <div data-controller="hello">
@@ -11,7 +11,7 @@ Stimulus is a front-end framework with structured conventions for handling event
 </div>
 ```
 
-Sprinkle your HTML with magic controller, target, and action attributes. Then write a compatible controller. Stimulus brings it to life for you automatically:
+Then write a compatible controller. Stimulus brings it to life automatically:
 
 ```js
 // hello_controller.js
@@ -32,15 +32,15 @@ export default class extends Controller {
 }
 ```
 
-Unlike other frameworks, Stimulus is _render-agnostic_—it doesn't matter where your HTML comes from or when it appears on the page. That makes it a great fit for static sites, server-rendered applications, and Turbolinks-style SPAs.
+Unlike other frameworks, Stimulus is _render-agnostic_—it doesn't care when or how you change the DOM. Stimulus continuously watches the page, kicking in as soon as magic attributes appear or disappear. That makes it a great fit for static sites, server-rendered applications, and Turbolinks-style SPAs.
 
-You can write your first controller in five minutes by diving straight into [The Stimulus Handbook](handbook/README.md).
+You can write your first controller in five minutes by following along in [The Stimulus Handbook](handbook/README.md).
 
 ## Installing Stimulus
 
-Stimulus integrates with [webpack](https://webpack.js.org/) to automatically load controller files from a folder in your app.
+Stimulus integrates with the [webpack](https://webpack.js.org/) asset packager to automatically load controller files from a folder in your app.
 
-Of course, you can use Stimulus with other asset packaging systems, too. And if you prefer no build step at all, just drop a `<script>` tag on the page and get right down to business.
+You can use Stimulus with other asset packaging systems, too. And if you prefer no build step at all, just drop a `<script>` tag on the page and get right down to business.
 
 See the [Installation Guide](INSTALLING.md) for detailed instructions.
 
