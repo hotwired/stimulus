@@ -32,15 +32,17 @@ export default class extends Controller {
 }
 ```
 
-Unlike other frameworks, Stimulus is _render-agnostic_: it doesn't matter where your HTML comes from or when it appears on the page. That makes it a great fit for static sites, server-rendered applications, and Turbolinks-style SPAs.
+Unlike other frameworks, Stimulus is _render-agnostic_—it doesn't matter where your HTML comes from or when it appears on the page. That makes it a great fit for static sites, server-rendered applications, and Turbolinks-style SPAs.
 
 You can write your first controller in five minutes by diving straight into [The Stimulus Handbook](handbook/README.md).
 
-## Installation
+## Installing Stimulus
 
-Include the [`stimulus` npm package](https://www.npmjs.com/package/stimulus) in your application using your preferred asset bundling tool.
+Stimulus integrates with [webpack](https://webpack.js.org/) to automatically load controller files from a folder in your app.
 
-Or, load the [`stimulus.umd.js`](https://unpkg.com/stimulus/dist/stimulus.umd.js) browser bundle in a `<script>` tag directly and access the API through the `window.Stimulus` global.
+Of course, you can use Stimulus with other asset packaging systems, too. And if you prefer no build step at all, just drop a `<script>` tag on the page and get right down to business.
+
+See the [Installation Guide](INSTALLING.md) for detailed instructions.
 
 ---
 
