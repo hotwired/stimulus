@@ -4,10 +4,12 @@
 
 # Table of Contents
 
-### [1 Hello Stimulus](01_hello_stimulus.md)
+### [1 Introduction](01_introduction.md)
 
-### [2 Building Something Real](02_building_something_real.md)
+### [2 Hello Stimulus](02_hello_stimulus.md)
 
-### [3 Managing State](03_managing_state.md)
+### [3 Building Something Real](03_building_something_real.md)
 
-### [4 Working With External Resources](04_working_with_external_resources.md)
+### [4 Managing State](04_managing_state.md)
+
+### [5 Working With External Resources](05_working_with_external_resources.md)

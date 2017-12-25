@@ -2,7 +2,7 @@
 
 ---
 
-# 4 Working With External Resources
+# 5 Working With External Resources
 
 COVERS: Timers, Requests, chaining
 

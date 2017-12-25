@@ -2,7 +2,7 @@
 
 ---
 
-# 2 Building Something Real
+# 3 Building Something Real
 
 * Logging hello to the console isn't very exciting
 * Let's build something we might actually use

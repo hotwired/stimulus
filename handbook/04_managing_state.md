@@ -2,7 +2,7 @@
 
 ---
 
-# 3 Managing State
+# 4 Managing State
 
 * Let's start by making a controller that increments a counter when you click a button
 * Add this to `public/index.html`:

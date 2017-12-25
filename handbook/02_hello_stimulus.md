@@ -2,7 +2,7 @@
 
 ---
 
-# 1 Hello, Stimulus
+# 2 Hello, Stimulus
 
 ## Prerequisites
 
