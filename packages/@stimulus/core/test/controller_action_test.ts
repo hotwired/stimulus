@@ -175,4 +175,29 @@ testGroup("Controller action", function () {
 
     done()
   })
+
+  test("inline actions can observe non-bubbling events", async function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    this.application.register(identifier, TestController)
+
+    await setFixture(`
+      <div data-controller="${identifier}" data-action="nonbubbling->${identifier}#foo">
+        <div id="${identifier}_inner" data-action="nonbubbling->${identifier}#foo"></div>
+      </div>
+    `)
+
+    const innerElement = document.getElementById(`${identifier}_inner`)!
+    const controllerElement = innerElement.parentElement!
+    const controller = this.application.getControllerForElementAndIdentifier(controllerElement, identifier)
+
+    triggerEvent(innerElement, "nonbubbling", false)
+
+    assert.deepEqual(controller.actions, [
+      { eventType: "nonbubbling", eventPrevented: false, eventTarget: innerElement, target: innerElement }
+    ])
+
+    done()
+  })
 })
