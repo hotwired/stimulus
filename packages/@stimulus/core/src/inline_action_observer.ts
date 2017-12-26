@@ -75,7 +75,8 @@ export class InlineActionObserver implements TokenListObserverDelegate {
   private getConnectedActionForElementWithDescriptorString(element: Element, descriptorString: string) {
     const newAction = this.buildActionForElementWithDescriptorString(element, descriptorString)
     if (newAction) {
-      return this.connectedActions.getValuesForKey(element).find(action => action.hasSameDescriptorAs(newAction))
+      const actions = this.connectedActions.getValuesForKey(element)
+      return actions.find(action => action.hasSameDescriptorAs(newAction))
     }
   }
 
@@ -83,11 +84,7 @@ export class InlineActionObserver implements TokenListObserverDelegate {
     try {
       const descriptor = ActionDescriptor.forElementWithInlineDescriptorString(element, descriptorString)
       if (descriptor.identifier == this.identifier) {
-        if (descriptor.eventTarget) {
-          return new Action(this.context, descriptor, descriptor.eventTarget)
-        } else {
-          return new Action(this.context, descriptor, this.element, eventTarget => eventTarget == element)
-        }
+        return new Action(this.context, descriptor, descriptor.eventTarget)
       }
     } catch (error) {
       this.context.reportError(error, `parsing descriptor string "${descriptorString}" for element`, element)

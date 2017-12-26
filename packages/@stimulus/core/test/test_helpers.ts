@@ -59,9 +59,9 @@ export function nextFrame(): Promise<any> {
   })
 }
 
-export function triggerEvent(eventTarget: EventTarget, type: string): Event {
+export function triggerEvent(eventTarget: EventTarget, type: string, bubbles: boolean = true): Event {
   const event = document.createEvent("Events")
-  event.initEvent(type, true, true)
+  event.initEvent(type, bubbles, true)
   // IE <= 11 does not set `defaultPrevented` when `preventDefault()` is called on synthetic events
   event.preventDefault = function() {
     Object.defineProperty(this, "defaultPrevented", {

@@ -1,30 +1,50 @@
 import { Action } from "./action"
-import { Multimap } from "@stimulus/multimap"
+import { Context } from "./context"
 
 export class ActionSet {
-  private actionsByEventName: Multimap<string, Action>
+  context: Context
+  started: boolean
+  actions: Set<Action>
 
-  constructor() {
-    this.actionsByEventName = new Multimap<string, Action>()
+  constructor(context: Context) {
+    this.context = context
+    this.started = false
+    this.actions = new Set
   }
 
-  get actions(): Action[] {
-    return this.actionsByEventName.values
+  start() {
+    if (!this.started) {
+      this.started = true
+      this.connectActions()
+    }
+  }
+
+  stop() {
+    if (this.started) {
+      this.disconnectActions()
+      this.started = false
+    }
   }
 
   add(action: Action) {
-    this.actionsByEventName.add(action.eventName, action)
+    if (!this.actions.has(action)) {
+      action.connect()
+      this.actions.add(action)
+    }
   }
 
   delete(action: Action) {
-    this.actionsByEventName.delete(action.eventName, action)
+    if (this.actions.has(action)) {
+      this.actions.delete(action)
+      action.disconnect()
+    }
   }
 
-  has(action: Action): boolean {
-    return this.actionsByEventName.hasValue(action)
+  private connectActions() {
+    this.actions.forEach(action => action.connect())
   }
 
-  getActionsForEventName(eventName: string): Action[] {
-    return this.actionsByEventName.getValuesForKey(eventName)
+  private disconnectActions() {
+    this.actions.forEach(action => action.disconnect())
   }
 }

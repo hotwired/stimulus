@@ -1,7 +1,7 @@
 import { testGroup, test, setFixture, queryFixture, getControllerSelector, getActionSelector, getTargetSelector, triggerEvent, TestController } from "./test_helpers"
 
 testGroup("Controller action", function () {
-  test("inline action", async function (assert) {
+  test("direct action", async function (assert) {
     const done = assert.async()
 
     const identifier = "test"
@@ -24,7 +24,7 @@ testGroup("Controller action", function () {
     done()
   })
 
-  test("inline action: bubbling from child element", async function (assert) {
+  test("bubbling action", async function (assert) {
     const done = assert.async()
 
     const identifier = "test"
@@ -50,7 +50,7 @@ testGroup("Controller action", function () {
     done()
   })
 
-  test("nested inline actions", async function (assert) {
+  test("nested actions", async function (assert) {
     const done = assert.async()
 
     const identifier1 = "test1"
@@ -85,7 +85,7 @@ testGroup("Controller action", function () {
     done()
   })
 
-  test("multiple inline actions", async function (assert) {
+  test("multiple actions", async function (assert) {
     const done = assert.async()
 
     const identifier = "test"
@@ -112,7 +112,7 @@ testGroup("Controller action", function () {
     done()
   })
 
-  test("global inline actions", async function (assert) {
+  test("global actions", async function (assert) {
     const done = assert.async()
 
     const identifier = "test"
@@ -139,6 +139,87 @@ testGroup("Controller action", function () {
       { eventType: "click", eventPrevented: false, eventTarget: window, target: window },
       { eventType: "click", eventPrevented: false, eventTarget: outerElement, target: window },
       { eventType: "click", eventPrevented: false, eventTarget: buttonElement, target: window },
+    ])
+
+    done()
+  })
+
+  test("actions ignore events triggered in child scopes", async function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    this.application.register(identifier, TestController)
+
+    await setFixture(`
+      <div id="${identifier}_outer" data-controller="${identifier}" data-action="click->${identifier}#foo">
+        <a id="${identifier}_outer_link" data-action="click->${identifier}#foo">
+          <div id="${identifier}_inner" data-controller="${identifier}" data-action="click->${identifier}#foo">
+            <a id="${identifier}_inner_link" data-action="click->${identifier}#foo"></a>
+          </div>
+        </a>
+      </div>
+    `)
+
+    const innerLinkElement = document.getElementById(`${identifier}_inner_link`)!
+    const innerController = this.application.getControllerForElementAndIdentifier(innerLinkElement.parentElement, identifier)
+    const outerLinkElement = document.getElementById(`${identifier}_outer_link`)!
+    const outerController = this.application.getControllerForElementAndIdentifier(outerLinkElement.parentElement, identifier)
+
+    triggerEvent(innerLinkElement, "click")
+
+    assert.deepEqual(outerController.actions, [])
+    assert.deepEqual(innerController.actions, [
+      { eventType: "click", eventPrevented: false, eventTarget: innerLinkElement, target: innerLinkElement },
+      { eventType: "click", eventPrevented: false, eventTarget: innerLinkElement, target: innerLinkElement.parentElement },
+    ])
+
+    done()
+  })
+
+  test("actions can observe non-bubbling events", async function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    this.application.register(identifier, TestController)
+
+    await setFixture(`
+      <div data-controller="${identifier}" data-action="nonbubbling->${identifier}#foo">
+        <div id="${identifier}_inner" data-action="nonbubbling->${identifier}#foo"></div>
+      </div>
+    `)
+
+    const innerElement = document.getElementById(`${identifier}_inner`)!
+    const controllerElement = innerElement.parentElement!
+    const controller = this.application.getControllerForElementAndIdentifier(controllerElement, identifier)
+
+    triggerEvent(innerElement, "nonbubbling", false)
+
+    assert.deepEqual(controller.actions, [
+      { eventType: "nonbubbling", eventPrevented: false, eventTarget: innerElement, target: innerElement }
+    ])
+
+    done()
+  })
+
+  test("global actions can observe events from elements outside the scope", async function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    this.application.register(identifier, TestController)
+
+    await setFixture(`
+      <div id="${identifier}_outside"></div>
+      <div id="${identifier}_controller" data-controller="${identifier}" data-action="click@window->${identifier}#foo"></div>
+    `)
+
+    const outsideElement = document.getElementById(`${identifier}_outside`)!
+    const controllerElement = document.getElementById(`${identifier}_controller`)!
+    const controller = this.application.getControllerForElementAndIdentifier(controllerElement, identifier)
+
+    triggerEvent(outsideElement, "click")
+
+    assert.deepEqual(controller.actions, [
+      { eventType: "click", eventPrevented: false, eventTarget: outsideElement, target: window }
     ])
 
     done()
