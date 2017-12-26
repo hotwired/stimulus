@@ -97,3 +97,7 @@ export default class extends Controller {
 
 * Try copying the element's HTML again. It works!
 * You've made your controller more resilient by saving its state in the DOM
+
+---
+
+Next: [Working With External Resources](05_working_with_external_resources.md)

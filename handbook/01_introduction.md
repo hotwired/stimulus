@@ -25,3 +25,7 @@ In the early 2000s, the web standards movement championed the separation of pres
 ## The Wiring is Laid Bare
 
 ## Render However You Want
+
+---
+
+Next: [Hello Stimulus](02_hello_stimulus.md)

@@ -161,3 +161,7 @@ export default class extends Controller {
 * (Demonstrate)
 * We can use any kind of element we want as the trigger, as long as it has the `data-action` attribute on it
 * We could even have multiple elements with the same action
+
+---
+
+Next: [Managing State](04_managing_state.md)

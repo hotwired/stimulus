@@ -208,3 +208,7 @@ export default class extends Controller {
 
 * Congratulations! You've just written your first Stimulus controller
 * We've covered the basics; keep reading to learn more
+
+---
+
+Next: [Building Something Real](03_building_something_real.md)
