@@ -200,4 +200,28 @@ testGroup("Controller action", function () {
 
     done()
   })
+
+  test("global inline actions can observe events from elements outside the scope", async function (assert) {
+    const done = assert.async()
+
+    const identifier = "test"
+    this.application.register(identifier, TestController)
+
+    await setFixture(`
+      <div id="${identifier}_outside"></div>
+      <div id="${identifier}_controller" data-controller="${identifier}" data-action="click@window->${identifier}#foo"></div>
+    `)
+
+    const outsideElement = document.getElementById(`${identifier}_outside`)!
+    const controllerElement = document.getElementById(`${identifier}_controller`)!
+    const controller = this.application.getControllerForElementAndIdentifier(controllerElement, identifier)
+
+    triggerEvent(outsideElement, "click")
+
+    assert.deepEqual(controller.actions, [
+      { eventType: "click", eventPrevented: false, eventTarget: outsideElement, target: window }
+    ])
+
+    done()
+  })
 })
