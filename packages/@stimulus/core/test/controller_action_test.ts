@@ -1,7 +1,7 @@
 import { testGroup, test, setFixture, queryFixture, getControllerSelector, getActionSelector, getTargetSelector, triggerEvent, TestController } from "./test_helpers"
 
 testGroup("Controller action", function () {
-  test("inline action", async function (assert) {
+  test("direct action", async function (assert) {
     const done = assert.async()
 
     const identifier = "test"
@@ -24,7 +24,7 @@ testGroup("Controller action", function () {
     done()
   })
 
-  test("inline action: bubbling from child element", async function (assert) {
+  test("bubbling action", async function (assert) {
     const done = assert.async()
 
     const identifier = "test"
@@ -50,7 +50,7 @@ testGroup("Controller action", function () {
     done()
   })
 
-  test("nested inline actions", async function (assert) {
+  test("nested actions", async function (assert) {
     const done = assert.async()
 
     const identifier1 = "test1"
@@ -85,7 +85,7 @@ testGroup("Controller action", function () {
     done()
   })
 
-  test("multiple inline actions", async function (assert) {
+  test("multiple actions", async function (assert) {
     const done = assert.async()
 
     const identifier = "test"
@@ -112,7 +112,7 @@ testGroup("Controller action", function () {
     done()
   })
 
-  test("global inline actions", async function (assert) {
+  test("global actions", async function (assert) {
     const done = assert.async()
 
     const identifier = "test"
@@ -144,7 +144,7 @@ testGroup("Controller action", function () {
     done()
   })
 
-  test("inline actions ignore events triggered in child scopes", async function (assert) {
+  test("actions ignore events triggered in child scopes", async function (assert) {
     const done = assert.async()
 
     const identifier = "test"
@@ -176,7 +176,7 @@ testGroup("Controller action", function () {
     done()
   })
 
-  test("inline actions can observe non-bubbling events", async function (assert) {
+  test("actions can observe non-bubbling events", async function (assert) {
     const done = assert.async()
 
     const identifier = "test"
@@ -201,7 +201,7 @@ testGroup("Controller action", function () {
     done()
   })
 
-  test("global inline actions can observe events from elements outside the scope", async function (assert) {
+  test("global actions can observe events from elements outside the scope", async function (assert) {
     const done = assert.async()
 
     const identifier = "test"
