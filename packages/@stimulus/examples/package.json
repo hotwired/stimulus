@@ -1,6 +1,6 @@
 {
   "name": "@stimulus/examples",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "dependencies": {
     "babel-core": "^6.26.0",
