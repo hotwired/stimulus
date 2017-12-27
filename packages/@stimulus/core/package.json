@@ -1,7 +1,7 @@
 {
   "name": "@stimulus/core",
   "version": "0.6.0",
-  "description": "👉✨",
+  "description": "Stimulus JavaScript framework: Core library",
   "author": "Basecamp, LLC",
   "contributors": [
     {
