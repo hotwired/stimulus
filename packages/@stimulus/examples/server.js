@@ -17,12 +17,19 @@ app.set("view engine", viewEngine)
 app.use(express.static(publicPath))
 app.use(webpackMiddleware(webpack(webpackConfig), { lazy: true }))
 
+const pages = [
+  { path: "/hello", title: "Hello" },
+  { path: "/clipboard", title: "Clipboard" },
+  { path: "/slideshow", title: "Slideshow" },
+]
+
 app.get("/", (req, res) => {
-  res.redirect("/clipboard")
+  res.redirect(pages[0].path)
 })
 
 app.get("/:page", (req, res, next) => {
-  res.render(req.params.page)
+  const currentPage = pages.find(page => page.path == req.path)
+  res.render(req.params.page, { pages, currentPage })
 })
 
 app.listen(port, () => {

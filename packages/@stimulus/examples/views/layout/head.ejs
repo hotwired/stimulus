@@ -3,30 +3,19 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Stimulus
-    <%= locals.title ? `: ${title}` : "" %>
-  </title>
+  <title>Stimulus: <%= currentPage.title %> Example</title>
   <link rel="stylesheet" href="/main.css">
   <script src="/main.js" defer></script>
 </head>
 
 <body>
   <main>
-    <ul class="nav" data-controller="navigation">
-      <li>
-        <a href="/clipboard" data-target="navigation.example">Clipboard</a>
-      </li>
-      <li>
-        <a href="/bulk-checker" data-target="navigation.example">Bulk Checker</a>
-      </li>
-      <li>
-        <a href="/slideshow" data-target="navigation.example">Slideshow</a>
-      </li>
-      <li>
-        <a href="/maxlength" data-target="navigation.example">Max Length</a>
-      </li>
-      <li>
-        <a href="/close-warning" data-target="navigation.example">Close Warning</a>
-      </li>
+    <ul class="nav">
+      <% pages.forEach(page => { %>
+        <li>
+          <a href="<%= page.path %>" class="<%= page.path == currentPage.path ? "active" : "" %>"><%= page.title %></a>
+        </li>
+      <% }) %>
     </ul>
+
     <div class="container">

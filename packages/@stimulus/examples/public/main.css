@@ -95,49 +95,6 @@ main {
   font-size: inherit;
 }
 
-[data-controller~="bulk-checker"] form {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  line-height: 1.6;
-  margin-top: 1em;
-}
-
-[data-controller~="bulk-checker"] form label {
-  width: 10em;
-}
-
-[data-controller~="expander"] {
-  position: relative;
-  border: 2px dotted red;
-  border-radius: 5px;
-  padding: 15px;
-  margin-top: 15px;
-}
-
-[data-controller~="close-warning"] {
-  min-height: 300px;
-}
-
-[data-controller~="close-warning"] .warning {
-  border-width: 2px;
-  border-color: rgba(255, 0, 0, 1);
-  background-color: rgba(255, 0, 0, 0.02);
-}
-
-[data-controller~="close-warning"] [data-target~="close-warning.autosave"] {
-  display: inline-block;
-  font-size: 1.2em;
-  border-radius: 4px;
-  background-color: highlight;
-  padding: 0.6em 1.2em;
-  margin: 1em 0;
-}
-
-[data-controller~="close-warning"] [data-target~="close-warning.autosave"].hidden {
-  display: none;
-}
-
 .slide {
   display: none;
   font-size: 6rem;
