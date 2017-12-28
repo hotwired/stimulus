@@ -14,7 +14,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
   font-size: 14px;
   color: #333;
-  background-color: rgba(0,0,0,0.08);
+  background-color: rgb(255, 235, 140);
 }
 
 a {
@@ -42,10 +42,14 @@ main {
   justify-content: space-around;
 }
 
-.nav {
+.sidebar {
   flex-basis: auto;
-  white-space: nowrap;
   margin: 10px 20px;
+}
+
+.nav {
+  white-space: nowrap;
+  margin: 10px 0;
 }
 
 .nav li {
@@ -59,6 +63,11 @@ main {
   text-decoration: none;
 }
 
+.nav a.active {
+  font-weight: bold;
+  color: #000;
+}
+
 .nav a.active::before {
   content: "👉";
   display: inline-block;
@@ -70,10 +79,9 @@ main {
 
 .container {
   flex-grow: 1;
-  border: 1px dashed #666;
   border-radius: 3px;
   min-height: 300px;
-  padding: 10px;
+  padding: 20px;
   margin: 10px;
   background-color: white;
 }
