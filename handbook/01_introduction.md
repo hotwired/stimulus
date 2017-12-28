@@ -10,6 +10,8 @@ Contemporary JavaScript frameworks are built around the notion that HTML is _dir
 
 By contrast, Stimulus embraces the DOM instead of abstracting it away. … The representational state of a well-crafted Stimulus application lives entirely in the DOM.
 
+Stimulus doesn't concern itself with the details of client-side rendering. It sits on top of your application's existing HTML, regardless of how you generate it or when it appears on the page. Your Stimulus controllers work the same way regardless of whether you're performing full page loads, fetching partial fragments with Ajax, or using your favorite client-side templating library.
+
 ## Connecting HTML to JavaScript
 
 Stimulus continuously monitors the page for the magic `data-controller` attribute. Like the `class` attribute, you can put more than one value inside it. But instead of applying or removing CSS class names, `data-controller` connects and disconnects Stimulus _controllers_.
