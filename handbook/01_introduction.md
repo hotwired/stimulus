@@ -20,13 +20,13 @@ Think of it like this: in the same way that `class` is a bridge connecting HTML 
 
 On top of this foundation, Stimulus adds the magic `data-action` attribute, which describes how events on the page should trigger controller methods, and the magic `data-target` attribute, which gives you a handle for finding elements in the controller's scope.
 
-## Separation of Code and State
+* Magic attributes let you cleanly separate content from behavior, the same way you already separate content from presentation with CSS
+* This separation gives just enough structure to your code to prevent it devolving into "JavaScript soup"
+* (Naming = organization = structure ???)
+* Attributes also let you read the DOM and see what's going on
+* That means when you come back to your templates later, you know where to look for corresponding JavaScript code
+* It also means others on your team can easily look at templates—or even the Web Inspector on a production page—to trace behavior or diagnose an issue
 
-In the early 2000s, the web standards movement championed the separation of presentation, content, and behavior through a philosophy called _progressive enhancement_. …
-
-## The Wiring is Laid Bare
-
-## Render However You Want
 
 ---
 
