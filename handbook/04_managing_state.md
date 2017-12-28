@@ -4,99 +4,177 @@
 
 # 4 Managing State
 
-* Let's start by making a controller that increments a counter when you click a button
-* Add this to `public/index.html`:
+* Let's build a simple slideshow: A set of slides and buttons for flipping through them
+* We'll manage the slideshow's state with DOM data attributes using the Stimulus data API
+* Start with the basic HTML:
 
 ```html
-<p data-controller="counter">
-  <button data-action="counter#increment">+</button>
-  <span data-target="counter.count"></span>
-</p>
+<div data-controller="slideshow">
+  <button data-action="slideshow#previous">←</button>
+  <button data-action="slideshow#next">→</button>
+
+  <div data-target="slideshow.slide" class="slide">🐵</div>
+  <div data-target="slideshow.slide" class="slide">🙈</div>
+  <div data-target="slideshow.slide" class="slide">🙉</div>
+  <div data-target="slideshow.slide" class="slide">🙊</div>
+</div>
+```
+
+* Add a couple styles to hide all but the current slide:
+
+```css
+.slide {
+  display: none;
+}
+
+.slide.slide--current {
+  display: block;
+}
 ```
 
 * And here's our initial controller:
 
 ```js
-// src/controllers/counter_controller.js
+// src/controllers/slideshow_controller.js
 import { Controller } from "stimulus"
 
 export default class extends Controller {
   initialize() {
-    this.count = 0
+    this.render()
   }
 
-  increment() {
-    this.count++
-    this.renderCount()
+  next() {
   }
 
-  renderCount() {
-    this.targets.find("count").textContent = this.count
+  previous() {
+  }
+
+  render() {
+    this.slideElements.forEach((element, index) => {
+      element.classList.toggle("slide--current", index == this.index)
+    })
+  }
+
+  get index() {
+  }
+
+  get slideElements() {
+    return this.targets.findAll("slide")
   }
 }
 ```
 
-* When the controller is initialized we set a `count` property to `0`
-* Clicking the button increments `count` and updates the target element with the value
-* Here it is in action:
-
-![counter](https://user-images.githubusercontent.com/5355/34276147-1c20f558-e66e-11e7-9ae1-8ed731c65c16.gif)
-
-* Great, it works! There's a subtle problem though.
-* What happens if we make a copy of our element's HTML?
-* Open your browser's JavaScript console and paste this in:
+* Now let's implement `get index()`:
 
 ```js
-document.body.innerHTML = document.body.innerHTML
+  get index() {
+    if (this.data.has("index")) {
+      return parseInt(this.data.get("index"))
+    } else {
+      return 0
+    }
+  }
 ```
 
-![counter-copy](https://user-images.githubusercontent.com/5355/34276158-250cff9a-e66e-11e7-886f-5d62a74bce41.gif)
+## Understanding the Data API
 
-* Oops! It looks right at first, but clicking the button resets the counter
-* That's because a new controller was created when we copied the HTML
-* The copied HTML isn't aligned with the new controller's state
-* Let's fix that by persisting the state in the DOM
-* First we'll add a new data attribute to store our `count` property
+* The data API provides convenient methods for working with _scoped_ data attributes
+* In the DOM, data attributes are scoped using the controller's _identifier_ (`slideshow` in this case)
+  * `this.data.has("index")` checks if the element has a `data-slideshow-index` attribute
+  * `this.data.get("index")` returns the value of the element's `data-slideshow-index` attribute
+  * `this.data.set("index", value)` sets the value of the element's `data-slideshow-index` attribute
 
-```html
-<p data-controller="counter" data-counter-count="0">
-  <button data-action="counter#increment">+</button>
-  <span data-target="counter.count"></span>
-</p>
-```
-
-### Data Attributes Explained
-
-> * `data-counter-count="0"` is a scoped data attribute
->   * `counter` is the controller's _identifier_
->   * `count` is the _key_
->   * `0` is the _value_
-
-* Now we'll update the controller to read and write `count` using the data API
+* Let's add a `set index()` method so we can write `index` too
+* We'll save the value using the data API, and then `render()` to change slides:
 
 ```js
+  set index(value) {
+    this.data.set("index", value)
+    this.render()
+  }
+```
+
+* Now we can implement the `next()` and `previous()` methods
+* They'll update the value of `index` if there's another slide to navigate to
+
+```js
+  next() {
+    if (this.index < this.lastIndex) {
+      this.index++
+    }
+  }
+
+  previous() {
+    if (this.index > 0) {
+      this.index--
+    }
+  }
+
+  get lastIndex() {
+    return this.slideElements.length - 1
+  }
+}
+```
+
+* We've filled in the missing pieces
+* Let's take a look at our final controller:
+
+```js
+// src/controllers/slideshow_controller.js
+import { Controller } from "stimulus"
+
 export default class extends Controller {
-  increment() {
-    this.count++
-    this.renderCount()
+  initialize() {
+    this.render()
   }
 
-  renderCount() {
-    this.targets.find("count").textContent = this.count
+  next() {
+    if (this.index < this.lastIndex) {
+      this.index++
+    }
   }
 
-  get count() {
-    return parseInt(this.data.get("count"))
+  previous() {
+    if (this.index > 0) {
+      this.index--
+    }
   }
 
-  set count(value) {
-    this.data.set("count", value)
+  render() {
+    this.slideElements.forEach((element, index) => {
+      element.classList.toggle("slide--current", index == this.index)
+    })
+  }
+
+  get index() {
+    if (this.data.has("index")) {
+      return parseInt(this.data.get("index"))
+    } else {
+      return 0
+    }
+  }
+
+  set index(value) {
+    this.data.set("index", value)
+    this.render()
+  }
+
+  get lastIndex() {
+    return this.slideElements.length - 1
+  }
+
+  get slideElements() {
+    return this.targets.findAll("slide")
   }
 }
 ```
 
-* Try copying the element's HTML again. It works!
-* You've made your controller more resilient by saving its state in the DOM
+* Click through the slides and note how `data-slideshow-index` changes in the DOM
+* Try starting on a different slide by setting an initial index in the HTML:
+  ```html
+  <div data-controller="slideshow"
+       data-slideshow-index="2">…</div>
+  ```
 
 ---
 
