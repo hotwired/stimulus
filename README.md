@@ -1,4 +1,4 @@
-# Stimulus
+# <img src="assets/logo.svg" width="34" height="34" align="left" alt="Stimulus"> Stimulus
 
 ### Save yourself from JavaScript soup.
 

@@ -1,4 +1,4 @@
-#### [Stimulus](../README.md) | The Stimulus Handbook is a 🚧 work in progress
+#### [<img src="../assets/logo.svg" width="11" height="11" alt="Stimulus">](../README.md) [Stimulus](../README.md) | The Stimulus Handbook
 
 ---
 
