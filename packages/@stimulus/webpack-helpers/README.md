@@ -1,0 +1,1 @@
+The `@stimulus/webpack-helpers` package provides autoload support support for Stimulus controllers. See the [Installation Guide](https://github.com/stimulusjs/stimulus/blob/master/INSTALLING.md#using-webpack) for details.
