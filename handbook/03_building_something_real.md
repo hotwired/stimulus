@@ -161,8 +161,16 @@ export default class extends Controller {
   <a href="#" data-action="clipboard#copy">Copy to Clipboard</button>
 </div>
 ```
+* We don't want the browser's default behavior when clicking a link so let's update the `copy()` method to cancel the event:
 
-* (Demonstrate)
+```js
+  copy(event) {
+    event.preventDefault()
+    this.sourceElement.select()
+    document.execCommand("copy")
+  }
+```
+
 * We can use any kind of element we want as the trigger, as long as it has the `data-action` attribute on it
 * We could even have multiple elements with the same action
 
