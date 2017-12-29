@@ -5,18 +5,9 @@
   "repository": "https://github.com/stimulusjs/stimulus",
   "author": "Basecamp, LLC",
   "contributors": [
-    {
-      "name": "David Heinemeier Hansson",
-      "email": "david@basecamp.com"
-    },
-    {
-      "name": "Javan Makhmali",
-      "email": "javan@javan.us"
-    },
-    {
-      "name": "Sam Stephenson",
-      "email": "sstephenson@gmail.com"
-    }
+    "David Heinemeier Hansson <david@basecamp.com>",
+    "Javan Makhmali <javan@javan.us>",
+    "Sam Stephenson <sstephenson@gmail.com>"
   ],
   "main": "dist/stimulus.umd.js",
   "module": "index.js",

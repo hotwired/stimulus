@@ -5,14 +5,8 @@
   "repository": "https://github.com/stimulusjs/stimulus",
   "author": "Basecamp, LLC",
   "contributors": [
-    {
-      "name": "Javan Makhmali",
-      "email": "javan@javan.us"
-    },
-    {
-      "name": "Sam Stephenson",
-      "email": "sstephenson@gmail.com"
-    }
+    "Javan Makhmali <javan@javan.us>",
+    "Sam Stephenson <sstephenson@gmail.com>"
   ],
   "main": "dist/module/index.js",
   "types": "dist/types/index.d.ts",
