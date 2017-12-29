@@ -4,11 +4,13 @@
 
 # Installation Guide
 
-To install Stimulus, add the [stimulus npm package](https://www.npmjs.com/package/stimulus) to your application's JavaScript bundle **or** load [`stimulus.umd.js`](https://unpkg.com/stimulus/dist/stimulus.umd.js) in a `<script>` tag.
+To install Stimulus, add the [stimulus npm package](https://www.npmjs.com/package/stimulus) to your application's JavaScript bundle. Or, load [`stimulus.umd.js`](https://unpkg.com/stimulus/dist/stimulus.umd.js) in a `<script>` tag.
 
 ## Using webpack
 
-Stimulus integrates with the [webpack](https://webpack.js.org/) asset packager to automatically load controller files from a folder in your app. Name your controller files by following the convention `[identifier]_controller.js` where `identifier` corresponds to each controller's `data-controller` value in your HTML. Create a [webpack `require.context`](https://webpack.js.org/api/module-methods/#require-context) for your controllers and pass it to the `autoload` helper along with your application instance.
+Stimulus integrates with the [webpack](https://webpack.js.org/) asset packager to automatically load controller files from a folder in your app.
+
+Use webpack's [`require.context`](https://webpack.js.org/api/module-methods/#require-context) helper in conjunction with Stimulus' `autoload` helper to set everything up:
 
 ```js
 // src/application.js
@@ -20,9 +22,13 @@ const controllers = require.context("./controllers", true, /\.js$/)
 autoload(controllers, application)
 ```
 
+Then name your controller files `[identifier]_controller.js`, where `identifier` corresponds to each controller's `data-controller` identifier in your HTML.
+
+**Note**: Dashes in Stimulus controller identifiers become underscores in controller filenames.
+
 ## Using Other Build Systems
 
-Stimulus works with all other build systems too, but without support for controller auto-loading. Controller files need to be explicitly loaded and registered with your application instance.
+Stimulus works with other build systems, too, but without support for controller autoloading. Instead, you must explicitly load and register controller files with your application instance:
 
 ```js
 // src/application.js
@@ -38,7 +44,7 @@ application.register("clipboard", ClipboardController)
 
 ## Using Without a Build System
 
-Load Stimulus in a `<script>` tag to make it globally available as `window.Stimulus`.
+If you prefer not to use a build system, you can load Stimulus in a `<script>` tag and it will be globally available through the `window.Stimulus` object.
 
 ```html
 <!doctype html>
@@ -65,4 +71,4 @@ Load Stimulus in a `<script>` tag to make it globally available as `window.Stimu
 
 Stimulus supports all evergreen, self-updating desktop and mobile browsers out of the box. If your application needs to support older browsers, include polyfills for `Array.from()`, `Element.closest()`, `Map`, `Object.assign()`, `Promise`, and `Set` before loading Stimulus.
 
-Stimulus is known to support Internet Explorer 11+ and Safari 9+ using [these polyfills](https://github.com/stimulusjs/stimulus/blob/master/packages/%40stimulus/polyfills/index.js) from [core-js](https://www.npmjs.com/package/core-js) and [element-closest](https://www.npmjs.com/package/element-closest) respectively.
+Stimulus is known to support Internet Explorer 11+ and Safari 9+ using [these polyfills](https://github.com/stimulusjs/stimulus/blob/master/packages/%40stimulus/polyfills/index.js) from the [core-js](https://www.npmjs.com/package/core-js) and [element-closest](https://www.npmjs.com/package/element-closest) packages.
