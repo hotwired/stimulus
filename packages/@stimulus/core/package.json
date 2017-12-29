@@ -1,6 +1,6 @@
 {
   "name": "@stimulus/core",
-  "version": "0.7.1",
+  "version": "0.9.0",
   "description": "Stimulus JavaScript framework: Core library",
   "repository": "https://github.com/stimulusjs/stimulus",
   "author": "Basecamp, LLC",
@@ -13,7 +13,7 @@
   "types": "dist/types/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@stimulus/mutation-observers": "^0.7.1"
+    "@stimulus/mutation-observers": "^0.9.0"
   },
   "files": [
     "dist"
