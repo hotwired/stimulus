@@ -16,9 +16,9 @@ On top of this foundation, Stimulus adds the magic `data-action` attribute, whic
 
 ## Separation of Concerns
 
-Stimulus' magic attributes let you cleanly separate content from behavior in the same way you already separate content from presentation with CSS. Your JavaScript and HTML sources can live in separate files once again.
+Stimulus' magic attributes let you cleanly separate content from behavior in the same way you already separate content from presentation with CSS. Plus, Stimulus' conventions naturally encourage you to group related code by name.
 
-Plus, Stimulus' conventions naturally encourage you to group related code by name. This arrangement helps you build reusable, trait-like controllers, giving you just enough structure to keep your code from devolving into "JavaScript soup."
+This arrangement helps you build reusable, trait-like controllers, giving you just enough structure to keep your code from devolving into "JavaScript soup."
 
 ## A Readable Document
 
