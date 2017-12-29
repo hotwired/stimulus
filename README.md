@@ -1,8 +1,10 @@
 # <img src="assets/logo.svg?sanitize=true" width="24" height="24" alt="Stimulus"> Stimulus
 
-### Save yourself from JavaScript soup.
+### The everyday JavaScript framework.
 
-Stimulus is a front-end framework with structured conventions for handling events and tracking the lifecycle of DOM elements. Sprinkle your HTML with magic controller, target, and action attributes:
+Stimulus is a new kind of framework for everyday front-end tasks. It sits on top of the DOM and automatically connects elements to JavaScript controllers. Stimulus works great with server-rendered HTML, and you don't need to be an expert to use it—it's perfect for designers and developers of all levels.
+
+What does it look like? Sprinkle your HTML with magic controller, target, and action attributes:
 
 ```html
 <div data-controller="hello">
@@ -32,7 +34,7 @@ export default class extends Controller {
 }
 ```
 
-Unlike other frameworks, Stimulus is _render-agnostic_—it works regardless of how or when you change the DOM. Stimulus continuously watches the page, kicking in as soon as magic attributes appear or disappear. That makes it a great fit for static sites, server-rendered applications, and Turbolinks-style SPAs.
+Stimulus continuously watches the page, kicking in as soon as magic attributes appear or disappear. That makes it a great fit for static sites, server-rendered applications, and Turbolinks-style SPAs.
 
 You can write your first controller in five minutes by following along in [The Stimulus Handbook](handbook/README.md).
 
