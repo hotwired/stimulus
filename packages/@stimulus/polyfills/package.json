@@ -4,7 +4,7 @@
   "version": "0.7.0",
   "license": "MIT",
   "devDependencies": {
-    "core-js": "^2.5.1",
+    "core-js": "^2.5.3",
     "element-closest": "^2.0.2"
   }
 }

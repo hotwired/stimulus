@@ -32,6 +32,6 @@
     "access": "public"
   },
   "devDependencies": {
-    "webpack": "^3.8.1"
+    "webpack": "^3.10.0"
   }
 }
