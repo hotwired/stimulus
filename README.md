@@ -1,4 +1,4 @@
-# <img src="assets/logo.svg" width="24" height="24" alt="Stimulus"> Stimulus
+# <img src="assets/logo.svg?sanitize=true" width="24" height="24" alt="Stimulus"> Stimulus
 
 ### Save yourself from JavaScript soup.
 
