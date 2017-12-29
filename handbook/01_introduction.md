@@ -4,15 +4,11 @@
 
 # 1 Introduction
 
-Stimulus is a new take on an old idea.
-
-Contemporary JavaScript frameworks are built around the notion that the DOM is a write-only implementation detail. Traditional HTML rendering is replaced by client-side templating systems that funnel through JavaScript-heavy "virtual" DOMs. You conform to the opinions of a framework instead of working with the web like it was designed.
-
-By contrast, Stimulus embraces the DOM instead of abstracting it away. Stimulus doesn't concern itself with the details of rendering. You can write old fashioned server-rendered HTML or use your favorite client-side templating library. Stimulus code works the same way regardless of whether you're performing full page loads, navigating with Turbolinks, fetching partial fragments with Ajax, or creating DOM elements directly.
+Stimulus is a JavaScript framework with modest ambitions. Unlike other frameworks, Stimulus doesn't take over your application's entire front-end. Rather, it's designed to augment your HTML by connecting elements to JavaScript objects automatically.
 
 ## Connecting HTML to JavaScript
 
-Stimulus continuously monitors the page in the background waiting for the magic `data-controller` attribute to appear. Like the `class` attribute, you can put more than one value inside it. But instead of applying or removing CSS class names, `data-controller` values connect and disconnect Stimulus _controllers_.
+Stimulus works by continuously monitoring the page, waiting for the magic `data-controller` attribute to appear. Like the `class` attribute, you can put more than one value inside it. But instead of applying or removing CSS class names, `data-controller` values connect and disconnect Stimulus _controllers_.
 
 Think of it like this: in the same way that `class` is a bridge connecting HTML to CSS, `data-controller` is a bridge from HTML to JavaScript.
 
