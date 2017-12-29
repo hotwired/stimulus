@@ -36,6 +36,10 @@ textarea {
   resize: none;
 }
 
+input {
+  padding: 0.15em 0.3em;
+}
+
 main {
   display: flex;
   flex-flow: row;

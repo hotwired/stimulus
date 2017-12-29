@@ -2,7 +2,7 @@ import { Controller } from "stimulus"
 
 export default class extends Controller {
   greet() {
-    console.log(`Hello, ${this.name}!`)
+    alert(`Hello, ${this.name}!`)
   }
 
   get name() {
