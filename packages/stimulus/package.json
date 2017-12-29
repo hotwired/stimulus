@@ -25,7 +25,7 @@
     "@stimulus/webpack-helpers": "^0.7.0"
   },
   "scripts": {
-    "prepublish": "yarn run build",
+    "prepublishOnly": "yarn run build",
     "build": "yarn exec webpack"
   },
   "publishConfig": {
