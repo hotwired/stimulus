@@ -2,6 +2,7 @@
   "name": "@stimulus/core",
   "version": "0.7.0",
   "description": "Stimulus JavaScript framework: Core library",
+  "repository": "https://github.com/stimulusjs/stimulus",
   "author": "Basecamp, LLC",
   "contributors": [
     {

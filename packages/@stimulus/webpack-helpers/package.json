@@ -2,6 +2,7 @@
   "name": "@stimulus/webpack-helpers",
   "version": "0.7.0",
   "description": "Stimulus JavaScript framework: webpack helpers",
+  "repository": "https://github.com/stimulusjs/stimulus",
   "author": "Basecamp, LLC",
   "contributors": [
     {
