@@ -15,7 +15,7 @@
     "compile": "tsc",
 
     "predist": "yarn compile",
-    "dist": "node script/dist-to-packages.js",
+    "dist": "node scripts/dist-to-packages.js",
 
     "prebuild": "yarn lint && yarn dist",
     "build": "lerna run build",
