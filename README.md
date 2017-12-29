@@ -4,7 +4,7 @@
 
 Stimulus is a new kind of framework for everyday front-end tasks. It sits on top of the DOM and automatically connects elements to JavaScript controllers. Stimulus works great with server-rendered HTML, and you don't need to be an expert to use it—it's perfect for designers and developers of all levels.
 
-What does it look like? Sprinkle your HTML with magic controller, target, and action attributes:
+How does it work? Sprinkle your HTML with magic controller, target, and action attributes:
 
 ```html
 <div data-controller="hello">
