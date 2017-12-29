@@ -30,7 +30,7 @@ export default class extends Controller {
 }
 ```
 
-Stimulus continuously watches the page, kicking in as soon as magic attributes appear or disappear. It processes and connects any update to the DOM regardless of whether it comes from a Turbolinks page change or an Ajax request. Stimulus manages the whole lifecycle.
+Stimulus continuously watches the page, kicking in as soon as magic attributes appear or disappear. It works with any update to the DOM, regardless of whether it comes from a full page load, a Turbolinks page change, or an Ajax request. Stimulus manages the whole lifecycle.
 
 You can write your first controller in five minutes by following along in [The Stimulus Handbook](handbook/README.md).
 
