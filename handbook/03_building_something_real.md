@@ -4,6 +4,11 @@
 
 # 3 Building Something Real
 
+### 🚧 This chapter of The Stimulus Handbook is a work in progress.
+We'll have it wrapped up in time for the 1.0 release. Thanks for your patience!
+
+---
+
 * Logging hello to the console isn't very exciting
 * Let's build something we might actually use
 * We'll go over a real example from Basecamp
@@ -14,7 +19,6 @@
 * The web platform now has an API for this that is supported across all the current major browsers
 * If a text input field has a selection, you can call `document.execCommand("copy")` to copy the selected text
 * Let's implement a Stimulus controller that uses text input field to copy a value
-
 * We'll start with basic HTML:
 
 ```html

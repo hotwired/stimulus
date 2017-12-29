@@ -4,6 +4,11 @@
 
 # 4 Managing State
 
+### 🚧 This chapter of The Stimulus Handbook is a work in progress.
+We'll have it wrapped up in time for the 1.0 release. Thanks for your patience!
+
+---
+
 * Let's build a simple slideshow: A set of slides and buttons for flipping through them
 * We'll manage the slideshow's state with DOM data attributes using the Stimulus data API
 * Start with the basic HTML:
