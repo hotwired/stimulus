@@ -145,12 +145,6 @@ export default class extends Controller {
 </div>
 ```
 
-* (Demonstrate)
-
-## Each Controller Instance is a Unique Object
-
-* (Explain that these are two separate controller instances)
-
 ## Actions and Targets Can Go on Any Kind of Element
 
 * Now let's add one more. This time we'll use a link instead of a button:
