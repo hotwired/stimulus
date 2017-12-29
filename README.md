@@ -2,7 +2,7 @@
 
 ### A modest JavaScript framework that works with the HTML you already have
 
-Stimulus is a JavaScript framework with modest ambitions. It doesn't seek to take over your entire front-end—in fact, it's not concerned with rendering HTML at all. Instead, it's designed to augment the HTML you're already generating on the server with just enough behavior to make it sparkle. Stimulus pairs beautifully with [Turbolinks](https://github.com/turbolinks/turbolinks) to provide a complete solution for fast, compelling applications with a minimal amount of effort.
+Stimulus is a JavaScript framework with modest ambitions. It doesn't seek to take over your entire front-end—in fact, it's not concerned with rendering HTML at all. Instead, it's designed to augment the HTML you're already generating on the server with just enough behavior to make it shine. Stimulus pairs beautifully with [Turbolinks](https://github.com/turbolinks/turbolinks) to provide a complete solution for fast, compelling applications with a minimal amount of effort.
 
 How does it work? Sprinkle your HTML with magic controller, target, and action attributes:
 
@@ -30,7 +30,7 @@ export default class extends Controller {
 }
 ```
 
-Stimulus continuously watches the page, kicking in as soon as magic attributes appear or disappear. It processes and connects any update to the DOM regardless of whether it comes from a Turbolinks page change or a partial fetch. Stimulus manages the whole lifecycle.
+Stimulus continuously watches the page, kicking in as soon as magic attributes appear or disappear. It processes and connects any update to the DOM regardless of whether it comes from a Turbolinks page change or an Ajax request. Stimulus manages the whole lifecycle.
 
 You can write your first controller in five minutes by following along in [The Stimulus Handbook](handbook/README.md).
 
