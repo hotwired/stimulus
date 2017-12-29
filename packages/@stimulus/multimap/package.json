@@ -1,6 +1,6 @@
 {
   "name": "@stimulus/multimap",
-  "version": "0.5.0",
+  "version": "0.7.1",
   "description": "Multimap maps one key to a set of many values",
   "repository": "https://github.com/stimulusjs/stimulus",
   "author": "Basecamp, LLC",

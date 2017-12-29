@@ -1,6 +1,6 @@
 {
   "name": "@stimulus/mutation-observers",
-  "version": "0.5.0",
+  "version": "0.7.1",
   "description": "Practical wrappers around DOM MutationObserver",
   "repository": "https://github.com/stimulusjs/stimulus",
   "author": "Basecamp, LLC",
@@ -12,7 +12,7 @@
   "types": "dist/types/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@stimulus/multimap": "^0.5.0"
+    "@stimulus/multimap": "^0.7.1"
   },
   "files": [
     "dist"

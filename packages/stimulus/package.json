@@ -1,6 +1,6 @@
 {
   "name": "stimulus",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Stimulus JavaScript framework",
   "repository": "https://github.com/stimulusjs/stimulus",
   "author": "Basecamp, LLC",
@@ -13,8 +13,8 @@
   "module": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@stimulus/core": "^0.7.0",
-    "@stimulus/webpack-helpers": "^0.7.0"
+    "@stimulus/core": "^0.7.1",
+    "@stimulus/webpack-helpers": "^0.7.1"
   },
   "scripts": {
     "prepack": "cp ../../README.md .",
