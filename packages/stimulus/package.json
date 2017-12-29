@@ -25,6 +25,7 @@
     "@stimulus/webpack-helpers": "^0.7.0"
   },
   "scripts": {
+    "prepack": "cp ../../README.md .",
     "prepublishOnly": "yarn run build",
     "build": "yarn exec webpack"
   },
