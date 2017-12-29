@@ -211,7 +211,7 @@ export default class extends Controller {
 
 Now the most important code lives at the top of our controller and its supporting details live below.
 
-### Wrap-Up and Next Steps
+## Wrap-Up and Next Steps
 
 Congratulations—you've just written your first Stimulus controller!
 
