@@ -6,11 +6,9 @@
 
 Stimulus is a new take on an old idea.
 
-Contemporary JavaScript frameworks are built around the notion that HTML is _dirty_. … In the world envisioned by React, and frameworks like it, the DOM is a write-only implementation detail.
+Contemporary JavaScript frameworks are built around the notion that the DOM is a write-only implementation detail. Traditional HTML rendering is replaced by client-side templating systems that funnel through JavaScript-heavy "virtual" DOMs. You conform to the opinions of a framework instead of working with the web like it was designed.
 
-By contrast, Stimulus embraces the DOM instead of abstracting it away. … The representational state of a well-crafted Stimulus application lives entirely in the DOM.
-
-Stimulus doesn't concern itself with the details of client-side rendering. Your code works the same way regardless of whether you're performing full page loads, navigating with Turbolinks, fetching partial fragments with Ajax, or using your favorite client-side templating library.
+By contrast, Stimulus embraces the DOM instead of abstracting it away. Stimulus doesn't concern itself with the details of rendering. You can write old fashioned server-rendered HTML or use your favorite client-side templating library. Stimulus code works the same way regardless of whether you're performing full page loads, navigating with Turbolinks, fetching partial fragments with Ajax, or creating DOM elements directly.
 
 ## Connecting HTML to JavaScript
 
