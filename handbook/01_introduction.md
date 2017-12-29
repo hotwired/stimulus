@@ -24,13 +24,17 @@ On top of this foundation, Stimulus adds the magic `data-action` attribute, whic
 
 Stimulus' magic attributes let you cleanly separate content from behavior in the same way you already separate content from presentation with CSS. Your JavaScript and HTML sources can live in separate files once again.
 
-And since Stimulus naturally encourages you to group related code by identifier, this separation of concerns gives you just enough structure to keep your code from devolving into "JavaScript soup."
+Plus, Stimulus' conventions naturally encourage you to group related code by name. This arrangement helps you build reusable, trait-like controllers, giving you just enough structure to keep your code from devolving into "JavaScript soup."
 
 ## A Readable Document
 
 When your JavaScript behavior is mapped out in magic attributes, you can _read_ a fragment of HTML and know what's going on. That's a welcome relief when you return to a template six months later and don't recall exactly how things fit together.
 
 Readable markup also means that others on your team can easily look at templates—or even the web inspector on a production page—to quickly trace behavior or diagnose an issue.
+
+## The Water's Warm
+
+Now's a great time to dip your toes in and discover how Stimulus works. Keep reading to learn how to build your first controller.
 
 ---
 
