@@ -1,7 +1,5 @@
 const config = {
-  // Run `defaults write com.apple.Safari ApplePersistenceIgnoreState YES`
-  // to work around Safari tab issue: https://github.com/karma-runner/karma-safari-launcher/issues/6
-  browsers: getBrowsersFromEnvironment() || ["ChromeHeadless"],
+  browsers: ["ChromeHeadless"],
 
   frameworks: ["qunit"],
 
@@ -100,13 +98,4 @@ if (process.env.CI) {
 
 module.exports = function(karmaConfig) {
   karmaConfig.set(config)
-}
-
-function getBrowsersFromEnvironment() {
-  const env = process.env.BROWSERS
-  if (env == "all") {
-    return ["Chrome", "Firefox", "Safari"]
-  } else if (env) {
-    return env.split(",")
-  }
 }
