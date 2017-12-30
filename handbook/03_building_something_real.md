@@ -82,7 +82,7 @@ export default class extends Controller {
   
   ![copy](https://user-images.githubusercontent.com/5355/34271849-0b645dfc-e65c-11e7-899d-b01bf9019d5c.gif)
 
-## Progressive Ehancement
+## Progressive Enhancement
 
 * What if the browser doesn't support the copy API?
 * What if JavaScript failed to load due to a CDN issue? What if it's disabled entirely?
