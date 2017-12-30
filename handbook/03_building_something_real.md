@@ -154,7 +154,7 @@ export default class extends Controller {
 ```html
 <div data-controller="clipboard">
   PIN Number: <input data-target="clipboard.source" type="text" value="3737" readonly>
-  <a href="#" data-action="clipboard#copy">Copy to Clipboard</button>
+  <a href="#" data-action="clipboard#copy">Copy to Clipboard</a>
 </div>
 ```
 * We don't want the browser's default behavior when clicking a link so let's update the `copy()` method to cancel the event:
