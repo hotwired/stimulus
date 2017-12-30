@@ -183,7 +183,7 @@ export default class extends Controller {
 
   get name() {
     const target = this.targets.find("name")
-    return this.inputElement.value
+    return target.value
   }
 }
 ```
