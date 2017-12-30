@@ -56,7 +56,12 @@ export default class extends Controller {
 
 ### Common Actions Have a Shorthand Notation
 
-* (Describe why we can omit `click->` from the `data-action` attribute)
+`click->` can be omit from the `data-action` attribute because it is one of default event names. Others are:
+- `a, button, input(type='submit')` => `click`
+- `form` => `submit`
+- `input, select, textarea` => `change`
+
+We can define others actions by explictly defining event name, e.g: `paste->`.
 
 ## Implementing the Copy Action
 
