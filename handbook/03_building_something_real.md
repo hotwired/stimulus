@@ -78,8 +78,8 @@ export default class extends Controller {
 }
 ```
 
-* Let's see our new controller in action: 
-  
+* Let's see our new controller in action:
+
   ![copy](https://user-images.githubusercontent.com/5355/34271849-0b645dfc-e65c-11e7-899d-b01bf9019d5c.gif)
 
 ## Progressive Enhancement
