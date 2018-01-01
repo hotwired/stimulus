@@ -23,7 +23,7 @@ We'll have it wrapped up in time for the 1.0 release. Thanks for your patience!
 
 ```html
 <div>
-  PIN Number: <input type="text" value="1234" readonly>
+  PIN: <input type="text" value="1234" readonly>
   <button>Copy to Clipboard</button>
 </div>
 ```
@@ -49,7 +49,7 @@ export default class extends Controller {
 
 ```html
 <div data-controller="clipboard">
-  PIN Number: <input data-target="clipboard.source" type="text" value="1234" readonly>
+  PIN: <input data-target="clipboard.source" type="text" value="1234" readonly>
   <button data-action="clipboard#copy">Copy to Clipboard</button>
 </div>
 ```
@@ -94,7 +94,7 @@ export default class extends Controller {
 
 ```html
 <div data-controller="clipboard">
-  PIN Number: <input data-target="clipboard.source" type="text" value="1234" readonly>
+  PIN: <input data-target="clipboard.source" type="text" value="1234" readonly>
   <button data-action="clipboard#copy" class="clipboard-button">Copy to Clipboard</button>
 </div>
 ```
@@ -142,7 +142,7 @@ export default class extends Controller {
 
 ```html
 <div data-controller="clipboard">
-  PIN Number: <input data-target="clipboard.source" type="text" value="3737" readonly>
+  PIN: <input data-target="clipboard.source" type="text" value="3737" readonly>
   <button data-action="clipboard#copy" class="clipboard-button">Copy to Clipboard</button>
 </div>
 ```
@@ -153,7 +153,7 @@ export default class extends Controller {
 
 ```html
 <div data-controller="clipboard">
-  PIN Number: <input data-target="clipboard.source" type="text" value="3737" readonly>
+  PIN: <input data-target="clipboard.source" type="text" value="3737" readonly>
   <a href="#" data-action="clipboard#copy">Copy to Clipboard</a>
 </div>
 ```
