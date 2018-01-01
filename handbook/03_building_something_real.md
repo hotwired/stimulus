@@ -95,7 +95,7 @@ export default class extends Controller {
 ```html
 <div data-controller="clipboard">
   PIN Number: <input data-target="clipboard.source" type="text" value="1234" readonly>
-  <button data-action="clipboard#copy" class="cliboard-button">Copy to Clipboard</button>
+  <button data-action="clipboard#copy" class="clipboard-button">Copy to Clipboard</button>
 </div>
 ```
 
@@ -143,7 +143,7 @@ export default class extends Controller {
 ```html
 <div data-controller="clipboard">
   PIN Number: <input data-target="clipboard.source" type="text" value="3737" readonly>
-  <button data-action="clipboard#copy" class="cliboard-button">Copy to Clipboard</button>
+  <button data-action="clipboard#copy" class="clipboard-button">Copy to Clipboard</button>
 </div>
 ```
 
