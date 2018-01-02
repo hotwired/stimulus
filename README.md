@@ -34,6 +34,8 @@ Stimulus continuously watches the page, kicking in as soon as magic attributes a
 
 You can write your first controller in five minutes by following along in [The Stimulus Handbook](handbook/README.md).
 
+You can read more about why we created this new framework in [The Origin of Stimulus](ORIGIN.md).
+
 ## Installing Stimulus
 
 Stimulus integrates with the [webpack](https://webpack.js.org/) asset packager to automatically load controller files from a folder in your app.
