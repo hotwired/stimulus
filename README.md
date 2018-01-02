@@ -46,7 +46,7 @@ See the [Installation Guide](INSTALLING.md) for detailed instructions.
 
 ## Contributing Back
 
-Stimulus is [MIT-licensed](LICENSE.md) open source software from [Basecamp](https://basecamp.com/), the creators of Ruby on Rails.
+Stimulus is [MIT-licensed](LICENSE.md) open source software from [Basecamp](https://basecamp.com/), the creators of [Ruby on Rails](http://rubyonrails.org).
 
 Have a question about Stimulus? Find a bug? Think the documentation could use some improvement? Head over to our [issue tracker](https://github.com/stimulusjs/stimulus/issues) and we'll do our best to help. We love pull requests, too!
 
