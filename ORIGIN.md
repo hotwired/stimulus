@@ -34,7 +34,7 @@ While it was easy to add new code like this, it wasn’t a comprehensive solutio
 
 Stimulus rolls up the best of those patterns into a modest, small framework revolving around just three main concepts: Controllers, actions, and targets. 
 
-It’s designed to read as a progressive enhancement when you look at the HTML its addressing. Such that you can look at a single template and know which behavior is acting upon it. Here’s an example:
+It’s designed to read as a progressive enhancement when you look at the HTML it's addressing. Such that you can look at a single template and know which behavior is acting upon it. Here’s an example:
 
 ```html
 <div data-controller="clipboard">
