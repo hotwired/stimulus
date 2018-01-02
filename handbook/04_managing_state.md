@@ -69,6 +69,8 @@ export default class extends Controller {
 }
 ```
 
+* (Describe what `this.render()` does?)
+* (Describe what `this.targets.findAll()` does? Here or in `stimulus/handbook/02_hello_stimulus.md`?)
 * Now let's implement `get index()`:
 
 ```js
