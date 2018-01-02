@@ -14,6 +14,8 @@ We wanted Basecamp to feel like that too. As though we had followed the herd and
 
 This desire lead us to a two-punch solution: [Turbolinks](https://github.com/turbolinks/turbolinks) and Stimulus.
 
+### Turbolinks up high, Stimulus down low
+
 Before I get to Stimulus, our new modest JavaScript framework, allow me to recap the proposition of Turbolinks. 
 
 Turbolinks descents from an approach called [pjax](https://github.com/defunkt/jquery-pjax), developed at GitHub. The basic concept remains the same. The reason full-page refreshes often feel slow is not so much because the browser has to process a bunch of HTML sent from a server. Browsers are really good and really fast at that. And in most cases, the fact that an HTML payload tends to be larger than a JSON payload doesn’t matter either (especially with gzipping). No, the reason is that CSS and JavaScript has to be reinitialized and reapplied to the page again. Regardless of whether the files themselves are cached. This can be pretty slow if you have a fair amount of CSS and JavaScript.
@@ -27,6 +29,8 @@ But Turbolinks alone is only half the story. The coarsely grained one. Below the
 Prior to Stimulus, Basecamp used a smattering of different styles and patterns to apply these sprinkles. Some code was just a pinch of jQuery, some code was a similarly sized pinch of vanilla JavaScript, and some again was larger object-oriented subsystems. They all usually worked off explicit event handling hanging off a data-behavior attribute.
 
 While it was easy to add new code like this, it wasn’t a comprehensive solution, and we had too many in-house styles and patterns coexisting. That made it hard to reuse code, and it made it hard for new developers to learn a consistent approach.
+
+### The three core concepts in Stimulus 
 
 Stimulus rolls up the best of those patterns into a modest, small framework revolving around just three main concepts: Controllers, actions, and targets. 
 
@@ -47,6 +51,9 @@ Stimulus is concerned with manipulating this existing HTML document. Some times 
 
 There are cases where you’d want Stimulus to create new DOM elements, and you’re definitely free to do that. We might even add some sugar to make it easier in the future. But it’s the minority use case. The focus is on manipulating, not creating elements.
 
+
+### How Stimulus differs from mainstream JavaScript frameworks
+
 This makes Stimulus very different from the majority of contemporary JavaScript frameworks. Almost all are focused on turning JSON into DOM elements via a template language of some sort. Many use these frameworks to birth an empty page, which is then filled exclusively with elements created through this JSON-to-template rendering.
 
 Stimulus also differs on the question of state. Most frameworks have ways of maintaining state within JavaScript objects, and then render HTML based on that state. Stimulus is the exact opposite. State is stored in the HTML, so that controllers can be discarded between page changes, but still reinitialize as they were when the cached HTML appears again.
@@ -54,6 +61,9 @@ Stimulus also differs on the question of state. Most frameworks have ways of mai
 It really is a remarkably different paradigm. One that I’m sure many veteran JavaScript developers who’ve been used to work with contemporary frameworks will scoff at. And hey, scoff away. If you’re happy with the complexity and effort it takes to maintain an application within the maelstrom of, say, React + Redux, then Turbolinks + Stimulus will not appeal to you.
 
 If, on the other hand, you have nagging sense that what you’re working on does not warrant the intense complexity and application separation such contemporary techniques imply, then you’re likely to find refuge in our approach.
+
+
+### Stimulus and related ideas were extracted from the wild
 
 At Basecamp we’ve used this architecture across several different versions of Basecamp and other applications for years. GitHub has used a similar approach to great effect. This is not only a valid alternative to the mainstream understanding of what a “modern” web application looks like, it’s an incredibly compelling one.
 
