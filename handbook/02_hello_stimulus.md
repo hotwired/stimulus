@@ -69,6 +69,15 @@ Next, we need to tell Stimulus how this controller should be connected to our HT
 
 Identifiers serve as the link between elements and controllers. In this case, the identifier `hello` tells Stimulus to create an instance of the controller class in `hello_controller.js`.
 
+### Multi-word controller names
+If you want to use multiple words for the name of your controller (e.g. it's the "Account Settings" controller), Stimulus will try to connect it with the appropriate file
+
+| data-controller | matching files
+| --------------- | --------------
+| `account-settings` | `account-settings_controller.js`, or `account_settings_controller.js`
+| `accountSettings` | `accountSettings.js`
+| `account_settings` | does not match
+
 ## Is This Thing On?
 
 Reload the page in your browser and you'll see that nothing has changed. How do we know whether our controller is working or not?
