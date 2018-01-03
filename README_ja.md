@@ -58,7 +58,7 @@ Stimulus は[webpack](https://webpack.js.org/)アセットパッケージャと�
 
 Stimulus は[MITライセンス](LICENSE.md)のオープンソースソフトウェアで、[Ruby on Rails](http://rubyonrails.org)の創始者たちである[Basecamp](https://basecamp.com/)から生まれました。
 
-質問がありますか？バグを発見しましたか？ドキュメントに進歩の余地がありますか？我々の[issueトラッカー](issue tracker)に来てください。助けるために最善を尽くします。プルリクエストも大歓迎です。
+質問がありますか？バグを発見しましたか？ドキュメントに進歩の余地がありますか？我々の[issueトラッカー](https://github.com/stimulusjs/stimulus/issues)に来てください。助けるために最善を尽くします。プルリクエストも大歓迎です。
 
 我々はすべてのStimulusコントリビュータが[Code of Conduct](CONDUCT.md)を遵守することを期待します。
 
