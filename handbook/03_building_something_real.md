@@ -61,7 +61,7 @@ export default class extends Controller {
 - `form` => `submit`
 - `input, select, textarea` => `change`
 
-We can define other actions by explicitly defining event name, e.g: `paste->`.
+So instead of e.g. `<button data-action="click->clipboard#copy">`, you can write just `<button data-action="clipboard#copy">`. We can define other actions by explicitly defining event name in `data-action`, e.g. `paste->`.
 
 ## Implementing the Copy Action
 
