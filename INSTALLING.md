@@ -22,9 +22,13 @@ const controllers = require.context("./controllers", true, /\.js$/)
 autoload(controllers, application)
 ```
 
-Then name your controller files `[identifier]_controller.js`, where `identifier` corresponds to each controller's `data-controller` identifier in your HTML.
+Then name your controller files `[identifier]_controller.js` (or `[identifier]-controller.js` if you prefer dashes), where `identifier` corresponds to each controller's `data-controller` identifier in your HTML.
 
-**Note**: Dashes in Stimulus controller identifiers become underscores in controller filenames.
+**Note**: Always use dashes in `data-controller` values for multi-word controller `identifier`s.
+
+Examples:
+* `data-controller="clipboard"` → `clipboard_controller.js` or `clipboard-controller.js`
+* `data-controller="local-time"` → `local_time_controller.js` or `local-time-controller.js`
 
 ## Using Other Build Systems
 
