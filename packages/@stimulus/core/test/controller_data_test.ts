@@ -8,7 +8,7 @@ testGroup("Controller data API", function () {
     const identifier = "test"
     const element = document.createElement("div")
     element.setAttribute("data-controller", identifier)
-    element.setAttribute(`data-${identifier}-foo`, "bar")
+    element.setAttribute(`data-${identifier}-foo`, JSON.stringify("bar"))
 
     this.application.register(identifier, class extends Controller {
       connect() {
@@ -31,7 +31,7 @@ testGroup("Controller data API", function () {
       connect() {
         this.data.set("foo", "bar")
         assert.equal(this.data.get("foo"), "bar")
-        assert.equal(element.getAttribute(`data-${identifier}-foo`), "bar")
+        assert.equal(element.getAttribute(`data-${identifier}-foo`), JSON.stringify("bar"))
         done()
       }
     })
