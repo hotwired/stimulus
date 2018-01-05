@@ -17,11 +17,13 @@ export class DataMap {
 
   get(key: string): string | null {
     key = this.getFormattedKey(key)
-    return this.element.getAttribute(key)
+    const value = this.element.getAttribute(key)
+    return value ? JSON.parse(value) : null
   }
 
   set(key: string, value): string | null {
     key = this.getFormattedKey(key)
+    value = value ? JSON.stringify(value) : null
     this.element.setAttribute(key, value)
     return this.get(key)
   }
