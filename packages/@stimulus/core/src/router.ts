@@ -56,10 +56,12 @@ export class Router implements TokenListObserverDelegate {
 
   // Token list observer delegate
 
+  /** @private */
   elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
     this.connectContextForIdentifierToElement(token, element)
   }
 
+  /** @private */
   elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
     this.disconnectContextForIdentifierFromElement(token, element)
   }

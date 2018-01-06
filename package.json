@@ -5,22 +5,18 @@
   "license": "MIT",
   "scripts": {
     "start": "lerna run --scope @stimulus/examples --stream start",
-    "clean": "rimraf dist packages/*/dist packages/*/**/dist",
-    "doc": "typedoc --out dist/docs --mode file --excludeNotExported packages/@stimulus/core/src",
+    "clean": "rimraf dist packages/**/dist",
+    "reset": "yarn clean && rimraf node_modules packages/**/node_modules",
+    "doc": "typedoc --out dist/docs --mode file --excludePrivate --excludeNotExported packages/@stimulus/core/src",
     "lint": "tslint --project tsconfig.json",
-
     "pretest": "yarn clean && yarn lint",
     "test": "karma start",
-
     "precompile": "yarn clean",
     "compile": "tsc",
-
     "predist": "yarn compile",
     "dist": "node scripts/dist-to-packages.js",
-
     "prebuild": "yarn lint && yarn dist",
     "build": "lerna run build",
-
     "prerelease": "yarn build",
     "release": "lerna publish"
   },
@@ -42,6 +38,7 @@
     "ts-loader": "^3.2.0",
     "tslint": "^5.7.0",
     "typedoc": "^0.9.0",
+    "typedoc-plugin-stimulus": "file:packages/typedoc-plugin-stimulus",
     "typescript": "^2.6.2",
     "webpack": "^3.10.0"
   }

@@ -54,6 +54,7 @@ export class InlineActionObserver implements TokenListObserverDelegate {
 
   // Token list observer delegate
 
+  /** @private */
   elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
     if (this.scope.containsElement(element)) {
       const action = this.buildActionForElementWithDescriptorString(element, token)
@@ -64,6 +65,7 @@ export class InlineActionObserver implements TokenListObserverDelegate {
     }
   }
 
+  /** @private */
   elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
     const action = this.getConnectedActionForElementWithDescriptorString(element, token)
     if (action) {

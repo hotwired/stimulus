@@ -101,10 +101,12 @@ export class Context implements InlineActionObserverDelegate {
 
   // Inline action observer delegate
 
+  /** @private */
   inlineActionConnected(action: Action) {
     this.addAction(action)
   }
 
+  /** @private */
   inlineActionDisconnected(action: Action) {
     this.removeAction(action)
   }
