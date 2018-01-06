@@ -120,7 +120,6 @@ export default class extends Controller {
   get lastIndex() {
     return this.slideElements.length - 1
   }
-}
 ```
 
 * We've filled in the missing pieces
