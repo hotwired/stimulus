@@ -6,6 +6,7 @@
   "scripts": {
     "start": "lerna run --scope @stimulus/examples --stream start",
     "clean": "rimraf dist packages/*/dist packages/*/**/dist",
+    "doc": "typedoc --out dist/docs --mode file --excludeNotExported packages/@stimulus/core/src",
     "lint": "tslint --project tsconfig.json",
 
     "pretest": "yarn clean && yarn lint",
@@ -40,6 +41,7 @@
     "rimraf": "^2.6.2",
     "ts-loader": "^3.2.0",
     "tslint": "^5.7.0",
+    "typedoc": "^0.9.0",
     "typescript": "^2.6.2",
     "webpack": "^3.10.0"
   }
