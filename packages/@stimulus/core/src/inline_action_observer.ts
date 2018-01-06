@@ -12,8 +12,8 @@ export interface InlineActionObserverDelegate {
 }
 
 export class InlineActionObserver implements TokenListObserverDelegate {
-  context: Context
-  delegate: InlineActionObserverDelegate
+  readonly context: Context
+  readonly delegate: InlineActionObserverDelegate
   private tokenListObserver: TokenListObserver
   private connectedActions: Multimap<Element, Action>
 

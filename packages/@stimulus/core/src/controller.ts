@@ -10,7 +10,7 @@ export interface ControllerConstructor {
 }
 
 export class Controller {
-  context: Context
+  readonly context: Context
 
   constructor(context: Context) {
     this.context = context

@@ -9,9 +9,9 @@ import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_act
 import { Scope } from "./scope"
 
 export class Context implements InlineActionObserverDelegate {
-  contextSet: ContextSet
-  scope: Scope
-  controller: Controller
+  readonly contextSet: ContextSet
+  readonly scope: Scope
+  readonly controller: Controller
   private actions: ActionSet
   private inlineActionObserver: InlineActionObserver
 

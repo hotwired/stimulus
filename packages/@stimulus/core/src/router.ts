@@ -6,7 +6,7 @@ import { ControllerConstructor } from "./controller"
 import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation-observers"
 
 export class Router implements TokenListObserverDelegate {
-  application: Application
+  readonly application: Application
   private tokenListObserver: TokenListObserver
   private contextSets: Map<string, ContextSet>
 

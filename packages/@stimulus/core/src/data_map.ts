@@ -1,7 +1,7 @@
 import { Scope } from "./scope"
 
 export class DataMap {
-  scope: Scope
+  readonly scope: Scope
 
   constructor(scope: Scope) {
     this.scope = scope

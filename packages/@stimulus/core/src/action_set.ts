@@ -2,9 +2,9 @@ import { Action } from "./action"
 import { Context } from "./context"
 
 export class ActionSet {
-  context: Context
-  started: boolean
-  actions: Set<Action>
+  readonly context: Context
+  private started: boolean
+  private actions: Set<Action>
 
   constructor(context: Context) {
     this.context = context

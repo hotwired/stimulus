@@ -4,9 +4,9 @@ import { ControllerConstructor } from "./controller"
 import { Router } from "./router"
 
 export class ContextSet {
-  router: Router
-  identifier: string
-  controllerConstructor: ControllerConstructor
+  readonly router: Router
+  readonly identifier: string
+  readonly controllerConstructor: ControllerConstructor
 
   private contextsByElement: WeakMap<Element, Context>
   private connectedContexts: Set<Context>

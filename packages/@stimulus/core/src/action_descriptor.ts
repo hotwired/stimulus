@@ -18,10 +18,10 @@ export class ActionDescriptor {
     "textarea": e => "change"
   }
 
-  identifier: string
-  eventName: string
-  methodName: string
-  eventTarget: EventTarget
+  readonly identifier: string
+  readonly eventName: string
+  readonly methodName: string
+  readonly eventTarget: EventTarget
 
   static forOptions(options: ActionDescriptorOptions): ActionDescriptor {
     return new ActionDescriptor(

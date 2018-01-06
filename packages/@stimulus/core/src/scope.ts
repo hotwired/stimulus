@@ -4,11 +4,11 @@ import { TargetSet } from "./target_set"
 import { attributeValueContainsToken } from "./selectors"
 
 export class Scope {
-  configuration: Configuration
-  identifier: string
-  element: Element
-  targets: TargetSet
-  data: DataMap
+  readonly configuration: Configuration
+  readonly identifier: string
+  readonly element: Element
+  readonly targets: TargetSet
+  readonly data: DataMap
 
   constructor(configuration: Configuration, identifier: string, element: Element) {
     this.configuration = configuration

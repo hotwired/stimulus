@@ -3,7 +3,7 @@ import { Controller, ControllerConstructor } from "./controller"
 import { Router } from "./router"
 
 export class Application {
-  configuration: Configuration
+  readonly configuration: Configuration
   private router: Router
 
   static start(configurationOptions?: ConfigurationOptions): Application {
