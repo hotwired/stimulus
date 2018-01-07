@@ -2,24 +2,19 @@ import { Application } from "./application"
 import { Context } from "./context"
 import { ControllerConstructor } from "./controller"
 import { Definition } from "./definition"
-import { Router } from "./router"
 
 export class Module {
-  readonly router: Router
+  readonly application: Application
   readonly definition: Definition
 
   private contextsByElement: WeakMap<Element, Context>
   private connectedContexts: Set<Context>
 
-  constructor(router: Router, definition: Definition) {
-    this.router = router
+  constructor(application: Application, definition: Definition) {
+    this.application = application
     this.definition = Object.assign({}, definition)
     this.contextsByElement = new WeakMap
     this.connectedContexts = new Set
-  }
-
-  get application(): Application {
-    return this.router.application
   }
 
   get identifier(): string {

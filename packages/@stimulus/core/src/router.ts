@@ -40,7 +40,7 @@ export class Router implements TokenListObserverDelegate {
     const { identifier } = definition
     this.unload(identifier)
 
-    const module = new Module(this, definition)
+    const module = new Module(this.application, definition)
     this.modules.set(identifier, module)
     this.connectModule(module)
   }
