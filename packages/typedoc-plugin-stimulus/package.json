@@ -1,0 +1,16 @@
+{
+  "name": "typedoc-plugin-stimulus",
+  "version": "0.9.0",
+  "description": "Private TypeDoc extensions",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "typedocplugin"
+  ],
+  "private": true,
+  "peerDependencies": {
+    "typedoc": "^0.9.0"
+  }
+}

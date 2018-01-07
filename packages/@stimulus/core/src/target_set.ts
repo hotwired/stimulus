@@ -3,7 +3,7 @@ import { Scope } from "./scope"
 import { attributeValueContainsToken } from "./selectors"
 
 export class TargetSet {
-  scope: Scope
+  readonly scope: Scope
 
   constructor(scope: Scope) {
     this.scope = scope

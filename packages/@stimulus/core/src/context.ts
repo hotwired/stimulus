@@ -9,9 +9,9 @@ import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_act
 import { Scope } from "./scope"
 
 export class Context implements InlineActionObserverDelegate {
-  contextSet: ContextSet
-  scope: Scope
-  controller: Controller
+  readonly contextSet: ContextSet
+  readonly scope: Scope
+  readonly controller: Controller
   private actions: ActionSet
   private inlineActionObserver: InlineActionObserver
 
@@ -101,10 +101,12 @@ export class Context implements InlineActionObserverDelegate {
 
   // Inline action observer delegate
 
+  /** @private */
   inlineActionConnected(action: Action) {
     this.addAction(action)
   }
 
+  /** @private */
   inlineActionDisconnected(action: Action) {
     this.removeAction(action)
   }

@@ -4,9 +4,9 @@ import { Controller } from "./controller"
 import { Scope } from "./scope"
 
 export class Action implements EventListenerObject {
-  context: Context
-  descriptor: ActionDescriptor
-  eventTarget: EventTarget
+  readonly context: Context
+  readonly descriptor: ActionDescriptor
+  readonly eventTarget: EventTarget
 
   constructor(context: Context, descriptor: ActionDescriptor, eventTarget: EventTarget) {
     this.context = context
@@ -32,14 +32,6 @@ export class Action implements EventListenerObject {
     }
   }
 
-  invokeWithEvent(event: Event) {
-    try {
-      this.method.call(this.controller, event, event.currentTarget)
-    } catch (error) {
-      this.context.reportError(error, `invoking action "${this.descriptor}"`, event, this)
-    }
-  }
-
   get eventName(): string {
     return this.descriptor.eventName
   }
@@ -52,7 +44,15 @@ export class Action implements EventListenerObject {
     throw new Error(`Action "${this.descriptor}" references undefined method "${this.methodName}"`)
   }
 
-  willBeInvokedByEvent(event: Event): boolean {
+  private invokeWithEvent(event: Event) {
+    try {
+      this.method.call(this.controller, event, event.currentTarget)
+    } catch (error) {
+      this.context.reportError(error, `invoking action "${this.descriptor}"`, event, this)
+    }
+  }
+
+  private willBeInvokedByEvent(event: Event): boolean {
     const eventTarget = event.target
     if (this.element === eventTarget) {
       return true
@@ -63,19 +63,19 @@ export class Action implements EventListenerObject {
     }
   }
 
-  get controller(): Controller {
+  private get controller(): Controller {
     return this.context.controller
   }
 
-  get methodName(): string {
+  private get methodName(): string {
     return this.descriptor.methodName
   }
 
-  get element(): Element {
+  private get element(): Element {
     return this.scope.element
   }
 
-  get scope(): Scope {
+  private get scope(): Scope {
     return this.context.scope
   }
 }

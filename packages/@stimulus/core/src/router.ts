@@ -6,7 +6,7 @@ import { ControllerConstructor } from "./controller"
 import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation-observers"
 
 export class Router implements TokenListObserverDelegate {
-  application: Application
+  readonly application: Application
   private tokenListObserver: TokenListObserver
   private contextSets: Map<string, ContextSet>
 
@@ -56,10 +56,12 @@ export class Router implements TokenListObserverDelegate {
 
   // Token list observer delegate
 
+  /** @private */
   elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
     this.connectContextForIdentifierToElement(token, element)
   }
 
+  /** @private */
   elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
     this.disconnectContextForIdentifierFromElement(token, element)
   }
