@@ -30,12 +30,18 @@ export class Application {
     this.load({ identifier, controllerConstructor })
   }
 
-  load(definition: Definition) {
-    this.router.load(definition)
+  load(...definitions: Definition[])
+  load(definitions: Definition[])
+  load(head: Definition | Definition[], ...rest: Definition[]) {
+    const definitions = Array.isArray(head) ? head : [head, ...rest]
+    definitions.forEach(definition => this.router.loadDefinition(definition))
   }
 
-  unload(identifier: string) {
-    this.router.unload(identifier)
+  unload(...identifiers: string[])
+  unload(identifiers: string[])
+  unload(head: string | string[], ...rest: string[]) {
+    const identifiers = Array.isArray(head) ? head : [head, ...rest]
+    identifiers.forEach(identifier => this.router.unloadIdentifier(identifier))
   }
 
   getControllerForElementAndIdentifier(element: Element, identifier: string): Controller | null {

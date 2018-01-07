@@ -36,16 +36,16 @@ export class Router implements TokenListObserverDelegate {
     this.tokenListObserver.stop()
   }
 
-  load(definition: Definition) {
+  loadDefinition(definition: Definition) {
     const { identifier } = definition
-    this.unload(identifier)
+    this.unloadIdentifier(identifier)
 
     const module = new Module(this.application, definition)
     this.modules.set(identifier, module)
     this.connectModule(module)
   }
 
-  unload(identifier: string) {
+  unloadIdentifier(identifier: string) {
     const module = this.modules.get(identifier)
     if (module) {
       this.disconnectModule(module)

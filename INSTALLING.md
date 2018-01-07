@@ -10,16 +10,16 @@ To install Stimulus, add the [stimulus npm package](https://www.npmjs.com/packag
 
 Stimulus integrates with the [webpack](https://webpack.js.org/) asset packager to automatically load controller files from a folder in your app.
 
-Use webpack's [`require.context`](https://webpack.js.org/api/module-methods/#require-context) helper in conjunction with Stimulus' `autoload` helper to set everything up:
+Use webpack's [`require.context`](https://webpack.js.org/api/module-methods/#require-context) helper in conjunction with Stimulus' `definitionsFromWebpackContext` helper to set everything up:
 
 ```js
 // src/application.js
 import { Application } from "stimulus"
-import { autoload } from "stimulus/webpack-helpers"
+import { definitionsFromWebpackContext } from "stimulus/webpack-helpers"
 
 const application = Application.start()
-const controllers = require.context("./controllers", true, /\.js$/)
-autoload(controllers, application)
+const definitions = definitionsFromWebpackContext(require.context("./controllers", true, /\.js$/))
+application.load(definitions)
 ```
 
 Then name your controller files `[identifier]_controller.js` (or `[identifier]-controller.js` if you prefer dashes), where `identifier` corresponds to each controller's `data-controller` identifier in your HTML.
