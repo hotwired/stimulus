@@ -4,7 +4,7 @@ import { ControllerConstructor } from "./controller"
 import { Definition } from "./definition"
 import { Router } from "./router"
 
-export class ContextSet {
+export class Module {
   readonly router: Router
   readonly definition: Definition
 
@@ -38,7 +38,7 @@ export class ContextSet {
     return this.connectedContexts.size
   }
 
-  connect(element: Element) {
+  connectElement(element: Element) {
     const context = this.fetchContextForElement(element)
     if (context && !this.connectedContexts.has(context)) {
       this.connectedContexts.add(context)
@@ -46,7 +46,7 @@ export class ContextSet {
     }
   }
 
-  disconnect(element: Element) {
+  disconnectElement(element: Element) {
     const context = this.fetchContextForElement(element)
     if (context && this.connectedContexts.has(context)) {
       this.connectedContexts.delete(context)
