@@ -2,7 +2,7 @@ import { Application } from "./application"
 import { Configuration } from "./configuration"
 import { Context } from "./context"
 import { ContextSet } from "./context_set"
-import { ControllerConstructor } from "./controller"
+import { Definition } from "./definition"
 import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation-observers"
 
 export class Router implements TokenListObserverDelegate {
@@ -36,17 +36,16 @@ export class Router implements TokenListObserverDelegate {
     this.tokenListObserver.stop()
   }
 
-  register(identifier: string, controllerConstructor: ControllerConstructor) {
-    if (this.contextSets.has(identifier)) {
-      throw new Error(`Router already has a controller registered with the identifier '${identifier}'`)
-    }
+  load(definition: Definition) {
+    const { identifier } = definition
+    this.unload(identifier)
 
-    const contextSet = new ContextSet(this, identifier, controllerConstructor)
+    const contextSet = new ContextSet(this, definition)
     this.contextSets.set(identifier, contextSet)
     this.connectContextSet(contextSet)
   }
 
-  unregister(identifier: string) {
+  unload(identifier: string) {
     const contextSet = this.contextSets.get(identifier)
     if (contextSet) {
       this.disconnectContextSet(contextSet)

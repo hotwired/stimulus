@@ -1,5 +1,6 @@
 import { Configuration, ConfigurationOptions, createConfiguration } from "./configuration"
 import { Controller, ControllerConstructor } from "./controller"
+import { Definition } from "./definition"
 import { Router } from "./router"
 
 export class Application {
@@ -26,11 +27,15 @@ export class Application {
   }
 
   register(identifier: string, controllerConstructor: ControllerConstructor) {
-    this.router.register(identifier, controllerConstructor)
+    this.load({ identifier, controllerConstructor })
   }
 
-  unregister(identifier: string) {
-    this.router.unregister(identifier)
+  load(definition: Definition) {
+    this.router.load(definition)
+  }
+
+  unload(identifier: string) {
+    this.router.unload(identifier)
   }
 
   getControllerForElementAndIdentifier(element: Element, identifier: string): Controller | null {

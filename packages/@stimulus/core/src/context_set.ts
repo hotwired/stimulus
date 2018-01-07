@@ -1,27 +1,33 @@
 import { Application } from "./application"
 import { Context } from "./context"
 import { ControllerConstructor } from "./controller"
+import { Definition } from "./definition"
 import { Router } from "./router"
 
 export class ContextSet {
   readonly router: Router
-  readonly identifier: string
-  readonly controllerConstructor: ControllerConstructor
+  readonly definition: Definition
 
   private contextsByElement: WeakMap<Element, Context>
   private connectedContexts: Set<Context>
 
-  constructor(router: Router, identifier: string, controllerConstructor: ControllerConstructor) {
+  constructor(router: Router, definition: Definition) {
     this.router = router
-    this.identifier = identifier
-    this.controllerConstructor = controllerConstructor
-
+    this.definition = Object.assign({}, definition)
     this.contextsByElement = new WeakMap
     this.connectedContexts = new Set
   }
 
   get application(): Application {
     return this.router.application
+  }
+
+  get identifier(): string {
+    return this.definition.identifier
+  }
+
+  get controllerConstructor(): ControllerConstructor {
+    return this.definition.controllerConstructor
   }
 
   get contexts(): Context[] {
