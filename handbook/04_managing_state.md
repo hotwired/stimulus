@@ -77,9 +77,9 @@ export default class extends Controller {
   get index() {
     if (this.data.has("index")) {
       return parseInt(this.data.get("index"))
-    } else {
-      return 0
     }
+    
+    return 0
   }
 ```
 
