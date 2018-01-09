@@ -3,26 +3,26 @@ import { ActionDescriptor } from "./action_descriptor"
 import { ActionSet } from "./action_set"
 import { Application } from "./application"
 import { Configuration } from "./configuration"
-import { ContextSet } from "./context_set"
 import { Controller } from "./controller"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
+import { Module } from "./module"
 import { Scope } from "./scope"
 
 export class Context implements InlineActionObserverDelegate {
-  readonly contextSet: ContextSet
+  readonly module: Module
   readonly scope: Scope
   readonly controller: Controller
   private actions: ActionSet
   private inlineActionObserver: InlineActionObserver
 
-  constructor(contextSet: ContextSet, element: Element) {
-    this.contextSet = contextSet
+  constructor(module: Module, element: Element) {
+    this.module = module
     this.scope = new Scope(this.configuration, this.identifier, element)
     this.actions = new ActionSet(this)
     this.inlineActionObserver = new InlineActionObserver(this, this)
 
     try {
-      this.controller = new contextSet.controllerConstructor(this)
+      this.controller = new module.controllerConstructor(this)
       this.controller.initialize()
     } catch (error) {
       this.reportError(error, `initializing controller "${this.identifier}"`)
@@ -52,11 +52,11 @@ export class Context implements InlineActionObserverDelegate {
   }
 
   get application(): Application {
-    return this.contextSet.application
+    return this.module.application
   }
 
   get identifier(): string {
-    return this.contextSet.identifier
+    return this.module.identifier
   }
 
   get configuration(): Configuration {

@@ -48,7 +48,7 @@ testGroup("Application", function() {
     done()
   })
 
-  test("register and unregister", async function(assert) {
+  test("load and unload", async function(assert) {
     const done = assert.async()
 
     const element = document.createElement("div")
@@ -61,7 +61,7 @@ testGroup("Application", function() {
     assert.ok(controller1)
     assert.deepEqual(controller1.lifecycle, { initialize: 1, connect: 1, disconnect: 0 })
 
-    this.application.unregister("test")
+    this.application.unload("test")
     assert.deepEqual(controller1.lifecycle, { initialize: 1, connect: 1, disconnect: 1 })
 
     const controller2 = this.application.getControllerForElementAndIdentifier(element, "test")
