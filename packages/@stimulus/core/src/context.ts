@@ -25,7 +25,7 @@ export class Context implements InlineActionObserverDelegate {
       this.controller = new contextSet.controllerConstructor(this)
       this.controller.initialize()
     } catch (error) {
-      this.reportError(error, `initializing controller "${this.identifier}"`)
+      this.handleError(error, "initializing controller")
     }
   }
 
@@ -36,7 +36,7 @@ export class Context implements InlineActionObserverDelegate {
     try {
       this.controller.connect()
     } catch (error) {
-      this.reportError(error, `connecting controller "${this.identifier}"`)
+      this.handleError(error, "connecting controller")
     }
   }
 
@@ -44,7 +44,7 @@ export class Context implements InlineActionObserverDelegate {
     try {
       this.controller.disconnect()
     } catch (error) {
-      this.reportError(error, `disconnecting controller "${this.identifier}"`)
+      this.handleError(error, "disconnecting controller")
     }
 
     this.inlineActionObserver.stop()
@@ -111,12 +111,12 @@ export class Context implements InlineActionObserverDelegate {
     this.removeAction(action)
   }
 
-  // Logging
+  // Error handling
 
-  reportError(error, message, ...args) {
-    const argsFormat = args.map(arg => "%o").join("\n")
-    const format = `Error %s\n\n%o\n\n${argsFormat}\n%o\n%o`
-    return console.error(format, message, error, ...args, this.controller, this.element)
+  handleError(error: Error, message: string, detail: object = {}) {
+    const { identifier, controller, element } = this
+    detail = Object.assign({ identifier, controller, element }, detail)
+    this.application.handleError(error, `Error ${message}`, detail)
   }
 }
 

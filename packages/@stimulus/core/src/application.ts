@@ -2,9 +2,12 @@ import { Configuration, ConfigurationOptions, createConfiguration } from "./conf
 import { Controller, ControllerConstructor } from "./controller"
 import { Router } from "./router"
 
+export type ErrorHandler = (error: Error, message: string, detail: object) => any
+
 export class Application {
   readonly configuration: Configuration
   private router: Router
+  errorHandler?: ErrorHandler
 
   static start(configurationOptions?: ConfigurationOptions): Application {
     const application = new Application(configurationOptions)
@@ -36,5 +39,20 @@ export class Application {
   getControllerForElementAndIdentifier(element: Element, identifier: string): Controller | null {
     const context = this.router.getContextForElementAndIdentifier(element, identifier)
     return context ? context.controller : null
+  }
+
+  // Error handling
+
+  setErrorHandler(errorHandler: ErrorHandler) {
+    this.errorHandler = errorHandler
+  }
+
+  /** @private */
+  handleError(error: Error, message: string, detail: object) {
+    if (typeof this.errorHandler == "function") {
+      this.errorHandler(error, message, detail)
+    } else {
+      console.error(`%s\n\n%o\n\n%o`, message, error, detail)
+    }
   }
 }
