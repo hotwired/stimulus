@@ -13,13 +13,13 @@ export interface Module {
   default?: object
 }
 
-export function definitionsFromWebpackContext(context: Context): Definition[] {
+export function definitionsFromContext(context: Context): Definition[] {
   return context.keys()
-    .map(key => definitionForWebpackModuleWithContextAndKey(context, key))
+    .map(key => definitionForModuleWithContextAndKey(context, key))
     .filter(value => value) as Definition[]
 }
 
-function definitionForWebpackModuleWithContextAndKey(context: Context, key: string): Definition | undefined {
+function definitionForModuleWithContextAndKey(context: Context, key: string): Definition | undefined {
   const identifier = identifierForContextKey(key)
   if (identifier) {
     return definitionForModuleAndIdentifier(context(key), identifier)
