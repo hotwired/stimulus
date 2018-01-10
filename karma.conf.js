@@ -5,6 +5,10 @@ const config = {
 
   reporters: ["progress"],
 
+  singleRun: true,
+
+  autoWatch: false,
+
   files: [
     { pattern: "packages/*/**/test/**/*_test.ts" }
   ],
@@ -93,7 +97,6 @@ if (process.env.CI) {
   config.browsers = Object.keys(config.customLaunchers)
   config.sauceLabs = { testName: "Stimulus Browser Tests" }
   config.reporters = ["dots", "saucelabs"]
-  config.singleRun = true
 }
 
 module.exports = function(karmaConfig) {

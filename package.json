@@ -11,6 +11,7 @@
     "lint": "tslint --project tsconfig.json",
     "pretest": "yarn clean && yarn lint",
     "test": "karma start",
+    "test:watch": "yarn test --auto-watch --no-single-run",
     "precompile": "yarn clean",
     "compile": "tsc",
     "predist": "yarn compile",
