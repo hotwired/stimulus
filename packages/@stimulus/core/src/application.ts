@@ -8,13 +8,13 @@ export class Application {
   readonly schema: Schema
   private router: Router
 
-  static start(element: Element = document.documentElement, schema: Schema = defaultSchema): Application {
+  static start(element?: Element, schema?: Schema): Application {
     const application = new Application(element, schema)
     application.start()
     return application
   }
 
-  constructor(element: Element, schema: Schema) {
+  constructor(element: Element = document.documentElement, schema: Schema = defaultSchema) {
     this.element = element
     this.schema = schema
     this.router = new Router(this)
