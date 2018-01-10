@@ -1,5 +1,4 @@
 import { Action } from "./action"
-import { ActionDescriptor } from "./action_descriptor"
 import { ActionSet } from "./action_set"
 import { Application } from "./application"
 import { Configuration } from "./configuration"
@@ -73,26 +72,8 @@ export class Context implements InlineActionObserverDelegate {
 
   // Actions
 
-  addAction(action: Action)
-  addAction(descriptorString: string, eventTarget: EventTarget)
-  addAction(actionOrDescriptorString, eventTarget?) {
-    let action
-
-    if (actionOrDescriptorString instanceof Action) {
-      action = actionOrDescriptorString
-
-    } else if (typeof actionOrDescriptorString == "string") {
-      const descriptorString = actionOrDescriptorString
-      if (!isEventTarget(eventTarget)) {
-        eventTarget = this.element
-      }
-      const descriptor = ActionDescriptor.forElementWithInlineDescriptorString(eventTarget, descriptorString)
-      action = new Action(this, descriptor, eventTarget)
-    }
-
-    if (action) {
-      this.actions.add(action)
-    }
+  addAction(action: Action) {
+    this.actions.add(action)
   }
 
   removeAction(action: Action) {
@@ -117,15 +98,5 @@ export class Context implements InlineActionObserverDelegate {
     const argsFormat = args.map(arg => "%o").join("\n")
     const format = `Error %s\n\n%o\n\n${argsFormat}\n%o\n%o`
     return console.error(format, message, error, ...args, this.controller, this.element)
-  }
-}
-
-function isEventTarget(object: any): boolean {
-  if (!object) {
-    return false
-  } else if (typeof EventTarget != "undefined") {
-    return object instanceof EventTarget
-  } else {
-    return typeof object.addEventListener == "function"
   }
 }
