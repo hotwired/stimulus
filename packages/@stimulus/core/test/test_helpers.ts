@@ -97,11 +97,11 @@ export class TestController extends Controller {
     this.lifecycle.disconnect++
   }
 
-  foo(event, target) {
-    this.recordAction(event, target)
+  foo(event) {
+    this.recordAction(event)
   }
 
-  private recordAction(event: Event, target: EventTarget) {
-    this.actions.push({ eventType: event.type, eventPrevented: event.defaultPrevented, eventTarget: event.target, target: target })
+  private recordAction(event: Event) {
+    this.actions.push({ eventType: event.type, eventPrevented: event.defaultPrevented, eventTarget: event.target, target: event.currentTarget })
   }
 }
