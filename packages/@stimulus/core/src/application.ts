@@ -1,15 +1,15 @@
 import { Controller, ControllerConstructor } from "./controller"
 import { Definition } from "./definition"
 import { Router } from "./router"
-import { Schema, SchemaOptions, createSchema } from "./schema"
+import { Schema, defaultSchema } from "./schema"
 
 export class Application {
   readonly element: Element
   readonly schema: Schema
   private router: Router
 
-  static start(element: Element = document.documentElement, schemaOptions?: SchemaOptions): Application {
-    const application = new Application(element, createSchema(schemaOptions))
+  static start(element: Element = document.documentElement, schema: Schema = defaultSchema): Application {
+    const application = new Application(element, schema)
     application.start()
     return application
   }
