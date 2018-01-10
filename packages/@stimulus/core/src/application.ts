@@ -1,20 +1,22 @@
-import { Configuration, ConfigurationOptions, createConfiguration } from "./configuration"
 import { Controller, ControllerConstructor } from "./controller"
 import { Definition } from "./definition"
 import { Router } from "./router"
+import { Schema, defaultSchema } from "./schema"
 
 export class Application {
-  readonly configuration: Configuration
+  readonly element: Element
+  readonly schema: Schema
   private router: Router
 
-  static start(configurationOptions?: ConfigurationOptions): Application {
-    const application = new Application(configurationOptions)
+  static start(element?: Element, schema?: Schema): Application {
+    const application = new Application(element, schema)
     application.start()
     return application
   }
 
-  constructor(configurationOptions: ConfigurationOptions = {}) {
-    this.configuration = createConfiguration(configurationOptions)
+  constructor(element: Element = document.documentElement, schema: Schema = defaultSchema) {
+    this.element = element
+    this.schema = schema
     this.router = new Router(this)
   }
 

@@ -1,8 +1,8 @@
 import { Action } from "./action"
 import { ActionDescriptor } from "./action_descriptor"
-import { Configuration } from "./configuration"
 import { Context } from "./context"
 import { Multimap } from "@stimulus/multimap"
+import { Schema } from "./schema"
 import { Scope } from "./scope"
 import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation-observers"
 
@@ -28,12 +28,12 @@ export class InlineActionObserver implements TokenListObserverDelegate {
     return this.context.scope
   }
 
-  get configuration(): Configuration {
-    return this.scope.configuration
+  get schema(): Schema {
+    return this.context.schema
   }
 
   get attributeName(): string {
-    return this.configuration.actionAttribute
+    return this.schema.actionAttribute
   }
 
   get element(): Element {
