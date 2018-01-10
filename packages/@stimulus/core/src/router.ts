@@ -1,8 +1,8 @@
 import { Application } from "./application"
-import { Configuration } from "./configuration"
 import { Context } from "./context"
 import { Definition } from "./definition"
 import { Module } from "./module"
+import { Schema } from "./schema"
 import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation-observers"
 
 export class Router implements TokenListObserverDelegate {
@@ -16,16 +16,16 @@ export class Router implements TokenListObserverDelegate {
     this.modules = new Map
   }
 
-  get configuration(): Configuration {
-    return this.application.configuration
+  get schema(): Schema {
+    return this.application.schema
   }
 
   get element(): Element {
-    return this.configuration.rootElement
+    return this.application.element
   }
 
   get controllerAttribute(): string {
-    return this.configuration.controllerAttribute
+    return this.schema.controllerAttribute
   }
 
   start() {

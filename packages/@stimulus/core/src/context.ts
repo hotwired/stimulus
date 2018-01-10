@@ -2,10 +2,10 @@ import { Action } from "./action"
 import { ActionDescriptor } from "./action_descriptor"
 import { ActionSet } from "./action_set"
 import { Application } from "./application"
-import { Configuration } from "./configuration"
 import { Controller } from "./controller"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
 import { Module } from "./module"
+import { Schema } from "./schema"
 import { Scope } from "./scope"
 
 export class Context implements InlineActionObserverDelegate {
@@ -17,7 +17,7 @@ export class Context implements InlineActionObserverDelegate {
 
   constructor(module: Module, element: Element) {
     this.module = module
-    this.scope = new Scope(this.configuration, this.identifier, element)
+    this.scope = new Scope(this.schema, this.identifier, element)
     this.actions = new ActionSet(this)
     this.inlineActionObserver = new InlineActionObserver(this, this)
 
@@ -59,8 +59,8 @@ export class Context implements InlineActionObserverDelegate {
     return this.module.identifier
   }
 
-  get configuration(): Configuration {
-    return this.application.configuration
+  get schema(): Schema {
+    return this.application.schema
   }
 
   get element(): Element {

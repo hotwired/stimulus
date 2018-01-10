@@ -1,17 +1,17 @@
-import { Configuration } from "./configuration"
 import { DataMap } from "./data_map"
+import { Schema } from "./schema"
 import { TargetSet } from "./target_set"
 import { attributeValueContainsToken } from "./selectors"
 
 export class Scope {
-  readonly configuration: Configuration
+  readonly schema: Schema
   readonly identifier: string
   readonly element: Element
   readonly targets: TargetSet
   readonly data: DataMap
 
-  constructor(configuration: Configuration, identifier: string, element: Element) {
-    this.configuration = configuration
+  constructor(schema: Schema, identifier: string, element: Element) {
+    this.schema = schema
     this.identifier = identifier
     this.element = element
     this.targets = new TargetSet(this)
@@ -37,6 +37,6 @@ export class Scope {
   }
 
   private get controllerSelector(): string {
-    return attributeValueContainsToken(this.configuration.controllerAttribute, this.identifier)
+    return attributeValueContainsToken(this.schema.controllerAttribute, this.identifier)
   }
 }
