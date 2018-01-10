@@ -48,4 +48,10 @@ export class Application {
     const context = this.router.getContextForElementAndIdentifier(element, identifier)
     return context ? context.controller : null
   }
+
+  // Error handling
+
+  handleError(error: Error, message: string, detail: object) {
+    console.error(`%s\n\n%o\n\n%o`, message, error, detail)
+  }
 }
