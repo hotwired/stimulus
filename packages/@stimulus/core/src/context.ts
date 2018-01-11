@@ -70,26 +70,16 @@ export class Context implements InlineActionObserverDelegate {
     return this.element.parentElement
   }
 
-  // Actions
-
-  addAction(action: Action) {
-    this.actions.add(action)
-  }
-
-  removeAction(action: Action) {
-    this.actions.delete(action)
-  }
-
   // Inline action observer delegate
 
   /** @private */
   inlineActionConnected(action: Action) {
-    this.addAction(action)
+    this.actions.add(action)
   }
 
   /** @private */
   inlineActionDisconnected(action: Action) {
-    this.removeAction(action)
+    this.actions.delete(action)
   }
 
   // Error handling
