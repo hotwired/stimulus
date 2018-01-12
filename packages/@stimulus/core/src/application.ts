@@ -46,6 +46,12 @@ export class Application {
     identifiers.forEach(identifier => this.router.unloadIdentifier(identifier))
   }
 
+  // Controllers
+
+  get controllers(): Controller[] {
+    return this.router.contexts.map(context => context.controller)
+  }
+
   getControllerForElementAndIdentifier(element: Element, identifier: string): Controller | null {
     const context = this.router.getContextForElementAndIdentifier(element, identifier)
     return context ? context.controller : null

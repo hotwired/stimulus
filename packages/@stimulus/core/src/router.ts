@@ -8,12 +8,12 @@ import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation
 export class Router implements TokenListObserverDelegate {
   readonly application: Application
   private tokenListObserver: TokenListObserver
-  private modules: Map<string, Module>
+  private modulesByIdentifier: Map<string, Module>
 
   constructor(application: Application) {
     this.application = application
     this.tokenListObserver = new TokenListObserver(this.element, this.controllerAttribute, this)
-    this.modules = new Map
+    this.modulesByIdentifier = new Map
   }
 
   get schema(): Schema {
@@ -26,6 +26,10 @@ export class Router implements TokenListObserverDelegate {
 
   get controllerAttribute(): string {
     return this.schema.controllerAttribute
+  }
+
+  get modules(): Module[] {
+    return Array.from(this.modulesByIdentifier.values())
   }
 
   start() {
@@ -41,15 +45,15 @@ export class Router implements TokenListObserverDelegate {
     this.unloadIdentifier(identifier)
 
     const module = new Module(this.application, definition)
-    this.modules.set(identifier, module)
+    this.modulesByIdentifier.set(identifier, module)
     this.connectModule(module)
   }
 
   unloadIdentifier(identifier: string) {
-    const module = this.modules.get(identifier)
+    const module = this.modulesByIdentifier.get(identifier)
     if (module) {
       this.disconnectModule(module)
-      this.modules.delete(identifier)
+      this.modulesByIdentifier.delete(identifier)
     }
   }
 
@@ -67,8 +71,12 @@ export class Router implements TokenListObserverDelegate {
 
   // Contexts
 
+  get contexts(): Context[] {
+    return this.modules.reduce((contexts, module) => contexts.concat(Array.from(module.contexts)), [])
+  }
+
   getContextForElementAndIdentifier(element: Element, identifier: string): Context | undefined {
-    const module = this.modules.get(identifier)
+    const module = this.modulesByIdentifier.get(identifier)
     if (module) {
       return module.getContextForElement(element)
     }
@@ -89,14 +97,14 @@ export class Router implements TokenListObserverDelegate {
   }
 
   private connectModuleForIdentifierToElement(identifier: string, element: Element) {
-    const module = this.modules.get(identifier)
+    const module = this.modulesByIdentifier.get(identifier)
     if (module) {
       module.connectElement(element)
     }
   }
 
   private disconnectModuleForIdentifierFromElement(identifier: string, element: Element) {
-    const module = this.modules.get(identifier)
+    const module = this.modulesByIdentifier.get(identifier)
     if (module) {
       module.disconnectElement(element)
     }
