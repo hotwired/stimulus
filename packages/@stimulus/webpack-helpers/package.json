@@ -16,5 +16,8 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "@types/webpack-env": "^1.13.3"
   }
 }
