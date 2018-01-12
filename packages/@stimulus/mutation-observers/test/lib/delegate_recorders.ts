@@ -1,7 +1,5 @@
 import {
-  AttributeObserver,
   AttributeObserverDelegate,
-  TokenListObserver,
   TokenListObserverDelegate
 } from "@stimulus/mutation-observers"
 
