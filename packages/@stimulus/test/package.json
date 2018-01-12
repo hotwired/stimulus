@@ -1,28 +1,20 @@
 {
-  "name": "@stimulus/core",
+  "name": "@stimulus/test",
   "version": "0.9.0",
-  "description": "Stimulus JavaScript framework: Core library",
+  "description": "Stimulus JavaScript framework: Test helpers",
   "repository": "https://github.com/stimulusjs/stimulus",
   "author": "Basecamp, LLC",
   "contributors": [
-    "David Heinemeier Hansson <david@basecamp.com>",
     "Javan Makhmali <javan@javan.us>",
     "Sam Stephenson <sstephenson@gmail.com>"
   ],
   "main": "dist/module/index.js",
   "types": "dist/types/index.d.ts",
   "license": "MIT",
-  "dependencies": {
-    "@stimulus/mutation-observers": "^0.9.0"
-  },
   "files": [
     "dist"
   ],
   "publishConfig": {
     "access": "public"
-  },
-  "devDependencies": {
-    "@stimulus/test": "^0.9.0",
-    "@types/webpack-env": "^1.13.3"
   }
 }

@@ -6,7 +6,7 @@ const config = {
   reporters: ["progress"],
 
   files: [
-    { pattern: "packages/*/**/test/**/*_test.ts" }
+    { pattern: "packages/*/**/test/index.ts" }
   ],
 
   preprocessors: {
