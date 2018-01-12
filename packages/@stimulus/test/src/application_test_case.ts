@@ -56,6 +56,10 @@ export class ApplicationTestCase extends TestCase {
     }
   }
 
+  findElements(...selectors: string[]) {
+    return selectors.map(selector => this.findElement(selector))
+  }
+
   get nextFrame(): Promise<any> {
     return new Promise(resolve => requestAnimationFrame(resolve))
   }
