@@ -1,6 +1,6 @@
 import { LogControllerTestCase } from "../log_controller_test_case"
 
-export default class extends LogControllerTestCase {
+export default class TargetTests extends LogControllerTestCase {
   fixtureHTML = `
     <div data-controller="${this.identifier}">
       <div data-target="${this.identifier}.alpha" id="alpha1"></div>
