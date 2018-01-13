@@ -3,6 +3,7 @@ import { Controller } from "stimulus"
 export type ActionLogEntry = {
   name: string
   eventType: string
+  eventTarget: EventTarget
   defaultPrevented: boolean
 }
 
@@ -25,7 +26,7 @@ export class LogController extends Controller {
   }
 
   log(event) {
-    this.recordAction({ name: "log", eventType: event.type, defaultPrevented: event.defaultPrevented })
+    this.recordAction({ name: "log", eventType: event.type, eventTarget: event.target, defaultPrevented: event.defaultPrevented })
   }
 
   private recordAction(entry: ActionLogEntry) {
