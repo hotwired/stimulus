@@ -14,30 +14,30 @@ export default class extends LogControllerTestCase {
     </div>
   `
 
-  async "test finding a target"() {
+  "test TargetSet#find"() {
     this.assert.equal(this.findElement("#alpha1"), this.controller.targets.find("alpha"))
   }
 
-  async "test finding all targets"() {
+  "test TargetSet#findAll"() {
     this.assert.deepEqual(
       this.findElements("#alpha1", "#alpha2"),
       this.controller.targets.findAll("alpha")
     )
   }
 
-  async "test finding all targets with multiple names"() {
+  "test TargetSet#findAll with multiple arguments"() {
     this.assert.deepEqual(
       this.findElements("#alpha1", "#alpha2", "#beta1"),
       this.controller.targets.findAll("alpha", "beta")
     )
   }
 
-  async "test target existence"() {
+  "test TargetSet#has"() {
     this.assert.equal(true, this.controller.targets.has("gamma"))
     this.assert.equal(false, this.controller.targets.has("delta"))
   }
 
-  async "test child controller targets"() {
+  "test TargetSet#find ignores child controller targets"() {
     this.assert.equal(null, this.controller.targets.find("delta"))
     this.findElement("#child").removeAttribute("data-controller")
     this.assert.equal(this.findElement("#delta1"), this.controller.targets.find("delta"))
