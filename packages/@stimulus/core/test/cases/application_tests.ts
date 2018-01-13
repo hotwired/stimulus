@@ -1,27 +1,21 @@
 import { ApplicationTestCase } from "@stimulus/test"
 
 export default class ApplicationTests extends ApplicationTestCase {
-  "test Application.start"() {
-    this.assert.expect(0)
+  "skip Application.start"() {
   }
 
-  "test only connects controllers while started"() {
-    this.assert.expect(0)
+  "skip only connects controllers while started"() {
   }
 
-  "test Application#register"() {
-    this.assert.expect(0)
+  "skip Application#register"() {
   }
 
-  "test Application#load"() {
-    this.assert.expect(0)
+  "skip Application#load"() {
   }
 
-  "test Application#unload"() {
-    this.assert.expect(0)
+  "skip Application#unload"() {
   }
 
-  "test reloading an already-loaded module"() {
-    this.assert.expect(0)
+  "skip reloading an already-loaded module"() {
   }
 }

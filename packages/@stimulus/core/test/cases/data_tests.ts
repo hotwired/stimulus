@@ -1,19 +1,15 @@
 import { LogControllerTestCase } from "../log_controller_test_case"
 
 export default class DataTests extends LogControllerTestCase {
-  "test DataSet#get"() {
-    this.assert.expect(0)
+  "skip DataSet#get"() {
   }
 
-  "test DataSet#set"() {
-    this.assert.expect(0)
+  "skip DataSet#set"() {
   }
 
-  "test DataSet#has"() {
-    this.assert.expect(0)
+  "skip DataSet#has"() {
   }
 
-  "test DataSet#delete"() {
-    this.assert.expect(0)
+  "skip DataSet#delete"() {
   }
 }

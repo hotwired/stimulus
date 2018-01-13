@@ -3,8 +3,10 @@ export class TestCase {
 
   static defineModule(moduleName: string, qUnit: QUnit = QUnit) {
     qUnit.module(moduleName, hooks => {
-      this.testNames.forEach(testName => {
-        qUnit.test(testName, this.getTest(testName))
+      this.manifest.forEach(([type, name]) => {
+        const method = qUnit[type] as Function
+        const test = this.getTest(name)
+        method.call(qUnit, name, test)
       })
     })
   }
@@ -19,10 +21,16 @@ export class TestCase {
     return testCase.runTest(testName)
   }
 
+  static get manifest() {
+    return this.testPropertyNames.map(name => [name.slice(0, 4), name.slice(5)])
+  }
+
   static get testNames(): string[] {
-    return Object.keys(this.prototype)
-      .filter(name => name.match(/^test /))
-      .map(name => name.slice(5))
+    return this.manifest.map(([type, name]) => name)
+  }
+
+  static get testPropertyNames(): string[] {
+    return Object.keys(this.prototype).filter(name => name.match(/^(skip|test|todo) /))
   }
 
   constructor(assert: Assert) {
@@ -39,7 +47,7 @@ export class TestCase {
   }
 
   async runTestBody(testName: string) {
-    const testCase = this[`test ${testName}`]
+    const testCase = this[`test ${testName}`] || this[`todo ${testName}`]
     if (typeof testCase == "function") {
       return testCase.call(this)
     } else {

@@ -19,27 +19,21 @@ export default class ActionTests extends LogControllerTestCase {
     this.assertActions({ eventType: "click", eventTarget: this.findElement("button") })
   }
 
-  "test nested actions"() {
-    this.assert.expect(0)
+  "skip nested actions"() {
   }
 
-  "test multiple actions"() {
-    this.assert.expect(0)
+  "skip multiple actions"() {
   }
 
-  "test global actions"() {
-    this.assert.expect(0)
+  "skip global actions"() {
   }
 
-  "test actions ignore events triggered in child scopes"() {
-    this.assert.expect(0)
+  "skip actions ignore events triggered in child scopes"() {
   }
 
-  "test actions can observe non-bubbling events"() {
-    this.assert.expect(0)
+  "skip actions can observe non-bubbling events"() {
   }
 
-  "test global actions can observe events from elements outside the scope"() {
-    this.assert.expect(0)
+  "skip global actions can observe events from elements outside the scope"() {
   }
 }

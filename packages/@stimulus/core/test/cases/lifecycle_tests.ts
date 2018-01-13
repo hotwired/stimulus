@@ -1,15 +1,12 @@
 import { LogControllerTestCase } from "../log_controller_test_case"
 
 export default class LifecycleTests extends LogControllerTestCase {
-  "test Controller#initialize"() {
-    this.assert.expect(0)
+  "skip Controller#initialize"() {
   }
 
-  "test Controller#connect"() {
-    this.assert.expect(0)
+  "skip Controller#connect"() {
   }
 
-  "test Controller#disconnect"() {
-    this.assert.expect(0)
+  "skip Controller#disconnect"() {
   }
 }
