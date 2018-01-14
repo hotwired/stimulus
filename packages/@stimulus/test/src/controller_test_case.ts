@@ -4,6 +4,7 @@ import { Controller, ControllerConstructor } from "stimulus"
 export class ControllerTestCase<T> extends ApplicationTestCase {
   identifier: string = "test"
   controllerConstructor: ControllerConstructor
+  fixtureHTML = `<div data-controller="${this.identifier}">`
 
   setupApplication() {
     this.application.register(this.identifier, this.controllerConstructor)
