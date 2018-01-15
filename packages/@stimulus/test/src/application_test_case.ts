@@ -7,8 +7,8 @@ export class ApplicationTestCase extends TestCase {
   schema: Schema = defaultSchema
   application: Application = new Application(this.fixtureElement, this.schema)
 
-  async renderFixture() {
-    this.fixtureElement.innerHTML = this.fixtureHTML
+  async renderFixture(fixtureHTML = this.fixtureHTML) {
+    this.fixtureElement.innerHTML = fixtureHTML
     return this.nextFrame
   }
 

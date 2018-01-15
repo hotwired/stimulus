@@ -1,21 +1,66 @@
 import { ApplicationTestCase } from "@stimulus/test"
+import { LogController } from "../log_controller"
+
+class AController extends LogController {}
+class BController extends LogController {}
+class CController extends LogController {}
 
 export default class ApplicationTests extends ApplicationTestCase {
-  "skip Application.start"() {
+  fixtureHTML = `<div data-controller="a"><div data-controller="b">`
+  private definitions = [
+    { controllerConstructor: AController, identifier: "a" },
+    { controllerConstructor: BController, identifier: "b" }
+  ]
+
+  async "test Application#register"() {
+    this.assert.equal(this.controllers.length, 0)
+    this.application.register("log", LogController)
+    await this.renderFixture(`<div data-controller="log">`)
+
+    this.assert.equal(this.controllers[0].initializeCount, 1)
+    this.assert.equal(this.controllers[0].connectCount, 1)
   }
 
-  "skip only connects controllers while started"() {
+  "test Application#load"() {
+    this.assert.equal(this.controllers.length, 0)
+    this.application.load(this.definitions)
+    this.assert.equal(this.controllers.length, 2)
+
+    this.assert.ok(this.controllers[0] instanceof AController)
+    this.assert.equal(this.controllers[0].initializeCount, 1)
+    this.assert.equal(this.controllers[0].connectCount, 1)
+
+    this.assert.ok(this.controllers[1] instanceof BController)
+    this.assert.equal(this.controllers[1].initializeCount, 1)
+    this.assert.equal(this.controllers[1].connectCount, 1)
   }
 
-  "skip Application#register"() {
+  "test Application#unload"() {
+    this.application.load(this.definitions)
+    const originalControllers = this.controllers
+
+    this.application.unload("a")
+    this.assert.equal(originalControllers[0].disconnectCount, 1)
+
+    this.assert.equal(this.controllers.length, 1)
+    this.assert.ok(this.controllers[0] instanceof BController)
   }
 
-  "skip Application#load"() {
+  "test reloading an already-loaded module"() {
+    this.application.load(this.definitions)
+    const originalControllers = this.controllers
+
+    this.application.load({ controllerConstructor: CController, identifier: "a" })
+    this.assert.equal(this.controllers.length, 2)
+    this.assert.equal(originalControllers[0].disconnectCount, 1)
+
+    this.assert.notEqual(originalControllers[0], this.controllers[1])
+    this.assert.ok(this.controllers[1] instanceof CController)
+    this.assert.equal(this.controllers[1].initializeCount, 1)
+    this.assert.equal(this.controllers[1].connectCount, 1)
   }
 
-  "skip Application#unload"() {
-  }
-
-  "skip reloading an already-loaded module"() {
+  get controllers() {
+    return this.application.controllers as LogController[]
   }
 }
