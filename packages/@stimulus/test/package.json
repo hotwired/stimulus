@@ -16,5 +16,8 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@stimulus/core": "^0.9.0"
   }
 }

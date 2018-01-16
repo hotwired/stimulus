@@ -1,4 +1,4 @@
-import { Application, Schema, defaultSchema } from "stimulus"
+import { Application, Schema, defaultSchema } from "@stimulus/core"
 import { TestCase } from "./test_case"
 
 export class ApplicationTestCase extends TestCase {
