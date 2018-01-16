@@ -26,10 +26,15 @@ export class LogController extends Controller {
   }
 
   log(event) {
-    this.recordAction({ name: "log", eventType: event.type, eventTarget: event.target, defaultPrevented: event.defaultPrevented })
+    this.recordAction("log", event)
   }
 
-  private recordAction(entry: ActionLogEntry) {
+  log2(event) {
+    this.recordAction("log2", event)
+  }
+
+  private recordAction(name: string, event: Event) {
+    const entry = { name, eventType: event.type, eventTarget: event.target, defaultPrevented: event.defaultPrevented }
     this.actionLog.push(entry)
   }
 }

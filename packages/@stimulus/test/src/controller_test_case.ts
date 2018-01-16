@@ -1,5 +1,5 @@
 import { ApplicationTestCase } from "./application_test_case"
-import { Controller, ControllerConstructor } from "stimulus"
+import { ControllerConstructor } from "stimulus"
 
 export class ControllerTestCase<T> extends ApplicationTestCase {
   identifier: string = "test"
@@ -11,11 +11,15 @@ export class ControllerTestCase<T> extends ApplicationTestCase {
   }
 
   get controller(): T {
-    const controller = this.application.controllers[0]
+    const controller = this.controllers[0]
     if (controller) {
-      return controller as any as T
+      return controller
     } else {
       throw new Error("no controller connected")
     }
+  }
+
+  get controllers(): T[] {
+    return this.application.controllers as any as T[]
   }
 }
