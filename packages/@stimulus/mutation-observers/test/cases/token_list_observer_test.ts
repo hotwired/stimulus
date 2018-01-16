@@ -1,6 +1,6 @@
-import { test, testGroup, nextFrame } from "./lib/helpers"
-import { TestEnvironment } from "./lib/environment"
-import { TokenListObserverRecorder } from "./lib/delegate_recorders"
+import { test, testGroup, nextFrame } from "../lib/helpers"
+import { TestEnvironment } from "../lib/environment"
+import { TokenListObserverRecorder } from "../lib/delegate_recorders"
 import { TokenListObserver } from "@stimulus/mutation-observers"
 
 testGroup("TokenListObserver", hooks => {

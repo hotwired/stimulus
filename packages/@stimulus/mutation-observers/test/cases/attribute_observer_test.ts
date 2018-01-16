@@ -1,6 +1,6 @@
-import { test, testGroup, nextFrame } from "./lib/helpers"
-import { TestEnvironment } from "./lib/environment"
-import { AttributeObserverRecorder } from "./lib/delegate_recorders"
+import { test, testGroup, nextFrame } from "../lib/helpers"
+import { TestEnvironment } from "../lib/environment"
+import { AttributeObserverRecorder } from "../lib/delegate_recorders"
 import { AttributeObserver } from "@stimulus/mutation-observers"
 
 testGroup("AttributeObserver", hooks => {
