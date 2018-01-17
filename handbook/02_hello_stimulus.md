@@ -126,13 +126,13 @@ To connect our action method to the button's `click` event, open `public/index.h
 
 Load the page in your browser and open the developer console. You should see the log message appear when you click the "Greet" button.
 
-## Targets Locate Important Elements By Name
+## Targets Map Important Elements To Controller Properties
 
 We'll finish the exercise by changing our action to say hello to whatever name we've typed in the text field.
 
 In order to do that, first we need a reference to the input element inside our controller. Then we can read the `value` property to get its contents.
 
-Stimulus lets us mark important elements as _targets_ so we can easily reference them by name. Open `public/index.html` and add a magic `data-target` attribute to the input element:
+Stimulus lets us mark important elements as _targets_ so we can easily reference them in the controller through corresponding properties. Open `public/index.html` and add a magic `data-target` attribute to the input element:
 
 ```html
 <div data-controller="hello">
@@ -147,7 +147,7 @@ Stimulus lets us mark important elements as _targets_ so we can easily reference
 > * `hello` is the controller identifier
 > * `name` is the target name
 
-If we add `name` to our controller's list of targets, Stimulus will automatically set up a `this.nameTarget` property that returns the first matching target element. We can then read its `value` and use it to build our greeting string.
+When we add `name` to our controller's list of target definitions, Stimulus automatically creates a `this.nameTarget` property which returns the first matching target element. We can use this property to read the element's `value` and build our greeting string.
 
 Let's try it out. Open `hello_controller.js` and update it like so:
 
