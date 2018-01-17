@@ -188,23 +188,21 @@ export default class extends Controller {
 }
 ```
 
-And we can further clean up the `name` getter by extracting an `inputElement` getter for the target element:
+And we can further clean up by adding a definition for our `name` target. Stimulus automatically creates a `nameTarget` property that returns the `name` target element.
 
 ```js
 // src/controllers/hello_controller.js
 import { Controller } from "stimulus"
 
 export default class extends Controller {
+  static targets = [ "name" ]
+
   greet() {
     console.log(`Hello, ${this.name}!`)
   }
 
   get name() {
-    return this.inputElement.value
-  }
-
-  get inputElement() {
-    return this.targets.find("name")
+    return this.nameTarget.value
   }
 }
 ```
