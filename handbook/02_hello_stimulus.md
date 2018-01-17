@@ -147,17 +147,19 @@ Stimulus lets us mark important elements as _targets_ so we can easily reference
 > * `hello` is the controller identifier
 > * `name` is the target name
 
-If we pass the target name to the `this.targets.find()` method, Stimulus will return the first matching target element it finds. We can then read its `value` and use it to build our greeting string.
+If we add `name` to our controller's list of targets, Stimulus will automatically set up a `this.nameTarget` property that returns the first matching target element. We can then read its `value` and use it to build our greeting string.
 
-Let's try it out. Open `hello_controller.js` and update the `greet()` method like so:
+Let's try it out. Open `hello_controller.js` and update it like so:
 
 ```js
 // src/controllers/hello_controller.js
 import { Controller } from "stimulus"
 
 export default class extends Controller {
+  static targets = [ "name" ]
+
   greet() {
-    const element = this.targets.find("name")
+    const element = this.nameTarget
     const name = element.value
     console.log(`Hello, ${name}!`)
   }
@@ -177,24 +179,6 @@ That means we have an arsenal of standard refactoring techniques at our disposal
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  greet() {
-    console.log(`Hello, ${this.name}!`)
-  }
-
-  get name() {
-    const target = this.targets.find("name")
-    return target.value
-  }
-}
-```
-
-And we can further clean up by adding a definition for our `name` target. Stimulus automatically creates a `nameTarget` property that returns the `name` target element.
-
-```js
-// src/controllers/hello_controller.js
-import { Controller } from "stimulus"
-
-export default class extends Controller {
   static targets = [ "name" ]
 
   greet() {
@@ -206,8 +190,6 @@ export default class extends Controller {
   }
 }
 ```
-
-Now the most important code lives at the top of our controller and its supporting details live below.
 
 ## Wrap-Up and Next Steps
 
