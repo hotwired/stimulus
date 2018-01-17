@@ -1,6 +1,6 @@
-import { LogControllerTestCase } from "../log_controller_test_case"
+import { TargetControllerTestCase } from "../target_controller_test_case"
 
-export default class TargetTests extends LogControllerTestCase {
+export default class TargetTests extends TargetControllerTestCase {
   fixtureHTML = `
     <div data-controller="${this.identifier}">
       <div data-target="${this.identifier}.alpha" id="alpha1"></div>
@@ -41,5 +41,13 @@ export default class TargetTests extends LogControllerTestCase {
     this.assert.equal(null, this.controller.targets.find("delta"))
     this.findElement("#child").removeAttribute("data-controller")
     this.assert.equal(this.findElement("#delta1"), this.controller.targets.find("delta"))
+  }
+
+  "test defined target properties"() {
+    this.assert.equal(this.findElement("#alpha1"), this.controller.alphaTarget)
+    this.assert.deepEqual(this.findElements("#alpha1", "#alpha2"), this.controller.alphaTargets)
+
+    this.assert.equal(this.findElement("#beta1"), this.controller.betaTarget)
+    this.assert.deepEqual(this.findElements("#beta1"), this.controller.betaTargets)
   }
 }

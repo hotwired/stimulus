@@ -11,6 +11,23 @@ export interface ControllerConstructor {
 export class Controller {
   readonly context: Context
 
+  static set targets(targetNames: string[]) {
+    targetNames.forEach(targetName => {
+      Object.defineProperties(this.prototype, {
+        [`${targetName}Target`]: {
+          get() {
+            return this.targets.find(targetName)
+          }
+        },
+        [`${targetName}Targets`]: {
+          get() {
+            return this.targets.findAll(targetName)
+          }
+        }
+      })
+    })
+  }
+
   constructor(context: Context) {
     this.context = context
   }
