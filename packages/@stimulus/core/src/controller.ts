@@ -5,28 +5,13 @@ import { Scope } from "./scope"
 import { TargetSet } from "./target_set"
 
 export interface ControllerConstructor {
+  targets: string[]
   new(context: Context): Controller
 }
 
 export class Controller {
+  static targets: string[] = []
   readonly context: Context
-
-  static set targets(targetNames: string[]) {
-    targetNames.forEach(targetName => {
-      Object.defineProperties(this.prototype, {
-        [`${targetName}Target`]: {
-          get() {
-            return this.targets.find(targetName)
-          }
-        },
-        [`${targetName}Targets`]: {
-          get() {
-            return this.targets.findAll(targetName)
-          }
-        }
-      })
-    })
-  }
 
   constructor(context: Context) {
     this.context = context
