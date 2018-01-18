@@ -1,6 +1,8 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
+  static targets = [ "slide" ]
+
   initialize() {
     this.render()
   }
@@ -18,7 +20,7 @@ export default class extends Controller {
   }
 
   render() {
-    this.slideElements.forEach((element, index) => {
+    this.slideTargets.forEach((element, index) => {
       element.classList.toggle("slide--current", index == this.index)
     })
   }
@@ -37,10 +39,6 @@ export default class extends Controller {
   }
 
   get lastIndex() {
-    return this.slideElements.length - 1
-  }
-
-  get slideElements() {
-    return this.targets.findAll("slide")
+    return this.slideTargets.length - 1
   }
 }

@@ -67,13 +67,11 @@ export default class extends Controller {
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  copy() {
-    this.sourceElement.select()
-    document.execCommand("copy")
-  }
+  static targets = [ "source" ]
 
-  get sourceElement() {
-    return this.targets.find("source")
+  copy() {
+    this.sourceTarget.select()
+    document.execCommand("copy")
   }
 }
 ```
@@ -115,6 +113,8 @@ export default class extends Controller {
 
 ```js
 export default class extends Controller {
+  static targets = [ "source" ]
+
   initialize() {
     if (document.queryCommandSupported("copy")) {
       this.element.classList.add("clipboard--supported")
@@ -122,12 +122,8 @@ export default class extends Controller {
   }
 
   copy() {
-    this.sourceElement.select()
+    this.sourceTarget.select()
     document.execCommand("copy")
-  }
-
-  get sourceElement() {
-    return this.targets.find("source")
   }
 }
 ```
@@ -162,7 +158,7 @@ export default class extends Controller {
 ```js
   copy(event) {
     event.preventDefault()
-    this.sourceElement.select()
+    this.sourceTarget.select()
     document.execCommand("copy")
   }
 ```

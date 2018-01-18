@@ -5,10 +5,12 @@ import { Scope } from "./scope"
 import { TargetSet } from "./target_set"
 
 export interface ControllerConstructor {
+  targets: string[]
   new(context: Context): Controller
 }
 
 export class Controller {
+  static targets: string[] = []
   readonly context: Context
 
   constructor(context: Context) {

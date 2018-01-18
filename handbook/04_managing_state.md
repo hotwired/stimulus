@@ -44,6 +44,8 @@ We'll have it wrapped up in time for the 1.0 release. Thanks for your patience!
 import { Controller } from "stimulus"
 
 export default class extends Controller {
+  static targets = [ "slide" ]
+
   initialize() {
     this.render()
   }
@@ -55,16 +57,12 @@ export default class extends Controller {
   }
 
   render() {
-    this.slideElements.forEach((element, index) => {
+    this.slideTargets.forEach((element, index) => {
       element.classList.toggle("slide--current", index == this.index)
     })
   }
 
   get index() {
-  }
-
-  get slideElements() {
-    return this.targets.findAll("slide")
   }
 }
 ```
@@ -118,7 +116,7 @@ export default class extends Controller {
   }
 
   get lastIndex() {
-    return this.slideElements.length - 1
+    return this.slideTargets.length - 1
   }
 ```
 
@@ -130,6 +128,8 @@ export default class extends Controller {
 import { Controller } from "stimulus"
 
 export default class extends Controller {
+  static targets = [ "slide" ]
+
   initialize() {
     this.render()
   }
@@ -147,7 +147,7 @@ export default class extends Controller {
   }
 
   render() {
-    this.slideElements.forEach((element, index) => {
+    this.slideTargets.forEach((element, index) => {
       element.classList.toggle("slide--current", index == this.index)
     })
   }
@@ -166,11 +166,7 @@ export default class extends Controller {
   }
 
   get lastIndex() {
-    return this.slideElements.length - 1
-  }
-
-  get slideElements() {
-    return this.targets.findAll("slide")
+    return this.slideTargets.length - 1
   }
 }
 ```
