@@ -46,6 +46,27 @@ application.register("hello", HelloController)
 application.register("clipboard", ClipboardController)
 ```
 
+## Using Babel
+
+If you're using [Babel](https://babeljs.io/) with your build system, you'll need to install the [transform-class-properties plugin](https://babeljs.io/docs/plugins/transform-class-properties/) and add it to your configuration:
+
+```js
+// .babelrc
+{
+  "presets": ["env"],
+  "plugins": ["transform-class-properties"]
+}
+```
+
+Or, use the [stage-2 preset](https://babeljs.io/docs/plugins/preset-stage-2/), which includes the transform-class-properties plugin and more:
+
+```js
+// .babelrc
+{
+  "presets": ["env", "stage-2"]
+}
+```
+
 ## Using Without a Build System
 
 If you prefer not to use a build system, you can load Stimulus in a `<script>` tag and it will be globally available through the `window.Stimulus` object.
