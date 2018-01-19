@@ -25,13 +25,9 @@ function definitionForModuleAndIdentifier(module: ECMAScriptModule, identifier: 
   }
 }
 
-function identifierForContextKey(key: string): string | undefined {
-  const dasherizedKey = key.replace(/_/g, "-")
-  const matches = dasherizedKey.match(/([\w-]+)-controller(\.\w+)?$/i)
-  if (matches) {
-    const identifier = matches[1].replace(/-controller$/i, "")
-    if (identifier) {
-      return identifier
-    }
+export function identifierForContextKey(key: string): string | undefined {
+  const logicalName = (key.match(/^(?:\.\/)?(.+)(?:[_-]controller\..+?)$/) || [])[1]
+  if (logicalName) {
+    return logicalName.replace(/_/g, "-").replace(/\//g, "--")
   }
 }

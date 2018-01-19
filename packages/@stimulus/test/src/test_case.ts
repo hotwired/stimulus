@@ -1,7 +1,7 @@
 export class TestCase {
   readonly assert: Assert
 
-  static defineModule(moduleName: string, qUnit: QUnit = QUnit) {
+  static defineModule(moduleName: string = this.name, qUnit: QUnit = QUnit) {
     qUnit.module(moduleName, hooks => {
       this.manifest.forEach(([type, name]) => {
         const method = qUnit[type] as Function
