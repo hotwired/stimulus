@@ -29,10 +29,12 @@ export default class ApplicationTests extends ApplicationTestCase {
     this.assert.ok(this.controllers[0] instanceof AController)
     this.assert.equal(this.controllers[0].initializeCount, 1)
     this.assert.equal(this.controllers[0].connectCount, 1)
+    this.assert.equal(this.controllers[0].constructor["importCount"], 1)
 
     this.assert.ok(this.controllers[1] instanceof BController)
     this.assert.equal(this.controllers[1].initializeCount, 1)
     this.assert.equal(this.controllers[1].connectCount, 1)
+    this.assert.equal(this.controllers[1].constructor["importCount"], 1)
   }
 
   "test Application#unload"() {
@@ -58,6 +60,7 @@ export default class ApplicationTests extends ApplicationTestCase {
     this.assert.ok(this.controllers[1] instanceof CController)
     this.assert.equal(this.controllers[1].initializeCount, 1)
     this.assert.equal(this.controllers[1].connectCount, 1)
+    this.assert.equal(this.controllers[1].constructor["importCount"], 1)
   }
 
   get controllers() {
