@@ -39,7 +39,7 @@ function getOwnTargetNamesForConstructor(constructor: Function) {
 
 function defineLinkedProperties(object: any, properties: PropertyDescriptorMap) {
   Object.keys(properties).forEach((name) => {
-    if (object[name] === undefined) {
+    if (!(name in object)) {
       const descriptor = properties[name]
       Object.defineProperty(object, name, descriptor)
     }
