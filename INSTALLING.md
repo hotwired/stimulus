@@ -10,7 +10,7 @@ To install Stimulus, add the [`stimulus` npm package](https://www.npmjs.com/pack
 
 Stimulus integrates with the [webpack](https://webpack.js.org/) asset packager to automatically load controller files from a folder in your app.
 
-Use webpack's [`require.context`](https://webpack.js.org/api/module-methods/#require-context) helper in conjunction with Stimulus' `definitionsFromContext` helper to set everything up:
+Call webpack's [`require.context`](https://webpack.js.org/api/module-methods/#require-context) helper with the path to the folder containing your Stimulus controllers. Then, pass the resulting context to the `Application#load` method using the `definitionsFromContext` helper:
 
 ```js
 // src/application.js
@@ -22,13 +22,22 @@ const context = require.context("./controllers", true, /\.js$/)
 application.load(definitionsFromContext(context))
 ```
 
-Then name your controller files `[identifier]_controller.js` (or `[identifier]-controller.js` if you prefer dashes), where `identifier` corresponds to each controller's `data-controller` identifier in your HTML.
+### Controller Filenames Map to Identifiers
 
-**Note**: Always use dashes in `data-controller` values for multi-word controller `identifier`s.
+Name your controller files `[identifier]_controller.js`, where `identifier` corresponds to each controller's `data-controller` identifier in your HTML.
 
-Examples:
-* `data-controller="clipboard"` → `clipboard_controller.js` or `clipboard-controller.js`
-* `data-controller="local-time"` → `local_time_controller.js` or `local-time-controller.js`
+Stimulus conventionally separates multiple words in filenames using underscores. Each underscore in a controller's filename translates to a dash in its identifier.
+
+You may also namespace your controllers using subfolders. Each forward slash in a namespaced controller file's path becomes two dashes in its identifier.
+
+If you prefer, you may use dashes instead of underscores anywhere in a controller's filename. Stimulus treats them identically.
+
+If your controller file is named… | its identifier will be…
+--------------------------------- | -----------------------
+clipboard_controller.js           | clipboard
+date_picker_controller.js         | date-picker
+users/list_item_controller.js     | users--list-item
+local-time-controller.js          | local-time
 
 ## Using Other Build Systems
 
