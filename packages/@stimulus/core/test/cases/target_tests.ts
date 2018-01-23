@@ -43,12 +43,12 @@ export default class TargetTests extends TargetControllerTestCase {
     this.assert.equal(this.findElement("#delta1"), this.controller.targets.find("delta"))
   }
 
-  "test defined target properties"() {
+  "test linked target properties"() {
     this.assert.equal(this.findElement("#beta1"), this.controller.betaTarget)
     this.assert.deepEqual(this.findElements("#beta1"), this.controller.betaTargets)
   }
 
-  "test inherited defined target properties"() {
+  "test inherited linked target properties"() {
     this.assert.equal(this.findElement("#alpha1"), this.controller.alphaTarget)
     this.assert.deepEqual(this.findElements("#alpha1", "#alpha2"), this.controller.alphaTargets)
   }
