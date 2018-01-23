@@ -4,12 +4,22 @@ export function defineTargetProperties(constructor: Function) {
   targetNames.forEach(name => defineLinkedProperties(prototype, {
     [`${name}Target`]: {
       get() {
-        return this.targets.find(name)
+        const target = this.targets.find(name)
+        if (target) {
+          return target
+        } else {
+          throw new Error(`Missing target element "${this.identifier}.${name}"`)
+        }
       }
     },
     [`${name}Targets`]: {
       get() {
         return this.targets.findAll(name)
+      }
+    },
+    [`has${capitalize(name)}Target`]: {
+      get() {
+        return this.targets.has(name)
       }
     }
   }))
@@ -44,4 +54,8 @@ function defineLinkedProperties(object: any, properties: PropertyDescriptorMap) 
       Object.defineProperty(object, name, descriptor)
     }
   })
+}
+
+function capitalize(name: string) {
+  return name.charAt(0).toLocaleUpperCase() + name.slice(1)
 }

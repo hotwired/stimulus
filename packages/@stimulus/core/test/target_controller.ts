@@ -5,6 +5,7 @@ export class BaseTargetController extends Controller {
 
   alphaTarget: Element | null
   alphaTargets: Element[]
+  hasAlphaTarget: boolean
 }
 
 export class TargetController extends BaseTargetController {
@@ -12,4 +13,5 @@ export class TargetController extends BaseTargetController {
 
   betaTarget: Element | null
   betaTargets: Element[]
+  hasBetaTarget: boolean
 }
