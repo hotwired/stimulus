@@ -46,6 +46,7 @@ export default class TargetTests extends TargetControllerTestCase {
   "test linked target properties"() {
     this.assert.equal(this.findElement("#beta1"), this.controller.betaTarget)
     this.assert.deepEqual(this.findElements("#beta1"), this.controller.betaTargets)
+    this.assert.equal(this.controller.hasBetaTarget, true)
   }
 
   "test inherited linked target properties"() {
@@ -55,6 +56,7 @@ export default class TargetTests extends TargetControllerTestCase {
 
   "test singular linked target property throws an error when no target is found"() {
     this.findElement("#beta1").removeAttribute("data-target")
+    this.assert.equal(this.controller.hasBetaTarget, false)
     this.assert.equal(this.controller.betaTargets.length, 0)
     this.assert.throws(() => this.controller.betaTarget)
   }
