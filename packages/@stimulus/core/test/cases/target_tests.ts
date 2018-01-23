@@ -15,43 +15,43 @@ export default class TargetTests extends TargetControllerTestCase {
   `
 
   "test TargetSet#find"() {
-    this.assert.equal(this.findElement("#alpha1"), this.controller.targets.find("alpha"))
+    this.assert.equal(this.controller.targets.find("alpha"), this.findElement("#alpha1"))
   }
 
   "test TargetSet#findAll"() {
     this.assert.deepEqual(
-      this.findElements("#alpha1", "#alpha2"),
-      this.controller.targets.findAll("alpha")
+      this.controller.targets.findAll("alpha"),
+      this.findElements("#alpha1", "#alpha2")
     )
   }
 
   "test TargetSet#findAll with multiple arguments"() {
     this.assert.deepEqual(
-      this.findElements("#alpha1", "#alpha2", "#beta1"),
-      this.controller.targets.findAll("alpha", "beta")
+      this.controller.targets.findAll("alpha", "beta"),
+      this.findElements("#alpha1", "#alpha2", "#beta1")
     )
   }
 
   "test TargetSet#has"() {
-    this.assert.equal(true, this.controller.targets.has("gamma"))
-    this.assert.equal(false, this.controller.targets.has("delta"))
+    this.assert.equal(this.controller.targets.has("gamma"), true)
+    this.assert.equal(this.controller.targets.has("delta"), false)
   }
 
   "test TargetSet#find ignores child controller targets"() {
-    this.assert.equal(null, this.controller.targets.find("delta"))
+    this.assert.equal(this.controller.targets.find("delta"), null)
     this.findElement("#child").removeAttribute("data-controller")
-    this.assert.equal(this.findElement("#delta1"), this.controller.targets.find("delta"))
+    this.assert.equal(this.controller.targets.find("delta"), this.findElement("#delta1"))
   }
 
   "test linked target properties"() {
-    this.assert.equal(this.findElement("#beta1"), this.controller.betaTarget)
-    this.assert.deepEqual(this.findElements("#beta1"), this.controller.betaTargets)
+    this.assert.equal(this.controller.betaTarget, this.findElement("#beta1"))
+    this.assert.deepEqual(this.controller.betaTargets, this.findElements("#beta1"))
     this.assert.equal(this.controller.hasBetaTarget, true)
   }
 
   "test inherited linked target properties"() {
-    this.assert.equal(this.findElement("#alpha1"), this.controller.alphaTarget)
-    this.assert.deepEqual(this.findElements("#alpha1", "#alpha2"), this.controller.alphaTargets)
+    this.assert.equal(this.controller.alphaTarget, this.findElement("#alpha1"))
+    this.assert.deepEqual(this.controller.alphaTargets, this.findElements("#alpha1", "#alpha2"))
   }
 
   "test singular linked target property throws an error when no target is found"() {
