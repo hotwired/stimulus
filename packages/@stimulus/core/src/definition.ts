@@ -5,15 +5,15 @@ export interface Definition {
   controllerConstructor: ControllerConstructor
 }
 
-export function importDefinition(definition: Definition): Definition {
+export function blessDefinition(definition: Definition): Definition {
   return {
     identifier: definition.identifier,
-    controllerConstructor: importControllerConstructor(definition.controllerConstructor)
+    controllerConstructor: blessControllerConstructor(definition.controllerConstructor)
   }
 }
 
-function importControllerConstructor(controllerConstructor: ControllerConstructor): ControllerConstructor {
+function blessControllerConstructor(controllerConstructor: ControllerConstructor): ControllerConstructor {
   const constructor = class extends controllerConstructor { }
-  constructor.import()
+  constructor.bless()
   return constructor
 }

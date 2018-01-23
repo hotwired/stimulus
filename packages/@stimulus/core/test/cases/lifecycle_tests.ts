@@ -19,7 +19,7 @@ export default class LifecycleTests extends LogControllerTestCase {
     this.assert.equal(this.controller.connectCount, 1)
     await this.reconnectControllerElement()
     this.assert.equal(this.controller.connectCount, 2)
-    this.assert.equal(this.controller.constructor["importCount"], 1)
+    this.assert.equal(this.controller.constructor["blessCount"], 1)
   }
 
   async "test Controller#disconnect"() {

@@ -1,7 +1,7 @@
 import { Application } from "./application"
 import { Context } from "./context"
 import { ControllerConstructor } from "./controller"
-import { Definition, importDefinition } from "./definition"
+import { Definition, blessDefinition } from "./definition"
 
 export class Module {
   readonly application: Application
@@ -12,7 +12,7 @@ export class Module {
 
   constructor(application: Application, definition: Definition) {
     this.application = application
-    this.definition = importDefinition(definition)
+    this.definition = blessDefinition(definition)
     this.contextsByElement = new WeakMap
     this.connectedContexts = new Set
   }

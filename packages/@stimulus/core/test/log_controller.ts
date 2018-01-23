@@ -8,15 +8,15 @@ export type ActionLogEntry = {
 }
 
 export class LogController extends Controller {
-  static importCount = 0
+  static blessCount = 0
   initializeCount = 0
   connectCount = 0
   disconnectCount = 0
   actionLog: ActionLogEntry[] = []
 
-  static import() {
-    super.import()
-    this.importCount++
+  static bless() {
+    super.bless()
+    this.blessCount++
   }
 
   initialize() {
