@@ -3,15 +3,21 @@ import { Context } from "./context"
 import { DataMap } from "./data_map"
 import { Scope } from "./scope"
 import { TargetSet } from "./target_set"
+import { defineTargetProperties } from "./target_properties"
 
 export interface ControllerConstructor {
-  targets: string[]
+  bless()
   new(context: Context): Controller
 }
 
 export class Controller {
   static targets: string[] = []
+
   readonly context: Context
+
+  static bless() {
+    defineTargetProperties(this)
+  }
 
   constructor(context: Context) {
     this.context = context
