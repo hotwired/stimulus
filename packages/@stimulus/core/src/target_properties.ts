@@ -4,7 +4,12 @@ export function defineTargetProperties(constructor: Function) {
   targetNames.forEach(name => defineLinkedProperties(prototype, {
     [`${name}Target`]: {
       get() {
-        return this.targets.find(name)
+        const target = this.targets.find(name)
+        if (target) {
+          return target
+        } else {
+          throw new Error(`Missing target element "${this.identifier}.${name}"`)
+        }
       }
     },
     [`${name}Targets`]: {

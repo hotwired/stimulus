@@ -52,4 +52,10 @@ export default class TargetTests extends TargetControllerTestCase {
     this.assert.equal(this.findElement("#alpha1"), this.controller.alphaTarget)
     this.assert.deepEqual(this.findElements("#alpha1", "#alpha2"), this.controller.alphaTargets)
   }
+
+  "test singular linked target property throws an error when no target is found"() {
+    this.findElement("#beta1").removeAttribute("data-target")
+    this.assert.equal(this.controller.betaTargets.length, 0)
+    this.assert.throws(() => this.controller.betaTarget)
+  }
 }
