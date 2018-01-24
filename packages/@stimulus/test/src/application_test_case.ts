@@ -1,11 +1,17 @@
 import { Application, Schema, defaultSchema } from "@stimulus/core"
 import { TestCase } from "./test_case"
 
+class TestApplication extends Application {
+  handleError(error: Error, message: string, detail: object) {
+    throw error
+  }
+}
+
 export class ApplicationTestCase extends TestCase {
   fixtureSelector: string = "#qunit-fixture"
   fixtureHTML: string = ""
   schema: Schema = defaultSchema
-  application: Application = new Application(this.fixtureElement, this.schema)
+  application: Application = new TestApplication(this.fixtureElement, this.schema)
 
   async renderFixture(fixtureHTML = this.fixtureHTML) {
     this.fixtureElement.innerHTML = fixtureHTML
