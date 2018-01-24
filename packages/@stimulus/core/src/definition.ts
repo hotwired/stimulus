@@ -13,7 +13,27 @@ export function blessDefinition(definition: Definition): Definition {
 }
 
 function blessControllerConstructor(controllerConstructor: ControllerConstructor): ControllerConstructor {
-  const constructor = class extends controllerConstructor { }
+  const constructor = extend(controllerConstructor)
   constructor.bless()
   return constructor
 }
+
+const extend = (() => {
+  if (window["Reflect"] && Reflect.construct) {
+    return (constructor) => {
+      function BlessedController() {
+        return Reflect.construct(constructor, arguments, new.target)
+      }
+
+      BlessedController.prototype = Object.create(constructor.prototype, {
+        constructor: { value: BlessedController }
+      })
+
+      Reflect.setPrototypeOf(BlessedController, constructor)
+      return BlessedController as any
+    }
+
+  } else {
+    return (constructor) => class BlessedController extends constructor {}
+  }
+})()
