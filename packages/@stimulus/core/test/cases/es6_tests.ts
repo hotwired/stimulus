@@ -46,5 +46,5 @@ function supportsES6Classes() {
 }
 
 function supportsReflectConstruct() {
-  return window["Reflect"] && typeof Reflect.construct == "function"
+  return typeof Reflect == "object" && typeof Reflect.construct == "function"
 }

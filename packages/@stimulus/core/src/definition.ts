@@ -19,7 +19,7 @@ function blessControllerConstructor(controllerConstructor: ControllerConstructor
 }
 
 const extend = (() => {
-  if (window["Reflect"] && Reflect.construct) {
+  if (typeof Reflect == "object" && typeof Reflect.construct == "function") {
     return (constructor) => {
       function BlessedController() {
         return Reflect.construct(constructor, arguments, new.target)
@@ -32,7 +32,6 @@ const extend = (() => {
       Reflect.setPrototypeOf(BlessedController, constructor)
       return BlessedController as any
     }
-
   } else {
     return (constructor) => class BlessedController extends constructor {}
   }
