@@ -21,18 +21,18 @@ function blessControllerConstructor(controllerConstructor: ControllerConstructor
 const extend = (() => {
   if (typeof Reflect == "object" && typeof Reflect.construct == "function") {
     return (constructor) => {
-      function BlessedController() {
+      function Controller() {
         return Reflect.construct(constructor, arguments, new.target)
       }
 
-      BlessedController.prototype = Object.create(constructor.prototype, {
-        constructor: { value: BlessedController }
+      Controller.prototype = Object.create(constructor.prototype, {
+        constructor: { value: Controller }
       })
 
-      Reflect.setPrototypeOf(BlessedController, constructor)
-      return BlessedController as any
+      Reflect.setPrototypeOf(Controller, constructor)
+      return Controller as any
     }
   } else {
-    return (constructor) => class BlessedController extends constructor {}
+    return (constructor) => class Controller extends constructor {}
   }
 })()
