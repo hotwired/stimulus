@@ -3,7 +3,7 @@ import { LogControllerTestCase } from "../log_controller_test_case"
 
 export default class ES6Tests extends LogControllerTestCase {
   static shouldSkipTest(testName: string) {
-    return !supportsES6Classes()
+    return !(supportsES6Classes() && supportsReflectConstruct())
   }
 
   fixtureHTML = `
@@ -43,4 +43,8 @@ function supportsES6Classes() {
   } catch (error) {
     return false
   }
+}
+
+function supportsReflectConstruct() {
+  return window["Reflect"] && typeof Reflect.construct == "function"
 }
