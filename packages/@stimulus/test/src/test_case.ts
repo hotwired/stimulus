@@ -4,6 +4,7 @@ export class TestCase {
   static defineModule(moduleName: string = this.name, qUnit: QUnit = QUnit) {
     qUnit.module(moduleName, hooks => {
       this.manifest.forEach(([type, name]) => {
+        type = this.shouldSkipTest(name) ? "skip" : type
         const method = qUnit[type] as Function
         const test = this.getTest(name)
         method.call(qUnit, name, test)
@@ -19,6 +20,10 @@ export class TestCase {
   static runTest(testName: string, assert: Assert) {
     const testCase = new this(assert)
     return testCase.runTest(testName)
+  }
+
+  static shouldSkipTest(testName: string): boolean {
+    return false
   }
 
   static get manifest() {
