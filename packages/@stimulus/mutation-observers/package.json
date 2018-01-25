@@ -1,6 +1,6 @@
 {
   "name": "@stimulus/mutation-observers",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.4",
   "description": "Practical wrappers around DOM MutationObserver",
   "repository": "https://github.com/stimulusjs/stimulus",
   "author": "Basecamp, LLC",
