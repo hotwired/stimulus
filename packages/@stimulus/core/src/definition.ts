@@ -19,20 +19,30 @@ function blessControllerConstructor(controllerConstructor: ControllerConstructor
 }
 
 const extend = (() => {
-  if (typeof Reflect == "object" && typeof Reflect.construct == "function") {
-    return (constructor) => {
-      function Controller() {
-        return Reflect.construct(constructor, arguments, new.target)
-      }
-
-      Controller.prototype = Object.create(constructor.prototype, {
-        constructor: { value: Controller }
-      })
-
-      Reflect.setPrototypeOf(Controller, constructor)
-      return Controller as any
+  function extendWithReflect(constructor) {
+    function Controller() {
+      return Reflect.construct(constructor, arguments, new.target)
     }
-  } else {
+
+    Controller.prototype = Object.create(constructor.prototype, {
+      constructor: { value: Controller }
+    })
+
+    Reflect.setPrototypeOf(Controller, constructor)
+    return Controller as any
+  }
+
+  function testReflectExtension() {
+    const a = function() { this.a.call(this) }
+    const b = extendWithReflect(a)
+    b.prototype.a = function() {}
+    return new b
+  }
+
+  try {
+    testReflectExtension()
+    return extendWithReflect
+  } catch (error) {
     return (constructor) => class Controller extends constructor {}
   }
 })()
