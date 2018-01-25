@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = [ "slide" ]
 
   initialize() {
-    this.render()
+    this.showCurrentSlide()
   }
 
   next() {
@@ -19,7 +19,7 @@ export default class extends Controller {
     }
   }
 
-  render() {
+  showCurrentSlide() {
     this.slideTargets.forEach((element, index) => {
       element.classList.toggle("slide--current", index == this.index)
     })
@@ -35,7 +35,7 @@ export default class extends Controller {
 
   set index(value) {
     this.data.set("index", value)
-    this.render()
+    this.showCurrentSlide()
   }
 
   get lastIndex() {
