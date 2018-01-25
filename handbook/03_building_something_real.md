@@ -4,22 +4,25 @@
 
 # 3 Building Something Real
 
-### 🚧 This chapter of The Stimulus Handbook is a work in progress.
-We'll have it wrapped up in time for the 1.0 release. Thanks for your patience!
+We've implemented our first controller and learned how Stimulus connects HTML to JavaScript. But logging "Hello" to the console isn't particularly exciting, nor is it representative of the kinds of things we're likely to build.
 
----
-
-* Logging hello to the console isn't very exciting
-* Let's build something we might actually use
-* We'll go over a real example from Basecamp
+Let's take a look at something we can use in a real application by re-creating a controller from Basecamp.
 
 ## Encapsulating the DOM Clipboard API
 
-* We have various bits of data in Basecamp that we want to be able to copy to the clipboard with one click
-* The web platform now has an API for this that is supported across all the current major browsers
-* If a text input field has a selection, you can call `document.execCommand("copy")` to copy the selected text
-* Let's implement a Stimulus controller that uses text input field to copy a value
-* We'll start with basic HTML:
+Scattered throughout Basecamp's UI are buttons like these:
+
+[img]
+
+When you click one, Basecamp copies a bit of text, such as a URL or an email address, to your clipboard.
+
+The web platform has [an API for accessing the system clipboard](https://www.w3.org/TR/clipboard-apis/) which is [well-supported in current browsers](https://caniuse.com/#feat=clipboard). But there's no HTML element that does what we need. To implement the Copy button, we must use JavaScript.
+
+## Implementing a Copy Button
+
+Let's say we have an app which allows us to grant someone else access by generating a PIN for them. It would be convenient if we could display that generated PIN alongside a button to copy it to the clipboard for easy sharing.
+
+Open `public/index.html` and replace the contents of `<body>` with a rough sketch of the button:
 
 ```html
 <div>
@@ -28,7 +31,9 @@ We'll have it wrapped up in time for the 1.0 release. Thanks for your patience!
 </div>
 ```
 
-* Next, create `src/controllers/clipboard_controller.js` and add an empty method `copy`:
+## Setting Up the Controller
+
+Next, create `src/controllers/clipboard_controller.js` and add an empty method `copy`:
 
 ```js
 // src/controllers/clipboard_controller.js
@@ -40,45 +45,77 @@ export default class extends Controller {
 }
 ```
 
-## Connecting the Controller
-
-* Now we can wire up the controller to our markup
-* Add `data-controller="clipboard"` to the outer `<div>`. Any time this attribute appears on an element, Stimulus will connect our controller
-* Add `data-target="clipboard.source"` to the text field so that we can refer to it by the logical name `source`
-* Add `data-action="clipboard#copy"` to the button so clicking it calls the `copy` method
+Then add `data-controller="clipboard"` to the outer `<div>`. Any time this attribute appears on an element, Stimulus will connect an instance of our controller:
 
 ```html
 <div data-controller="clipboard">
-  PIN: <input data-target="clipboard.source" type="text" value="1234" readonly>
-  <button data-action="clipboard#copy">Copy to Clipboard</button>
-</div>
 ```
 
-### Common Actions Have a Shorthand Notation
+## Defining the Target
 
-* (Describe why we can omit `click->` from the `data-action` attribute)
+We'll need a reference to the text field so we can select its contents before invoking the clipboard API. Add `data-target="clipboard.source"` to the text field:
 
-## Implementing the Copy Action
+```html
+  PIN: <input data-target="clipboard.source" type="text" value="1234" readonly>
+```
 
-* Now we can implement the `copy` action:
+Now add a target definition to the controller so we can access the text field element as `this.sourceTarget`:
 
 ```js
-// src/controllers/clipboard_controller.js
-import { Controller } from "stimulus"
-
 export default class extends Controller {
   static targets = [ "source" ]
 
+  // ...
+}
+```
+
+> ### What's With That `static targets` Line?
+>
+> When Stimulus loads your controller class, it looks for target name strings in a static array called `targets`. For each target name in the array, Stimulus adds three new properties to your controller. Here, our `"source"` target name becomes the following properties:
+>
+> * `this.sourceTarget` evaluates to the first `source` target in your controller's scope. If there is no `source` target, accessing the property throws an error.
+> * `this.sourceTargets` evaluates to an array of all `source` targets in the controller's scope.
+> * `this.hasSourceTarget` evaluates to `true` if there is a `source` target or `false` if not.
+
+
+## Connecting the Action
+
+Now we're ready to hook up the Copy button.
+
+We want a click on the button to invoke the `copy` method in our controller, so we'll add `data-action="clipboard#copy"`:
+
+```html
+  <button data-action="clipboard#copy">Copy to Clipboard</button>
+```
+
+> ### Common Events Have a Shorthand Action Notation
+>
+> You might have noticed we've omitted `click->` from the action descriptor. That's because Stimulus defines `click` as the default event for actions on `<button>` elements.
+>
+> Certain other elements have default events, too. Here's the full list:
+>
+> Element           | Default event
+> ----------------- | -------------
+> a                 | click
+> button            | click
+> form              | submit
+> input             | change
+> input type=submit | click
+> select            | change
+> textarea          | change
+
+Finally, in our `copy` method, we can select the input field's contents and call the clipboard API:
+
+```js
   copy() {
     this.sourceTarget.select()
     document.execCommand("copy")
   }
-}
 ```
 
-* Let's see our new controller in action:
+Load the page in your browser and click the Copy button. Then switch back to your text editor and paste. You should see the PIN `1234`.
 
-  ![copy](https://user-images.githubusercontent.com/5355/34271849-0b645dfc-e65c-11e7-899d-b01bf9019d5c.gif)
+[img]
 
 ## Progressive Enhancement
 
