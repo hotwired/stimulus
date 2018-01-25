@@ -21,6 +21,7 @@ const pages = [
   { path: "/hello", title: "Hello" },
   { path: "/clipboard", title: "Clipboard" },
   { path: "/slideshow", title: "Slideshow" },
+  { path: "/content-loader", title: "Content Loader" },
 ]
 
 app.get("/", (req, res) => {
@@ -30,6 +31,12 @@ app.get("/", (req, res) => {
 app.get("/:page", (req, res, next) => {
   const currentPage = pages.find(page => page.path == req.path)
   res.render(req.params.page, { pages, currentPage })
+})
+
+app.get("/content/:title", (req, res, next) => {
+  setTimeout(() => {
+    res.render(`content/${req.params.title}`)
+  }, Math.max(800, Math.random() * 1600))
 })
 
 app.listen(port, () => {
