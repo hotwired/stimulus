@@ -1,8 +1,7 @@
-#### [<img src="../assets/logo.svg" width="12" height="12" alt="Stimulus">](../README.md) [The Stimulus Handbook](README.md)
-
+---
 ---
 
-# 2 Hello, Stimulus
+# 2: Hello, Stimulus
 
 The best way to learn how Stimulus works is to build a simple controller. This chapter will show you how.
 
@@ -196,7 +195,3 @@ export default class extends Controller {
 Congratulations—you've just written your first Stimulus controller!
 
 We've covered the framework's core concepts: controllers, identifiers, actions, and targets. In the next chapter, we'll see how to put those together to build a real-life controller taken right from Basecamp.
-
----
-
-Next: [Building Something Real](03_building_something_real.md)

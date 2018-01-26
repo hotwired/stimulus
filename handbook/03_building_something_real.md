@@ -1,8 +1,7 @@
-#### [<img src="../assets/logo.svg" width="12" height="12" alt="Stimulus">](../README.md) [The Stimulus Handbook](README.md)
-
+---
 ---
 
-# 3 Building Something Real
+# 3: Building Something Real
 
 We've implemented our first controller and learned how Stimulus connects HTML to JavaScript. But logging "Hello" to the console isn't particularly exciting, nor is it representative of the kinds of things we're likely to build.
 
@@ -202,7 +201,3 @@ export default class extends Controller {
 
 * We can use any kind of element we want as the trigger, as long as it has the `data-action` attribute on it
 * We could even have multiple elements with the same action
-
----
-
-Next: [Managing State](04_managing_state.md)

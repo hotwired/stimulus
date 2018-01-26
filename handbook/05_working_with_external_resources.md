@@ -1,8 +1,7 @@
-#### [<img src="../assets/logo.svg" width="12" height="12" alt="Stimulus">](../README.md) [The Stimulus Handbook](README.md)
-
+---
 ---
 
-# 5 Working With External Resources
+# 5: Working With External Resources
 
 In this chapter we'll learn how to populate parts of a page asynchronously using Ajax requests. This is great technique for loading user-specific content that may be slower to generate, while keeping the initial page fast and easy to cache.
 
@@ -148,5 +147,3 @@ export default class extends Controller {
   }
 }
 ```
-
----

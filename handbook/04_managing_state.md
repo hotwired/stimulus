@@ -1,8 +1,7 @@
-#### [<img src="../assets/logo.svg" width="12" height="12" alt="Stimulus">](../README.md) [The Stimulus Handbook](README.md)
-
+---
 ---
 
-# 4 Managing State
+# 4: Managing State
 
 Let's build a simple slideshow—a set of slides and two buttons for navigating them. We'll manage the slideshow's state with DOM data attributes using Stimulus’ Data API.
 
@@ -170,7 +169,3 @@ To wrap up, let's inspect our working controller in action:
   <div data-controller="slideshow"
        data-slideshow-index="2">…</div>
   ```
-
----
-
-Next: [Working With External Resources](05_working_with_external_resources.md)
