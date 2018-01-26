@@ -1,7 +1,8 @@
 ---
+slug: /hello-stimulus
 ---
 
-# 2: Hello, Stimulus
+# Hello, Stimulus
 
 The best way to learn how Stimulus works is to build a simple controller. This chapter will show you how.
 

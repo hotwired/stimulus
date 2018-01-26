@@ -1,7 +1,8 @@
 ---
+slug: /
 ---
 
-# 1: Introduction
+# Introduction
 
 Stimulus is a JavaScript framework with modest ambitions. Unlike other frameworks, Stimulus doesn't take over your application's entire front-end. Rather, it's designed to augment your HTML by connecting elements to JavaScript objects automatically.
 

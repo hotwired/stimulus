@@ -1,7 +1,8 @@
 ---
+slug: /building-something-real
 ---
 
-# 3: Building Something Real
+# Building Something Real
 
 We've implemented our first controller and learned how Stimulus connects HTML to JavaScript. But logging "Hello" to the console isn't particularly exciting, nor is it representative of the kinds of things we're likely to build.
 

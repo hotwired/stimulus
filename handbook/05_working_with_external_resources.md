@@ -1,7 +1,8 @@
 ---
+slug: /working-with-external-resources
 ---
 
-# 5: Working With External Resources
+# Working With External Resources
 
 In this chapter we'll learn how to populate parts of a page asynchronously using Ajax requests. This is great technique for loading user-specific content that may be slower to generate, while keeping the initial page fast and easy to cache.
 
@@ -81,7 +82,7 @@ What happens if the element's content has already been loaded? We don't want to 
   }
 
   load() {
-    …
+    // …
     xhr.onload = () => {
       this.content = xhr.response
       this.loaded = true

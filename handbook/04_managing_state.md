@@ -1,7 +1,8 @@
 ---
+slug: /managing-state
 ---
 
-# 4: Managing State
+# Managing State
 
 Let's build a simple slideshow—a set of slides and two buttons for navigating them. We'll manage the slideshow's state with DOM data attributes using Stimulus’ Data API.
 
