@@ -28,15 +28,13 @@ app.get("/", (req, res) => {
   res.redirect(pages[0].path)
 })
 
+app.get("/uptime", (req, res, next) => {
+  res.send(process.uptime().toString())
+})
+
 app.get("/:page", (req, res, next) => {
   const currentPage = pages.find(page => page.path == req.path)
   res.render(req.params.page, { pages, currentPage })
-})
-
-app.get("/content/:title", (req, res, next) => {
-  setTimeout(() => {
-    res.render(`content/${req.params.title}`)
-  }, Math.max(800, Math.random() * 1600))
 })
 
 app.listen(port, () => {
