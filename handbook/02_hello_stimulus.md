@@ -67,7 +67,7 @@ Next, we need to tell Stimulus how this controller should be connected to our HT
 </div>
 ```
 
-Identifiers serve as the link between elements and controllers. In this case, the identifier `hello` tells Stimulus to create an instance of the controller class in `hello_controller.js`. *Learn how automatic controller loading works in the [Installation Guide](/INSTALLING.md#using-webpack).*
+Identifiers serve as the link between elements and controllers. In this case, the identifier `hello` tells Stimulus to create an instance of the controller class in `hello_controller.js`. *Learn how automatic controller loading works in the [Installation Guide]({% link _handbook/06_installing_stimulus.md %}).*
 
 ## Is This Thing On?
 
@@ -117,7 +117,7 @@ To connect our action method to the button's `click` event, open `public/index.h
 </div>
 ```
 
-> ### 💡 Action Descriptors Explained
+> ### Action Descriptors Explained
 >
 > The `data-action` value `click->hello#greet` is called an _action descriptor_. This particular descriptor says:
 > * `click` is the event name
@@ -141,7 +141,7 @@ Stimulus lets us mark important elements as _targets_ so we can easily reference
 </div>
 ```
 
-> ### 💡 Target Descriptors Explained
+> ### Target Descriptors Explained
 >
 > The `data-target` value `hello.name` is called a _target descriptor_. This particular descriptor says:
 > * `hello` is the controller identifier

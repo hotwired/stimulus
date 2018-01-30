@@ -1,10 +1,14 @@
-#### [<img src="assets/logo.svg" width="12" height="12" alt="Stimulus">](README.md) [Stimulus](README.md)
-
+---
+slug: /installing
 ---
 
-# Installation Guide
+# Installing Stimulus in Your Application
+{:.no_toc}
 
-To install Stimulus, add the [`stimulus` npm package](https://www.npmjs.com/package/stimulus) to your application's JavaScript bundle. Or, load [`stimulus.umd.js`](https://unpkg.com/stimulus/dist/stimulus.umd.js) in a `<script>` tag.
+To install Stimulus in your application, add the [`stimulus` npm package](https://www.npmjs.com/package/stimulus) to your JavaScript bundle. Or, load [`stimulus.umd.js`](https://unpkg.com/stimulus/dist/stimulus.umd.js) in a `<script>` tag.
+
+* TOC
+{:toc}
 
 ## Using webpack
 
@@ -36,7 +40,7 @@ If your controller file is named… | its identifier will be…
 --------------------------------- | -----------------------
 clipboard_controller.js           | clipboard
 date_picker_controller.js         | date-picker
-users/list_item_controller.js     | users--list-item
+users/list_item_controller.js     | users\-\-list-item
 local-time-controller.js          | local-time
 
 ## Using Other Build Systems
@@ -90,13 +94,13 @@ If you prefer not to use a build system, you can load Stimulus in a `<script>` t
     (function() {
       const application = Stimulus.Application.start()
       application.register("hello", class extends Stimulus.Controller {
-        …
+        // ...
       })
     })()
   </script>
 <head>
 <body>
-  <div data-controller="hello">…</div>
+  <div data-controller="hello">...</div>
 </body>
 </html>
 ```

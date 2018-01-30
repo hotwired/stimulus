@@ -1,3 +1,7 @@
+---
+slug: /origin
+---
+
 # The Origin of Stimulus
 
 We write a lot of JavaScript at [Basecamp](https://basecamp.com), but we don’t use it to create “JavaScript applications” in the contemporary sense. All our applications have server-side rendered HTML at their core, then add sprinkles of JavaScript to make them sparkle.
@@ -12,11 +16,11 @@ And it’s also not to say that the proliferation of single-page JavaScript appl
 
 We wanted Basecamp to feel like that too. As though we had followed the herd and rewritten everything with client-side rendering or gone full-native on mobile.
 
-This desire lead us to a two-punch solution: [Turbolinks](https://github.com/turbolinks/turbolinks) and Stimulus.
+This desire led us to a two-punch solution: [Turbolinks](https://github.com/turbolinks/turbolinks) and Stimulus.
 
 ### Turbolinks up high, Stimulus down low
 
-Before I get to Stimulus, our new modest JavaScript framework, allow me to recap the proposition of Turbolinks. 
+Before I get to Stimulus, our new modest JavaScript framework, allow me to recap the proposition of Turbolinks.
 
 Turbolinks descends from an approach called [pjax](https://github.com/defunkt/jquery-pjax), developed at GitHub. The basic concept remains the same. The reason full-page refreshes often feel slow is not so much because the browser has to process a bunch of HTML sent from a server. Browsers are really good and really fast at that. And in most cases, the fact that an HTML payload tends to be larger than a JSON payload doesn’t matter either (especially with gzipping). No, the reason is that CSS and JavaScript has to be reinitialized and reapplied to the page again. Regardless of whether the files themselves are cached. This can be pretty slow if you have a fair amount of CSS and JavaScript.
 
@@ -30,9 +34,9 @@ Prior to Stimulus, Basecamp used a smattering of different styles and patterns t
 
 While it was easy to add new code like this, it wasn’t a comprehensive solution, and we had too many in-house styles and patterns coexisting. That made it hard to reuse code, and it made it hard for new developers to learn a consistent approach.
 
-### The three core concepts in Stimulus 
+### The three core concepts in Stimulus
 
-Stimulus rolls up the best of those patterns into a modest, small framework revolving around just three main concepts: Controllers, actions, and targets. 
+Stimulus rolls up the best of those patterns into a modest, small framework revolving around just three main concepts: Controllers, actions, and targets.
 
 It’s designed to read as a progressive enhancement when you look at the HTML it’s addressing. Such that you can look at a single template and know which behavior is acting upon it. Here’s an example:
 
@@ -67,11 +71,11 @@ If, on the other hand, you have nagging sense that what you’re working on does
 
 At Basecamp we’ve used this architecture across several different versions of Basecamp and other applications for years. GitHub has used a similar approach to great effect. This is not only a valid alternative to the mainstream understanding of what a “modern” web application looks like, it’s an incredibly compelling one.
 
-In fact, it feels like the same kind of secret sauce we had at Basecamp when we developed Ruby on Rails. The sense that contemporary mainstream approaches are needlessly convoluted, and that we can do more, faster, with far less.
+In fact, it feels like the same kind of secret sauce we had at Basecamp when we developed [Ruby on Rails](https://rubyonrails.org/). The sense that contemporary mainstream approaches are needlessly convoluted, and that we can do more, faster, with far less.
 
 Furthermore, you don’t even have to choose. Stimulus and Turbolinks work great in conjunction with other, heavier approaches. If 80% of your application does not warrant the big rig, consider using our two-pack punch for that. Then roll out the heavy machinery for the part of your application that can really benefit from it.
 
-At Basecamp, we have and do use several heavier-duty approaches when the occasion calls for it. Our calendars tend to use client-side rendering. Our text editor is Trix, a fully formed text processor that wouldn’t make sense as a set of Stimulus controllers.
+At Basecamp, we have and do use several heavier-duty approaches when the occasion calls for it. Our calendars tend to use client-side rendering. Our text editor is [Trix](https://trix-editor.org/), a fully formed text processor that wouldn’t make sense as a set of Stimulus controllers.
 
 This set of alternative frameworks is about avoiding the heavy lifting as much as possible. To stay within the request-response paradigm for all the many, many interactions that work well with that simple model. Then reaching for the expensive tooling when there’s a call for peak fidelity.
 
