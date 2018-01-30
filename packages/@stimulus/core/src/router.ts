@@ -1,31 +1,35 @@
 import { Application } from "./application"
-import { Configuration } from "./configuration"
 import { Context } from "./context"
-import { ContextSet } from "./context_set"
-import { ControllerConstructor } from "./controller"
+import { Definition } from "./definition"
+import { Module } from "./module"
+import { Schema } from "./schema"
 import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation-observers"
 
 export class Router implements TokenListObserverDelegate {
   readonly application: Application
   private tokenListObserver: TokenListObserver
-  private contextSets: Map<string, ContextSet>
+  private modulesByIdentifier: Map<string, Module>
 
   constructor(application: Application) {
     this.application = application
     this.tokenListObserver = new TokenListObserver(this.element, this.controllerAttribute, this)
-    this.contextSets = new Map
+    this.modulesByIdentifier = new Map
   }
 
-  get configuration(): Configuration {
-    return this.application.configuration
+  get schema(): Schema {
+    return this.application.schema
   }
 
   get element(): Element {
-    return this.configuration.rootElement
+    return this.application.element
   }
 
   get controllerAttribute(): string {
-    return this.configuration.controllerAttribute
+    return this.schema.controllerAttribute
+  }
+
+  get modules(): Module[] {
+    return Array.from(this.modulesByIdentifier.values())
   }
 
   start() {
@@ -36,21 +40,20 @@ export class Router implements TokenListObserverDelegate {
     this.tokenListObserver.stop()
   }
 
-  register(identifier: string, controllerConstructor: ControllerConstructor) {
-    if (this.contextSets.has(identifier)) {
-      throw new Error(`Router already has a controller registered with the identifier '${identifier}'`)
-    }
+  loadDefinition(definition: Definition) {
+    const { identifier } = definition
+    this.unloadIdentifier(identifier)
 
-    const contextSet = new ContextSet(this, identifier, controllerConstructor)
-    this.contextSets.set(identifier, contextSet)
-    this.connectContextSet(contextSet)
+    const module = new Module(this.application, definition)
+    this.modulesByIdentifier.set(identifier, module)
+    this.connectModule(module)
   }
 
-  unregister(identifier: string) {
-    const contextSet = this.contextSets.get(identifier)
-    if (contextSet) {
-      this.disconnectContextSet(contextSet)
-      this.contextSets.delete(identifier)
+  unloadIdentifier(identifier: string) {
+    const module = this.modulesByIdentifier.get(identifier)
+    if (module) {
+      this.disconnectModule(module)
+      this.modulesByIdentifier.delete(identifier)
     }
   }
 
@@ -58,48 +61,52 @@ export class Router implements TokenListObserverDelegate {
 
   /** @private */
   elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
-    this.connectContextForIdentifierToElement(token, element)
+    this.connectModuleForIdentifierToElement(token, element)
   }
 
   /** @private */
   elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
-    this.disconnectContextForIdentifierFromElement(token, element)
+    this.disconnectModuleForIdentifierFromElement(token, element)
   }
 
   // Contexts
 
+  get contexts(): Context[] {
+    return this.modules.reduce((contexts, module) => contexts.concat(Array.from(module.contexts)), [])
+  }
+
   getContextForElementAndIdentifier(element: Element, identifier: string): Context | undefined {
-    const contextSet = this.contextSets.get(identifier)
-    if (contextSet) {
-      return contextSet.getContextForElement(element)
+    const module = this.modulesByIdentifier.get(identifier)
+    if (module) {
+      return module.getContextForElement(element)
     }
   }
 
-  private connectContextSet(contextSet: ContextSet) {
-    const elements = this.tokenListObserver.getElementsMatchingToken(contextSet.identifier)
+  private connectModule(module: Module) {
+    const elements = this.tokenListObserver.getElementsMatchingToken(module.identifier)
     for (const element of elements) {
-      contextSet.connect(element)
+      module.connectElement(element)
     }
   }
 
-  private disconnectContextSet(contextSet: ContextSet) {
-    const contexts = contextSet.contexts
+  private disconnectModule(module: Module) {
+    const contexts = module.contexts
     for (const { element } of contexts) {
-      contextSet.disconnect(element)
+      module.disconnectElement(element)
     }
   }
 
-  private connectContextForIdentifierToElement(identifier: string, element: Element) {
-    const contextSet = this.contextSets.get(identifier)
-    if (contextSet) {
-      contextSet.connect(element)
+  private connectModuleForIdentifierToElement(identifier: string, element: Element) {
+    const module = this.modulesByIdentifier.get(identifier)
+    if (module) {
+      module.connectElement(element)
     }
   }
 
-  private disconnectContextForIdentifierFromElement(identifier: string, element: Element) {
-    const contextSet = this.contextSets.get(identifier)
-    if (contextSet) {
-      contextSet.disconnect(element)
+  private disconnectModuleForIdentifierFromElement(identifier: string, element: Element) {
+    const module = this.modulesByIdentifier.get(identifier)
+    if (module) {
+      module.disconnectElement(element)
     }
   }
 }

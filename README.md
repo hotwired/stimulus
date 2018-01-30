@@ -9,7 +9,10 @@ How does it work? Sprinkle your HTML with magic controller, target, and action a
 ```html
 <div data-controller="hello">
   <input data-target="hello.name" type="text">
+
   <button data-action="click->hello#greet">Greet</button>
+
+  <span data-target="hello.output"></span>
 </div>
 ```
 
@@ -20,21 +23,20 @@ Then write a compatible controller. Stimulus brings it to life automatically:
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  greet() {
-    console.log(`Hello, ${this.name}!`)
-  }
+  static targets = [ "name", "output" ]
 
-  get name() {
-    return this.targets.find("name").value
+  greet() {
+    this.outputTarget.textContent =
+      `Hello, ${this.nameTarget.value}!`
   }
 }
 ```
 
 Stimulus continuously watches the page, kicking in as soon as magic attributes appear or disappear. It works with any update to the DOM, regardless of whether it comes from a full page load, a Turbolinks page change, or an Ajax request. Stimulus manages the whole lifecycle.
 
-You can write your first controller in five minutes by following along in [The Stimulus Handbook](handbook/README.md).
+You can write your first controller in five minutes by following along in [The Stimulus Handbook](https://stimulusjs.org/handbook/introduction).
 
-You can read more about why we created this new framework in [The Origin of Stimulus](ORIGIN.md).
+You can read more about why we created this new framework in [The Origin of Stimulus](https://stimulusjs.org/handbook/origin).
 
 ## Installing Stimulus
 
@@ -42,7 +44,7 @@ Stimulus integrates with the [webpack](https://webpack.js.org/) asset packager t
 
 You can use Stimulus with other asset packaging systems, too. And if you prefer no build step at all, just drop a `<script>` tag on the page and get right down to business.
 
-See the [Installation Guide](INSTALLING.md) for detailed instructions.
+See the [Installation Guide](https://stimulusjs.org/handbook/installing) for detailed instructions.
 
 ## Contributing Back
 

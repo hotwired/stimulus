@@ -1,4 +1,4 @@
-import { Configuration } from "./configuration"
+import { Schema } from "./schema"
 import { Scope } from "./scope"
 import { attributeValueContainsToken } from "./selectors"
 
@@ -17,8 +17,8 @@ export class TargetSet {
     return this.scope.identifier
   }
 
-  get configuration(): Configuration {
-    return this.scope.configuration
+  get schema(): Schema {
+    return this.scope.schema
   }
 
   has(targetName: string): boolean {
@@ -41,6 +41,6 @@ export class TargetSet {
 
   private getSelectorForTargetName(targetName: string): string {
     const targetDescriptor = `${this.identifier}.${targetName}`
-    return attributeValueContainsToken(this.configuration.targetAttribute, targetDescriptor)
+    return attributeValueContainsToken(this.schema.targetAttribute, targetDescriptor)
   }
 }

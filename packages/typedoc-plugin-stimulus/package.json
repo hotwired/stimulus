@@ -1,6 +1,6 @@
 {
   "name": "typedoc-plugin-stimulus",
-  "version": "0.9.0",
+  "version": "1.0.0-beta.4",
   "description": "Private TypeDoc extensions",
   "main": "index.js",
   "scripts": {

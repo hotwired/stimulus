@@ -1,15 +1,13 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
+  static targets = ["name"]
+
   greet() {
     alert(`Hello, ${this.name}!`)
   }
 
   get name() {
-    return this.inputElement.value
-  }
-
-  get inputElement() {
-    return this.targets.find("name")
+    return this.nameTarget.value
   }
 }

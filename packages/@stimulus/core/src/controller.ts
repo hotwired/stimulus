@@ -1,16 +1,23 @@
-import { Action } from "./action"
 import { Application } from "./application"
 import { Context } from "./context"
 import { DataMap } from "./data_map"
 import { Scope } from "./scope"
 import { TargetSet } from "./target_set"
+import { defineTargetProperties } from "./target_properties"
 
 export interface ControllerConstructor {
+  bless()
   new(context: Context): Controller
 }
 
 export class Controller {
+  static targets: string[] = []
+
   readonly context: Context
+
+  static bless() {
+    defineTargetProperties(this)
+  }
 
   constructor(context: Context) {
     this.context = context
@@ -50,15 +57,5 @@ export class Controller {
 
   disconnect() {
     // Override in your subclass to respond when the controller is disconnected from the DOM
-  }
-
-  addAction(action: Action)
-  addAction(descriptorString: string, eventTarget: EventTarget)
-  addAction(actionOrDescriptorString, eventTarget?) {
-    this.context.addAction(actionOrDescriptorString, eventTarget)
-  }
-
-  removeAction(action: Action) {
-    this.context.removeAction(action)
   }
 }

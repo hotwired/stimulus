@@ -1,10 +1,10 @@
-#### [<img src="../assets/logo.svg" width="12" height="12" alt="Stimulus">](../README.md) [The Stimulus Handbook](README.md)
-
+---
+slug: /introduction
 ---
 
-# 1 Introduction
+# Introduction
 
-Stimulus is a JavaScript framework with modest ambitions. Unlike other frameworks, Stimulus doesn't take over your application's entire front-end. Rather, it's designed to augment your HTML by connecting elements to JavaScript objects automatically.
+Stimulus is a JavaScript framework with _modest_ ambitions. Unlike other frameworks, Stimulus doesn't take over your application's entire front-end. Rather, it's designed to augment your HTML by connecting elements to JavaScript objects automatically.
 
 ## Connecting HTML to JavaScript
 
@@ -24,12 +24,8 @@ This arrangement helps you build reusable, trait-like controllers, giving you ju
 
 When your JavaScript behavior is mapped out in magic attributes, you can _read_ a fragment of HTML and know what's going on. That's a welcome relief when you return to a template six months later and don't recall exactly how things fit together.
 
-Readable markup also means that others on your team can easily look at templates—or even the web inspector on a production page—to quickly trace behavior or diagnose an issue.
+Readable markup also means that others on your team can easily look at templates—or even the developer console on a production page—to quickly trace behavior or diagnose an issue.
 
 ## The Water's Warm
 
 Now's a great time to dip your toes in and discover how Stimulus works. Keep reading to learn how to build your first controller.
-
----
-
-Next: [Hello Stimulus](02_hello_stimulus.md)

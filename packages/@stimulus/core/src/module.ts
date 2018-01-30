@@ -1,27 +1,28 @@
 import { Application } from "./application"
 import { Context } from "./context"
 import { ControllerConstructor } from "./controller"
-import { Router } from "./router"
+import { Definition, blessDefinition } from "./definition"
 
-export class ContextSet {
-  readonly router: Router
-  readonly identifier: string
-  readonly controllerConstructor: ControllerConstructor
+export class Module {
+  readonly application: Application
+  readonly definition: Definition
 
   private contextsByElement: WeakMap<Element, Context>
   private connectedContexts: Set<Context>
 
-  constructor(router: Router, identifier: string, controllerConstructor: ControllerConstructor) {
-    this.router = router
-    this.identifier = identifier
-    this.controllerConstructor = controllerConstructor
-
+  constructor(application: Application, definition: Definition) {
+    this.application = application
+    this.definition = blessDefinition(definition)
     this.contextsByElement = new WeakMap
     this.connectedContexts = new Set
   }
 
-  get application(): Application {
-    return this.router.application
+  get identifier(): string {
+    return this.definition.identifier
+  }
+
+  get controllerConstructor(): ControllerConstructor {
+    return this.definition.controllerConstructor
   }
 
   get contexts(): Context[] {
@@ -32,7 +33,7 @@ export class ContextSet {
     return this.connectedContexts.size
   }
 
-  connect(element: Element) {
+  connectElement(element: Element) {
     const context = this.fetchContextForElement(element)
     if (context && !this.connectedContexts.has(context)) {
       this.connectedContexts.add(context)
@@ -40,7 +41,7 @@ export class ContextSet {
     }
   }
 
-  disconnect(element: Element) {
+  disconnectElement(element: Element) {
     const context = this.fetchContextForElement(element)
     if (context && this.connectedContexts.has(context)) {
       this.connectedContexts.delete(context)

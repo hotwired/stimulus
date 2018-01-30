@@ -1,8 +1,8 @@
-#### [<img src="../assets/logo.svg" width="12" height="12" alt="Stimulus">](../README.md) [The Stimulus Handbook](README.md)
-
+---
+slug: /hello-stimulus
 ---
 
-# 2 Hello, Stimulus
+# Hello, Stimulus
 
 The best way to learn how Stimulus works is to build a simple controller. This chapter will show you how.
 
@@ -67,7 +67,7 @@ Next, we need to tell Stimulus how this controller should be connected to our HT
 </div>
 ```
 
-Identifiers serve as the link between elements and controllers. In this case, the identifier `hello` tells Stimulus to create an instance of the controller class in `hello_controller.js`. *Learn how automatic controller loading works in the [Installation Guide](/INSTALLING.md#using-webpack).*
+Identifiers serve as the link between elements and controllers. In this case, the identifier `hello` tells Stimulus to create an instance of the controller class in `hello_controller.js`. *Learn how automatic controller loading works in the [Installation Guide]({% link _handbook/06_installing_stimulus.md %}).*
 
 ## Is This Thing On?
 
@@ -117,7 +117,7 @@ To connect our action method to the button's `click` event, open `public/index.h
 </div>
 ```
 
-> ### 💡 Action Descriptors Explained
+> ### Action Descriptors Explained
 >
 > The `data-action` value `click->hello#greet` is called an _action descriptor_. This particular descriptor says:
 > * `click` is the event name
@@ -126,13 +126,13 @@ To connect our action method to the button's `click` event, open `public/index.h
 
 Load the page in your browser and open the developer console. You should see the log message appear when you click the "Greet" button.
 
-## Targets Locate Important Elements By Name
+## Targets Map Important Elements To Controller Properties
 
 We'll finish the exercise by changing our action to say hello to whatever name we've typed in the text field.
 
 In order to do that, first we need a reference to the input element inside our controller. Then we can read the `value` property to get its contents.
 
-Stimulus lets us mark important elements as _targets_ so we can easily reference them by name. Open `public/index.html` and add a magic `data-target` attribute to the input element:
+Stimulus lets us mark important elements as _targets_ so we can easily reference them in the controller through corresponding properties. Open `public/index.html` and add a magic `data-target` attribute to the input element:
 
 ```html
 <div data-controller="hello">
@@ -141,23 +141,25 @@ Stimulus lets us mark important elements as _targets_ so we can easily reference
 </div>
 ```
 
-> ### 💡 Target Descriptors Explained
+> ### Target Descriptors Explained
 >
 > The `data-target` value `hello.name` is called a _target descriptor_. This particular descriptor says:
 > * `hello` is the controller identifier
 > * `name` is the target name
 
-If we pass the target name to the `this.targets.find()` method, Stimulus will return the first matching target element it finds. We can then read its `value` and use it to build our greeting string.
+When we add `name` to our controller's list of target definitions, Stimulus automatically creates a `this.nameTarget` property which returns the first matching target element. We can use this property to read the element's `value` and build our greeting string.
 
-Let's try it out. Open `hello_controller.js` and update the `greet()` method like so:
+Let's try it out. Open `hello_controller.js` and update it like so:
 
 ```js
 // src/controllers/hello_controller.js
 import { Controller } from "stimulus"
 
 export default class extends Controller {
+  static targets = [ "name" ]
+
   greet() {
-    const element = this.targets.find("name")
+    const element = this.nameTarget
     const name = element.value
     console.log(`Hello, ${name}!`)
   }
@@ -177,46 +179,20 @@ That means we have an arsenal of standard refactoring techniques at our disposal
 import { Controller } from "stimulus"
 
 export default class extends Controller {
+  static targets = [ "name" ]
+
   greet() {
     console.log(`Hello, ${this.name}!`)
   }
 
   get name() {
-    const target = this.targets.find("name")
-    return target.value
+    return this.nameTarget.value
   }
 }
 ```
-
-And we can further clean up the `name` getter by extracting an `inputElement` getter for the target element:
-
-```js
-// src/controllers/hello_controller.js
-import { Controller } from "stimulus"
-
-export default class extends Controller {
-  greet() {
-    console.log(`Hello, ${this.name}!`)
-  }
-
-  get name() {
-    return this.inputElement.value
-  }
-
-  get inputElement() {
-    return this.targets.find("name")
-  }
-}
-```
-
-Now the most important code lives at the top of our controller and its supporting details live below.
 
 ## Wrap-Up and Next Steps
 
 Congratulations—you've just written your first Stimulus controller!
 
 We've covered the framework's core concepts: controllers, identifiers, actions, and targets. In the next chapter, we'll see how to put those together to build a real-life controller taken right from Basecamp.
-
----
-
-Next: [Building Something Real](03_building_something_real.md)

@@ -10,7 +10,7 @@ const config = {
   autoWatch: false,
 
   files: [
-    { pattern: "packages/*/**/test/**/*_test.ts" }
+    { pattern: "packages/*/**/test/index.ts" }
   ],
 
   preprocessors: {
@@ -57,6 +57,11 @@ if (process.env.CI) {
       base: "SauceLabs",
       browserName: "chrome",
       version: "63"
+    },
+    sl_firefox_43: {
+      base: "SauceLabs",
+      browserName: "firefox",
+      version: "43"
     },
     sl_firefox: {
       base: "SauceLabs",

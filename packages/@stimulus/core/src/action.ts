@@ -46,9 +46,9 @@ export class Action implements EventListenerObject {
 
   private invokeWithEvent(event: Event) {
     try {
-      this.method.call(this.controller, event, event.currentTarget)
+      this.method.call(this.controller, event)
     } catch (error) {
-      this.context.reportError(error, `invoking action "${this.descriptor}"`, event, this)
+      this.context.handleError(error, `invoking action "${this.descriptor}"`, { event })
     }
   }
 

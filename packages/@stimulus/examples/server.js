@@ -21,10 +21,15 @@ const pages = [
   { path: "/hello", title: "Hello" },
   { path: "/clipboard", title: "Clipboard" },
   { path: "/slideshow", title: "Slideshow" },
+  { path: "/content-loader", title: "Content Loader" },
 ]
 
 app.get("/", (req, res) => {
   res.redirect(pages[0].path)
+})
+
+app.get("/uptime", (req, res, next) => {
+  res.send(process.uptime().toString())
 })
 
 app.get("/:page", (req, res, next) => {

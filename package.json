@@ -19,7 +19,8 @@
     "prebuild": "yarn lint && yarn dist",
     "build": "lerna run build",
     "prerelease": "yarn build",
-    "release": "lerna publish"
+    "release": "lerna publish",
+    "release:beta": "yarn release --npm-tag=beta"
   },
   "workspaces": [
     "packages/*",
@@ -27,6 +28,7 @@
   ],
   "devDependencies": {
     "@types/qunit": "^2.0.31",
+    "@types/webpack-env": "^1.13.3",
     "fs-extra": "^5.0.0",
     "karma": "^2.0.0",
     "karma-chrome-launcher": "^2.2.0",
