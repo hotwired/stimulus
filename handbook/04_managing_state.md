@@ -92,7 +92,7 @@ Reload the page and confirm that the Next button advances to the next slide.
 
 ## Reading Initial State from the DOM
 
-Notice how our controller tracks its state—the currently selected slide—in the `this.slide` property.
+Notice how our controller tracks its state—the currently selected slide—in the `this.index` property.
 
 Now say we'd like to start one of our slideshows with the second slide visible instead of the first. How can we encode the start index in our markup?
 
