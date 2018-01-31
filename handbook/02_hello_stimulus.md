@@ -10,9 +10,9 @@ The best way to learn how Stimulus works is to build a simple controller. This c
 
 To follow along, you'll need a running copy of the [`stimulus-starter`](https://github.com/stimulusjs/stimulus-starter) project, which is a preconfigured blank slate for exploring Stimulus.
 
-We recommend [remixing `stimulus-starter` on Glitch](https://glitch.com/edit/#!/remix/stimulus-starter) so you can work entirely in your browser without installing anything:
+We recommend [remixing `stimulus-starter` on Glitch](https://glitch.com/edit/#!/import/github/stimulusjs/stimulus-starter) so you can work entirely in your browser without installing anything:
 
-[<img src="https://cdn.glitch.com/2bdfb3f8-05ef-4035-a06e-2043962a3a13%2Fremix%402x.png?1513093958726" alt="Remix on Glitch" aria-label="remix" height="33">](https://glitch.com/edit/#!/remix/stimulus-starter)
+[![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/stimulusjs/stimulus-starter)
 
 Or, if you'd prefer to work from the comfort of your own text editor, you'll need to clone and set up `stimulus-starter`:
 
