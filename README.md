@@ -46,11 +46,13 @@ You can use Stimulus with other asset packaging systems, too. And if you prefer 
 
 See the [Installation Guide](https://stimulusjs.org/handbook/installing) for detailed instructions.
 
-## Contributing Back
+## Getting Help & Contributing Back
 
 Stimulus is [MIT-licensed](LICENSE.md) open source software from [Basecamp](https://basecamp.com/), the creators of [Ruby on Rails](http://rubyonrails.org).
 
-Have a question about Stimulus? Find a bug? Think the documentation could use some improvement? Head over to our [issue tracker](https://github.com/stimulusjs/stimulus/issues) and we'll do our best to help. We love pull requests, too!
+Have a question about Stimulus? Connect with other Stimulus developers on the [Stimulus Discourse](https://discourse.stimulusjs.org/) community forum.
+
+Find a bug? Head over to our [issue tracker](https://github.com/stimulusjs/stimulus/issues) and we'll do our best to help. We love pull requests, too!
 
 We expect all Stimulus contributors to abide by the terms of our [Code of Conduct](CONDUCT.md).
 
