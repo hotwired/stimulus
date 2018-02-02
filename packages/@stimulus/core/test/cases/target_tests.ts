@@ -11,6 +11,7 @@ export default class TargetTests extends TargetControllerTestCase {
       <div data-controller="${this.identifier}" id="child">
         <div data-target="${this.identifier}.delta" id="delta1"></div>
       </div>
+      <textarea data-target="${this.identifier}.input" id="input1"></textarea>
     </div>
   `
 
@@ -59,5 +60,9 @@ export default class TargetTests extends TargetControllerTestCase {
     this.assert.equal(this.controller.hasBetaTarget, false)
     this.assert.equal(this.controller.betaTargets.length, 0)
     this.assert.throws(() => this.controller.betaTarget)
+  }
+
+  "test has*Target property names are not localized"() {
+    this.assert.equal(this.controller.hasInputTarget, true)
   }
 }
