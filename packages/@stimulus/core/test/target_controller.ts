@@ -9,9 +9,13 @@ export class BaseTargetController extends Controller {
 }
 
 export class TargetController extends BaseTargetController {
-  static targets = [ "beta" ]
+  static targets = [ "beta", "input" ]
 
   betaTarget: Element | null
   betaTargets: Element[]
   hasBetaTarget: boolean
+
+  inputTarget: Element | null
+  inputTargets: Element[]
+  hasInputTarget: boolean
 }

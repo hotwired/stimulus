@@ -58,6 +58,14 @@ if (process.env.CI) {
       browserName: "chrome",
       version: "63"
     },
+    sl_chrome_lang_tl: {
+      base: "SauceLabs",
+      browserName: "chrome",
+      version: "63",
+      chromeOptions: {
+        args: ["--lang=tr"]
+      }
+    },
     sl_firefox_43: {
       base: "SauceLabs",
       browserName: "firefox",
