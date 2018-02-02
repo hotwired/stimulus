@@ -1,6 +1,6 @@
 {
   "name": "@stimulus/core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Stimulus JavaScript framework: Core library",
   "repository": "https://github.com/stimulusjs/stimulus",
   "author": "Basecamp, LLC",
@@ -22,7 +22,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@stimulus/test": "^1.0.0",
+    "@stimulus/test": "^1.0.1",
     "@types/webpack-env": "^1.13.3"
   }
 }
