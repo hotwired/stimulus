@@ -110,6 +110,8 @@ We want to call the `greet()` method when the button's `click` event is triggere
 
 To connect our action method to the button's `click` event, open `public/index.html` and add a magic `data-action` attribute to the button:
 
+Note that events triggered with jQuery using `$.fn.trigger` are not DOM events and will not trigger stimulus actions. You should use `document.createEvent` or `Element#dispatchEvent` instead.
+
 ```html
 <div data-controller="hello">
   <input type="text">
