@@ -2,12 +2,13 @@ import { Action } from "./action"
 import { ActionSet } from "./action_set"
 import { Application } from "./application"
 import { Controller } from "./controller"
+import { ErrorHandler } from "./error_handler"
 import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
 import { Module } from "./module"
 import { Schema } from "./schema"
 import { Scope } from "./scope"
 
-export class Context implements InlineActionObserverDelegate {
+export class Context implements ErrorHandler, InlineActionObserverDelegate {
   readonly module: Module
   readonly scope: Scope
   readonly controller: Controller
