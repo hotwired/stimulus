@@ -2,19 +2,17 @@ import { Application } from "./application"
 import { Context } from "./context"
 import { ControllerConstructor } from "./controller"
 import { Definition, blessDefinition } from "./definition"
+import { Scope } from "./scope"
 
 export class Module {
   readonly application: Application
   readonly definition: Definition
-
-  private contextsByElement: WeakMap<Element, Context>
-  private connectedContexts: Set<Context>
+  private contextsByScope: Map<Scope, Context>
 
   constructor(application: Application, definition: Definition) {
     this.application = application
     this.definition = blessDefinition(definition)
-    this.contextsByElement = new WeakMap
-    this.connectedContexts = new Set
+    this.contextsByScope = new Map
   }
 
   get identifier(): string {
@@ -26,39 +24,22 @@ export class Module {
   }
 
   get contexts(): Context[] {
-    return Array.from(this.connectedContexts)
+    return Array.from(this.contextsByScope.values())
   }
 
-  get size(): number {
-    return this.connectedContexts.size
-  }
-
-  connectElement(element: Element) {
-    const context = this.fetchContextForElement(element)
-    if (context && !this.connectedContexts.has(context)) {
-      this.connectedContexts.add(context)
+  connectContextForScope(scope: Scope) {
+    if (!this.contextsByScope.has(scope)) {
+      const context = new Context(this, scope)
+      this.contextsByScope.set(scope, context)
       context.connect()
     }
   }
 
-  disconnectElement(element: Element) {
-    const context = this.fetchContextForElement(element)
-    if (context && this.connectedContexts.has(context)) {
-      this.connectedContexts.delete(context)
+  disconnectContextForScope(scope: Scope) {
+    const context = this.contextsByScope.get(scope)
+    if (context) {
+      this.contextsByScope.delete(scope)
       context.disconnect()
     }
-  }
-
-  getContextForElement(element: Element): Context | undefined {
-    return this.contextsByElement.get(element)
-  }
-
-  private fetchContextForElement(element: Element): Context {
-    let context = this.contextsByElement.get(element)
-    if (!context) {
-      context = new Context(this, element)
-      this.contextsByElement.set(element, context)
-    }
-    return context
   }
 }

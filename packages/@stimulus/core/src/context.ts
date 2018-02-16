@@ -15,9 +15,9 @@ export class Context implements ErrorHandler, InlineActionObserverDelegate {
   private actions: ActionSet
   private inlineActionObserver: InlineActionObserver
 
-  constructor(module: Module, element: Element) {
+  constructor(module: Module, scope: Scope) {
     this.module = module
-    this.scope = new Scope(this.schema, this.identifier, element)
+    this.scope = scope
     this.actions = new ActionSet(this)
     this.inlineActionObserver = new InlineActionObserver(this, this)
 
