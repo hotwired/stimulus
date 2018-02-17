@@ -6,12 +6,14 @@ import { Scope } from "./scope"
 export class Action implements EventListenerObject {
   readonly context: Context
   readonly descriptor: ActionDescriptor
-  readonly eventTarget: EventTarget
 
-  constructor(context: Context, descriptor: ActionDescriptor, eventTarget: EventTarget) {
+  constructor(context: Context, descriptor: ActionDescriptor) {
     this.context = context
     this.descriptor = descriptor
-    this.eventTarget = eventTarget
+  }
+
+  get eventTarget(): EventTarget {
+    return this.descriptor.eventTarget
   }
 
   connect() {
