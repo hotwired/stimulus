@@ -7,7 +7,7 @@ export default class LifecycleTests extends LogControllerTestCase {
     this.controllerElement = this.controller.element
   }
 
-  async "skip Controller#initialize"() {
+  async "test Controller#initialize"() {
     const controller = this.controller
     this.assert.equal(controller.initializeCount, 1)
     await this.reconnectControllerElement()
@@ -15,7 +15,7 @@ export default class LifecycleTests extends LogControllerTestCase {
     this.assert.equal(controller.initializeCount, 1)
   }
 
-  async "skip Controller#connect"() {
+  async "test Controller#connect"() {
     this.assert.equal(this.controller.connectCount, 1)
     await this.reconnectControllerElement()
     this.assert.equal(this.controller.connectCount, 2)

@@ -1,5 +1,4 @@
 import { ErrorHandler } from "./error_handler"
-import { Multimap } from "@stimulus/multimap"
 import { Schema } from "./schema"
 import { Scope } from "./scope"
 import { Token, TokenObserver, TokenObserverDelegate, TokenSource } from "@stimulus/mutation-observers"
@@ -9,19 +8,17 @@ export interface ScopeObserverDelegate extends ErrorHandler {
   scopeDisconnected(scope: Scope)
 }
 
-export class ScopeObserver implements TokenObserverDelegate<string> {
+export class ScopeObserver implements TokenObserverDelegate<Scope> {
   readonly element: Element
   readonly schema: Schema
   private delegate: ScopeObserverDelegate
-  private tokenObserver: TokenObserver<string>
-  private scopesByElement: Multimap<Element, Scope>
+  private tokenObserver: TokenObserver<Scope>
 
   constructor(element: Element, schema: Schema, delegate: ScopeObserverDelegate) {
     this.element = element
     this.schema = schema
     this.delegate = delegate
     this.tokenObserver = new TokenObserver(this.element, this.controllerAttribute, this)
-    this.scopesByElement = new Multimap
   }
 
   start() {
@@ -39,8 +36,8 @@ export class ScopeObserver implements TokenObserverDelegate<string> {
   // Token observer delegate
 
   /** @private */
-  parseValueFromTokenSource(source: TokenSource): string {
-    return source.value
+  parseValueFromTokenSource(source: TokenSource): Scope {
+    return new Scope(this.schema, source.value, source.element)
   }
 
   /** @private */
@@ -50,44 +47,12 @@ export class ScopeObserver implements TokenObserverDelegate<string> {
   }
 
   /** @private */
-  elementMatchedToken(token: Token<string>) {
-    const scope = this.fetchScopeForToken(token)
-    this.delegate.scopeConnected(scope)
+  elementMatchedToken(token: Token<Scope>) {
+    this.delegate.scopeConnected(token.value)
   }
 
   /** @private */
-  elementUnmatchedToken(token: Token<string>) {
-    const scope = this.getScopeForToken(token)
-    if (scope) {
-      this.deleteScopeForToken(token)
-      this.delegate.scopeDisconnected(scope)
-    }
-  }
-
-  // Scope management
-
-  private getScopesForElement(element: Element): Scope[] {
-    return this.scopesByElement.getValuesForKey(element)
-  }
-
-  private fetchScopeForToken(token: Token<string>): Scope {
-    let scope = this.getScopeForToken(token)
-    if (!scope) {
-      scope = new Scope(this.schema, token.value, token.source.element)
-      this.scopesByElement.add(token.source.element, scope)
-    }
-    return scope
-  }
-
-  private getScopeForToken(token: Token<string>): Scope | undefined {
-    const scopes = this.getScopesForElement(token.source.element)
-    return scopes.find(scope => scope.identifier == token.value)
-  }
-
-  private deleteScopeForToken(token: Token<string>) {
-    const scope = this.getScopeForToken(token)
-    if (scope) {
-      this.scopesByElement.delete(token.source.element, scope)
-    }
+  elementUnmatchedToken(token: Token<Scope>) {
+    this.delegate.scopeDisconnected(token.value)
   }
 }
