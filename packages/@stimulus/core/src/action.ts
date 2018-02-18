@@ -69,14 +69,6 @@ export class Action {
     return stringifyEventTarget(this.eventTarget)
   }
 
-  isEqualTo(descriptor: Action | null): boolean {
-    return descriptor != null &&
-      descriptor.identifier == this.identifier &&
-      descriptor.eventName == this.eventName &&
-      descriptor.methodName == this.methodName &&
-      descriptor.eventTarget == this.eventTarget
-  }
-
   toString(): string {
     const eventNameSuffix = this.eventTargetName ? `@${this.eventTargetName}` : ""
     return `${this.eventName}${eventNameSuffix}->${this.identifier}#${this.methodName}`

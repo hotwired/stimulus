@@ -24,10 +24,6 @@ export class EventListener implements EventListenerObject {
     this.eventTarget.removeEventListener(this.eventName, this, false)
   }
 
-  hasSameDescriptorAs(action: EventListener | null): boolean {
-    return action != null && action.descriptor.isEqualTo(this.descriptor)
-  }
-
   handleEvent(event: Event) {
     if (this.willBeInvokedByEvent(event)) {
       this.invokeWithEvent(event)
