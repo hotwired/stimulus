@@ -1,83 +1,104 @@
-import { ActionDescriptor } from "./action_descriptor"
-import { Context } from "./context"
-import { Controller } from "./controller"
-import { Scope } from "./scope"
+export interface ActionDescriptorOptions {
+  identifier?: string
+  eventName?: string
+  methodName?: string
+  eventTarget?: EventTarget
+}
 
-export class Action implements EventListenerObject {
-  readonly context: Context
-  readonly descriptor: ActionDescriptor
+// capture nos.:  12   23 4               43   1 5   5 6  6
+const pattern = /^((.+?)(@(window|document))?->)?(.+?)#(.+)$/
 
-  constructor(context: Context, descriptor: ActionDescriptor) {
-    this.context = context
-    this.descriptor = descriptor
+export class Action {
+  private static defaultEventNames: { [tagName: string]: (element: Element) => string } = {
+    "a":        e => "click",
+    "button":   e => "click",
+    "form":     e => "submit",
+    "input":    e => e.getAttribute("type") == "submit" ? "click" : "change",
+    "select":   e => "change",
+    "textarea": e => "change"
   }
 
-  get eventTarget(): EventTarget {
-    return this.descriptor.eventTarget
+  readonly identifier: string
+  readonly eventName: string
+  readonly methodName: string
+  readonly eventTarget: EventTarget
+
+  static forOptions(options: ActionDescriptorOptions): Action {
+    return new Action(
+      options.identifier  || error("Missing identifier in action descriptor"),
+      options.eventName   || error("Missing event name in action descriptor"),
+      options.methodName  || error("Missing method name in action descriptor"),
+      options.eventTarget || error("Missing event target in action descriptor")
+    )
   }
 
-  connect() {
-    this.eventTarget.addEventListener(this.eventName, this, false)
-  }
-
-  disconnect() {
-    this.eventTarget.removeEventListener(this.eventName, this, false)
-  }
-
-  hasSameDescriptorAs(action: Action | null): boolean {
-    return action != null && action.descriptor.isEqualTo(this.descriptor)
-  }
-
-  handleEvent(event: Event) {
-    if (this.willBeInvokedByEvent(event)) {
-      this.invokeWithEvent(event)
-    }
-  }
-
-  get eventName(): string {
-    return this.descriptor.eventName
-  }
-
-  get method(): Function {
-    const method = this.controller[this.methodName]
-    if (typeof method == "function") {
-      return method
-    }
-    throw new Error(`Action "${this.descriptor}" references undefined method "${this.methodName}"`)
-  }
-
-  private invokeWithEvent(event: Event) {
+  static forElementWithInlineDescriptorString(element: Element, descriptorString: string): Action {
     try {
-      this.method.call(this.controller, event)
+      const options = Action.parseOptionsFromInlineActionDescriptorString(descriptorString)
+      options.eventName = options.eventName || Action.getDefaultEventNameForElement(element)
+      options.eventTarget = options.eventTarget || element
+      return Action.forOptions(options)
     } catch (error) {
-      this.context.handleError(error, `invoking action "${this.descriptor}"`, { event })
+      throw new Error(`Bad action descriptor "${descriptorString}": ${error.message}`)
     }
   }
 
-  private willBeInvokedByEvent(event: Event): boolean {
-    const eventTarget = event.target
-    if (this.element === eventTarget) {
-      return true
-    } else if (eventTarget instanceof Element && this.element.contains(eventTarget)) {
-      return this.scope.containsElement(eventTarget)
-    } else {
-      return true
+  private static parseOptionsFromInlineActionDescriptorString(descriptorString: string): ActionDescriptorOptions {
+    const source = descriptorString.trim()
+    const matches = source.match(pattern) || error("Invalid action descriptor syntax")
+    return {
+      identifier:  matches[5],
+      eventName:   matches[2],
+      methodName:  matches[6],
+      eventTarget: parseEventTarget(matches[4])
     }
   }
 
-  private get controller(): Controller {
-    return this.context.controller
+  private static getDefaultEventNameForElement(element) {
+    return Action.defaultEventNames[element.tagName.toLowerCase()](element)
   }
 
-  private get methodName(): string {
-    return this.descriptor.methodName
+  constructor(identifier: string, eventName: string, methodName: string, eventTarget: EventTarget) {
+    this.identifier = identifier
+    this.eventName = eventName
+    this.methodName = methodName
+    this.eventTarget = eventTarget
   }
 
-  private get element(): Element {
-    return this.scope.element
+  get eventTargetName(): string | undefined {
+    return stringifyEventTarget(this.eventTarget)
   }
 
-  private get scope(): Scope {
-    return this.context.scope
+  isEqualTo(descriptor: Action | null): boolean {
+    return descriptor != null &&
+      descriptor.identifier == this.identifier &&
+      descriptor.eventName == this.eventName &&
+      descriptor.methodName == this.methodName &&
+      descriptor.eventTarget == this.eventTarget
+  }
+
+  toString(): string {
+    const eventNameSuffix = this.eventTargetName ? `@${this.eventTargetName}` : ""
+    return `${this.eventName}${eventNameSuffix}->${this.identifier}#${this.methodName}`
+  }
+}
+
+function error(message: string): never {
+  throw new Error(message)
+}
+
+function parseEventTarget(eventTargetName: string): EventTarget | undefined {
+  if (eventTargetName == "window") {
+    return window
+  } else if (eventTargetName == "document") {
+    return document
+  }
+}
+
+function stringifyEventTarget(eventTarget?: EventTarget) {
+  if (eventTarget == window) {
+    return "window"
+  } else if (eventTarget == document) {
+    return "document"
   }
 }

@@ -1,25 +1,25 @@
 import { Action } from "./action"
-import { ActionSet } from "./action_set"
+import { ActionObserver, ActionObserverDelegate } from "./action_observer"
 import { Application } from "./application"
 import { Controller } from "./controller"
 import { ErrorHandler } from "./error_handler"
-import { InlineActionObserver, InlineActionObserverDelegate } from "./inline_action_observer"
+import { EventListenerSet } from "./event_listener_set"
 import { Module } from "./module"
 import { Schema } from "./schema"
 import { Scope } from "./scope"
 
-export class Context implements ErrorHandler, InlineActionObserverDelegate {
+export class Context implements ErrorHandler, ActionObserverDelegate {
   readonly module: Module
   readonly scope: Scope
   readonly controller: Controller
-  private actions: ActionSet
-  private inlineActionObserver: InlineActionObserver
+  private actionObserver: ActionObserver
+  private eventListeners: EventListenerSet
 
   constructor(module: Module, scope: Scope) {
     this.module = module
     this.scope = scope
-    this.actions = new ActionSet(this)
-    this.inlineActionObserver = new InlineActionObserver(this, this)
+    this.actionObserver = new ActionObserver(this.element, this.schema, this)
+    this.eventListeners = new EventListenerSet(this)
 
     try {
       this.controller = new module.controllerConstructor(this)
@@ -30,8 +30,8 @@ export class Context implements ErrorHandler, InlineActionObserverDelegate {
   }
 
   connect() {
-    this.actions.start()
-    this.inlineActionObserver.start()
+    this.actionObserver.start()
+    this.eventListeners.start()
 
     try {
       this.controller.connect()
@@ -47,8 +47,8 @@ export class Context implements ErrorHandler, InlineActionObserverDelegate {
       this.handleError(error, "disconnecting controller")
     }
 
-    this.inlineActionObserver.stop()
-    this.actions.stop()
+    this.eventListeners.stop()
+    this.actionObserver.stop()
   }
 
   get application(): Application {
@@ -74,13 +74,13 @@ export class Context implements ErrorHandler, InlineActionObserverDelegate {
   // Inline action observer delegate
 
   /** @private */
-  inlineActionConnected(action: Action) {
-    this.actions.add(action)
+  actionConnected(action: Action) {
+    this.eventListeners.addEventListenerForAction(action)
   }
 
   /** @private */
-  inlineActionDisconnected(action: Action) {
-    this.actions.delete(action)
+  actionDisconnected(action: Action) {
+    this.eventListeners.deleteEventListenerForAction(action)
   }
 
   // Error handling
