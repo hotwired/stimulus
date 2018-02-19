@@ -1,7 +1,3 @@
-#### [<img src="assets/logo.svg" width="12" height="12" alt="Stimulus">](README.md) [Stimulus](README.md)
-
----
-
 # MIT License
 
 Copyright © 2018 Basecamp, LLC.

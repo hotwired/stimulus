@@ -1,7 +1,3 @@
-#### [<img src="assets/logo.svg" width="12" height="12" alt="Stimulus">](README.md) [Stimulus](README.md)
-
----
-
 # Contributor Covenant Code of Conduct
 
 ## Our Pledge
