@@ -54,7 +54,7 @@ Have a question about Stimulus? Connect with other Stimulus developers on the [S
 
 Find a bug? Head over to our [issue tracker](https://github.com/stimulusjs/stimulus/issues) and we'll do our best to help. We love pull requests, too!
 
-We expect all Stimulus contributors to abide by the terms of our [Code of Conduct](CONDUCT.md).
+We expect all Stimulus contributors to abide by the terms of our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ---
 
