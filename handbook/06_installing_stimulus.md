@@ -84,6 +84,8 @@ Or, use the [stage-2 preset](https://babeljs.io/docs/plugins/preset-stage-2/), w
 
 If you prefer not to use a build system, you can load Stimulus in a `<script>` tag and it will be globally available through the `window.Stimulus` object.
 
+Define targets using `static get targets()` methods instead of `static targets = […]` class properties, which aren't supported natively [yet](https://github.com/tc39/proposal-static-class-features/).
+
 ```html
 <!doctype html>
 <html>
@@ -91,16 +93,24 @@ If you prefer not to use a build system, you can load Stimulus in a `<script>` t
   <meta charset="utf-8">
   <script src="https://unpkg.com/stimulus/dist/stimulus.umd.js"></script>
   <script>
-    (function() {
+    (() => {
       const application = Stimulus.Application.start()
+
       application.register("hello", class extends Stimulus.Controller {
-        // ...
+        static get targets() {
+          return [ "name" ]
+        }
+
+        // …
       })
     })()
   </script>
 <head>
 <body>
-  <div data-controller="hello">...</div>
+  <div data-controller="hello">
+    <input data-target="hello.name" type="text">
+    …
+  </div>
 </body>
 </html>
 ```
