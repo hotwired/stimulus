@@ -43,7 +43,7 @@ export class ActionObserver implements TokenObserverDelegate<Action> {
   /** @private */
   handleErrorParsingTokenSource(error: Error, source: TokenSource) {
     const location = `<${source.element.tagName.toLowerCase()} ${source.attributeName}>`
-    this.delegate.handleError(error, `Error parsing action descriptor "${source.value}" in ${location}`, source)
+    this.delegate.handleError(error, `parsing action descriptor "${source.value}" in ${location}`, source)
   }
 
   /** @private */

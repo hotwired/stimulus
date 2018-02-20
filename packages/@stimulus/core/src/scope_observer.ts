@@ -43,7 +43,7 @@ export class ScopeObserver implements TokenObserverDelegate<Scope> {
   /** @private */
   handleErrorParsingTokenSource(error: Error, source: TokenSource) {
     const location = `<${source.element.tagName.toLowerCase()} ${source.attributeName}>`
-    this.delegate.handleError(error, `Error parsing token "${source.value}" in ${location}`, source)
+    this.delegate.handleError(error, `parsing identifier "${source.value}" in ${location}`, source)
   }
 
   /** @private */
