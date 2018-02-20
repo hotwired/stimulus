@@ -41,12 +41,6 @@ export class ScopeObserver implements TokenObserverDelegate<Scope> {
   }
 
   /** @private */
-  handleErrorParsingTokenSource(error: Error, source: TokenSource) {
-    const location = `<${source.element.tagName.toLowerCase()} ${source.attributeName}>`
-    this.delegate.handleError(error, `parsing identifier "${source.value}" in ${location}`, source)
-  }
-
-  /** @private */
   elementMatchedToken(token: Token<Scope>) {
     this.delegate.scopeConnected(token.value)
   }

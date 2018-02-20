@@ -18,7 +18,7 @@ interface Result<T> {
 
 export interface TokenObserverDelegate<T> {
   parseValueFromTokenSource(source: TokenSource): T
-  handleErrorParsingTokenSource(error: Error, source: TokenSource)
+  handleErrorParsingTokenSource?(error: Error, source: TokenSource)
   elementMatchedToken(token: Token<T>)
   elementUnmatchedToken(token: Token<T>)
 }
@@ -64,7 +64,7 @@ export class TokenObserver<T> implements TokenListObserverDelegate {
     const { token, error } = this.fetchResultForElementAndValue(element, value)
     if (token) {
       this.delegate.elementMatchedToken(token)
-    } else if (error) {
+    } else if (error && this.delegate.handleErrorParsingTokenSource) {
       this.delegate.handleErrorParsingTokenSource(error, { element, attributeName, value })
     }
   }
