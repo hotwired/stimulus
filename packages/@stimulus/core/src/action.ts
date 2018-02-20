@@ -1,96 +1,50 @@
-export interface ActionDescriptorOptions {
-  identifier?: string
-  eventName?: string
-  methodName?: string
-  eventTarget?: EventTarget
-}
-
-// capture nos.:  12   23 4               43   1 5   5 6  6
-const pattern = /^((.+?)(@(window|document))?->)?(.+?)#(.+)$/
+import { ActionDescriptor, parseDescriptorString, stringifyEventTarget } from "./action_descriptor"
 
 export class Action {
-  private static defaultEventNames: { [tagName: string]: (element: Element) => string } = {
-    "a":        e => "click",
-    "button":   e => "click",
-    "form":     e => "submit",
-    "input":    e => e.getAttribute("type") == "submit" ? "click" : "change",
-    "select":   e => "change",
-    "textarea": e => "change"
-  }
-
-  readonly identifier: string
-  readonly eventName: string
-  readonly methodName: string
+  readonly element: Element
   readonly eventTarget: EventTarget
+  readonly eventName: string
+  readonly identifier: string
+  readonly methodName: string
 
-  static forOptions(options: ActionDescriptorOptions): Action {
-    return new Action(
-      options.identifier  || error("Missing identifier in action descriptor"),
-      options.eventName   || error("Missing event name in action descriptor"),
-      options.methodName  || error("Missing method name in action descriptor"),
-      options.eventTarget || error("Missing event target in action descriptor")
-    )
+  static forElementWithDescriptorString(element: Element, descriptorString: string) {
+    return new this(element, parseDescriptorString(descriptorString))
   }
 
-  static forElementWithInlineDescriptorString(element: Element, descriptorString: string): Action {
-    try {
-      const options = Action.parseOptionsFromInlineActionDescriptorString(descriptorString)
-      options.eventName = options.eventName || Action.getDefaultEventNameForElement(element)
-      options.eventTarget = options.eventTarget || element
-      return Action.forOptions(options)
-    } catch (error) {
-      throw new Error(`Bad action descriptor "${descriptorString}": ${error.message}`)
-    }
+  constructor(element: Element, descriptor: Partial<ActionDescriptor>) {
+    this.element     = element
+    this.eventTarget = descriptor.eventTarget || element
+    this.eventName   = descriptor.eventName || getDefaultEventNameForElement(element) || error("missing event name")
+    this.identifier  = descriptor.identifier || error("missing identifier")
+    this.methodName  = descriptor.methodName || error("missing method name")
   }
 
-  private static parseOptionsFromInlineActionDescriptorString(descriptorString: string): ActionDescriptorOptions {
-    const source = descriptorString.trim()
-    const matches = source.match(pattern) || error("Invalid action descriptor syntax")
-    return {
-      identifier:  matches[5],
-      eventName:   matches[2],
-      methodName:  matches[6],
-      eventTarget: parseEventTarget(matches[4])
-    }
-  }
-
-  private static getDefaultEventNameForElement(element) {
-    return Action.defaultEventNames[element.tagName.toLowerCase()](element)
-  }
-
-  constructor(identifier: string, eventName: string, methodName: string, eventTarget: EventTarget) {
-    this.identifier = identifier
-    this.eventName = eventName
-    this.methodName = methodName
-    this.eventTarget = eventTarget
-  }
-
-  get eventTargetName(): string | undefined {
-    return stringifyEventTarget(this.eventTarget)
-  }
-
-  toString(): string {
+  toString() {
     const eventNameSuffix = this.eventTargetName ? `@${this.eventTargetName}` : ""
     return `${this.eventName}${eventNameSuffix}->${this.identifier}#${this.methodName}`
   }
+
+  private get eventTargetName() {
+    return stringifyEventTarget(this.eventTarget)
+  }
 }
 
-function error(message: string): never {
+const defaultEventNames: { [tagName: string]: (element: Element) => string } = {
+  "a":        e => "click",
+  "button":   e => "click",
+  "form":     e => "submit",
+  "input":    e => e.getAttribute("type") == "submit" ? "click" : "change",
+  "select":   e => "change",
+  "textarea": e => "change"
+}
+
+export function getDefaultEventNameForElement(element): string | undefined {
+  const tagName = element.tagName.toLowerCase()
+  if (tagName in defaultEventNames) {
+    return defaultEventNames[tagName](element)
+  }
+}
+
+function error(message): never {
   throw new Error(message)
-}
-
-function parseEventTarget(eventTargetName: string): EventTarget | undefined {
-  if (eventTargetName == "window") {
-    return window
-  } else if (eventTargetName == "document") {
-    return document
-  }
-}
-
-function stringifyEventTarget(eventTarget?: EventTarget) {
-  if (eventTarget == window) {
-    return "window"
-  } else if (eventTarget == document) {
-    return "document"
-  }
 }
