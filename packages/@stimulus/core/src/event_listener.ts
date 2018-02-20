@@ -5,15 +5,15 @@ import { Scope } from "./scope"
 
 export class EventListener implements EventListenerObject {
   readonly context: Context
-  readonly descriptor: Action
+  readonly action: Action
 
-  constructor(context: Context, descriptor: Action) {
+  constructor(context: Context, action: Action) {
     this.context = context
-    this.descriptor = descriptor
+    this.action = action
   }
 
   get eventTarget(): EventTarget {
-    return this.descriptor.eventTarget
+    return this.action.eventTarget
   }
 
   connect() {
@@ -31,7 +31,7 @@ export class EventListener implements EventListenerObject {
   }
 
   get eventName(): string {
-    return this.descriptor.eventName
+    return this.action.eventName
   }
 
   get method(): Function {
@@ -39,14 +39,14 @@ export class EventListener implements EventListenerObject {
     if (typeof method == "function") {
       return method
     }
-    throw new Error(`Action "${this.descriptor}" references undefined method "${this.methodName}"`)
+    throw new Error(`Action "${this.action}" references undefined method "${this.methodName}"`)
   }
 
   private invokeWithEvent(event: Event) {
     try {
       this.method.call(this.controller, event)
     } catch (error) {
-      this.context.handleError(error, `invoking action "${this.descriptor}"`, { event })
+      this.context.handleError(error, `invoking action "${this.action}"`, { event })
     }
   }
 
@@ -66,7 +66,7 @@ export class EventListener implements EventListenerObject {
   }
 
   private get methodName(): string {
-    return this.descriptor.methodName
+    return this.action.methodName
   }
 
   private get element(): Element {
