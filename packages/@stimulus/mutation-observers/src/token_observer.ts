@@ -11,7 +11,7 @@ export interface Token<T> {
   value: T
 }
 
-interface Result<T> {
+interface ParseResult<T> {
   token?: Token<T>
   error?: Error
 }
@@ -26,12 +26,12 @@ export interface TokenObserverDelegate<T> {
 export class TokenObserver<T> implements TokenListObserverDelegate {
   private tokenListObserver: TokenListObserver
   private delegate: TokenObserverDelegate<T>
-  private resultsByElementAndValue: WeakMap<Element, Map<string, Result<T>>>
+  private parseResultsByElementAndValue: WeakMap<Element, Map<string, ParseResult<T>>>
 
   constructor(element: Element, attributeName: string, delegate: TokenObserverDelegate<T>) {
     this.tokenListObserver = new TokenListObserver(element, attributeName, this)
     this.delegate = delegate
-    this.resultsByElementAndValue = new WeakMap
+    this.parseResultsByElementAndValue = new WeakMap
   }
 
   get started(): boolean {
@@ -61,7 +61,7 @@ export class TokenObserver<T> implements TokenListObserverDelegate {
   // Token list observer delegate
 
   elementMatchedTokenForAttribute(element: Element, value: string, attributeName: string) {
-    const { token, error } = this.fetchResultForElementAndValue(element, value)
+    const { token, error } = this.fetchParseResultForElementAndValue(element, value)
     if (token) {
       this.delegate.elementMatchedToken(token)
     } else if (error && this.delegate.handleErrorParsingTokenSource) {
@@ -70,36 +70,36 @@ export class TokenObserver<T> implements TokenListObserverDelegate {
   }
 
   elementUnmatchedTokenForAttribute(element: Element, value: string, attributeName: string) {
-    const { token } = this.fetchResultForElementAndValue(element, value)
+    const { token } = this.fetchParseResultForElementAndValue(element, value)
     if (token) {
       this.delegate.elementUnmatchedToken(token)
     }
   }
 
-  private fetchResultForElementAndValue(element: Element, value: string): Result<T> {
-    const resultsByValue = this.fetchResultsByValueForElement(element)
-    let result = resultsByValue.get(value)
+  private fetchParseResultForElementAndValue(element: Element, value: string): ParseResult<T> {
+    const parseResultsByValue = this.fetchParseResultsByValueForElement(element)
+    let parseResult = parseResultsByValue.get(value)
 
-    if (!result) {
-      result = this.parseTokenSource({ element, attributeName: this.attributeName, value })
-      resultsByValue.set(value, result)
+    if (!parseResult) {
+      parseResult = this.parseTokenSource({ element, attributeName: this.attributeName, value })
+      parseResultsByValue.set(value, parseResult)
     }
 
-    return result
+    return parseResult
   }
 
-  private fetchResultsByValueForElement(element: Element): Map<string, Result<T>> {
-    let resultsByValue = this.resultsByElementAndValue.get(element)
+  private fetchParseResultsByValueForElement(element: Element): Map<string, ParseResult<T>> {
+    let parseResultsByValue = this.parseResultsByElementAndValue.get(element)
 
-    if (!resultsByValue) {
-      resultsByValue = new Map
-      this.resultsByElementAndValue.set(element, resultsByValue)
+    if (!parseResultsByValue) {
+      parseResultsByValue = new Map
+      this.parseResultsByElementAndValue.set(element, parseResultsByValue)
     }
 
-    return resultsByValue
+    return parseResultsByValue
   }
 
-  private parseTokenSource(source: TokenSource): Result<T> {
+  private parseTokenSource(source: TokenSource): ParseResult<T> {
     try {
       return { token: { source, value: this.delegate.parseValueFromTokenSource(source) } }
     } catch (error) {
