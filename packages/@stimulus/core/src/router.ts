@@ -2,26 +2,30 @@ import { Application } from "./application"
 import { Context } from "./context"
 import { Definition } from "./definition"
 import { Module } from "./module"
+import { Multimap } from "@stimulus/multimap"
 import { Schema } from "./schema"
-import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation-observers"
+import { Scope } from "./scope"
+import { ScopeObserver, ScopeObserverDelegate } from "./scope_observer"
 
-export class Router implements TokenListObserverDelegate {
+export class Router implements ScopeObserverDelegate {
   readonly application: Application
-  private tokenListObserver: TokenListObserver
+  private scopeObserver: ScopeObserver
+  private scopesByIdentifier: Multimap<string, Scope>
   private modulesByIdentifier: Map<string, Module>
 
   constructor(application: Application) {
     this.application = application
-    this.tokenListObserver = new TokenListObserver(this.element, this.controllerAttribute, this)
+    this.scopeObserver = new ScopeObserver(this.element, this.schema, this)
+    this.scopesByIdentifier = new Multimap
     this.modulesByIdentifier = new Map
-  }
-
-  get schema(): Schema {
-    return this.application.schema
   }
 
   get element(): Element {
     return this.application.element
+  }
+
+  get schema(): Schema {
+    return this.application.schema
   }
 
   get controllerAttribute(): string {
@@ -32,20 +36,21 @@ export class Router implements TokenListObserverDelegate {
     return Array.from(this.modulesByIdentifier.values())
   }
 
+  get contexts(): Context[] {
+    return this.modules.reduce((contexts, module) => contexts.concat(module.contexts), [] as Context[])
+  }
+
   start() {
-    this.tokenListObserver.start()
+    this.scopeObserver.start()
   }
 
   stop() {
-    this.tokenListObserver.stop()
+    this.scopeObserver.stop()
   }
 
   loadDefinition(definition: Definition) {
-    const { identifier } = definition
-    this.unloadIdentifier(identifier)
-
+    this.unloadIdentifier(definition.identifier)
     const module = new Module(this.application, definition)
-    this.modulesByIdentifier.set(identifier, module)
     this.connectModule(module)
   }
 
@@ -53,60 +58,54 @@ export class Router implements TokenListObserverDelegate {
     const module = this.modulesByIdentifier.get(identifier)
     if (module) {
       this.disconnectModule(module)
-      this.modulesByIdentifier.delete(identifier)
     }
-  }
-
-  // Token list observer delegate
-
-  /** @private */
-  elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
-    this.connectModuleForIdentifierToElement(token, element)
-  }
-
-  /** @private */
-  elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
-    this.disconnectModuleForIdentifierFromElement(token, element)
-  }
-
-  // Contexts
-
-  get contexts(): Context[] {
-    return this.modules.reduce((contexts, module) => contexts.concat(Array.from(module.contexts)), [])
   }
 
   getContextForElementAndIdentifier(element: Element, identifier: string): Context | undefined {
     const module = this.modulesByIdentifier.get(identifier)
     if (module) {
-      return module.getContextForElement(element)
+      return module.contexts.find(context => context.element == element)
     }
   }
 
-  private connectModule(module: Module) {
-    const elements = this.tokenListObserver.getElementsMatchingToken(module.identifier)
-    for (const element of elements) {
-      module.connectElement(element)
+  // Error handler delegate
+
+  /** @private */
+  handleError(error: Error, message: string, detail: any) {
+    this.application.handleError(error, message, detail)
+  }
+
+  // Scope observer delegate
+
+  /** @private */
+  scopeConnected(scope: Scope) {
+    this.scopesByIdentifier.add(scope.identifier, scope)
+    const module = this.modulesByIdentifier.get(scope.identifier)
+    if (module) {
+      module.connectContextForScope(scope)
     }
+  }
+
+  /** @private */
+  scopeDisconnected(scope: Scope) {
+    this.scopesByIdentifier.delete(scope.identifier, scope)
+    const module = this.modulesByIdentifier.get(scope.identifier)
+    if (module) {
+      module.disconnectContextForScope(scope)
+    }
+  }
+
+  // Modules
+
+  private connectModule(module: Module) {
+    this.modulesByIdentifier.set(module.identifier, module)
+    const scopes = this.scopesByIdentifier.getValuesForKey(module.identifier)
+    scopes.forEach(scope => module.connectContextForScope(scope))
   }
 
   private disconnectModule(module: Module) {
-    const contexts = module.contexts
-    for (const { element } of contexts) {
-      module.disconnectElement(element)
-    }
-  }
-
-  private connectModuleForIdentifierToElement(identifier: string, element: Element) {
-    const module = this.modulesByIdentifier.get(identifier)
-    if (module) {
-      module.connectElement(element)
-    }
-  }
-
-  private disconnectModuleForIdentifierFromElement(identifier: string, element: Element) {
-    const module = this.modulesByIdentifier.get(identifier)
-    if (module) {
-      module.disconnectElement(element)
-    }
+    this.modulesByIdentifier.delete(module.identifier)
+    const scopes = this.scopesByIdentifier.getValuesForKey(module.identifier)
+    scopes.forEach(scope => module.disconnectContextForScope(scope))
   }
 }

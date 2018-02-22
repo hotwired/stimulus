@@ -1,9 +1,10 @@
 import { Controller, ControllerConstructor } from "./controller"
 import { Definition } from "./definition"
+import { ErrorHandler } from "./error_handler"
 import { Router } from "./router"
 import { Schema, defaultSchema } from "./schema"
 
-export class Application {
+export class Application implements ErrorHandler {
   readonly element: Element
   readonly schema: Schema
   private router: Router

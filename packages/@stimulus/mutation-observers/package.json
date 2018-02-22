@@ -14,6 +14,9 @@
   "dependencies": {
     "@stimulus/multimap": "^0.9.0"
   },
+  "devDependencies": {
+    "@stimulus/test": "^1.0.1"
+  },
   "files": [
     "dist"
   ],
