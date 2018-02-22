@@ -1,71 +1,51 @@
-import { test, testGroup, nextFrame } from "../lib/helpers"
-import { TestEnvironment } from "../lib/environment"
-import { TokenListObserverRecorder } from "../lib/delegate_recorders"
-import { TokenListObserver } from "@stimulus/mutation-observers"
+import { ObserverTestCase } from "../observer_test_case"
+import { TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation-observers"
 
-testGroup("TokenListObserver", hooks => {
-  hooks.beforeEach(() => { this.env = TestEnvironment.setup(TokenListObserver, TokenListObserverRecorder) })
-  hooks.afterEach(()  => { this.env.teardown() })
+export default class TokenListObserverTests extends ObserverTestCase implements TokenListObserverDelegate {
+  attributeName = "data-test"
+  fixtureHTML = `<div ${this.attributeName}="one two"></div>`
+  observer = new TokenListObserver(this.fixtureElement, this.attributeName, this)
 
-  test("token matches", async assert => {
-    const done = assert.async()
-    const { element, childElement, attributeName, recorder } = this.env
-
-    element.setAttribute(attributeName, "a")
-    childElement.setAttribute(attributeName, "a")
-    await nextFrame()
-
-    element.setAttribute(attributeName, "a b")
-    childElement.setAttribute(attributeName, "a b")
-    await nextFrame()
-
-    assert.deepEqual(recorder.entries, [
-      { elementMatchedTokenForAttribute: [element, "a", attributeName] },
-      { elementMatchedTokenForAttribute: [childElement, "a", attributeName] },
-      { elementMatchedTokenForAttribute: [element, "b", attributeName] },
-      { elementMatchedTokenForAttribute: [childElement, "b", attributeName] }
+  async "test elementMatchedTokenForAttribute"() {
+    this.assert.deepEqual(this.calls, [
+      ["elementMatchedTokenForAttribute", [this.element, "one", this.attributeName]],
+      ["elementMatchedTokenForAttribute", [this.element, "two", this.attributeName]]
     ])
+  }
 
-    done()
-  })
+  async "test elementUnmatchedTokenForAttribute"() {
+    this.element.setAttribute(this.attributeName, "one")
+    await this.nextFrame
 
-  test("token match uniqueness", async assert => {
-    const done = assert.async()
-    const { element, childElement, attributeName, recorder } = this.env
-
-    element.setAttribute(attributeName, "a")
-    childElement.setAttribute(attributeName, "a")
-    await nextFrame()
-
-    element.setAttribute(attributeName, "a a")
-    childElement.setAttribute(attributeName, "a a")
-    await nextFrame()
-
-    assert.deepEqual(recorder.entries, [
-      { elementMatchedTokenForAttribute: [element, "a", attributeName] },
-      { elementMatchedTokenForAttribute: [childElement, "a", attributeName] }
+    this.assert.deepEqual(this.calls, [
+      ["elementMatchedTokenForAttribute", [this.element, "one", this.attributeName]],
+      ["elementMatchedTokenForAttribute", [this.element, "two", this.attributeName]],
+      ["elementUnmatchedTokenForAttribute", [this.element, "two", this.attributeName]]
     ])
+  }
 
-    done()
-  })
+  async "test matched tokens are unique"() {
+    this.element.setAttribute(this.attributeName, "two one two three three")
+    await this.nextFrame
 
-  test("token unmatches", async assert => {
-    const done = assert.async()
-    const { element, childElement, attributeName, recorder } = this.env
-
-    element.setAttribute(attributeName, "a b")
-    childElement.setAttribute(attributeName, "a b")
-    await nextFrame()
-
-    element.setAttribute(attributeName, "a")
-    childElement.setAttribute(attributeName, "a")
-    await nextFrame()
-
-    assert.deepEqual(recorder.entries.slice(-2), [
-      { elementUnmatchedTokenForAttribute: [element, "b", attributeName] },
-      { elementUnmatchedTokenForAttribute: [childElement, "b", attributeName] },
+    this.assert.deepEqual(this.calls, [
+      ["elementMatchedTokenForAttribute", [this.element, "one", this.attributeName]],
+      ["elementMatchedTokenForAttribute", [this.element, "two", this.attributeName]],
+      ["elementMatchedTokenForAttribute", [this.element, "three", this.attributeName]]
     ])
+  }
 
-    done()
-  })
-})
+  get element() {
+    return this.findElement("div")
+  }
+
+  // Token list observer delegate
+
+  elementMatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
+    this.recordCall("elementMatchedTokenForAttribute", element, token, attributeName)
+  }
+
+  elementUnmatchedTokenForAttribute(element: Element, token: string, attributeName: string) {
+    this.recordCall("elementUnmatchedTokenForAttribute", element, token, attributeName)
+  }
+}

@@ -1,65 +1,75 @@
-import { test, testGroup, nextFrame } from "../lib/helpers"
-import { TestEnvironment } from "../lib/environment"
-import { AttributeObserverRecorder } from "../lib/delegate_recorders"
-import { AttributeObserver } from "@stimulus/mutation-observers"
+import { AttributeObserver, AttributeObserverDelegate } from "@stimulus/mutation-observers"
+import { ObserverTestCase } from "../observer_test_case"
 
-testGroup("AttributeObserver", hooks => {
-  hooks.beforeEach(() => { this.env = TestEnvironment.setup(AttributeObserver, AttributeObserverRecorder) })
-  hooks.afterEach(()  => { this.env.teardown() })
+export default class AttributeObserverTests extends ObserverTestCase implements AttributeObserverDelegate {
+  attributeName = "data-test"
+  fixtureHTML = `<div id="outer" ${this.attributeName}><div id="inner"></div></div>`
+  observer = new AttributeObserver(this.fixtureElement, this.attributeName, this)
 
-  test("attribute matches", async assert => {
-    const done = assert.async()
-    const { element, childElement, attributeName, recorder } = this.env
-
-    element.setAttribute(attributeName, "a")
-    childElement.setAttribute(attributeName, "a")
-    await nextFrame()
-
-    assert.deepEqual(recorder.entries, [
-      { elementMatchedAttribute: [element, attributeName] },
-      { elementMatchedAttribute: [childElement, attributeName] }
+  async "test elementMatchedAttribute"() {
+    this.assert.deepEqual(this.calls, [
+      ["elementMatchedAttribute", [this.outerElement, this.attributeName]]
     ])
+  }
 
-    done()
-  })
+  async "test elementAttributeValueChanged"() {
+    this.outerElement.setAttribute(this.attributeName, "hello")
+    await this.nextFrame
 
-  test("attribute value changes", async assert => {
-    const done = assert.async()
-    const { element, childElement, attributeName, recorder } = this.env
-
-    element.setAttribute(attributeName, "a")
-    childElement.setAttribute(attributeName, "a")
-    await nextFrame()
-
-    element.setAttribute(attributeName, "b")
-    childElement.setAttribute(attributeName, "b")
-    await nextFrame()
-
-    assert.deepEqual(recorder.entries.slice(-2), [
-      { elementAttributeValueChanged: [element, attributeName] },
-      { elementAttributeValueChanged: [childElement, attributeName] }
+    this.assert.deepEqual(this.calls, [
+      ["elementMatchedAttribute", [this.outerElement, this.attributeName]],
+      ["elementAttributeValueChanged", [this.outerElement, this.attributeName]]
     ])
+  }
 
-    done()
-  })
+  async "test elementUnmatchedAttribute"() {
+    this.outerElement.removeAttribute(this.attributeName)
+    await this.nextFrame
 
-  test("attribute unmatches", async assert => {
-    const done = assert.async()
-    const { element, childElement, attributeName, recorder } = this.env
-
-    element.setAttribute(attributeName, "a")
-    childElement.setAttribute(attributeName, "a")
-    await nextFrame()
-
-    element.removeAttribute(attributeName)
-    childElement.removeAttribute(attributeName)
-    await nextFrame()
-
-    assert.deepEqual(recorder.entries.slice(-2), [
-      { elementUnmatchedAttribute: [element, attributeName] },
-      { elementUnmatchedAttribute: [childElement, attributeName] }
+    this.assert.deepEqual(this.calls, [
+      ["elementMatchedAttribute", [this.outerElement, this.attributeName]],
+      ["elementUnmatchedAttribute", [this.outerElement, this.attributeName]]
     ])
+  }
 
-    done()
-  })
-})
+  async "test observes attribute changes to child elements"() {
+    this.innerElement.setAttribute(this.attributeName, "hello")
+    await this.nextFrame
+
+    this.assert.deepEqual(this.calls, [
+      ["elementMatchedAttribute", [this.outerElement, this.attributeName]],
+      ["elementMatchedAttribute", [this.innerElement, this.attributeName]]
+    ])
+  }
+
+  async "test ignores other attributes"() {
+    this.outerElement.setAttribute(this.attributeName + "-x", "hello")
+    await this.nextFrame
+
+    this.assert.deepEqual(this.calls, [
+      ["elementMatchedAttribute", [this.outerElement, this.attributeName]]
+    ])
+  }
+
+  get outerElement() {
+    return this.findElement("#outer")
+  }
+
+  get innerElement() {
+    return this.findElement("#inner")
+  }
+
+  // Attribute observer delegate
+
+  elementMatchedAttribute(element: Element, attributeName: string) {
+    this.recordCall("elementMatchedAttribute", element, attributeName)
+  }
+
+  elementAttributeValueChanged(element: Element, attributeName: string) {
+    this.recordCall("elementAttributeValueChanged", element, attributeName)
+  }
+
+  elementUnmatchedAttribute(element: Element, attributeName: string) {
+    this.recordCall("elementUnmatchedAttribute", element, attributeName)
+  }
+}
