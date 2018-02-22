@@ -107,6 +107,6 @@ If you prefer not to use a build system, you can load Stimulus in a `<script>` t
 
 ## Browser Support
 
-Stimulus supports all evergreen, self-updating desktop and mobile browsers out of the box. If your application needs to support older browsers, include polyfills for `Array.from()`, `Element.closest()`, `Map`, `Object.assign()`, `Promise`, and `Set` before loading Stimulus.
+Stimulus supports all evergreen, self-updating desktop and mobile browsers out of the box. If your application needs to support older browsers, include polyfills for `Array#find`, `Array.from`, `Element#closest`, `Map`, `Object.assign`, `Promise`, and `Set` before loading Stimulus.
 
 Stimulus is known to support Internet Explorer 11+ and Safari 9+ using [these polyfills](https://github.com/stimulusjs/stimulus/blob/master/packages/%40stimulus/polyfills/index.js) from the [core-js](https://www.npmjs.com/package/core-js) and [element-closest](https://www.npmjs.com/package/element-closest) packages.
