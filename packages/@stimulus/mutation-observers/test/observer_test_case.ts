@@ -17,6 +17,14 @@ export class ObserverTestCase extends DOMTestCase {
     this.observer.stop()
   }
 
+  get callNames() {
+    return this.calls.map(([name, args]) => name)
+  }
+
+  get callArguments() {
+    return this.calls.map(([name, args]) => args)
+  }
+
   recordCall(methodName: string, ...args: any[]) {
     this.calls.push([methodName, args])
   }
