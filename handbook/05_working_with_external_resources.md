@@ -162,4 +162,4 @@ export default class extends Controller {
 
 In this chapter we've seen how to acquire and release external resources using Stimulus lifecycle callbacks.
 
-Next we'll see how to install and configure Stimulus in your own application.
+Next we'll examine how to develop secure applications with Stimulus.

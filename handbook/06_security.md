@@ -32,7 +32,7 @@ For more information, see the [OWASP CSP Cheat Sheet](https://www.owasp.org/inde
 
 ## Stimulus does not just execute what's in the HTML
 
-CSP is valuable when using Stimulus, just like CSP is useful in other frameworks, because Stimulus does not just execute ("eval") code in the HTML.  Indeed, Stimulus does not use `eval` all.
+CSP is valuable when using Stimulus, just like CSP is useful in other frameworks, because Stimulus does not just execute ("eval") code in the HTML.  Indeed, Stimulus does not use `eval` at all.
 
 The Stimulus action system _does_ use dynamic dispatch to invoke controller methods, but that's simply a property lookup on the controller instance. See the [EventListener class](https://github.com/stimulusjs/stimulus/blob/9bb10c60b09cfd471286710acbb736e1a21bc449/packages/%40stimulus/core/src/event_listener.ts#L37-L51) for details.
 
