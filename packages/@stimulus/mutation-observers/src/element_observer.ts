@@ -24,10 +24,11 @@ export class ElementObserver {
     this.mutationObserver = new MutationObserver((mutations) => this.processMutations(mutations))
   }
 
-  start() {
+  async start() {
     if (!this.started) {
-      this.mutationObserver.observe(this.element, { attributes: true, childList: true, subtree: true })
       this.started = true
+      await domReady()
+      this.mutationObserver.observe(this.element, { attributes: true, childList: true, subtree: true })
       this.refresh()
     }
   }
@@ -59,8 +60,10 @@ export class ElementObserver {
   // Mutation record processing
 
   private processMutations(mutations: MutationRecord[]) {
-    for (const mutation of mutations) {
-      this.processMutation(mutation)
+    if (this.started) {
+      for (const mutation of mutations) {
+        this.processMutation(mutation)
+      }
     }
   }
 
@@ -142,4 +145,14 @@ export class ElementObserver {
       }
     }
   }
+}
+
+function domReady(): Promise<any> {
+  return new Promise(resolve => {
+    if (document.readyState == "loading") {
+      document.addEventListener("DOMContentLoaded", resolve)
+    } else {
+      resolve()
+    }
+  })
 }
