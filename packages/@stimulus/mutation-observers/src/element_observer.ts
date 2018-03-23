@@ -24,10 +24,9 @@ export class ElementObserver {
     this.mutationObserver = new MutationObserver((mutations) => this.processMutations(mutations))
   }
 
-  async start() {
+  start() {
     if (!this.started) {
       this.started = true
-      await domReady()
       this.mutationObserver.observe(this.element, { attributes: true, childList: true, subtree: true })
       this.refresh()
     }
@@ -145,14 +144,4 @@ export class ElementObserver {
       }
     }
   }
-}
-
-function domReady(): Promise<any> {
-  return new Promise(resolve => {
-    if (document.readyState == "loading") {
-      document.addEventListener("DOMContentLoaded", resolve)
-    } else {
-      resolve()
-    }
-  })
 }
