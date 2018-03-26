@@ -51,6 +51,23 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
     ])
   }
 
+  async "test observes removal of nested matched element HTML"() {
+    const { innerElement, outerElement } = this
+
+    innerElement.setAttribute(this.attributeName, "")
+    await this.nextFrame
+
+    this.fixtureElement.innerHTML = ""
+    await this.nextFrame
+
+    this.assert.deepEqual(this.calls, [
+      ["elementMatchedAttribute", [outerElement, this.attributeName]],
+      ["elementMatchedAttribute", [innerElement, this.attributeName]],
+      ["elementUnmatchedAttribute", [outerElement, this.attributeName]],
+      ["elementUnmatchedAttribute", [innerElement, this.attributeName]]
+    ])
+  }
+
   get outerElement() {
     return this.findElement("#outer")
   }

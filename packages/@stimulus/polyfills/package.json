@@ -5,6 +5,7 @@
   "license": "MIT",
   "devDependencies": {
     "core-js": "^2.5.3",
-    "element-closest": "^2.0.2"
+    "element-closest": "^2.0.2",
+    "mutation-observer-inner-html-shim": "^1.0.0"
   }
 }
