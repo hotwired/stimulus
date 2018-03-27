@@ -10,11 +10,17 @@ const config = {
   autoWatch: false,
 
   files: [
-    { pattern: "packages/*/**/test/index.ts" }
+    { pattern: "packages/*/**/test/index.ts" },
+    { pattern: "packages/*/**/test/fixtures/**/*", included: false },
   ],
 
+  proxies: {
+    "/core/": "/base/packages/@stimulus/core/test/fixtures/"
+  },
+
   preprocessors: {
-    "packages/**/*.ts": ["webpack"]
+    "packages/**/*.ts": ["webpack"],
+    "packages/*/**/test/fixtures/**/*.js": ["webpack"],
   },
 
   mime: {
