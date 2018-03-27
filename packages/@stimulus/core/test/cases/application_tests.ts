@@ -63,48 +63,7 @@ export default class ApplicationTests extends ApplicationTestCase {
     this.assert.equal(this.controllers[1].constructor["blessCount"], 1)
   }
 
-  async "test starting an application when the document is loading"() {
-    const iframe = this.installIframe("/core/application/index.html")
-    const message = await messageFromIframeStartState(iframe, "loading")
-    this.assert.notEqual(message.connectState, "loading")
-    this.assert.equal(message.targetCount, 3)
-  }
-
-  async "test starting an application when the document is interactive"() {
-    const iframe = this.installIframe("/core/application/index.html")
-    const message = await messageFromIframeStartState(iframe, "interactive")
-    this.assert.equal(message.targetCount, 3)
-  }
-
-  async "test starting an application when the document is complete"() {
-    const iframe = this.installIframe("/core/application/index.html")
-    const message = await messageFromIframeStartState(iframe, "complete")
-    this.assert.equal(message.targetCount, 3)
-  }
-
   get controllers() {
     return this.application.controllers as LogController[]
   }
-
-  private installIframe(src: string): HTMLIFrameElement {
-    const iframe = document.createElement("iframe")
-    iframe.src = src
-    this.fixtureElement.appendChild(iframe)
-    return iframe
-  }
-}
-
-function messageFromIframeStartState(iframe: HTMLIFrameElement, startState: string): Promise<any> {
-  return new Promise(resolve => {
-    function receiveMessage(event) {
-      if (event.source == iframe.contentWindow) {
-        const message = JSON.parse(event.data)
-        if (message.startState == startState) {
-          removeEventListener("message", receiveMessage)
-          resolve(message)
-        }
-      }
-    }
-    addEventListener("message", receiveMessage)
-  })
 }
