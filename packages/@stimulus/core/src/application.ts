@@ -21,7 +21,8 @@ export class Application implements ErrorHandler {
     this.router = new Router(this)
   }
 
-  start() {
+  async start() {
+    await domReady()
     this.router.start()
   }
 
@@ -63,4 +64,14 @@ export class Application implements ErrorHandler {
   handleError(error: Error, message: string, detail: object) {
     console.error(`%s\n\n%o\n\n%o`, message, error, detail)
   }
+}
+
+function domReady(): Promise<any> {
+  return new Promise(resolve => {
+    if (document.readyState == "loading") {
+      document.addEventListener("DOMContentLoaded", resolve)
+    } else {
+      resolve()
+    }
+  })
 }

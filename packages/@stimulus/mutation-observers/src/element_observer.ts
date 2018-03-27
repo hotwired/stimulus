@@ -26,8 +26,8 @@ export class ElementObserver {
 
   start() {
     if (!this.started) {
-      this.mutationObserver.observe(this.element, { attributes: true, childList: true, subtree: true })
       this.started = true
+      this.mutationObserver.observe(this.element, { attributes: true, childList: true, subtree: true })
       this.refresh()
     }
   }
@@ -59,8 +59,10 @@ export class ElementObserver {
   // Mutation record processing
 
   private processMutations(mutations: MutationRecord[]) {
-    for (const mutation of mutations) {
-      this.processMutation(mutation)
+    if (this.started) {
+      for (const mutation of mutations) {
+        this.processMutation(mutation)
+      }
     }
   }
 
