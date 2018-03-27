@@ -11,17 +11,19 @@ export default class ApplicationStartTests extends DOMTestCase {
 
   async "test starting an application when the document is loading"() {
     const message = await this.messageFromStartState("loading")
-    this.assert.notEqual(message.connectState, "loading")
+    this.assertIn(message.connectState, ["interactive", "complete"])
     this.assert.equal(message.targetCount, 3)
   }
 
   async "test starting an application when the document is interactive"() {
     const message = await this.messageFromStartState("interactive")
+    this.assertIn(message.connectState, ["interactive", "complete"])
     this.assert.equal(message.targetCount, 3)
   }
 
   async "test starting an application when the document is complete"() {
     const message = await this.messageFromStartState("complete")
+    this.assertIn(message.connectState, ["complete"])
     this.assert.equal(message.targetCount, 3)
   }
 
@@ -38,6 +40,12 @@ export default class ApplicationStartTests extends DOMTestCase {
       }
       addEventListener("message", receiveMessage)
     })
+  }
+
+  private assertIn(actual: any, expected: any[]) {
+    const state = expected.indexOf(actual) > -1
+    const message = `${JSON.stringify(actual)} is not in ${JSON.stringify(expected)}`
+    this.assert.ok(state, message)
   }
 }
 
