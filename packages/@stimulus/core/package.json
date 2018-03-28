@@ -22,6 +22,7 @@
     "access": "public"
   },
   "devDependencies": {
+    "@stimulus/polyfills": "^1.0.0",
     "@stimulus/test": "^1.0.1",
     "@types/webpack-env": "^1.13.3"
   }
