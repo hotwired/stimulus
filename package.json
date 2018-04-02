@@ -26,7 +26,7 @@
     "packages/*",
     "packages/@stimulus/*"
   ],
-  "devDependencies": {
+  "dependencies": {
     "@types/qunit": "^2.0.31",
     "@types/webpack-env": "^1.13.3",
     "fs-extra": "^5.0.0",
