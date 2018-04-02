@@ -1,7 +1,7 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  static targets = [ "slide" ]
+  static targets = ["slide"]
 
   initialize() {
     this.showCurrentSlide()

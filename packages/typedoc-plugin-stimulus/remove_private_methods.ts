@@ -14,7 +14,7 @@ export class RemovePrivateMethodsPlugin extends ConverterComponent {
     this.markedReflections = []
     this.listenTo(this.owner, {
       [Converter.EVENT_CREATE_SIGNATURE]: this.createSignature,
-      [Converter.EVENT_RESOLVE_BEGIN]:    this.resolveBegin
+      [Converter.EVENT_RESOLVE_BEGIN]: this.resolveBegin
     })
   }
 
