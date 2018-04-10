@@ -3,7 +3,7 @@ import { Controller } from "stimulus"
 export type ActionLogEntry = {
   name: string
   eventType: string
-  eventTarget: EventTarget
+  eventTarget: EventTarget | null
   defaultPrevented: boolean
 }
 
