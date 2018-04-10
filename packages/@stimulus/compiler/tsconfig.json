@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "strict": true,
+    "target": "esnext",
+    "module": "commonjs",
+    "outDir": "dist/modules",
+    "declarationDir": "dist/types"
+  },
+  "include": [
+    "src/*.ts"
+  ]
+}

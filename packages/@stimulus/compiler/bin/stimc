@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+var compiler = require("../dist/modules")
+var project = new compiler.Project(process.cwd())
+project.build()

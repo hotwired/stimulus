@@ -11,16 +11,14 @@
     "rootDir": "packages",
     "baseUrl": "packages",
     "outDir": "dist/modules",
-    "declarationDir": "dist/types",
-    "paths": {
-      "*": ["*"]
-    }
+    "declarationDir": "dist/types"
   },
   "include": [
-    "packages/*/src/**/*.ts",
-    "packages/*/index.ts",
-    "packages/@stimulus/*/src/**/*.ts",
-    "packages/@stimulus/*/index.ts",
-    "packages/@stimulus/*/test/**/*.ts"
+    "packages/**/*.ts"
+  ],
+  "exclude": [
+    "packages/**/dist",
+    "packages/@stimulus/compiler",
+    "packages/typedoc-plugin-stimulus"
   ]
 }

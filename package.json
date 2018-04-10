@@ -39,6 +39,7 @@
     "qunitjs": "^2.4.0",
     "rimraf": "^2.6.2",
     "ts-loader": "^3.2.0",
+    "ts-simple-ast": "^10.2.0",
     "tslint": "^5.7.0",
     "typedoc": "^0.11.1",
     "typedoc-plugin-stimulus": "file:packages/typedoc-plugin-stimulus",

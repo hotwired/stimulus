@@ -1,0 +1,27 @@
+{
+  "name": "@stimulus/compiler",
+  "version": "1.0.0",
+  "description": "The Stimulus Compiler",
+  "repository": "https://github.com/stimulusjs/stimulus",
+  "author": "Basecamp, LLC",
+  "contributors": [
+    "Javan Makhmali <javan@javan.us>",
+    "Sam Stephenson <sstephenson@gmail.com>"
+  ],
+  "main": "dist/module/index.js",
+  "types": "dist/types/index.d.ts",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "ts-simple-ast": "^10.2.0",
+    "typescript": "^2.8.1"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
+}
