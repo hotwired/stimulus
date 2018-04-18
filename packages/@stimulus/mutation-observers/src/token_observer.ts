@@ -1,109 +1,117 @@
-import { TokenListObserver, TokenListObserverDelegate } from "./token_list_observer"
+import { AttributeObserver, AttributeObserverDelegate } from "./attribute_observer"
+import { Multimap } from "@stimulus/multimap"
 
-export interface TokenSource {
+export interface Token {
   element: Element
   attributeName: string
-  value: string
+  index: number
+  content: string
 }
 
-export interface Token<T> {
-  source: TokenSource
-  value: T
+export interface TokenObserverDelegate {
+  tokenMatched(token: Token)
+  tokenUnmatched(token: Token)
 }
 
-interface ParseResult<T> {
-  token?: Token<T>
-  error?: Error
-}
+export class TokenObserver implements AttributeObserverDelegate {
+  private attributeObserver: AttributeObserver
+  private delegate: TokenObserverDelegate
+  private tokensByElement: Multimap<Element, Token>
 
-export interface TokenObserverDelegate<T> {
-  parseValueFromTokenSource(source: TokenSource): T
-  handleErrorParsingTokenSource?(error: Error, source: TokenSource)
-  elementMatchedToken(token: Token<T>)
-  elementUnmatchedToken(token: Token<T>)
-}
-
-export class TokenObserver<T> implements TokenListObserverDelegate {
-  private tokenListObserver: TokenListObserver
-  private delegate: TokenObserverDelegate<T>
-  private parseResultsByElementAndValue: WeakMap<Element, Map<string, ParseResult<T>>>
-
-  constructor(element: Element, attributeName: string, delegate: TokenObserverDelegate<T>) {
-    this.tokenListObserver = new TokenListObserver(element, attributeName, this)
+  constructor(element: Element, attributeName: string, delegate: TokenObserverDelegate) {
+    this.attributeObserver = new AttributeObserver(element, attributeName, this)
     this.delegate = delegate
-    this.parseResultsByElementAndValue = new WeakMap
+    this.tokensByElement = new Multimap
   }
 
   get started(): boolean {
-    return this.tokenListObserver.started
+    return this.attributeObserver.started
   }
 
   start() {
-    this.tokenListObserver.start()
+    this.attributeObserver.start()
   }
 
   stop() {
-    this.tokenListObserver.stop()
+    this.attributeObserver.stop()
   }
 
   refresh() {
-    this.tokenListObserver.refresh()
+    this.attributeObserver.refresh()
   }
 
   get element(): Element {
-    return this.tokenListObserver.element
+    return this.attributeObserver.element
   }
 
   get attributeName(): string {
-    return this.tokenListObserver.attributeName
+    return this.attributeObserver.attributeName
   }
 
-  // Token list observer delegate
+  // Attribute observer delegate
 
-  elementMatchedTokenForAttribute(element: Element, value: string, attributeName: string) {
-    const { token, error } = this.fetchParseResultForElementAndValue(element, value)
-    if (token) {
-      this.delegate.elementMatchedToken(token)
-    } else if (error && this.delegate.handleErrorParsingTokenSource) {
-      this.delegate.handleErrorParsingTokenSource(error, { element, attributeName, value })
+  elementMatchedAttribute(element: Element) {
+    this.tokensMatched(this.readTokensForElement(element))
+  }
+
+  elementAttributeValueChanged(element: Element) {
+    const [unmatchedTokens, matchedTokens] = this.refreshTokensForElement(element)
+    this.tokensUnmatched(unmatchedTokens)
+    this.tokensMatched(matchedTokens)
+  }
+
+  elementUnmatchedAttribute(element: Element) {
+    this.tokensUnmatched(this.tokensByElement.getValuesForKey(element))
+  }
+
+  private tokensMatched(tokens: Token[]) {
+    tokens.forEach(token => this.tokenMatched(token))
+  }
+
+  private tokensUnmatched(tokens: Token[]) {
+    tokens.forEach(token => this.tokenUnmatched(token))
+  }
+
+  private tokenMatched(token: Token) {
+    this.delegate.tokenMatched(token)
+    this.tokensByElement.add(token.element, token)
+  }
+
+  private tokenUnmatched(token: Token) {
+    this.delegate.tokenUnmatched(token)
+    this.tokensByElement.delete(token.element, token)
+  }
+
+  private refreshTokensForElement(element: Element): [Token[], Token[]] {
+    const previousTokens = this.tokensByElement.getValuesForKey(element)
+    const currentTokens = this.readTokensForElement(element)
+    const firstDifferingIndex = zip(previousTokens, currentTokens)
+      .findIndex(([previousToken, currentToken]) => !tokensAreEqual(previousToken, currentToken))
+
+    if (firstDifferingIndex == -1) {
+      return [[], []]
+    } else {
+      return [previousTokens.slice(firstDifferingIndex), currentTokens.slice(firstDifferingIndex)]
     }
   }
 
-  elementUnmatchedTokenForAttribute(element: Element, value: string, attributeName: string) {
-    const { token } = this.fetchParseResultForElementAndValue(element, value)
-    if (token) {
-      this.delegate.elementUnmatchedToken(token)
-    }
+  private readTokensForElement(element: Element): Token[] {
+    const attributeName = this.attributeName
+    const tokenString = element.getAttribute(attributeName) || ""
+    return parseTokenString(tokenString, { element, attributeName })
   }
+}
 
-  private fetchParseResultForElementAndValue(element: Element, value: string): ParseResult<T> {
-    const parseResultsByValue = this.fetchParseResultsByValueForElement(element)
-    let parseResult = parseResultsByValue.get(value)
+function parseTokenString(tokenString: string, { element, attributeName }): Token[] {
+  return tokenString.trim().split(/\s+/).filter(content => content.length)
+    .map((content, index) => ({ element, attributeName, content, index }))
+}
 
-    if (!parseResult) {
-      parseResult = this.parseTokenSource({ element, attributeName: this.attributeName, value })
-      parseResultsByValue.set(value, parseResult)
-    }
+function zip<L, R>(left: L[], right: R[]): [L | undefined, R | undefined][] {
+  const length = Math.max(left.length, right.length)
+  return Array.from({ length }, (_, index) => [left[index], right[index]] as [L, R])
+}
 
-    return parseResult
-  }
-
-  private fetchParseResultsByValueForElement(element: Element): Map<string, ParseResult<T>> {
-    let parseResultsByValue = this.parseResultsByElementAndValue.get(element)
-
-    if (!parseResultsByValue) {
-      parseResultsByValue = new Map
-      this.parseResultsByElementAndValue.set(element, parseResultsByValue)
-    }
-
-    return parseResultsByValue
-  }
-
-  private parseTokenSource(source: TokenSource): ParseResult<T> {
-    try {
-      return { token: { source, value: this.delegate.parseValueFromTokenSource(source) } }
-    } catch (error) {
-      return { error }
-    }
-  }
+function tokensAreEqual(left?: Token, right?: Token) {
+  return left && right && left.index == right.index && left.content == right.content
 }

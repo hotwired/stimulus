@@ -7,25 +7,24 @@ export interface Observer {
 
 export class ObserverTestCase extends DOMTestCase {
   observer: Observer
-  calls: [string, any[]][] = []
+  calls: any[][] = []
+  private setupCallCount = 0
 
   async setup() {
     this.observer.start()
+    await this.nextFrame
+    this.setupCallCount = this.calls.length
   }
 
   async teardown() {
     this.observer.stop()
   }
 
-  get callNames() {
-    return this.calls.map(([name, args]) => name)
-  }
-
-  get callArguments() {
-    return this.calls.map(([name, args]) => args)
+  get testCalls() {
+    return this.calls.slice(this.setupCallCount)
   }
 
   recordCall(methodName: string, ...args: any[]) {
-    this.calls.push([methodName, args])
+    this.calls.push([methodName, ...args])
   }
 }

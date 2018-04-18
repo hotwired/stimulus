@@ -1,52 +1,81 @@
 import { ErrorHandler } from "./error_handler"
 import { Schema } from "./schema"
 import { Scope } from "./scope"
-import { Token, TokenObserver, TokenObserverDelegate, TokenSource } from "@stimulus/mutation-observers"
+import { Token, ValueObserver, ValueObserverDelegate } from "@stimulus/mutation-observers"
 
 export interface ScopeObserverDelegate extends ErrorHandler {
   scopeConnected(scope: Scope)
   scopeDisconnected(scope: Scope)
 }
 
-export class ScopeObserver implements TokenObserverDelegate<Scope> {
+export class ScopeObserver implements ValueObserverDelegate<Scope> {
   readonly element: Element
   readonly schema: Schema
   private delegate: ScopeObserverDelegate
-  private tokenObserver: TokenObserver<Scope>
+  private valueObserver: ValueObserver<Scope>
+  private scopesByIdentifierByElement: WeakMap<Element, Map<string, Scope>>
+  private scopeReferenceCounts: WeakMap<Scope, number>
 
   constructor(element: Element, schema: Schema, delegate: ScopeObserverDelegate) {
     this.element = element
     this.schema = schema
     this.delegate = delegate
-    this.tokenObserver = new TokenObserver(this.element, this.controllerAttribute, this)
+    this.valueObserver = new ValueObserver(this.element, this.controllerAttribute, this)
+    this.scopesByIdentifierByElement = new WeakMap
+    this.scopeReferenceCounts = new WeakMap
   }
 
   start() {
-    this.tokenObserver.start()
+    this.valueObserver.start()
   }
 
   stop() {
-    this.tokenObserver.stop()
+    this.valueObserver.stop()
   }
 
   get controllerAttribute() {
     return this.schema.controllerAttribute
   }
 
-  // Token observer delegate
+  // Value observer delegate
 
-  /** @private */
-  parseValueFromTokenSource(source: TokenSource): Scope {
-    return new Scope(this.schema, source.value, source.element)
+  parseValueForToken(token: Token): Scope | undefined {
+    const { element, content: identifier } = token
+    const scopesByIdentifier = this.fetchScopesByIdentifierForElement(element)
+
+    let scope = scopesByIdentifier.get(identifier)
+    if (!scope) {
+      scope = new Scope(this.schema, identifier, element)
+      scopesByIdentifier.set(identifier, scope)
+    }
+
+    return scope
   }
 
-  /** @private */
-  elementMatchedToken(token: Token<Scope>) {
-    this.delegate.scopeConnected(token.value)
+  elementMatchedValue(element: Element, value: Scope) {
+    const referenceCount = (this.scopeReferenceCounts.get(value) || 0) + 1
+    this.scopeReferenceCounts.set(value, referenceCount)
+    if (referenceCount == 1) {
+      this.delegate.scopeConnected(value)
+    }
   }
 
-  /** @private */
-  elementUnmatchedToken(token: Token<Scope>) {
-    this.delegate.scopeDisconnected(token.value)
+  elementUnmatchedValue(element: Element, value: Scope) {
+    const referenceCount = this.scopeReferenceCounts.get(value)
+    if (referenceCount) {
+      this.scopeReferenceCounts.set(value, referenceCount - 1)
+      if (referenceCount == 1) {
+        this.delegate.scopeDisconnected(value)
+      }
+    }
+  }
+
+  private fetchScopesByIdentifierForElement(element: Element) {
+    let scopesByIdentifier = this.scopesByIdentifierByElement.get(element)
+    if (!scopesByIdentifier) {
+      scopesByIdentifier = new Map
+      this.scopesByIdentifierByElement.set(element, scopesByIdentifier)
+    }
+    return scopesByIdentifier
   }
 }

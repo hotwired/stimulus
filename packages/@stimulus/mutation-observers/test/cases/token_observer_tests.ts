@@ -1,89 +1,85 @@
+import { Token, TokenObserver, TokenObserverDelegate } from "@stimulus/mutation-observers"
 import { ObserverTestCase } from "../observer_test_case"
-import { Token, TokenObserver, TokenObserverDelegate, TokenSource } from "@stimulus/mutation-observers"
 
-export interface TestValue {
-  identifier: string
-  source: TokenSource
-}
-
-export default class TokenObserverTests extends ObserverTestCase implements TokenObserverDelegate<TestValue> {
+export default class TokenObserverTests extends ObserverTestCase implements TokenObserverDelegate {
   attributeName = "data-test"
-  fixtureHTML = `<div ${this.attributeName}="one"></div>`
+  fixtureHTML = `<div ${this.attributeName}="one two"></div>`
   observer = new TokenObserver(this.fixtureElement, this.attributeName, this)
 
-  async "test elementMatchedToken"() {
-    this.assert.deepEqual(this.callNames, [
-      "parseValueFromTokenSource",
-      "elementMatchedToken"
-    ])
-
-    const [[tokenSource], [token]] = this.callArguments
-    this.assert.equal(token.value.identifier, "one")
-    this.assert.equal(token.source, tokenSource)
-  }
-
-  async "test elementUnmatchedToken"() {
-    this.element.removeAttribute(this.attributeName)
-    await this.nextFrame
-
-    this.assert.deepEqual(this.callNames, [
-      "parseValueFromTokenSource",
-      "elementMatchedToken",
-      "elementUnmatchedToken"
+  async "test tokenMatched"() {
+    this.assert.deepEqual(this.calls, [
+      ["tokenMatched", this.element, this.attributeName, "one", 0],
+      ["tokenMatched", this.element, this.attributeName, "two", 1]
     ])
   }
 
-  async "test tokens are parsed once per element"() {
-    this.element.setAttribute(this.attributeName, "")
-    await this.nextFrame
-    this.element.setAttribute(this.attributeName, "one")
+  async "test adding a token to the right"() {
+    this.tokenString = "one two three"
     await this.nextFrame
 
-    const [[firstToken], [secondToken]] = this.callArguments.slice(-2)
-    this.assert.strictEqual(firstToken, secondToken)
-  }
-
-  async "test handleErrorParsingToken"() {
-    this.element.setAttribute(this.attributeName, "one error")
-    await this.nextFrame
-
-    const callNames = this.callNames
-    this.assert.deepEqual(callNames, [
-      "parseValueFromTokenSource",
-      "elementMatchedToken",
-      "parseValueFromTokenSource",
-      "handleErrorParsingTokenSource"
+    this.assert.deepEqual(this.testCalls, [
+      ["tokenMatched", this.element, this.attributeName, "three", 2]
     ])
-
-    this.element.setAttribute(this.attributeName, "one")
-    await this.nextFrame
-    this.assert.deepEqual(this.callNames, callNames)
   }
 
-  get element() {
+  async "test inserting a token in the middle"() {
+    this.tokenString = "one three two"
+    await this.nextFrame
+
+    this.assert.deepEqual(this.testCalls, [
+      ["tokenUnmatched", this.element, this.attributeName, "two", 1],
+      ["tokenMatched", this.element, this.attributeName, "three", 1],
+      ["tokenMatched", this.element, this.attributeName, "two", 2]
+    ])
+  }
+
+  async "test removing the leftmost token"() {
+    this.tokenString = "two"
+    await this.nextFrame
+
+    this.assert.deepEqual(this.testCalls, [
+      ["tokenUnmatched", this.element, this.attributeName, "one", 0],
+      ["tokenUnmatched", this.element, this.attributeName, "two", 1],
+      ["tokenMatched", this.element, this.attributeName, "two", 0]
+    ])
+  }
+
+  async "test removing the rightmost token"() {
+    this.tokenString = "one"
+    await this.nextFrame
+
+    this.assert.deepEqual(this.testCalls, [
+      ["tokenUnmatched", this.element, this.attributeName, "two", 1]
+    ])
+  }
+
+  async "test removing the only token"() {
+    this.tokenString = "one"
+    await this.nextFrame
+    this.tokenString = ""
+    await this.nextFrame
+
+    this.assert.deepEqual(this.testCalls, [
+      ["tokenUnmatched", this.element, this.attributeName, "two", 1],
+      ["tokenUnmatched", this.element, this.attributeName, "one", 0]
+    ])
+  }
+
+  get element(): Element {
     return this.findElement("div")
+  }
+
+  set tokenString(value: string) {
+    this.element.setAttribute(this.attributeName, value)
   }
 
   // Token observer delegate
 
-  parseValueFromTokenSource(source: TokenSource) {
-    this.recordCall("parseValueFromTokenSource", source)
-    if (source.value == "error") {
-      throw new Error("oops")
-    } else {
-      return { identifier: source.value, source }
-    }
+  tokenMatched(token: Token) {
+    this.recordCall("tokenMatched", token.element, token.attributeName, token.content, token.index)
   }
 
-  handleErrorParsingTokenSource(error: Error, source: TokenSource) {
-    this.recordCall("handleErrorParsingTokenSource", error, source)
-  }
-
-  elementMatchedToken(token: Token<TestValue>) {
-    this.recordCall("elementMatchedToken", token)
-  }
-
-  elementUnmatchedToken(token: Token<TestValue>) {
-    this.recordCall("elementUnmatchedToken", token)
+  tokenUnmatched(token: Token) {
+    this.recordCall("tokenUnmatched", token.element, token.attributeName, token.content, token.index)
   }
 }

@@ -1,58 +1,50 @@
 import { Action } from "./action"
 import { ErrorHandler } from "./error_handler"
 import { Schema } from "./schema"
-import { Token, TokenObserver, TokenObserverDelegate, TokenSource } from "@stimulus/mutation-observers"
+import { Token, ValueObserver, ValueObserverDelegate } from "@stimulus/mutation-observers"
 
 export interface ActionObserverDelegate extends ErrorHandler {
   actionConnected(action: Action)
   actionDisconnected(action: Action)
 }
 
-export class ActionObserver implements TokenObserverDelegate<Action> {
+export class ActionObserver implements ValueObserverDelegate<Action> {
   readonly element: Element
   readonly schema: Schema
   private delegate: ActionObserverDelegate
-  private tokenObserver: TokenObserver<Action>
+  private valueObserver: ValueObserver<Action>
 
   constructor(element: Element, schema: Schema, delegate: ActionObserverDelegate) {
     this.element = element
     this.schema = schema
     this.delegate = delegate
-    this.tokenObserver = new TokenObserver(element, this.actionAttribute, this)
+    this.valueObserver = new ValueObserver(element, this.actionAttribute, this)
   }
 
   start() {
-    this.tokenObserver.start()
+    this.valueObserver.start()
   }
 
   stop() {
-    this.tokenObserver.stop()
+    this.valueObserver.stop()
   }
 
   get actionAttribute() {
     return this.schema.actionAttribute
   }
 
-  // Token observer delegate
+  // Value observer delegate
 
-  /** @private */
-  parseValueFromTokenSource(source: TokenSource): Action {
-    return Action.forElementWithDescriptorString(source.element, source.value)
+  parseValueForToken(token: Token): Action | undefined {
+    const { element, content: descriptorString } = token
+    return Action.forElementWithDescriptorString(element, descriptorString)
   }
 
-  /** @private */
-  handleErrorParsingTokenSource(error: Error, source: TokenSource) {
-    const location = `<${source.element.tagName.toLowerCase()} ${source.attributeName}>`
-    this.delegate.handleError(error, `parsing action descriptor "${source.value}" in ${location}`, source)
+  elementMatchedValue(element: Element, value: Action) {
+    this.delegate.actionConnected(value)
   }
 
-  /** @private */
-  elementMatchedToken(token: Token<Action>) {
-    this.delegate.actionConnected(token.value)
-  }
-
-  /** @private */
-  elementUnmatchedToken(token: Token<Action>) {
-    this.delegate.actionDisconnected(token.value)
+  elementUnmatchedValue(element: Element, value: Action) {
+    this.delegate.actionDisconnected(value)
   }
 }
