@@ -36,8 +36,7 @@ export class ActionObserver implements ValueObserverDelegate<Action> {
   // Value observer delegate
 
   parseValueForToken(token: Token): Action | undefined {
-    const { element, content: descriptorString } = token
-    return Action.forElementWithDescriptorString(element, descriptorString)
+    return Action.forToken(token)
   }
 
   elementMatchedValue(element: Element, value: Action) {

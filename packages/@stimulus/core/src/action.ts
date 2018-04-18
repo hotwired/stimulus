@@ -1,18 +1,21 @@
 import { ActionDescriptor, parseDescriptorString, stringifyEventTarget } from "./action_descriptor"
+import { Token } from "@stimulus/mutation-observers"
 
 export class Action {
   readonly element: Element
+  readonly index: number
   readonly eventTarget: EventTarget
   readonly eventName: string
   readonly identifier: string
   readonly methodName: string
 
-  static forElementWithDescriptorString(element: Element, descriptorString: string) {
-    return new this(element, parseDescriptorString(descriptorString))
+  static forToken(token: Token) {
+    return new this(token.element, token.index, parseDescriptorString(token.content))
   }
 
-  constructor(element: Element, descriptor: Partial<ActionDescriptor>) {
+  constructor(element: Element, index: number, descriptor: Partial<ActionDescriptor>) {
     this.element     = element
+    this.index       = index
     this.eventTarget = descriptor.eventTarget || element
     this.eventName   = descriptor.eventName || getDefaultEventNameForElement(element) || error("missing event name")
     this.identifier  = descriptor.identifier || error("missing identifier")
