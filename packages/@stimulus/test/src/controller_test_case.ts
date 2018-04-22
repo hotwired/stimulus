@@ -2,12 +2,14 @@ import { ApplicationTestCase } from "./application_test_case"
 import { ControllerConstructor } from "@stimulus/core"
 
 export class ControllerTestCase<T> extends ApplicationTestCase {
-  identifier: string = "test"
+  identifier: string | string[] = "test"
   controllerConstructor: ControllerConstructor
-  fixtureHTML = `<div data-controller="${this.identifier}">`
+  fixtureHTML = `<div data-controller="${this.identifiers.join(" ")}">`
 
   setupApplication() {
-    this.application.register(this.identifier, this.controllerConstructor)
+    this.identifiers.forEach(identifier => {
+      this.application.register(identifier, this.controllerConstructor)
+    })
   }
 
   get controller(): T {
@@ -16,6 +18,14 @@ export class ControllerTestCase<T> extends ApplicationTestCase {
       return controller
     } else {
       throw new Error("no controller connected")
+    }
+  }
+
+  get identifiers(): string[] {
+    if (typeof this.identifier == "string") {
+      return [this.identifier]
+    } else {
+      return this.identifier
     }
   }
 

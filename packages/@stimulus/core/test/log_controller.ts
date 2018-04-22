@@ -2,17 +2,19 @@ import { Controller } from "stimulus"
 
 export type ActionLogEntry = {
   name: string
+  controller: Controller
+  identifier: string
   eventType: string
-  eventTarget: EventTarget | null
+  currentTarget: EventTarget | null
   defaultPrevented: boolean
 }
 
 export class LogController extends Controller {
   static blessCount = 0
+  static actionLog: ActionLogEntry[] = []
   initializeCount = 0
   connectCount = 0
   disconnectCount = 0
-  actionLog: ActionLogEntry[] = []
 
   static bless() {
     super.bless()
@@ -39,8 +41,27 @@ export class LogController extends Controller {
     this.recordAction("log2", event)
   }
 
+  log3(event) {
+    this.recordAction("log3", event)
+  }
+
+  stop(event) {
+    this.recordAction("stop", event)
+    event.stopImmediatePropagation()
+  }
+
+  get actionLog() {
+    return (this.constructor as typeof LogController).actionLog
+  }
+
   private recordAction(name: string, event: Event) {
-    const entry = { name, eventType: event.type, eventTarget: event.target, defaultPrevented: event.defaultPrevented }
-    this.actionLog.push(entry)
+    this.actionLog.push({
+      name,
+      controller: this,
+      identifier: this.identifier,
+      eventType: event.type,
+      currentTarget: event.currentTarget,
+      defaultPrevented: event.defaultPrevented
+    })
   }
 }
