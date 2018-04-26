@@ -1,18 +1,18 @@
 import { ErrorHandler } from "./error_handler"
 import { Schema } from "./schema"
 import { Scope } from "./scope"
-import { Token, ValueObserver, ValueObserverDelegate } from "@stimulus/mutation-observers"
+import { Token, ValueListObserver, ValueListObserverDelegate } from "@stimulus/mutation-observers"
 
 export interface ScopeObserverDelegate extends ErrorHandler {
   scopeConnected(scope: Scope)
   scopeDisconnected(scope: Scope)
 }
 
-export class ScopeObserver implements ValueObserverDelegate<Scope> {
+export class ScopeObserver implements ValueListObserverDelegate<Scope> {
   readonly element: Element
   readonly schema: Schema
   private delegate: ScopeObserverDelegate
-  private valueObserver: ValueObserver<Scope>
+  private valueListObserver: ValueListObserver<Scope>
   private scopesByIdentifierByElement: WeakMap<Element, Map<string, Scope>>
   private scopeReferenceCounts: WeakMap<Scope, number>
 
@@ -20,17 +20,17 @@ export class ScopeObserver implements ValueObserverDelegate<Scope> {
     this.element = element
     this.schema = schema
     this.delegate = delegate
-    this.valueObserver = new ValueObserver(this.element, this.controllerAttribute, this)
+    this.valueListObserver = new ValueListObserver(this.element, this.controllerAttribute, this)
     this.scopesByIdentifierByElement = new WeakMap
     this.scopeReferenceCounts = new WeakMap
   }
 
   start() {
-    this.valueObserver.start()
+    this.valueListObserver.start()
   }
 
   stop() {
-    this.valueObserver.stop()
+    this.valueListObserver.stop()
   }
 
   get controllerAttribute() {

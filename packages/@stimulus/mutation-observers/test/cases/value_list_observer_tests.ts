@@ -1,4 +1,4 @@
-import { Token, ValueObserver, ValueObserverDelegate } from "@stimulus/mutation-observers"
+import { Token, ValueListObserver, ValueListObserverDelegate } from "@stimulus/mutation-observers"
 import { ObserverTestCase } from "../observer_test_case"
 
 export interface Value {
@@ -6,10 +6,10 @@ export interface Value {
   token: Token
 }
 
-export default class ValueObserverTests extends ObserverTestCase implements ValueObserverDelegate<Value> {
+export default class ValueListObserverTests extends ObserverTestCase implements ValueListObserverDelegate<Value> {
   attributeName = "data-test"
   fixtureHTML = `<div ${this.attributeName}="one"></div>`
-  observer = new ValueObserver(this.fixtureElement, this.attributeName, this)
+  observer = new ValueListObserver(this.fixtureElement, this.attributeName, this)
   lastValueId = 0
 
   async "test elementMatchedValue"() {

@@ -1,6 +1,6 @@
-import { Token, TokenObserver, TokenObserverDelegate } from "./token_observer"
+import { Token, TokenListObserver, TokenListObserverDelegate } from "./token_list_observer"
 
-export interface ValueObserverDelegate<T> {
+export interface ValueListObserverDelegate<T> {
   parseValueForToken(token: Token): T | undefined
   elementMatchedValue(element: Element, value: T)
   elementUnmatchedValue(element: Element, value: T)
@@ -11,41 +11,41 @@ interface ParseResult<T> {
   error?: Error
 }
 
-export class ValueObserver<T> implements TokenObserverDelegate {
-  private tokenObserver: TokenObserver
-  private delegate: ValueObserverDelegate<T>
+export class ValueListObserver<T> implements TokenListObserverDelegate {
+  private tokenListObserver: TokenListObserver
+  private delegate: ValueListObserverDelegate<T>
   private parseResultsByToken: WeakMap<Token, ParseResult<T>>
   private valuesByTokenByElement: WeakMap<Element, Map<Token, T>>
 
-  constructor(element: Element, attributeName: string, delegate: ValueObserverDelegate<T>) {
-    this.tokenObserver = new TokenObserver(element, attributeName, this)
+  constructor(element: Element, attributeName: string, delegate: ValueListObserverDelegate<T>) {
+    this.tokenListObserver = new TokenListObserver(element, attributeName, this)
     this.delegate = delegate
     this.parseResultsByToken = new WeakMap
     this.valuesByTokenByElement = new WeakMap
   }
 
   get started(): boolean {
-    return this.tokenObserver.started
+    return this.tokenListObserver.started
   }
 
   start() {
-    this.tokenObserver.start()
+    this.tokenListObserver.start()
   }
 
   stop() {
-    this.tokenObserver.stop()
+    this.tokenListObserver.stop()
   }
 
   refresh() {
-    this.tokenObserver.refresh()
+    this.tokenListObserver.refresh()
   }
 
   get element(): Element {
-    return this.tokenObserver.element
+    return this.tokenListObserver.element
   }
 
   get attributeName(): string {
-    return this.tokenObserver.attributeName
+    return this.tokenListObserver.attributeName
   }
 
   tokenMatched(token: Token) {

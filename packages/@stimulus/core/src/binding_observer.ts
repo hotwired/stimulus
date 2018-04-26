@@ -3,17 +3,17 @@ import { Binding } from "./binding"
 import { Context } from "./context"
 import { ErrorHandler } from "./error_handler"
 import { Schema } from "./schema"
-import { Token, ValueObserver, ValueObserverDelegate } from "@stimulus/mutation-observers"
+import { Token, ValueListObserver, ValueListObserverDelegate } from "@stimulus/mutation-observers"
 
 export interface BindingObserverDelegate extends ErrorHandler {
   bindingConnected(binding: Binding)
   bindingDisconnected(binding: Binding)
 }
 
-export class BindingObserver implements ValueObserverDelegate<Action> {
+export class BindingObserver implements ValueListObserverDelegate<Action> {
   readonly context: Context
   private delegate: BindingObserverDelegate
-  private valueObserver: ValueObserver<Action>
+  private valueListObserver: ValueListObserver<Action>
   private bindingsByAction: Map<Action, Binding>
 
   constructor(context: Context, delegate: BindingObserverDelegate) {
@@ -23,16 +23,16 @@ export class BindingObserver implements ValueObserverDelegate<Action> {
   }
 
   start() {
-    if (!this.valueObserver) {
-      this.valueObserver = new ValueObserver(this.element, this.actionAttribute, this)
-      this.valueObserver.start()
+    if (!this.valueListObserver) {
+      this.valueListObserver = new ValueListObserver(this.element, this.actionAttribute, this)
+      this.valueListObserver.start()
     }
   }
 
   stop() {
-    if (this.valueObserver) {
-      this.valueObserver.stop()
-      delete this.valueObserver
+    if (this.valueListObserver) {
+      this.valueListObserver.stop()
+      delete this.valueListObserver
       this.disconnectAllActions()
     }
   }
