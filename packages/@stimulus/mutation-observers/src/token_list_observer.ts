@@ -8,17 +8,17 @@ export interface Token {
   content: string
 }
 
-export interface TokenObserverDelegate {
+export interface TokenListObserverDelegate {
   tokenMatched(token: Token)
   tokenUnmatched(token: Token)
 }
 
-export class TokenObserver implements AttributeObserverDelegate {
+export class TokenListObserver implements AttributeObserverDelegate {
   private attributeObserver: AttributeObserver
-  private delegate: TokenObserverDelegate
+  private delegate: TokenListObserverDelegate
   private tokensByElement: Multimap<Element, Token>
 
-  constructor(element: Element, attributeName: string, delegate: TokenObserverDelegate) {
+  constructor(element: Element, attributeName: string, delegate: TokenListObserverDelegate) {
     this.attributeObserver = new AttributeObserver(element, attributeName, this)
     this.delegate = delegate
     this.tokensByElement = new Multimap

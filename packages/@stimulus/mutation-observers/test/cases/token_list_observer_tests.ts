@@ -1,10 +1,10 @@
-import { Token, TokenObserver, TokenObserverDelegate } from "@stimulus/mutation-observers"
+import { Token, TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation-observers"
 import { ObserverTestCase } from "../observer_test_case"
 
-export default class TokenObserverTests extends ObserverTestCase implements TokenObserverDelegate {
+export default class TokenListObserverTests extends ObserverTestCase implements TokenListObserverDelegate {
   attributeName = "data-test"
   fixtureHTML = `<div ${this.attributeName}="one two"></div>`
-  observer = new TokenObserver(this.fixtureElement, this.attributeName, this)
+  observer = new TokenListObserver(this.fixtureElement, this.attributeName, this)
 
   async "test tokenMatched"() {
     this.assert.deepEqual(this.calls, [
