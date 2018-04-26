@@ -19,12 +19,14 @@
   "scripts": {
     "prepack": "cp ../../README.md .",
     "prepublishOnly": "yarn run build",
-    "build": "yarn exec webpack"
+    "build": "rollup --config rollup.config.js"
   },
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
-    "webpack": "^3.10.0"
+    "rollup": "^0.58.2",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-uglify": "^3.0.0"
   }
 }
