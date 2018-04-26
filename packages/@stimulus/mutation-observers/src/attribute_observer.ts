@@ -35,6 +35,14 @@ export class AttributeObserver implements ElementObserverDelegate {
     this.elementObserver.stop()
   }
 
+  refresh() {
+    this.elementObserver.refresh()
+  }
+
+  get started(): boolean {
+    return this.elementObserver.started
+  }
+
   // Element observer delegate
 
   matchElement(element: Element): boolean {

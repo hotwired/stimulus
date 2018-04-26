@@ -1,4 +1,5 @@
 import "core-js/fn/array/find"
+import "core-js/fn/array/find-index"
 import "core-js/fn/array/from"
 import "core-js/fn/map"
 import "core-js/fn/object/assign"

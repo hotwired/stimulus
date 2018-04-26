@@ -33,7 +33,7 @@ export default class ES6Tests extends LogControllerTestCase {
 
   async "test ES6 controller classes"() {
     await this.triggerEvent("button", "click")
-    this.assertActions({ eventType: "click", eventTarget: this.findElement("button") })
+    this.assertActions({ eventType: "click", currentTarget: this.findElement("button") })
   }
 }
 

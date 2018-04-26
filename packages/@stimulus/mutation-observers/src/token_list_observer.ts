@@ -1,127 +1,117 @@
-import { ElementObserver, ElementObserverDelegate } from "./element_observer"
-import { IndexedMultimap } from "@stimulus/multimap"
+import { AttributeObserver, AttributeObserverDelegate } from "./attribute_observer"
+import { Multimap } from "@stimulus/multimap"
 
-export interface TokenListObserverDelegate {
-  elementMatchedTokenForAttribute?(element: Element, token: string, attributeName: string)
-  elementUnmatchedTokenForAttribute?(element: Element, token: string, attributeName: string)
+export interface Token {
+  element: Element
+  attributeName: string
+  index: number
+  content: string
 }
 
-export class TokenListObserver implements ElementObserverDelegate {
-  attributeName: string
-  private delegate: TokenListObserverDelegate
+export interface TokenListObserverDelegate {
+  tokenMatched(token: Token)
+  tokenUnmatched(token: Token)
+}
 
-  private elementObserver: ElementObserver
-  private tokensByElement: IndexedMultimap<Element, string>
+export class TokenListObserver implements AttributeObserverDelegate {
+  private attributeObserver: AttributeObserver
+  private delegate: TokenListObserverDelegate
+  private tokensByElement: Multimap<Element, Token>
 
   constructor(element: Element, attributeName: string, delegate: TokenListObserverDelegate) {
-    this.attributeName = attributeName
+    this.attributeObserver = new AttributeObserver(element, attributeName, this)
     this.delegate = delegate
-
-    this.elementObserver = new ElementObserver(element, this)
-    this.tokensByElement = new IndexedMultimap
+    this.tokensByElement = new Multimap
   }
 
   get started(): boolean {
-    return this.elementObserver.started
+    return this.attributeObserver.started
   }
 
   start() {
-    this.elementObserver.start()
+    this.attributeObserver.start()
   }
 
   stop() {
-    this.elementObserver.stop()
+    this.attributeObserver.stop()
   }
 
   refresh() {
-    this.elementObserver.refresh()
+    this.attributeObserver.refresh()
   }
 
   get element(): Element {
-    return this.elementObserver.element
+    return this.attributeObserver.element
   }
 
-  get selector(): string {
-    return `[${this.attributeName}]`
+  get attributeName(): string {
+    return this.attributeObserver.attributeName
   }
 
-  getElementsMatchingToken(token: string): Element[] {
-    return this.tokensByElement.getKeysForValue(token)
+  // Attribute observer delegate
+
+  elementMatchedAttribute(element: Element) {
+    this.tokensMatched(this.readTokensForElement(element))
   }
 
-  // Element observer delegate
-
-  matchElement(element: Element): boolean {
-    return element.hasAttribute(this.attributeName)
+  elementAttributeValueChanged(element: Element) {
+    const [unmatchedTokens, matchedTokens] = this.refreshTokensForElement(element)
+    this.tokensUnmatched(unmatchedTokens)
+    this.tokensMatched(matchedTokens)
   }
 
-  matchElementsInTree(tree: Element): Element[] {
-    const match = this.matchElement(tree) ? [tree] : []
-    const matches = Array.from(tree.querySelectorAll(this.selector))
-    return match.concat(matches)
+  elementUnmatchedAttribute(element: Element) {
+    this.tokensUnmatched(this.tokensByElement.getValuesForKey(element))
   }
 
-  elementMatched(element: Element) {
-    const newTokens = Array.from(this.readTokenSetForElement(element))
-    for (const token of newTokens) {
-      this.elementMatchedToken(element, token)
+  private tokensMatched(tokens: Token[]) {
+    tokens.forEach(token => this.tokenMatched(token))
+  }
+
+  private tokensUnmatched(tokens: Token[]) {
+    tokens.forEach(token => this.tokenUnmatched(token))
+  }
+
+  private tokenMatched(token: Token) {
+    this.delegate.tokenMatched(token)
+    this.tokensByElement.add(token.element, token)
+  }
+
+  private tokenUnmatched(token: Token) {
+    this.delegate.tokenUnmatched(token)
+    this.tokensByElement.delete(token.element, token)
+  }
+
+  private refreshTokensForElement(element: Element): [Token[], Token[]] {
+    const previousTokens = this.tokensByElement.getValuesForKey(element)
+    const currentTokens = this.readTokensForElement(element)
+    const firstDifferingIndex = zip(previousTokens, currentTokens)
+      .findIndex(([previousToken, currentToken]) => !tokensAreEqual(previousToken, currentToken))
+
+    if (firstDifferingIndex == -1) {
+      return [[], []]
+    } else {
+      return [previousTokens.slice(firstDifferingIndex), currentTokens.slice(firstDifferingIndex)]
     }
   }
 
-  elementUnmatched(element: Element) {
-    const tokens = this.getTokensForElement(element)
-    for (const token of tokens) {
-      this.elementUnmatchedToken(element, token)
-    }
+  private readTokensForElement(element: Element): Token[] {
+    const attributeName = this.attributeName
+    const tokenString = element.getAttribute(attributeName) || ""
+    return parseTokenString(tokenString, { element, attributeName })
   }
+}
 
-  elementAttributeChanged(element: Element) {
-    const newTokenSet = this.readTokenSetForElement(element)
+function parseTokenString(tokenString: string, { element, attributeName }): Token[] {
+  return tokenString.trim().split(/\s+/).filter(content => content.length)
+    .map((content, index) => ({ element, attributeName, content, index }))
+}
 
-    for (const token of Array.from(newTokenSet)) {
-      this.elementMatchedToken(element, token)
-    }
+function zip<L, R>(left: L[], right: R[]): [L | undefined, R | undefined][] {
+  const length = Math.max(left.length, right.length)
+  return Array.from({ length }, (_, index) => [left[index], right[index]] as [L, R])
+}
 
-    for (const token of this.getTokensForElement(element)) {
-      if (!newTokenSet.has(token)) {
-        this.elementUnmatchedToken(element, token)
-      }
-    }
-  }
-
-  // Private
-
-  private elementMatchedToken(element: Element, token: string) {
-    if (!this.tokensByElement.has(element, token)) {
-      this.tokensByElement.add(element, token)
-      if (this.delegate.elementMatchedTokenForAttribute) {
-        this.delegate.elementMatchedTokenForAttribute(element, token, this.attributeName)
-      }
-    }
-  }
-
-  private elementUnmatchedToken(element: Element, token: string) {
-    if (this.tokensByElement.has(element, token)) {
-      this.tokensByElement.delete(element, token)
-      if (this.delegate.elementUnmatchedTokenForAttribute) {
-        this.delegate.elementUnmatchedTokenForAttribute(element, token, this.attributeName)
-      }
-    }
-  }
-
-  private getTokensForElement(element: Element): string[] {
-    return this.tokensByElement.getValuesForKey(element)
-  }
-
-  private readTokenSetForElement(element: Element): Set<string> {
-    const tokens = new Set
-    const value = element.getAttribute(this.attributeName) || ""
-    for (const token of value.split(/\s+/)) {
-      if (token.length) {
-        tokens.add(token)
-      }
-    }
-
-    return tokens
-  }
+function tokensAreEqual(left?: Token, right?: Token) {
+  return left && right && left.index == right.index && left.content == right.content
 }

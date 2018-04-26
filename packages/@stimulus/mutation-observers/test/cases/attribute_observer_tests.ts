@@ -8,7 +8,7 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
 
   async "test elementMatchedAttribute"() {
     this.assert.deepEqual(this.calls, [
-      ["elementMatchedAttribute", [this.outerElement, this.attributeName]]
+      ["elementMatchedAttribute", this.outerElement, this.attributeName]
     ])
   }
 
@@ -17,8 +17,8 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
     await this.nextFrame
 
     this.assert.deepEqual(this.calls, [
-      ["elementMatchedAttribute", [this.outerElement, this.attributeName]],
-      ["elementAttributeValueChanged", [this.outerElement, this.attributeName]]
+      ["elementMatchedAttribute", this.outerElement, this.attributeName],
+      ["elementAttributeValueChanged", this.outerElement, this.attributeName]
     ])
   }
 
@@ -27,8 +27,8 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
     await this.nextFrame
 
     this.assert.deepEqual(this.calls, [
-      ["elementMatchedAttribute", [this.outerElement, this.attributeName]],
-      ["elementUnmatchedAttribute", [this.outerElement, this.attributeName]]
+      ["elementMatchedAttribute", this.outerElement, this.attributeName],
+      ["elementUnmatchedAttribute", this.outerElement, this.attributeName]
     ])
   }
 
@@ -37,8 +37,8 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
     await this.nextFrame
 
     this.assert.deepEqual(this.calls, [
-      ["elementMatchedAttribute", [this.outerElement, this.attributeName]],
-      ["elementMatchedAttribute", [this.innerElement, this.attributeName]]
+      ["elementMatchedAttribute", this.outerElement, this.attributeName],
+      ["elementMatchedAttribute", this.innerElement, this.attributeName]
     ])
   }
 
@@ -47,7 +47,7 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
     await this.nextFrame
 
     this.assert.deepEqual(this.calls, [
-      ["elementMatchedAttribute", [this.outerElement, this.attributeName]]
+      ["elementMatchedAttribute", this.outerElement, this.attributeName]
     ])
   }
 
@@ -61,10 +61,10 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
     await this.nextFrame
 
     this.assert.deepEqual(this.calls, [
-      ["elementMatchedAttribute", [outerElement, this.attributeName]],
-      ["elementMatchedAttribute", [innerElement, this.attributeName]],
-      ["elementUnmatchedAttribute", [outerElement, this.attributeName]],
-      ["elementUnmatchedAttribute", [innerElement, this.attributeName]]
+      ["elementMatchedAttribute", outerElement, this.attributeName],
+      ["elementMatchedAttribute", innerElement, this.attributeName],
+      ["elementUnmatchedAttribute", outerElement, this.attributeName],
+      ["elementUnmatchedAttribute", innerElement, this.attributeName]
     ])
   }
 

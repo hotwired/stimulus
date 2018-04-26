@@ -20,7 +20,7 @@ export default class ActionTests extends LogControllerTestCase {
 
   async "test bubbling events"() {
     await this.triggerEvent("span", "click")
-    this.assertActions({ eventType: "click", eventTarget: this.findElement("button") })
+    this.assertActions({ eventType: "click", currentTarget: this.findElement("button") })
   }
 
   async "test non-bubbling events"() {
@@ -31,10 +31,15 @@ export default class ActionTests extends LogControllerTestCase {
   }
 
   async "test nested actions"() {
-    const [outerController, innerController] = this.controllers
+    const innerController = this.controllers[1]
     await this.triggerEvent("#inner", "click")
-    this.assertActions(outerController)
-    this.assertActions(innerController, { eventType: "click" })
+    this.assert.ok(true)
+    this.assertActions({ controller: innerController, eventType: "click" })
+  }
+
+  async "test global actions"() {
+    await this.triggerEvent("#outside", "keydown")
+    this.assertActions({ name: "log", eventType: "keydown" })
   }
 
   async "test multiple actions"() {
@@ -45,10 +50,5 @@ export default class ActionTests extends LogControllerTestCase {
       { name: "log", eventType: "click" },
       { name: "log2", eventType: "click" }
     )
-  }
-
-  async "test global actions"() {
-    await this.triggerEvent("#outside", "keydown")
-    this.assertActions({ name: "log", eventType: "keydown" })
   }
 }

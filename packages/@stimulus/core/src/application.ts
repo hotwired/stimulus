@@ -1,5 +1,6 @@
 import { Controller, ControllerConstructor } from "./controller"
 import { Definition } from "./definition"
+import { Dispatcher } from "./dispatcher"
 import { ErrorHandler } from "./error_handler"
 import { Router } from "./router"
 import { Schema, defaultSchema } from "./schema"
@@ -7,7 +8,8 @@ import { Schema, defaultSchema } from "./schema"
 export class Application implements ErrorHandler {
   readonly element: Element
   readonly schema: Schema
-  private router: Router
+  readonly dispatcher: Dispatcher
+  readonly router: Router
 
   static start(element?: Element, schema?: Schema): Application {
     const application = new Application(element, schema)
@@ -18,16 +20,19 @@ export class Application implements ErrorHandler {
   constructor(element: Element = document.documentElement, schema: Schema = defaultSchema) {
     this.element = element
     this.schema = schema
+    this.dispatcher = new Dispatcher(this)
     this.router = new Router(this)
   }
 
   async start() {
     await domReady()
     this.router.start()
+    this.dispatcher.start()
   }
 
   stop() {
     this.router.stop()
+    this.dispatcher.stop()
   }
 
   register(identifier: string, controllerConstructor: ControllerConstructor) {
