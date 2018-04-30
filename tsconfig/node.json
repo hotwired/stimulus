@@ -1,0 +1,7 @@
+{
+  "extends": "./shared.json",
+  "compilerOptions": {
+    "target": "ES2015",
+    "module": "CommonJS"
+  }
+}

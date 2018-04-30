@@ -1,0 +1,6 @@
+{
+  "extends": "../../../tsconfig/web",
+  "compilerOptions": {
+    "outDir": "dist"
+  }
+}

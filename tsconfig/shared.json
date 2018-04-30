@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "pretty": true,
+    "strictNullChecks": true,
+    "inlineSourceMap": true,
+    "declaration": true
+  }
+}

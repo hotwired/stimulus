@@ -3,5 +3,6 @@
   "version": "1.0.1",
   "npmClient": "yarn",
   "registry": "https://registry.npmjs.org/",
-  "useWorkspaces": true
+  "useWorkspaces": true,
+  "sort": true
 }

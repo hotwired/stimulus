@@ -1,7 +1,8 @@
 {
-  "extends": "../../tsconfig",
+  "extends": "../../../tsconfig/web",
   "compilerOptions": {
     "allowJs": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "declaration": false
   }
 }

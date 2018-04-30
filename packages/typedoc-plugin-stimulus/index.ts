@@ -1,6 +1,6 @@
-const { RemovePrivateMethodsPlugin } = require("./remove_private_methods")
+import { RemovePrivateMethodsPlugin } from "./src/remove_private_methods"
 
-module.exports = pluginHost => {
+export default pluginHost => {
   const app = pluginHost.owner
   app.converter.addComponent("remove-private-methods", RemovePrivateMethodsPlugin)
 }

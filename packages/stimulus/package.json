@@ -19,7 +19,8 @@
   "scripts": {
     "prepack": "cp ../../README.md .",
     "prepublishOnly": "yarn run build",
-    "build": "rollup --config rollup.config.js"
+    "build": "rollup --config rollup.config.js",
+    "clean": "rimraf dist"
   },
   "publishConfig": {
     "access": "public"
