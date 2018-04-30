@@ -11,6 +11,6 @@
   ],
   "private": true,
   "peerDependencies": {
-    "typedoc": "^0.9.0"
+    "typedoc": "^0.11.1"
   }
 }
