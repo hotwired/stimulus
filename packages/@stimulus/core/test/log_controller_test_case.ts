@@ -1,4 +1,4 @@
-import { ControllerTestCase } from "@stimulus/test"
+import { ControllerTestCase } from "./controller_test_case"
 import { LogController, ActionLogEntry } from "./log_controller"
 
 export class LogControllerTestCase extends ControllerTestCase<LogController> {

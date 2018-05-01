@@ -1,4 +1,4 @@
-import { Controller } from "stimulus"
+import { Controller } from "../src/controller"
 
 export type ActionLogEntry = {
   name: string

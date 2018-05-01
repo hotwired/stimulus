@@ -1,4 +1,5 @@
-import { Token, ValueListObserver, ValueListObserverDelegate } from "@stimulus/mutation-observers"
+import { Token } from "../../src/token_list_observer"
+import { ValueListObserver, ValueListObserverDelegate } from "../../src/value_list_observer"
 import { ObserverTestCase } from "../observer_test_case"
 
 export interface Value {

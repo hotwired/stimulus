@@ -17,9 +17,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "peerDependencies": {
-    "@stimulus/core": "^1.0.1"
-  },
   "scripts": {
     "clean": "rimraf dist",
     "lint": "tslint -p . -c ../../../tslint.json",

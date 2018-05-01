@@ -1,4 +1,4 @@
-import { AttributeObserver, AttributeObserverDelegate } from "@stimulus/mutation-observers"
+import { AttributeObserver, AttributeObserverDelegate } from "../../src/attribute_observer"
 import { ObserverTestCase } from "../observer_test_case"
 
 export default class AttributeObserverTests extends ObserverTestCase implements AttributeObserverDelegate {

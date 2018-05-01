@@ -1,4 +1,4 @@
-import { Token, TokenListObserver, TokenListObserverDelegate } from "@stimulus/mutation-observers"
+import { Token, TokenListObserver, TokenListObserverDelegate } from "../../src/token_list_observer"
 import { ObserverTestCase } from "../observer_test_case"
 
 export default class TokenListObserverTests extends ObserverTestCase implements TokenListObserverDelegate {

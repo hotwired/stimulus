@@ -1,5 +1,6 @@
-import { Application, Schema, defaultSchema } from "@stimulus/core"
-import { DOMTestCase } from "./dom_test_case"
+import { Application } from "../src/application"
+import { DOMTestCase } from "@stimulus/test"
+import { Schema, defaultSchema } from "../src/schema"
 
 class TestApplication extends Application {
   handleError(error: Error, message: string, detail: object) {
