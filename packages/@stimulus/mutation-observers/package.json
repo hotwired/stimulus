@@ -26,6 +26,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "lint": "tslint -p . -c ../../../config/tslint.json",
-    "build": "tsc"
+    "build": "tsc",
+    "watch": "tsc --watch"
   }
 }

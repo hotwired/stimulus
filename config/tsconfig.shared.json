@@ -4,6 +4,7 @@
     "pretty": true,
     "strictNullChecks": true,
     "inlineSourceMap": true,
-    "declaration": true
+    "declaration": true,
+    "preserveWatchOutput": true
   }
 }

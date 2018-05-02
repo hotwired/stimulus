@@ -9,6 +9,7 @@
     "lint": "lerna run --parallel lint",
     "prebuild": "yarn lint",
     "build": "lerna run --stream --prefix build",
+    "watch": "lerna run --parallel watch",
     "start": "lerna run --scope @stimulus/examples --stream start",
     "test": "yarn build && karma start config/karma.conf.js",
     "test:watch": "yarn test --auto-watch --no-single-run",
