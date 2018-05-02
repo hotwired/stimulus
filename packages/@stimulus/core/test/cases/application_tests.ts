@@ -1,4 +1,4 @@
-import { ApplicationTestCase } from "@stimulus/test"
+import { ApplicationTestCase } from "../application_test_case"
 import { LogController } from "../log_controller"
 
 class AController extends LogController {}

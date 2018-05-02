@@ -1,8 +1,6 @@
 {
   "extends": "../../../config/tsconfig.web",
   "compilerOptions": {
-    "allowJs": true,
-    "noImplicitAny": false,
-    "declaration": false
+    "outDir": "dist"
   }
 }

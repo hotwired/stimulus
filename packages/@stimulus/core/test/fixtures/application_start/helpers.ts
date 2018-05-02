@@ -1,4 +1,5 @@
-import { Application, Controller } from "@stimulus/core"
+import { Application } from "../../../src/application"
+import { Controller } from "../../../src/controller"
 
 export function startApplication() {
   const startState = document.readyState

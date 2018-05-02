@@ -2,15 +2,19 @@
   "name": "typedoc-plugin-stimulus",
   "version": "1.0.0",
   "description": "Private TypeDoc extensions",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc"
-  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "keywords": [
     "typedocplugin"
   ],
   "private": true,
   "peerDependencies": {
-    "typedoc": "^0.9.0"
+    "typedoc": "^0.11.1"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "lint": "tslint -p . -c ../../config/tslint.json",
+    "build": "tsc",
+    "watch": "tsc --watch"
   }
 }

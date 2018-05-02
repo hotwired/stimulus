@@ -1,4 +1,6 @@
 const config = {
+  basePath: "../",
+
   browsers: ["ChromeHeadless"],
 
   frameworks: ["qunit"],
@@ -10,37 +12,18 @@ const config = {
   autoWatch: false,
 
   files: [
-    { pattern: "packages/*/**/test/index.ts" },
-    { pattern: "packages/*/**/test/fixtures/**/*", included: false },
+    "packages/**/dist/test/index.js",
+    { pattern: "packages/**/test/fixtures/**/*", included: false },
+    { pattern: "packages/**/dist/**/*", included: false, served: false }
   ],
 
-  proxies: {
-    "/core/": "/base/packages/@stimulus/core/test/fixtures/"
-  },
-
   preprocessors: {
-    "packages/**/*.ts": ["webpack"],
-    "packages/*/**/test/fixtures/**/*.js": ["webpack"],
-  },
-
-  mime: {
-    "text/x-typescript": ["ts"]
+    "packages/**/dist/test/**/*.js": ["webpack"]
   },
 
   webpack: {
-    module: {
-      rules: [
-        {
-          test: /\.ts$/,
-          use: [
-            { loader: "ts-loader" }
-          ]
-        }
-      ]
-    },
-
     resolve: {
-      extensions: [".ts", ".js"]
+      extensions: [".js"]
     }
   },
 

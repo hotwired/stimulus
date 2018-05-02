@@ -8,8 +8,8 @@
     "Javan Makhmali <javan@javan.us>",
     "Sam Stephenson <sstephenson@gmail.com>"
   ],
-  "main": "dist/module/index.js",
-  "types": "dist/types/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "license": "MIT",
   "dependencies": {
     "@stimulus/multimap": "^0.9.0"
@@ -18,9 +18,16 @@
     "@stimulus/test": "^1.0.1"
   },
   "files": [
-    "dist"
+    "dist/index*",
+    "dist/src"
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "lint": "tslint -p . -c ../../../config/tslint.json",
+    "build": "tsc",
+    "watch": "tsc --watch"
   }
 }

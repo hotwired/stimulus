@@ -1,5 +1,5 @@
 import { ApplicationTestCase } from "./application_test_case"
-import { ControllerConstructor } from "@stimulus/core"
+import { ControllerConstructor } from "../src/controller"
 
 export class ControllerTestCase<T> extends ApplicationTestCase {
   identifier: string | string[] = "test"
