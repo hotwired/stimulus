@@ -10,7 +10,7 @@
     "prebuild": "yarn lint",
     "build": "lerna run --stream --prefix build",
     "start": "lerna run --scope @stimulus/examples --stream start",
-    "test": "karma start",
+    "test": "yarn build && karma start",
     "test:watch": "yarn test --auto-watch --no-single-run",
     "prerelease": "yarn build",
     "release": "lerna publish",
