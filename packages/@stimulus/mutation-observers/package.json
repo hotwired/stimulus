@@ -18,7 +18,8 @@
     "@stimulus/test": "^1.0.1"
   },
   "files": [
-    "dist"
+    "dist/index*",
+    "dist/src"
   ],
   "publishConfig": {
     "access": "public"

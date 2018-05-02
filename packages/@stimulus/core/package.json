@@ -16,7 +16,8 @@
     "@stimulus/mutation-observers": "^1.0.0"
   },
   "files": [
-    "dist"
+    "dist/index*",
+    "dist/src"
   ],
   "publishConfig": {
     "access": "public"

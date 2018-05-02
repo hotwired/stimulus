@@ -12,7 +12,8 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "files": [
-    "dist"
+    "dist/index*",
+    "dist/src"
   ],
   "publishConfig": {
     "access": "public"
