@@ -1,4 +1,6 @@
 const config = {
+  basePath: "../",
+
   browsers: ["ChromeHeadless"],
 
   frameworks: ["qunit"],
@@ -14,10 +16,6 @@ const config = {
     { pattern: "packages/**/test/fixtures/**/*", included: false },
     { pattern: "packages/**/dist/**/*", included: false, served: false }
   ],
-
-  proxies: {
-    "/core/": "/base/packages/@stimulus/core/test/fixtures/"
-  },
 
   preprocessors: {
     "packages/**/dist/test/**/*.js": ["webpack"]

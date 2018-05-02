@@ -1,5 +1,5 @@
 {
-  "extends": "./shared.json",
+  "extends": "./tsconfig.shared.json",
   "compilerOptions": {
     "target": "ES2015",
     "module": "CommonJS"
