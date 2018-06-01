@@ -129,9 +129,11 @@ export class ElementObserver {
 
   private addElement(element: Element) {
     if (!this.elements.has(element)) {
-      this.elements.add(element)
-      if (this.delegate.elementMatched) {
-        this.delegate.elementMatched(element)
+      if (this.element.contains(element)) {
+        this.elements.add(element)
+        if (this.delegate.elementMatched) {
+          this.delegate.elementMatched(element)
+        }
       }
     }
   }

@@ -68,6 +68,32 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
     ])
   }
 
+  async "test ignores synchronously disconnected elements"() {
+    const { innerElement, outerElement } = this
+
+    outerElement.removeChild(innerElement)
+    innerElement.setAttribute(this.attributeName, "")
+    await this.nextFrame
+
+    this.assert.deepEqual(this.calls, [
+      ["elementMatchedAttribute", outerElement, this.attributeName]
+    ])
+  }
+
+  async "test ignores synchronously moved elements"() {
+    const { innerElement, outerElement } = this
+
+    document.body.appendChild(innerElement)
+    innerElement.setAttribute(this.attributeName, "")
+    await this.nextFrame
+
+    this.assert.deepEqual(this.calls, [
+      ["elementMatchedAttribute", outerElement, this.attributeName]
+    ])
+
+    document.body.removeChild(innerElement)
+  }
+
   get outerElement() {
     return this.findElement("#outer")
   }
