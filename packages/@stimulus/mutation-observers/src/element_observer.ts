@@ -125,11 +125,19 @@ export class ElementObserver {
     }
   }
 
+  private elementIsActive(element: Element): boolean {
+    if (element.isConnected != this.element.isConnected) {
+      return false
+    } else {
+      return this.element.contains(element)
+    }
+  }
+
   // Element tracking
 
   private addElement(element: Element) {
     if (!this.elements.has(element)) {
-      if (this.element.contains(element)) {
+      if (this.elementIsActive(element)) {
         this.elements.add(element)
         if (this.delegate.elementMatched) {
           this.delegate.elementMatched(element)
