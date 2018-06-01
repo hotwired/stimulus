@@ -90,13 +90,19 @@ export class ElementObserver {
 
   private processRemovedNodes(nodes: NodeList) {
     for (const node of Array.from(nodes)) {
-      this.processNode(node, this.removeElement)
+      const element = this.elementFromNode(node)
+      if (element) {
+        this.processTree(element, this.removeElement)
+      }
     }
   }
 
   private processAddedNodes(nodes: NodeList) {
     for (const node of Array.from(nodes)) {
-      this.processNode(node, this.addElement)
+      const element = this.elementFromNode(node)
+      if (element && this.elementIsActive(element)) {
+        this.processTree(element, this.addElement)
+      }
     }
   }
 
@@ -110,12 +116,9 @@ export class ElementObserver {
     return this.delegate.matchElementsInTree(tree)
   }
 
-  private processNode(node: Node, processor: (element: Element) => void) {
-    const tree = this.elementFromNode(node)
-    if (tree) {
-      for (const element of this.matchElementsInTree(tree)) {
-        processor.call(this, element)
-      }
+  private processTree(tree: Element, processor: (element: Element) => void) {
+    for (const element of this.matchElementsInTree(tree)) {
+      processor.call(this, element)
     }
   }
 
@@ -125,13 +128,23 @@ export class ElementObserver {
     }
   }
 
+  private elementIsActive(element: Element): boolean {
+    if (element.isConnected != this.element.isConnected) {
+      return false
+    } else {
+      return this.element.contains(element)
+    }
+  }
+
   // Element tracking
 
   private addElement(element: Element) {
     if (!this.elements.has(element)) {
-      this.elements.add(element)
-      if (this.delegate.elementMatched) {
-        this.delegate.elementMatched(element)
+      if (this.elementIsActive(element)) {
+        this.elements.add(element)
+        if (this.delegate.elementMatched) {
+          this.delegate.elementMatched(element)
+        }
       }
     }
   }
