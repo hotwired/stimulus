@@ -115,16 +115,20 @@ Define targets using `static get targets()` methods instead of `static targets =
 </html>
 ```
 
-## Browser Support
+## Supporting Older Browsers
 
-Stimulus supports all evergreen, self-updating desktop and mobile browsers out of the box. If your application needs to support older browsers like Internet Explorer 11+ and Safari 9+ use the `@stimulus/polyfills` package.
+Stimulus supports all evergreen, self-updating desktop and mobile browsers out of the box. If your application needs to support older browsers, like Internet Explorer 11 or older versions of Safari, you can use the `@stimulus/polyfills` package to [polyfill](https://developer.mozilla.org/docs/Glossary/Polyfill) the required browser APIs.
+
+Declare the package as a dependency in your `package.json` file:
 
 ```shell
 yarn add @stimulus/polyfills
 ```
 
-Because this is a polyfill (which will run before your source code), we need it to be a dependency, not a devDependency. To include the polyfill you need to import it at the top of the entry point to your application.
+Then import it at the top of your `application.js` file:
 
 ```js
-import "@stimulus/polyfills";
+import "@stimulus/polyfills"
+import { Application } from "stimulus"
+…
 ```
