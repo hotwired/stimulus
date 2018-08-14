@@ -17,7 +17,7 @@ export default class ES6Tests extends LogControllerTestCase {
   `
 
   async renderFixture() {
-    window["_stimulus"] = { LogController, application: this.application }
+    (window as any)["_stimulus"] = { LogController, application: this.application }
     await super.renderFixture()
 
     const scriptElement = document.createElement("script")
@@ -28,7 +28,7 @@ export default class ES6Tests extends LogControllerTestCase {
 
   async teardown() {
     this.application.unload("test")
-    delete window["_stimulus"]
+    delete (window as any)["_stimulus"]
   }
 
   async "test ES6 controller classes"() {

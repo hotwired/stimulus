@@ -1,7 +1,7 @@
 import { DOMTestCase } from "@stimulus/test"
 
 export default class ApplicationStartTests extends DOMTestCase {
-  iframe: HTMLIFrameElement
+  iframe!: HTMLIFrameElement
 
   async setup() {
     this.iframe = document.createElement("iframe")
@@ -29,7 +29,7 @@ export default class ApplicationStartTests extends DOMTestCase {
 
   private messageFromStartState(startState: string): Promise<any> {
     return new Promise(resolve => {
-      const receiveMessage = event => {
+      const receiveMessage = (event: MessageEvent) => {
         if (event.source == this.iframe.contentWindow) {
           const message = JSON.parse(event.data)
           if (message.startState == startState) {

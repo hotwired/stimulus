@@ -1,9 +1,11 @@
+import { Controller } from "./controller"
+
 export function defineTargetProperties(constructor: Function) {
   const prototype = constructor.prototype
   const targetNames = getTargetNamesForConstructor(constructor)
   targetNames.forEach(name => defineLinkedProperties(prototype, {
     [`${name}Target`]: {
-      get() {
+      get(this: Controller) {
         const target = this.targets.find(name)
         if (target) {
           return target
@@ -13,12 +15,12 @@ export function defineTargetProperties(constructor: Function) {
       }
     },
     [`${name}Targets`]: {
-      get() {
+      get(this: Controller) {
         return this.targets.findAll(name)
       }
     },
     [`has${capitalize(name)}Target`]: {
-      get() {
+      get(this: Controller) {
         return this.targets.has(name)
       }
     }
@@ -43,7 +45,7 @@ function getAncestorsForConstructor(constructor: Function) {
 }
 
 function getOwnTargetNamesForConstructor(constructor: Function) {
-  const definition = constructor["targets"]
+  const definition = (constructor as any)["targets"]
   return Array.isArray(definition) ? definition : []
 }
 

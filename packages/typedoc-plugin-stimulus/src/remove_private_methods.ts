@@ -8,23 +8,22 @@ import { ReflectionKind } from "typedoc/dist/lib/models/reflections"
 
 @Component({ name: "remove-private-methods" })
 export class RemovePrivateMethodsPlugin extends ConverterComponent {
-  private markedReflections: Reflection[]
+  private markedReflections: Reflection[] = []
 
   initialize() {
-    this.markedReflections = []
     this.listenTo(this.owner, {
       [Converter.EVENT_CREATE_SIGNATURE]: this.createSignature,
       [Converter.EVENT_RESOLVE_BEGIN]:    this.resolveBegin
     })
   }
 
-  createSignature(context: Context, reflection: Reflection, node?) {
+  createSignature(context: Context, reflection: Reflection) {
     if (reflection.flags.isPrivate) {
       this.markedReflections.push(reflection)
     }
   }
 
-  resolveBegin(context: Context, reflection: Reflection, node?) {
+  resolveBegin(context: Context, reflection: Reflection) {
     this.markedReflections.forEach(reflection => {
       this.removeReflectionFromProject(reflection, context.project)
     })

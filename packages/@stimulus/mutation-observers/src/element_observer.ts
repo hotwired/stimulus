@@ -2,9 +2,9 @@ export interface ElementObserverDelegate {
   matchElement(element: Element): boolean
   matchElementsInTree(tree: Element): Element[]
 
-  elementMatched?(element: Element)
-  elementUnmatched?(element: Element)
-  elementAttributeChanged?(element: Element, attributeName: string)
+  elementMatched?(element: Element): void
+  elementUnmatched?(element: Element): void
+  elementAttributeChanged?(element: Element, attributeName: string): void
 }
 
 export class ElementObserver {
@@ -15,7 +15,7 @@ export class ElementObserver {
   private elements: Set<Element>
   private mutationObserver: MutationObserver
 
-  constructor(element, delegate) {
+  constructor(element: Element, delegate: ElementObserverDelegate) {
     this.element = element
     this.started = false
     this.delegate = delegate

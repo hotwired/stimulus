@@ -5,7 +5,7 @@ export class TestCase {
     qUnit.module(moduleName, hooks => {
       this.manifest.forEach(([type, name]) => {
         type = this.shouldSkipTest(name) ? "skip" : type
-        const method = qUnit[type] as Function
+        const method = (qUnit as any)[type] as Function
         const test = this.getTest(name)
         method.call(qUnit, name, test)
       })
@@ -52,7 +52,7 @@ export class TestCase {
   }
 
   async runTestBody(testName: string) {
-    const testCase = this[`test ${testName}`] || this[`todo ${testName}`]
+    const testCase = (this as any)[`test ${testName}`] || (this as any)[`todo ${testName}`]
     if (typeof testCase == "function") {
       return testCase.call(this)
     } else {

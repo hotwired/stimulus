@@ -5,7 +5,7 @@ export function startApplication() {
   const startState = document.readyState
 
   class PostMessageController extends Controller {
-    itemTargets: Element[]
+    itemTargets!: Element[]
 
     static targets = [ "item" ]
 

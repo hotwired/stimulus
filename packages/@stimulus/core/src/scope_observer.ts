@@ -4,8 +4,8 @@ import { Scope } from "./scope"
 import { Token, ValueListObserver, ValueListObserverDelegate } from "@stimulus/mutation-observers"
 
 export interface ScopeObserverDelegate extends ErrorHandler {
-  scopeConnected(scope: Scope)
-  scopeDisconnected(scope: Scope)
+  scopeConnected(scope: Scope): void
+  scopeDisconnected(scope: Scope): void
 }
 
 export class ScopeObserver implements ValueListObserverDelegate<Scope> {

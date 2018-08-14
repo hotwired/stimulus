@@ -9,8 +9,8 @@ export interface Token {
 }
 
 export interface TokenListObserverDelegate {
-  tokenMatched(token: Token)
-  tokenUnmatched(token: Token)
+  tokenMatched(token: Token): void
+  tokenUnmatched(token: Token): void
 }
 
 export class TokenListObserver implements AttributeObserverDelegate {
@@ -98,11 +98,11 @@ export class TokenListObserver implements AttributeObserverDelegate {
   private readTokensForElement(element: Element): Token[] {
     const attributeName = this.attributeName
     const tokenString = element.getAttribute(attributeName) || ""
-    return parseTokenString(tokenString, { element, attributeName })
+    return parseTokenString(tokenString, element, attributeName)
   }
 }
 
-function parseTokenString(tokenString: string, { element, attributeName }): Token[] {
+function parseTokenString(tokenString: string, element: Element, attributeName: string): Token[] {
   return tokenString.trim().split(/\s+/).filter(content => content.length)
     .map((content, index) => ({ element, attributeName, content, index }))
 }

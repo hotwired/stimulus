@@ -2,7 +2,7 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "pretty": true,
-    "strictNullChecks": true,
+    "strict": true,
     "inlineSourceMap": true,
     "declaration": true,
     "preserveWatchOutput": true

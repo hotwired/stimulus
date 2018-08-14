@@ -20,7 +20,7 @@ export class DataMap {
     return this.element.getAttribute(key)
   }
 
-  set(key: string, value): string | null {
+  set(key: string, value: string): string | null {
     key = this.getFormattedKey(key)
     this.element.setAttribute(key, value)
     return this.get(key)
@@ -41,11 +41,11 @@ export class DataMap {
     }
   }
 
-  private getFormattedKey(key): string {
+  private getFormattedKey(key: string): string {
     return `data-${this.identifier}-${dasherize(key)}`
   }
 }
 
-function dasherize(value) {
-  return value.toString().replace(/([A-Z])/g, (_, char) => `-${char.toLowerCase()}`)
+function dasherize(value: string) {
+  return value.replace(/([A-Z])/g, (_, char) => `-${char.toLowerCase()}`)
 }

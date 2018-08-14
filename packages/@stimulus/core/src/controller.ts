@@ -6,7 +6,7 @@ import { TargetSet } from "./target_set"
 import { defineTargetProperties } from "./target_properties"
 
 export interface ControllerConstructor {
-  bless()
+  bless(): void
   new(context: Context): Controller
 }
 
