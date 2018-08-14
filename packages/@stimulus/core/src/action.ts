@@ -41,13 +41,13 @@ const defaultEventNames: { [tagName: string]: (element: Element) => string } = {
   "textarea": e => "change"
 }
 
-export function getDefaultEventNameForElement(element): string | undefined {
+export function getDefaultEventNameForElement(element: Element): string | undefined {
   const tagName = element.tagName.toLowerCase()
   if (tagName in defaultEventNames) {
     return defaultEventNames[tagName](element)
   }
 }
 
-function error(message): never {
+function error(message: string): never {
   throw new Error(message)
 }

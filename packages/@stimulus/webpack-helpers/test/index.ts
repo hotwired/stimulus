@@ -25,7 +25,7 @@ import { identifierForContextKey } from "../index"
     this.assertContextKeyMapsToIdentifier("./my/navigation/menu_controller.js", "my--navigation--menu")
   }
 
-  assertContextKeyMapsToIdentifier(contextKey, expectedIdentifier) {
+  assertContextKeyMapsToIdentifier(contextKey: string, expectedIdentifier?: string) {
     const actualIdentifier = identifierForContextKey(contextKey)
     this.assert.equal(actualIdentifier, expectedIdentifier)
   }

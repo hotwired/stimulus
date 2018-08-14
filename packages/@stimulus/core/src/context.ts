@@ -16,10 +16,10 @@ export class Context implements ErrorHandler {
   constructor(module: Module, scope: Scope) {
     this.module = module
     this.scope = scope
+    this.controller = new module.controllerConstructor(this)
     this.bindingObserver = new BindingObserver(this, this.dispatcher)
 
     try {
-      this.controller = new module.controllerConstructor(this)
       this.controller.initialize()
     } catch (error) {
       this.handleError(error, "initializing controller")

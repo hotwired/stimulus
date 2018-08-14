@@ -9,7 +9,7 @@ export class LogControllerTestCase extends ControllerTestCase<LogController> {
     await super.setup()
   }
 
-  assertActions(...actions) {
+  assertActions(...actions: any[]) {
     this.assert.equal(this.actionLog.length, actions.length)
 
     actions.forEach((expected, index) => {
@@ -29,6 +29,6 @@ export class LogControllerTestCase extends ControllerTestCase<LogController> {
   }
 }
 
-function slice(object: object, keys: string[]) {
-  return keys.reduce((result, key) => (result[key] = object[key], result), {})
+function slice(object: any, keys: string[]): any {
+  return keys.reduce((result: any, key: string) => (result[key] = object[key], result), {})
 }

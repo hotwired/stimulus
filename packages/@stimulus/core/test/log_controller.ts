@@ -33,19 +33,19 @@ export class LogController extends Controller {
     this.disconnectCount++
   }
 
-  log(event) {
+  log(event: Event) {
     this.recordAction("log", event)
   }
 
-  log2(event) {
+  log2(event: Event) {
     this.recordAction("log2", event)
   }
 
-  log3(event) {
+  log3(event: Event) {
     this.recordAction("log3", event)
   }
 
-  stop(event) {
+  stop(event: Event) {
     this.recordAction("stop", event)
     event.stopImmediatePropagation()
   }

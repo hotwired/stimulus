@@ -2,8 +2,8 @@ import { Token, TokenListObserver, TokenListObserverDelegate } from "./token_lis
 
 export interface ValueListObserverDelegate<T> {
   parseValueForToken(token: Token): T | undefined
-  elementMatchedValue(element: Element, value: T)
-  elementUnmatchedValue(element: Element, value: T)
+  elementMatchedValue(element: Element, value: T): void
+  elementUnmatchedValue(element: Element, value: T): void
 }
 
 interface ParseResult<T> {

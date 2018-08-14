@@ -35,7 +35,7 @@ export class Binding {
   }
 
   get method(): Function {
-    const method = this.controller[this.methodName]
+    const method = (this.controller as any)[this.methodName]
     if (typeof method == "function") {
       return method
     }

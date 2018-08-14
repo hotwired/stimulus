@@ -19,7 +19,9 @@ function blessControllerConstructor(controllerConstructor: ControllerConstructor
 }
 
 const extend = (() => {
-  function extendWithReflect(constructor) {
+  type Constructor<T> = new(...args: any[]) => T
+
+  function extendWithReflect<T extends Constructor<{}>>(constructor: T): T {
     function Controller() {
       return Reflect.construct(constructor, arguments, new.target)
     }
@@ -33,7 +35,7 @@ const extend = (() => {
   }
 
   function testReflectExtension() {
-    const a = function() { this.a.call(this) }
+    const a = function(this: any) { this.a.call(this) } as any
     const b = extendWithReflect(a)
     b.prototype.a = function() {}
     return new b
@@ -43,6 +45,6 @@ const extend = (() => {
     testReflectExtension()
     return extendWithReflect
   } catch (error) {
-    return (constructor) => class Controller extends constructor {}
+    return <T extends Constructor<{}>>(constructor: T) => class Controller extends constructor {}
   }
 })()

@@ -6,14 +6,14 @@ import { Schema } from "./schema"
 import { Token, ValueListObserver, ValueListObserverDelegate } from "@stimulus/mutation-observers"
 
 export interface BindingObserverDelegate extends ErrorHandler {
-  bindingConnected(binding: Binding)
-  bindingDisconnected(binding: Binding)
+  bindingConnected(binding: Binding): void
+  bindingDisconnected(binding: Binding): void
 }
 
 export class BindingObserver implements ValueListObserverDelegate<Action> {
   readonly context: Context
   private delegate: BindingObserverDelegate
-  private valueListObserver: ValueListObserver<Action>
+  private valueListObserver?: ValueListObserver<Action>
   private bindingsByAction: Map<Action, Binding>
 
   constructor(context: Context, delegate: BindingObserverDelegate) {

@@ -1,12 +1,12 @@
 import { DOMTestCase } from "@stimulus/test"
 
 export interface Observer {
-  start()
-  stop()
+  start(): void
+  stop(): void
 }
 
 export class ObserverTestCase extends DOMTestCase {
-  observer: Observer
+  observer!: Observer
   calls: any[][] = []
   private setupCallCount = 0
 

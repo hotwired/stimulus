@@ -39,15 +39,15 @@ export class Application implements ErrorHandler {
     this.load({ identifier, controllerConstructor })
   }
 
-  load(...definitions: Definition[])
-  load(definitions: Definition[])
+  load(...definitions: Definition[]): void
+  load(definitions: Definition[]): void
   load(head: Definition | Definition[], ...rest: Definition[]) {
     const definitions = Array.isArray(head) ? head : [head, ...rest]
     definitions.forEach(definition => this.router.loadDefinition(definition))
   }
 
-  unload(...identifiers: string[])
-  unload(identifiers: string[])
+  unload(...identifiers: string[]): void
+  unload(identifiers: string[]): void
   unload(head: string | string[], ...rest: string[]) {
     const identifiers = Array.isArray(head) ? head : [head, ...rest]
     identifiers.forEach(identifier => this.router.unloadIdentifier(identifier))

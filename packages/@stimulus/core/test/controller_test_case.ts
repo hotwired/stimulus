@@ -3,7 +3,7 @@ import { ControllerConstructor } from "../src/controller"
 
 export class ControllerTestCase<T> extends ApplicationTestCase {
   identifier: string | string[] = "test"
-  controllerConstructor: ControllerConstructor
+  controllerConstructor!: ControllerConstructor
   fixtureHTML = `<div data-controller="${this.identifiers.join(" ")}">`
 
   setupApplication() {
