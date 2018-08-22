@@ -2,6 +2,7 @@ The `@stimulus/polyfills` package provides support for Stimulus in older browser
 
 * [core-js](https://www.npmjs.com/package/core-js)
   * `Array.find()`
+  * `Array.findIndex()`
   * `Array.from()`
   * `Map`
   * `Object.assign()`
@@ -11,3 +12,4 @@ The `@stimulus/polyfills` package provides support for Stimulus in older browser
   * `Element.closest()`
 * [mutation-observer-inner-html-shim](https://www.npmjs.com/package/mutation-observer-inner-html-shim)
   * `MutationObserver` support for Internet Explorer 11
+  
