@@ -22,6 +22,7 @@ const config = {
   },
 
   webpack: {
+    mode: "development",
     resolve: {
       extensions: [".js"]
     }

@@ -5,6 +5,7 @@
     "strict": true,
     "inlineSourceMap": true,
     "declaration": true,
-    "preserveWatchOutput": true
+    "preserveWatchOutput": true,
+    "noUnusedLocals": true
   }
 }

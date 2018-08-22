@@ -24,8 +24,7 @@
   },
   "devDependencies": {
     "@stimulus/polyfills": "^1.1.0-beta.1",
-    "@stimulus/test": "^1.1.0-beta.1",
-    "@types/webpack-env": "^1.13.3"
+    "@stimulus/test": "^1.1.0-beta.1"
   },
   "scripts": {
     "clean": "rimraf dist",

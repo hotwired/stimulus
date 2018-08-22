@@ -27,8 +27,8 @@
     "access": "public"
   },
   "devDependencies": {
-    "rollup": "^0.58.2",
+    "rollup": "^0.64.1",
     "rollup-plugin-node-resolve": "^3.3.0",
-    "rollup-plugin-uglify": "^3.0.0"
+    "rollup-plugin-uglify": "^4.0.0"
   }
 }

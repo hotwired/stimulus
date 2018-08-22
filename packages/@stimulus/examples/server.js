@@ -15,7 +15,7 @@ app.set("views", viewPath)
 app.set("view engine", viewEngine)
 
 app.use(express.static(publicPath))
-app.use(webpackMiddleware(webpack(webpackConfig), { lazy: true }))
+app.use(webpackMiddleware(webpack(webpackConfig)))
 
 const pages = [
   { path: "/hello", title: "Hello" },

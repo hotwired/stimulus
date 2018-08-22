@@ -22,22 +22,21 @@
     "packages/@stimulus/*"
   ],
   "dependencies": {
-    "@types/qunit": "^2.0.31",
+    "@types/qunit": "^2.5.2",
     "@types/webpack-env": "^1.13.3",
-    "fs-extra": "^5.0.0",
-    "karma": "^2.0.0",
+    "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",
-    "karma-qunit": "^1.2.1",
+    "karma-qunit": "^2.1.0",
     "karma-sauce-launcher": "^1.2.0",
-    "karma-webpack": "^2.0.9",
+    "karma-webpack": "^3.0.0",
     "lerna": "^3.0.0-rc.0",
-    "qunitjs": "^2.4.0",
+    "qunit": "^2.6.2",
     "rimraf": "^2.6.2",
-    "ts-loader": "^3.2.0",
-    "tslint": "^5.7.0",
+    "ts-loader": "^4.5.0",
+    "tslint": "^5.11.0",
     "typedoc": "^0.11.1",
     "typedoc-plugin-stimulus": "file:packages/typedoc-plugin-stimulus",
     "typescript": "^2.8.4",
-    "webpack": "^3.10.0"
+    "webpack": "^4.17.1"
   }
 }

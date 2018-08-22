@@ -18,9 +18,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "devDependencies": {
-    "@types/webpack-env": "^1.13.3"
-  },
   "scripts": {
     "clean": "rimraf dist",
     "lint": "tslint -p . -c ../../../config/tslint.json",
