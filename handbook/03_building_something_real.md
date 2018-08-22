@@ -101,6 +101,44 @@ We want a click on the button to invoke the `copy()` method in our controller, s
 > input type=submit | click
 > select            | change
 > textarea          | change
+>
+> ### Other Events
+>
+> In case you were wondering, nearly *all* [events](https://developer.mozilla.org/en-US/docs/Web/Events) are supported using
+> the long form `event->controller#action` notation, so we have you covered there too! The controller implements the standard *`addEventListener`* API
+>
+> You can even chain controller methods together to react to events. Implementing the [drag & drop API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_operations#drop) may look similiar to this, for example:
+
+```html
+<ul
+    class="list-cards"
+    data-target="dragdrop.dropzone"
+    data-action="dragover->dragdrop#acceptCard drop->dragdrop#dropCard">
+  <!-- your HTML content.... -->
+```
+
+```js
+export default class extends Controller {
+  // ...
+
+  acceptCard(event) {
+    event.preventDefault()
+  }
+
+  dropCard() {
+    // ...
+  }
+}
+```
+>
+> Window events are supported to, for instance, this commonly deployed method for linking YouTube videos onto a site:
+
+```html
+<div data-controller="youtube" data-action="youtube-api:ready@window->youtube#init_player">
+  <div id="player">
+</div>
+```
+>
 
 Finally, in our `copy()` method, we can select the input field's contents and call the clipboard API:
 
