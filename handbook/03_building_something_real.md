@@ -131,6 +131,14 @@ export default class extends Controller {
 }
 ```
 >
+> Window events are supported to, for instance, this commonly deployed method for linking YouTube videos onto a site:
+
+```html
+<div data-controller="youtube" data-action="youtube-api:ready@window->youtube#init_player">
+  <div id="player">
+</div>
+```
+>
 
 Finally, in our `copy()` method, we can select the input field's contents and call the clipboard API:
 
