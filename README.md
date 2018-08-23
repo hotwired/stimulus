@@ -4,7 +4,7 @@
 
 Stimulus is a JavaScript framework with modest ambitions. It doesn't seek to take over your entire front-end—in fact, it's not concerned with rendering HTML at all. Instead, it's designed to augment your HTML with just enough behavior to make it shine. Stimulus pairs beautifully with [Turbolinks](https://github.com/turbolinks/turbolinks) to provide a complete solution for fast, compelling applications with a minimal amount of effort.
 
-How does it work? Sprinkle your HTML with magic controller, target, and action attributes:
+How does it work? Sprinkle your HTML with controller, target, and action attributes:
 
 ```html
 <div data-controller="hello">
@@ -32,9 +32,9 @@ export default class extends Controller {
 }
 ```
 
-Stimulus continuously watches the page, kicking in as soon as magic attributes appear or disappear. It works with any update to the DOM, regardless of whether it comes from a full page load, a Turbolinks page change, or an Ajax request. Stimulus manages the whole lifecycle.
+Stimulus continuously watches the page, kicking in as soon as attributes appear or disappear. It works with any update to the DOM, regardless of whether it comes from a full page load, a Turbolinks page change, or an Ajax request. Stimulus manages the whole lifecycle.
 
-You can write your first controller in five minutes by following along in [The Stimulus Handbook](https://stimulusjs.org/handbook/introduction).
+You can write your first controller in five minutes by following along in the [Stimulus Handbook](https://stimulusjs.org/handbook/introduction).
 
 You can read more about why we created this new framework in [The Origin of Stimulus](https://stimulusjs.org/handbook/origin).
 
@@ -47,6 +47,8 @@ You can use Stimulus with other asset packaging systems, too. And if you prefer 
 See the [Installation Guide](https://stimulusjs.org/handbook/installing) for detailed instructions.
 
 ## Getting Help & Contributing Back
+
+Looking for the docs? Once you've read through the Handbook, consult the [Stimulus Reference](https://stimulusjs.org/reference/controllers) for details on the Stimulus API.
 
 Have a question about Stimulus? Connect with other Stimulus developers on the [Stimulus Discourse](https://discourse.stimulusjs.org/) community forum.
 
