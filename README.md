@@ -48,7 +48,7 @@ See the [Installation Guide](https://stimulusjs.org/handbook/installing) for det
 
 ## Getting Help & Contributing Back
 
-Looking for the docs? Once you've read through the Handbook, consult the [Stimulus Reference](https://stimulusjs.org/reference/controllers) for details on the Stimulus API.
+Looking for the docs? Once you've read through the Handbook, consult the [Stimulus Reference](https://stimulusjs.org/reference/controllers) for API details.
 
 Have a question about Stimulus? Connect with other Stimulus developers on the [Stimulus Discourse](https://discourse.stimulusjs.org/) community forum.
 
