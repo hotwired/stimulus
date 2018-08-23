@@ -53,7 +53,7 @@ Write keys with multiple words as `camelCase` in JavaScript and `kebab-case` in 
 this.data.get("fileType")
 ```
 
-would return the value `"svg"`, given the following HTML:
+will return the value `"svg"`, given the following HTML:
 
 <meta data-controller="callout" data-callout-value="file-type">
 
@@ -63,7 +63,7 @@ would return the value `"svg"`, given the following HTML:
 
 ## Values Are Strings
 
-Attribute values are always represented as strings, so if you pass a number to `DataMap#set()`:
+Attribute values are always represented as strings, so if you pass the number `1` to `DataMap#set()`:
 
 ```js
 this.data.set("count", 1)
@@ -74,4 +74,3 @@ then you'll get the string `"1"` back from `DataMap#get()`:
 ```js
 this.data.get("count") // "1"
 ```
-
