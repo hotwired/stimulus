@@ -1,5 +1,5 @@
 ---
-slug: /working-with-external-resources
+permalink: /handbook/working-with-external-resources
 ---
 
 # Working With External Resources

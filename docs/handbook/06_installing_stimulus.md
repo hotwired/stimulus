@@ -1,5 +1,5 @@
 ---
-slug: /installing
+permalink: /handbook/installing
 ---
 
 # Installing Stimulus in Your Application
@@ -115,20 +115,16 @@ Define targets using `static get targets()` methods instead of `static targets =
 </html>
 ```
 
-## Supporting Older Browsers
+## Browser Support
 
-Stimulus supports all evergreen, self-updating desktop and mobile browsers out of the box. If your application needs to support older browsers, like Internet Explorer 11 or older versions of Safari, you can use the `@stimulus/polyfills` package to [polyfill](https://developer.mozilla.org/docs/Glossary/Polyfill) the required browser APIs.
+Stimulus supports all evergreen, self-updating desktop and mobile browsers out of the box.
 
-Declare the package as a dependency in your `package.json` file:
-
-```shell
-yarn add @stimulus/polyfills
-```
-
-Then import it at the top of your `application.js` file:
+If your application needs to support older browsers like Internet Explorer 11, include the [`@stimulus/polyfills`](https://www.npmjs.com/package/@stimulus/polyfills) package before loading Stimulus.
 
 ```js
 import "@stimulus/polyfills"
 import { Application } from "stimulus"
-…
+
+const application = Application.start()
+// …
 ```

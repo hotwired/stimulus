@@ -1,5 +1,5 @@
 ---
-slug: /managing-state
+permalink: /handbook/managing-state
 ---
 
 # Managing State
@@ -82,11 +82,11 @@ We initialize the controller by showing the first slide, and the `next()` and `p
 >
 > These are Stimulus _lifecycle callback_ methods, and they're useful for setting up or tearing down associated state when your controller enters or leaves the document.
 >
-> Callback   | Invoked by Stimulus…
-> ---------- | --------------------
-> initialize | once, when the controller is first instantiated
-> connect    | anytime the controller is connected to the DOM
-> disconnect | anytime the controller is disconnected from the DOM
+> Method       | Invoked by Stimulus…
+> ------------ | --------------------
+> initialize() | Once, when the controller is first instantiated
+> connect()    | Anytime the controller is connected to the DOM
+> disconnect() | Anytime the controller is disconnected from the DOM
 
 Reload the page and confirm that the Next button advances to the next slide.
 

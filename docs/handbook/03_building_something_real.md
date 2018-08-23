@@ -1,5 +1,5 @@
 ---
-slug: /building-something-real
+permalink: /handbook/building-something-real
 ---
 
 # Building Something Real
@@ -10,7 +10,7 @@ We've implemented our first controller and learned how Stimulus connects HTML to
 
 Scattered throughout Basecamp's UI are buttons like these:
 
-<img src="../assets/bc3-clipboard-ui.png" width="500" height="122" class="handbook__screenshot">
+<img src="../assets/bc3-clipboard-ui.png" width="500" height="122" class="docs__screenshot">
 
 When you click one of these buttons, Basecamp copies a bit of text, such as a URL or an email address, to your clipboard.
 
@@ -92,7 +92,7 @@ We want a click on the button to invoke the `copy()` method in our controller, s
 >
 > Certain other elements have default events, too. Here's the full list:
 >
-> Element           | Default event
+> Element           | Default Event
 > ----------------- | -------------
 > a                 | click
 > button            | click

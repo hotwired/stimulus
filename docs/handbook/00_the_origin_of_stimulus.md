@@ -1,5 +1,6 @@
 ---
-slug: /origin
+permalink: /handbook/origin
+nav_prefix: Preface
 ---
 
 # The Origin of Stimulus

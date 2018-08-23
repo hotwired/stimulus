@@ -1,5 +1,5 @@
 ---
-slug: /hello-stimulus
+permalink: /handbook/hello-stimulus
 ---
 
 # Hello, Stimulus
@@ -67,7 +67,7 @@ Next, we need to tell Stimulus how this controller should be connected to our HT
 </div>
 ```
 
-Identifiers serve as the link between elements and controllers. In this case, the identifier `hello` tells Stimulus to create an instance of the controller class in `hello_controller.js`. You can learn more about how automatic controller loading works in the [Installation Guide]({% link _handbook/06_installing_stimulus.md %}).
+Identifiers serve as the link between elements and controllers. In this case, the identifier `hello` tells Stimulus to create an instance of the controller class in `hello_controller.js`. You can learn more about how automatic controller loading works in the [Installation Guide]({% link docs/handbook/06_installing_stimulus.md %}).
 
 ## Is This Thing On?
 

@@ -1,5 +1,5 @@
 ---
-slug: /introduction
+permalink: /handbook/introduction
 ---
 
 # Introduction
