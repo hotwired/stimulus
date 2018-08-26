@@ -28,6 +28,6 @@ function definitionForModuleAndIdentifier(module: ECMAScriptModule, identifier: 
 export function identifierForContextKey(key: string): string | undefined {
   const logicalName = (key.match(/^(?:\.\/)?(.+)(?:[_-]controller\..+?)$/) || [])[1]
   if (logicalName) {
-    return logicalName.replace(/_/g, "-").replace(/\//g, "--")
+    return logicalName.replace(/_/g, "-").replace(/\//g, ".")
   }
 }
