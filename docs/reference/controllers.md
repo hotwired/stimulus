@@ -44,7 +44,7 @@ For example, this element has a controller which is an instance of the class def
 <div data-controller="reference"></div>
 ```
 
-If you have controllers within a namespace for example: 
+If you have controllers under a namespace: 
 
 ```yml
 controllers: 
