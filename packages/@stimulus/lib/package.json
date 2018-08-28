@@ -1,0 +1,27 @@
+{
+  "name": "@stimulus/lib",
+  "version": "1.1.0",
+  "description": "Stimulus JavaScript framework: Standard library",
+  "repository": "https://github.com/stimulusjs/stimulus",
+  "author": "Basecamp, LLC",
+  "contributors": [
+    "Javan Makhmali <javan@javan.us>",
+    "Sam Stephenson <sstephenson@gmail.com>"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "files": [
+    "dist/index*",
+    "dist/src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "lint": "tslint -p . -c ../../../config/tslint.json",
+    "build": "tsc",
+    "watch": "tsc --watch"
+  }
+}
