@@ -44,6 +44,28 @@ For example, this element has a controller which is an instance of the class def
 <div data-controller="reference"></div>
 ```
 
+If you have controllers under a namespace: 
+
+```yml
+controllers: 
+	admin: 
+		- reference_controller.js 
+	app: 
+		- reference_controller.js 
+```
+
+```js
+const context = require.context('../controllers', true, /\.js$/)
+application.load(definitionsFromContext(context))
+```
+
+Then, you can reference them in your views like so: 
+
+```html
+<div data-controller="admin.reference"></div>
+<div data-controller="app.reference"></div>
+```
+
 ## Scopes
 
 When Stimulus connects a controller to an element, that element and all of its children make up the controller's _scope_.

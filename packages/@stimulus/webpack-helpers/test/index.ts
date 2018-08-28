@@ -15,14 +15,14 @@ import { identifierForContextKey } from "../index"
     this.assertContextKeyMapsToIdentifier("./hello-controller.js", "hello")
   }
 
-  "test underscores map to one dash"() {
+  "test filenames underscores map to one dash"() {
     this.assertContextKeyMapsToIdentifier("./remote_content_controller.js", "remote-content")
     this.assertContextKeyMapsToIdentifier("./date_range_editor_controller.js", "date-range-editor")
   }
 
-  "test slashes map to two dashes"() {
-    this.assertContextKeyMapsToIdentifier("./users/list_item_controller.js", "users--list-item")
-    this.assertContextKeyMapsToIdentifier("./my/navigation/menu_controller.js", "my--navigation--menu")
+  "test directory slashes map to one dot"() {
+    this.assertContextKeyMapsToIdentifier("./users/list_item_controller.js", "users.list-item")
+    this.assertContextKeyMapsToIdentifier("./my/navigation/menu_controller.js", "my.navigation.menu")
   }
 
   assertContextKeyMapsToIdentifier(contextKey: string, expectedIdentifier?: string) {
