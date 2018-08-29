@@ -25,7 +25,8 @@ export default class extends Controller {
     this.perform(event, (element) => element.outerHTML = "")
   }
 
-  perform(event: CustomEvent, callback: (element: Element, html: string) => void) {
-    requestAnimationFrame(() => callback(this.viewTarget, event.detail.html))
+  async perform(event: CustomEvent, callback: (element: Element, html: string) => void) {
+    const html = await event.detail.html
+    requestAnimationFrame(() => callback(this.viewTarget, html))
   }
 }

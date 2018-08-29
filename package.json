@@ -10,7 +10,7 @@
     "build": "lerna run --stream --prefix build",
     "build:doc": "typedoc --out docs/api --name Stimulus --mode file --readme none --excludePrivate --excludeProtected --excludeNotExported --hideGenerator --tsconfig packages/@stimulus/core/tsconfig.json packages/@stimulus/core/src",
     "watch": "lerna run --parallel watch",
-    "start": "lerna run --scope @stimulus/examples --stream start",
+    "start": "lerna run --scope @stimulus/lib --stream start",
     "test": "yarn build && karma start config/karma.conf.js",
     "test:watch": "yarn test --auto-watch --no-single-run",
     "prerelease": "yarn build",

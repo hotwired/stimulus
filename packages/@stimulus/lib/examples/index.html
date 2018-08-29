@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script src="/examples.js"></script>
+    <style>
+      main, .view {
+        border: 1px solid #888;
+        padding: 10px 30px;
+      }
+      main {
+        width: 300px;
+        background-color: #ffc;
+      }
+      .view {
+        padding: 10px 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <main data-controller="html" data-action="http-success->html#update">
+      <div>
+        <a data-controller="http" data-action="http#request" href="/remote.html">Load /remote.html</a>
+      </div>
+      <div class="view" data-target="html.view">
+        (Remote content goes here)
+      </div>
+    </main>
+  </body>
+</html>

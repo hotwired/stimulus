@@ -1,5 +1,9 @@
+import css from "./css_controller"
+import html from "./html_controller"
+import http from "./http_controller"
+
 export default [
-  ["css", import("./css_controller")],
-  ["html", import("./html_controller")],
-  ["http", import("./http_controller")]
+  { identifier: "css", controllerConstructor: css },
+  { identifier: "html", controllerConstructor: html },
+  { identifier: "http", controllerConstructor: http }
 ]
