@@ -61,13 +61,13 @@ application.register("clipboard", ClipboardController)
 
 ## Using Babel
 
-If you're using [Babel](https://babeljs.io/) with your build system, you'll need to install the [transform-class-properties plugin](https://babeljs.io/docs/plugins/transform-class-properties/) and add it to your configuration:
+If you're using [Babel](https://babeljs.io/) with your build system, you'll need to install the [@babel/plugin-proposal-class-properties](https://babeljs.io/docs/en/babel-plugin-proposal-class-properties) and add it to your configuration:
 
 ```js
 // .babelrc
 {
-  "presets": ["env"],
-  "plugins": ["transform-class-properties"]
+  "presets": ["@babel/preset-env"],
+  "plugins": ["@babel/plugin-proposal-class-properties"]
 }
 ```
 
