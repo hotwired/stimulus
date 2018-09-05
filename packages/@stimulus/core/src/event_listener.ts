@@ -21,10 +21,12 @@ export class EventListener implements EventListenerObject {
 
   // Binding observer delegate
 
+  /** @hidden */
   bindingConnected(binding: Binding) {
     this.unorderedBindings.add(binding)
   }
 
+  /** @hidden */
   bindingDisconnected(binding: Binding) {
     this.unorderedBindings.delete(binding)
   }

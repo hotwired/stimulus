@@ -1,7 +1,0 @@
-{
-  "extends": "../../config/tsconfig.node",
-  "compilerOptions": {
-    "experimentalDecorators": true,
-    "outDir": "dist"
-  }
-}

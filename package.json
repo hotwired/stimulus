@@ -9,6 +9,7 @@
     "lint": "lerna run --parallel lint",
     "prebuild": "yarn lint",
     "build": "lerna run --stream --prefix build",
+    "build:doc": "typedoc --out docs/api --name Stimulus --mode file --readme none --excludePrivate --excludeProtected --excludeNotExported --hideGenerator --tsconfig packages/@stimulus/core/tsconfig.json packages/@stimulus/core/src",
     "watch": "lerna run --parallel watch",
     "start": "lerna run --scope @stimulus/examples --stream start",
     "test": "yarn build && karma start config/karma.conf.js",
@@ -35,7 +36,6 @@
     "ts-loader": "^4.5.0",
     "tslint": "^5.11.0",
     "typedoc": "^0.11.1",
-    "typedoc-plugin-stimulus": "file:packages/typedoc-plugin-stimulus",
     "typescript": "^2.8.4",
     "webpack": "^4.17.1"
   }

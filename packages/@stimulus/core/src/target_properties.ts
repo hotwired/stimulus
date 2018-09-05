@@ -1,5 +1,6 @@
 import { Controller } from "./controller"
 
+/** @hidden */
 export function defineTargetProperties(constructor: Function) {
   const prototype = constructor.prototype
   const targetNames = getTargetNamesForConstructor(constructor)
