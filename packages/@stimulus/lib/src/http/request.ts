@@ -59,7 +59,7 @@ export class Request {
     if (this.options.contentType) {
       return this.options.contentType
     } else if (this.body == null || this.body instanceof FormData) {
-      return "multipart/form-data"
+      return
     } else if (this.body instanceof File) {
       return this.body.type
     } else {
