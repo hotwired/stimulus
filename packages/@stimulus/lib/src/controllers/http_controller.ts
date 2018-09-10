@@ -1,5 +1,5 @@
 import { Controller } from "@stimulus/core"
-import { Request } from "../http/request"
+import { Request } from "@stimulus/http"
 
 export default class extends Controller {
   get resourceTarget() {
