@@ -1,7 +1,7 @@
 {
-  "name": "@stimulus/lib",
+  "name": "@stimulus/ajax",
   "version": "1.1.0",
-  "description": "Stimulus JavaScript framework: Standard library",
+  "description": "Stimulus JavaScript framework: Ajax helpers",
   "repository": "https://github.com/stimulusjs/stimulus",
   "author": "Basecamp, LLC",
   "contributors": [
