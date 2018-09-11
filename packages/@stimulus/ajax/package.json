@@ -30,7 +30,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "lint": "tslint -p . -c ../../../config/tslint.json",
-    "build": "tsc",
+    "build": "{ [ ! -r dist ] || { find src -newer dist | grep .; }>/dev/null; } && { tsc && touch dist; } || true",
     "watch": "tsc --watch",
     "start": "rollup -wc"
   }
