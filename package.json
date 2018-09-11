@@ -7,7 +7,6 @@
     "reset": "yarn clean && lerna clean",
     "clean": "lerna run --parallel clean",
     "lint": "lerna run --parallel lint",
-    "prebuild": "yarn lint",
     "build": "lerna run --stream --prefix build",
     "build:doc": "typedoc --out docs/api --name Stimulus --mode file --readme none --excludePrivate --excludeProtected --excludeNotExported --hideGenerator --tsconfig packages/@stimulus/core/tsconfig.json packages/@stimulus/core/src",
     "watch": "lerna run --parallel watch",
