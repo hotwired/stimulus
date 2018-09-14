@@ -1,14 +1,12 @@
-import serve from "rollup-plugin-dev-server"
 import resolve from "rollup-plugin-node-resolve"
 
 export default {
-  input: "examples/application.js",
+  input: "demo/demo.js",
   output: {
-    file: "dist/examples.js",
+    file: "dist/demo.js",
     format: "iife"
   },
   plugins: [
-    serve(["dist", "examples"]),
     resolve()
   ]
 }

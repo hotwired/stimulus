@@ -41,8 +41,8 @@ export class Resource {
   }
 
   get formData() {
-    if (this.element instanceof HTMLFormElement) {
-      return new FormData(this.element)
+    if (this.formTarget instanceof HTMLFormElement) {
+      return new FormData(this.formTarget)
     }
   }
 
@@ -52,5 +52,13 @@ export class Resource {
 
   get element() {
     return this.scope.element
+  }
+
+  get formTarget() {
+    return this.targets.find("form") || this.element
+  }
+
+  get targets() {
+    return this.scope.targets
   }
 }

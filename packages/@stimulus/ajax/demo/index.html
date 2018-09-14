@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script src="/demo.js"></script>
+    <style>
+      * {
+        font-family: "Comic Sans MS";
+      }
+      .boosts {
+        padding: 20px 10px;
+        border: 1px solid #000;
+      }
+      .boost {
+        display: inline-block;
+        border: 1px solid #888;
+        border-radius: 7px;
+        padding: 3px 10px;
+      }
+      .new-boost {
+        margin: 20px 0;
+      }
+      .busy {
+        background-color: #fe3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="boosts" data-controller="resource" data-resource-url="/boosts" data-resource-autoload>
+    </div>
+  </body>
+</html>

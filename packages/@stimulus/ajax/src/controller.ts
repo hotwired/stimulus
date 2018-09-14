@@ -5,6 +5,12 @@ import { Operation, OperationDelegate } from "./operation"
 import { Resource } from "./resource"
 
 export class ResourceController extends Controller implements OperationDelegate {
+  initialize() {
+    if (this.data.has("autoload")) {
+      this.issue("show", this.resource.showRequest)
+    }
+  }
+
   create(event: Event) {
     event.preventDefault()
     this.issue("create", this.resource.createRequest)
@@ -70,8 +76,9 @@ export class ResourceController extends Controller implements OperationDelegate 
     this.element.classList.remove(this.activityClass)
   }
 
-  present(response: Response) {
+  async present(response: Response) {
     console.log("presenting", response)
+    this.element.outerHTML = await response.html
   }
 
   dispatchEventForOperation(operation: Operation, name: string) {
