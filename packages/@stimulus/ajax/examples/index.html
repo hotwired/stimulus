@@ -4,27 +4,46 @@
     <meta charset="UTF-8">
     <script src="/examples.js"></script>
     <style>
-      main, .view {
+      .boost {
+        display: inline-block;
         border: 1px solid #888;
-        padding: 10px 30px;
+        border-radius: 7px;
+        padding: 3px 10px;
       }
-      main {
-        width: 300px;
-        background-color: #ffc;
+      .boosts form {
+        margin: 20px 0;
       }
-      .view {
-        padding: 10px 30px;
+      .busy {
+        background-color: #fcc;
       }
     </style>
   </head>
   <body>
-    <main data-controller="html" data-action="http-success->html#update">
+    <div class="boosts" data-controller="resource" data-resource-url="/boosts">
       <div>
-        <a data-controller="http" data-action="http#request" href="/remote.html">Load /remote.html</a>
+        <div class="boost" data-controller="resource" data-resource-url="/boosts/1">
+          <span>Cool</span>
+          <button data-action="resource#edit">Edit</button>
+          <button data-action="resource#destroy">Delete</button>
+        </div>
+        <div class="boost" data-controller="resource" data-resource-url="/boosts/2">
+          <span>neat</span>
+          <button data-action="resource#edit">Edit</button>
+          <button data-action="resource#destroy">Delete</button>
+        </div>
+        <div class="boost" data-controller="resource" data-resource-url="/boosts/3" data-resource-edit-url="/nonexistent">
+          <span>Nice job</span>
+          <button data-action="resource#edit">Edit</button>
+          <button data-action="resource#destroy">Delete</button>
+        </div>
       </div>
-      <div class="view" data-target="html.view">
-        (Remote content goes here)
+      <div>
+        <form data-action="resource#create" action="/boosts" method="post">
+          <input type="text" name="name" placeholder="Boost Sam…">
+          <input type="submit">
+          <input type="reset" value="Cancel">
+        </form>
       </div>
-    </main>
+    </div>
   </body>
 </html>
