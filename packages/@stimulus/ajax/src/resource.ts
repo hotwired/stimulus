@@ -58,6 +58,10 @@ export class Resource {
     return this.targets.find("form") || this.element
   }
 
+  get primaryFieldTarget() {
+    return (this.targets.find("primaryField") || this.element) as HTMLElement
+  }
+
   get targets() {
     return this.scope.targets
   }

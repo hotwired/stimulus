@@ -61,7 +61,7 @@ function index({ boosts }) {
       <div>${ Object.keys(boosts).map(id => show({ boost: boosts[id] })).join("") }</div>
       <div class="boost new-boost">
         <form data-action="resource#create" data-target="resource.form">
-          <input type="text" name="name" placeholder="Boost Sam…">
+          <input type="text" name="name" placeholder="Boost Sam…" data-target="resource.primaryField">
           <button type="submit">Submit</button>
           <button type="reset">Cancel</button>
         </form>
@@ -84,7 +84,7 @@ function edit({ boost: { id, name } }) {
   return `
     <div class="boost" data-controller="resource" data-resource-url="/boosts/${ h(id) }">
       <form data-action="resource#update" data-target="resource.form">
-        <input type="text" name="name" value="${ h(name) }">
+        <input type="text" name="name" value="${ h(name) }" data-target="resource.primaryField">
         <button type="submit">Submit</button>
         <button type="reset" data-action="click->resource#show">Cancel</button>
       </form>

@@ -79,6 +79,7 @@ export class ResourceController extends Controller implements OperationDelegate 
   async present(response: Response) {
     console.log("presenting", response)
     this.element.outerHTML = await response.html
+    this.focusPrimaryField()
   }
 
   dispatchEventForOperation(operation: Operation, name: string) {
@@ -90,5 +91,10 @@ export class ResourceController extends Controller implements OperationDelegate 
 
   get activityClass() {
     return this.data.get("activityClass") || "busy"
+  }
+
+  focusPrimaryField() {
+    console.log("primary field =", this.resource.primaryFieldTarget)
+    this.resource.primaryFieldTarget.focus()
   }
 }
