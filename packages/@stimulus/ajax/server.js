@@ -50,7 +50,9 @@ const boosts = {
 let nextId = Object.keys(boosts).length + 1
 
 function serve(response, body) {
-  response.format({ "text/html": () => response.send(body) })
+  setTimeout(() => {
+    response.format({ "text/html": () => response.send(body) })
+  }, (Math.random() * 450) + 50)
 }
 
 function index({ boosts }) {
@@ -60,8 +62,8 @@ function index({ boosts }) {
       <div class="boost new-boost">
         <form data-action="resource#create" data-target="resource.form">
           <input type="text" name="name" placeholder="Boost Sam…">
-          <input type="submit">
-          <input type="reset" value="Cancel">
+          <button type="submit">Submit</button>
+          <button type="reset">Cancel</button>
         </form>
       </div>
     </div>
@@ -70,8 +72,8 @@ function index({ boosts }) {
 
 function show({ boost: { id, name } }) {
   return `
-    <div class="boost" data-controller="resource" data-resource-url="/boosts/${ id }">
-      <span>${ name }</span>
+    <div class="boost" data-controller="resource" data-resource-url="/boosts/${ h(id) }">
+      <span>${ h(name) }</span>
       <button data-action="resource#edit">Edit</button>
       <button data-action="resource#destroy">Delete</button>
     </div>
@@ -80,12 +82,20 @@ function show({ boost: { id, name } }) {
 
 function edit({ boost: { id, name } }) {
   return `
-    <div class="boost" data-controller="resource" data-resource-url="/boosts/${ id }">
+    <div class="boost" data-controller="resource" data-resource-url="/boosts/${ h(id) }">
       <form data-action="resource#update" data-target="resource.form">
-        <input type="text" name="name" value="${ name }">
-        <input type="submit">
-        <input type="reset" value="Cancel" data-action="click->resource#show">
+        <input type="text" name="name" value="${ h(name) }">
+        <button type="submit">Submit</button>
+        <button type="reset" data-action="click->resource#show">Cancel</button>
       </form>
     </div>
   `
+}
+
+function h(value) {
+  return value.toString()
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, '&quot;')
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
 }
