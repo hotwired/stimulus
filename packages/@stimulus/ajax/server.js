@@ -8,8 +8,8 @@ const root = __dirname
 app.listen(10001)
 console.log("Listening on http://localhost:10001")
 
-app.get("/boosts", (_, response) => {
-  serve(response, index({ boosts }))
+app.get("/boosts", ({ query: { delay }}, response) => {
+  serve(response, index({ boosts }), { delay })
 })
 
 app.post("/boosts", form, ({ body: { name } }, response) => {
@@ -53,10 +53,10 @@ const boosts = {
 
 let nextId = Object.keys(boosts).length + 1
 
-function serve(response, body) {
+function serve(response, body, { delay } = {}) {
   setTimeout(() => {
     response.format({ "text/html": () => response.send(body) })
-  }, (Math.random() * 450) + 50)
+  }, delay == 0 ? 0 : (Math.random() * 450 + 50))
 }
 
 function guard(response, boosts, id) {

@@ -8,6 +8,10 @@ export class Resource {
     this.scope = scope
   }
 
+  get bootstrapRequest() {
+    return new Request("get", this.bootstrapUrl)
+  }
+
   get createRequest() {
     return new Request("post", this.url, { body: this.formData })
   }
@@ -26,6 +30,16 @@ export class Resource {
 
   get destroyRequest() {
     return new Request("delete", this.url)
+  }
+
+  get shouldBootstrapContents() {
+    return this.data.has("bootstrapUrl")
+      || this.data.has("bootstrap")
+  }
+
+  get bootstrapUrl() {
+    return this.data.get("bootstrapUrl")
+      || this.url
   }
 
   get url() {

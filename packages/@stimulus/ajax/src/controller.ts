@@ -6,8 +6,8 @@ import { Resource } from "./resource"
 
 export class ResourceController extends Controller implements OperationDelegate {
   initialize() {
-    if (this.data.has("autoload")) {
-      this.issue("show", this.resource.showRequest)
+    if (this.resource.shouldBootstrapContents) {
+      this.issue("bootstrap", this.resource.bootstrapRequest)
     }
   }
 
