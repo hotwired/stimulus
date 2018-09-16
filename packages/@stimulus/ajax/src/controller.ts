@@ -2,6 +2,7 @@ import { Controller } from "@stimulus/core"
 import { Request, Response } from "@stimulus/http"
 import { createEvent } from "./event_helpers"
 import { Operation, OperationDelegate } from "./operation"
+import { Replacement } from "./replacement"
 import { Resource } from "./resource"
 
 export class ResourceController extends Controller implements OperationDelegate {
@@ -65,21 +66,24 @@ export class ResourceController extends Controller implements OperationDelegate 
   }
 
   operationFailedWithError(operation: Operation, error: Error) {
-    alert(error)
+    requestAnimationFrame(() => alert(error))
   }
 
   showActivityIndicator() {
-    this.element.classList.add(this.activityClass)
+    requestAnimationFrame(() => this.element.classList.add(this.activityClass))
   }
 
   hideActivityIndicator() {
-    this.element.classList.remove(this.activityClass)
+    requestAnimationFrame(() => this.element.classList.remove(this.activityClass))
   }
 
   async present(response: Response) {
-    console.log("presenting", response)
-    this.element.outerHTML = await response.html
-    this.focusPrimaryField()
+    const replacement = new Replacement(this.element, await response.html)
+    console.log("replacement =", replacement)
+    requestAnimationFrame(() => {
+      replacement.perform()
+      this.focusPrimaryField()
+    })
   }
 
   dispatchEventForOperation(operation: Operation, name: string) {
