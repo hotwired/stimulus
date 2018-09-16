@@ -81,6 +81,7 @@ export class ResourceController extends Controller implements OperationDelegate 
     const replacement = new Replacement(this.element, await response.html)
     console.log("replacement =", replacement)
     requestAnimationFrame(() => {
+      this.resetForm()
       replacement.perform()
       this.focusPrimaryField()
     })
@@ -97,8 +98,13 @@ export class ResourceController extends Controller implements OperationDelegate 
     return this.data.get("activityClass") || "busy"
   }
 
+  resetForm() {
+    if (this.resource.formTarget instanceof HTMLFormElement) {
+      this.resource.formTarget.reset()
+    }
+  }
+
   focusPrimaryField() {
-    console.log("primary field =", this.resource.primaryFieldTarget)
     this.resource.primaryFieldTarget.focus()
   }
 }
