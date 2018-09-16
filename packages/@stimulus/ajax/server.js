@@ -5,6 +5,8 @@ const path = require("path")
 const app = express()
 const form = multer().none()
 const root = __dirname
+app.listen(10001)
+console.log("Listening on http://localhost:10001")
 
 app.get("/boosts", (_, response) => {
   serve(response, index({ boosts }))
@@ -17,16 +19,19 @@ app.post("/boosts", form, ({ body: { name } }, response) => {
 })
 
 app.get("/boosts/:id", ({ params: { id } }, response) => {
+  guard(response, boosts, id)
   const boost = boosts[id]
   serve(response, show({ boost }))
 })
 
 app.put("/boosts/:id", form, ({ body: { name }, params: { id } }, response) => {
+  guard(response, boosts, id)
   const boost = boosts[id] = { id, name }
   serve(response, show({ boost }))
 })
 
 app.delete("/boosts/:id", ({ params: { id } }, response) => {
+  guard(response, boosts, id)
   delete boosts[id]
   serve(response, "")
 })
@@ -38,13 +43,12 @@ app.get("/boosts/:id/edit", ({ params: { id } }, response) => {
 
 app.use(express.static(path.join(root, "/dist")))
 app.use(express.static(path.join(root, "/demo")))
-console.log("Listening on http://localhost:10001")
-app.listen(10001)
 
 const boosts = {
   1: { id: "1", name: "Cool" },
   2: { id: "2", name: "neat" },
-  3: { id: "3", name: "Nice job" }
+  3: { id: "3", name: "Nice job" },
+  "": { id: "nonexistent", name: "👻" }
 }
 
 let nextId = Object.keys(boosts).length + 1
@@ -53,6 +57,13 @@ function serve(response, body) {
   setTimeout(() => {
     response.format({ "text/html": () => response.send(body) })
   }, (Math.random() * 450) + 50)
+}
+
+function guard(response, boosts, id) {
+  if (!(id in boosts)) {
+    response.status(404)
+    throw new Error("Not Found")
+  }
 }
 
 function index({ boosts }) {
