@@ -96,8 +96,8 @@ The following basic properties are common to all events:
 Event Property      | Value
 ------------------- | -----
 event.type          | The name of the event (e.g. `"click"`)
-event.target        | The target where the event listener is installed (either `this.element`, `document`, or `window`)
-event.currentTarget | The target that dispatched the event (e.g. the innermost element that was clicked)
+event.target        | The target that dispatched the event (e.g. the innermost element that was clicked)
+event.currentTarget | The target where the event listener is installed (either `this.element`, `document`, or `window`)
 
 <br>The following event methods give you more control over how events are handled:
 
