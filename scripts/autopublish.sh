@@ -8,6 +8,27 @@ else
   TMPDIR="${TMPDIR%/}"
 fi
 
+package-name() {
+  node -e "
+    const package = JSON.parse(fs.readFileSync('package.json'))
+    console.log(package.name)
+  "
+}
+
+rewrite-package-json() {
+  url="https://github.com/${AUTOPUBLISH_PACKAGE_REPO}/archive/${sha}/" \
+  packageList="$package_list" node -e "
+    const package = JSON.parse(fs.readFileSync('package.json'))
+    if (package.dependencies) {
+      const packageNames = JSON.parse(process.env.packageList).map(_ => _.name)
+      for (const name in package.dependencies)
+        if (packageNames.indexOf(name) != -1)
+          package.dependencies[name] = process.env.url + name + '.tar.gz'
+      fs.writeFileSync('package.json', JSON.stringify(package))
+    }
+  "
+}
+
 # Ensure the environment is complete
 for name in NAME EMAIL GITHUB_USER GITHUB_TOKEN PACKAGE_REPO SOURCE_REPO BRANCH COMMIT; do
   var="AUTOPUBLISH_${name}"
@@ -34,6 +55,7 @@ pushd "$AUTOPUBLISH_SOURCE_REPO"
   yarn install
   yarn build
   IFS=$'\n'
+    package_list="$(yarn -s lerna list --json 2>/dev/null)"
     package_paths=( $(yarn -s lerna exec pwd 2>/dev/null) )
   IFS="$_IFS"
 popd
@@ -48,7 +70,7 @@ popd
 # Create the commits
 for path in "${package_paths[@]}"; do
   pushd "$path"
-    name="$(node -e 'console.log(JSON.parse(fs.readFileSync("package.json")).name)')"
+    name="$(package-name)"
     subject="$(git log -n 1 --format=format:%s)"
     date="$(git log -n 1 --format=format:%ai)"
     url="https://github.com/${AUTOPUBLISH_SOURCE_REPO}/tree/${AUTOPUBLISH_COMMIT}"
@@ -61,6 +83,7 @@ for path in "${package_paths[@]}"; do
     shopt -s nullglob
       cp -R "$path"/{*.json,*.js,dist} . || true
     shopt -u nullglob
+    rewrite-package-json
     git add .
     GIT_AUTHOR_DATE="$date" GIT_COMMITTER_DATE="$date" \
     GIT_AUTHOR_NAME="$AUTOPUBLISH_NAME" GIT_COMMITTER_NAME="$AUTOPUBLISH_NAME" \
