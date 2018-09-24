@@ -93,6 +93,15 @@ When an identifier is composed of more than one word, write the words in kebab-c
 
 In filenames, separate multiple words using either dashes or underscores (kebab-case or snake_case: `controllers/date_picker.js`, `controllers/list-item.js`).
 
+### Multi-word controllers
+Lets say you have a multi-word controller called `option_panel_controller.js` (you could use `option-panel-controller.js` here as well - they are treated as the same thing). To use the controller in your HTML, it would look like the following: 
+```html
+<div data-controller="option-panel">
+  <div data-target="option-panel.widget"></div>
+  <div data-action="click->option-panel#show"></div>
+</div>
+```
+
 ## Registration
 
 If you use Stimulus with the `@stimulus/webpack-helpers` package, your application will automatically load and register controller classes following the conventions above.
