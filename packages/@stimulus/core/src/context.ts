@@ -1,6 +1,7 @@
 import { Application } from "./application"
 import { BindingObserver } from "./binding_observer"
 import { Controller } from "./controller"
+import { DataMapObserver } from "./data_map_observer"
 import { Dispatcher } from "./dispatcher"
 import { ErrorHandler } from "./error_handler"
 import { Module } from "./module"
@@ -12,12 +13,14 @@ export class Context implements ErrorHandler {
   readonly scope: Scope
   readonly controller: Controller
   private bindingObserver: BindingObserver
+  private dataMapObserver: DataMapObserver
 
   constructor(module: Module, scope: Scope) {
     this.module = module
     this.scope = scope
     this.controller = new module.controllerConstructor(this)
     this.bindingObserver = new BindingObserver(this, this.dispatcher)
+    this.dataMapObserver = new DataMapObserver(this, this.controller)
 
     try {
       this.controller.initialize()
@@ -28,6 +31,7 @@ export class Context implements ErrorHandler {
 
   connect() {
     this.bindingObserver.start()
+    this.dataMapObserver.start()
 
     try {
       this.controller.connect()
@@ -43,6 +47,7 @@ export class Context implements ErrorHandler {
       this.handleError(error, "disconnecting controller")
     }
 
+    this.dataMapObserver.stop()
     this.bindingObserver.stop()
   }
 
