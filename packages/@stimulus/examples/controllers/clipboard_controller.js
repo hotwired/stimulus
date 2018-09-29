@@ -2,7 +2,8 @@ import { Controller } from "stimulus"
 
 export default class extends Controller {
   static targets = [ "source" ]
-  static classes = [ "supported" ]
+  static values = [{ name: "supportedClass", default: "clipboard--supported" }]
+  // static classes = [ "supported" ]
 
   initialize() {
     if (document.queryCommandSupported("copy")) {

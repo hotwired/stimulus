@@ -1,23 +1,19 @@
 import { Application } from "./application"
+import { Constructor } from "./constructor"
 import { Context } from "./context"
 import { DataMap } from "./data_map"
 import { Scope } from "./scope"
+import { TargetPropertiesBlessing } from "./target_properties"
 import { TargetSet } from "./target_set"
-import { defineTargetProperties } from "./target_properties"
+import { ValuePropertiesBlessing } from "./value_properties"
 
-export interface ControllerConstructor {
-  bless(): void
-  new(context: Context): Controller
-}
+export type ControllerConstructor = Constructor<Controller>
 
 export class Controller {
+  static blessings = [ TargetPropertiesBlessing, ValuePropertiesBlessing ]
   static targets: string[] = []
 
   readonly context: Context
-
-  static bless() {
-    defineTargetProperties(this)
-  }
 
   constructor(context: Context) {
     this.context = context

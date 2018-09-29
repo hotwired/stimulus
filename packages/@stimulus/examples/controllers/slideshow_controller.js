@@ -1,9 +1,12 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  static values = [{ name: "index", type: "integer", default: 0 }]
   static targets = [ "slide" ]
-  static classes = [ "currentSlide" ]
+  static values = [
+    { name: "index", type: "integer", default: 0 },
+    { name: "currentSlideClass", default: "slide--current" }
+  ]
+  // static classes = [ "currentSlide" ]
 
   initialize() {
     this.render()

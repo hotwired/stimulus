@@ -1,5 +1,6 @@
 import { Context } from "./context"
 import { StringMapObserver, StringMapObserverDelegate } from "@stimulus/mutation-observers"
+import { camelize } from "./string_helpers"
 
 export class DataMapObserver implements StringMapObserverDelegate {
   readonly context: Context
@@ -48,8 +49,4 @@ export class DataMapObserver implements StringMapObserverDelegate {
   private get prefix() {
     return `data-${this.identifier}-`
   }
-}
-
-function camelize(value: string) {
-  return value.replace(/(?:[_-])([a-z])/g, (_, char) => char.toUpperCase())
 }
