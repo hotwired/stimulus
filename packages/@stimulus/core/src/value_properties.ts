@@ -11,17 +11,19 @@ export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
   }, {} as PropertyDescriptorMap)
 }
 
-function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition): PropertyDescriptorMap {
+/** @hidden */
+export function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition): PropertyDescriptorMap {
   const key = typeof valueDefinition == "string" ? valueDefinition : valueDefinition.name
   const type = typeof valueDefinition == "string" ? "string" : valueDefinition.type || "string"
   const defaultValue = typeof valueDefinition == "string" ? undefined : valueDefinition.default
+  const getDefaultValue = defaultValue instanceof Function ? defaultValue : () => defaultValue
   const read = readers[type]
 
   return {
     [key]: {
       get: defaultValue == undefined
         ? getOrThrow(key, read)
-        : getWithDefault(key, read, defaultValue),
+        : getWithDefault(key, read, getDefaultValue),
 
       set(this: Controller, value: T | undefined) {
         if (value == undefined) {
@@ -34,7 +36,7 @@ function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition): Prop
 
     [`has${capitalize(key)}`]: {
       get(this: Controller): boolean {
-        return defaultValue != undefined || this.data.has(key)
+        return getDefaultValue.call(this) != undefined || this.data.has(key)
       }
     }
   }
@@ -46,10 +48,10 @@ type ValueDefinition = string | {
   default: any
 }
 
-function getWithDefault<T>(key: string, read: Reader, defaultValue: T) {
+function getWithDefault<T>(key: string, read: Reader, getDefaultValue: () => T) {
   return function(this: Controller): T {
     const value = this.data.get(key)
-    return value == null ? defaultValue : read(value)
+    return value == null ? getDefaultValue.call(this) : read(value)
   }
 }
 

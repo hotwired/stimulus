@@ -1,4 +1,5 @@
 import { Application } from "./application"
+import { ClassPropertiesBlessing } from "./class_properties"
 import { Constructor } from "./constructor"
 import { Context } from "./context"
 import { DataMap } from "./data_map"
@@ -10,7 +11,7 @@ import { ValuePropertiesBlessing } from "./value_properties"
 export type ControllerConstructor = Constructor<Controller>
 
 export class Controller {
-  static blessings = [ TargetPropertiesBlessing, ValuePropertiesBlessing ]
+  static blessings = [ ClassPropertiesBlessing, TargetPropertiesBlessing, ValuePropertiesBlessing ]
   static targets: string[] = []
 
   readonly context: Context
