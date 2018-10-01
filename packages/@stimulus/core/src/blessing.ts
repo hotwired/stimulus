@@ -56,12 +56,16 @@ function getShadowedDescriptor(prototype: any, properties: PropertyDescriptorMap
   }
 }
 
-function getOwnKeys(object: any) {
-  return [
-    ...Object.getOwnPropertyNames(object),
-    ...Object.getOwnPropertySymbols(object)
-  ]
-}
+const getOwnKeys = (() => {
+  if (typeof Object.getOwnPropertySymbols == "function") {
+    return (object: any) => [
+      ...Object.getOwnPropertyNames(object),
+      ...Object.getOwnPropertySymbols(object)
+    ]
+  } else {
+    return Object.getOwnPropertyNames
+  }
+})()
 
 const extend = (() => {
   function extendWithReflect<T extends Constructor<{}>>(constructor: T): T {
