@@ -6,7 +6,7 @@ export default class extends Controller {
   connect() {
     this.load()
 
-    if (this.hasRefreshInterval) {
+    if (this.hasRefreshIntervalValue) {
       this.startRefreshing()
     }
   }
@@ -16,7 +16,7 @@ export default class extends Controller {
   }
 
   load() {
-    fetch(this.url)
+    fetch(this.urlValue)
       .then(response => response.text())
       .then(html => {
         this.element.innerHTML = html
@@ -26,7 +26,7 @@ export default class extends Controller {
   startRefreshing() {
     this.refreshTimer = setInterval(() => {
       this.load()
-    }, this.refreshInterval)
+    }, this.refreshIntervalValue)
   }
 
   stopRefreshing() {

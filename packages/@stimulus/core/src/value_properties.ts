@@ -18,9 +18,10 @@ export function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition
   const defaultValue = typeof valueDefinition == "string" ? undefined : valueDefinition.default
   const getDefaultValue = defaultValue instanceof Function ? defaultValue : () => defaultValue
   const read = readers[type]
+  const name = `${key}Value`
 
   return {
-    [key]: {
+    [name]: {
       get: defaultValue == undefined
         ? getOrThrow(key, read)
         : getWithDefault(key, read, getDefaultValue),
@@ -34,7 +35,7 @@ export function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition
       }
     },
 
-    [`has${capitalize(key)}`]: {
+    [`has${capitalize(name)}`]: {
       get(this: Controller): boolean {
         return getDefaultValue.call(this) != undefined || this.data.has(key)
       }

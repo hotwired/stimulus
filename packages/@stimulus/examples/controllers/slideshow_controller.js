@@ -10,14 +10,14 @@ export default class extends Controller {
   }
 
   next() {
-    if (this.index < this.lastIndex) {
-      this.index++
+    if (this.indexValue < this.lastIndex) {
+      this.indexValue++
     }
   }
 
   previous() {
-    if (this.index > 0) {
-      this.index--
+    if (this.indexValue > 0) {
+      this.indexValue--
     }
   }
 
@@ -27,7 +27,7 @@ export default class extends Controller {
 
   render() {
     this.slideTargets.forEach((element, index) => {
-      element.classList.toggle(this.currentSlideClass, index == this.index)
+      element.classList.toggle(this.currentSlideClass, index == this.indexValue)
     })
   }
 
