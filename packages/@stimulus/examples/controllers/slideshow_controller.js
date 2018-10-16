@@ -21,7 +21,7 @@ export default class extends Controller {
     }
   }
 
-  indexChanged() {
+  indexValueChanged() {
     this.render()
   }
 

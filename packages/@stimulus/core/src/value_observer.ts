@@ -1,16 +1,17 @@
 import { Context } from "./context"
 import { StringMapObserver, StringMapObserverDelegate } from "@stimulus/mutation-observers"
-import { camelize } from "./string_helpers"
 
-export class DataMapObserver implements StringMapObserverDelegate {
+export class ValueObserver implements StringMapObserverDelegate {
   readonly context: Context
   readonly receiver: any
   private stringMapObserver: StringMapObserver
+  private keysByAttributeName: { [attributeName: string]: string }
 
   constructor(context: Context, receiver: any) {
     this.context = context
     this.receiver = receiver
     this.stringMapObserver = new StringMapObserver(this.element, this)
+    this.keysByAttributeName = this.getKeysByAttributeName()
   }
 
   start() {
@@ -25,28 +26,32 @@ export class DataMapObserver implements StringMapObserverDelegate {
     return this.context.element
   }
 
-  get identifier() {
-    return this.context.identifier
+  get controller() {
+    return this.context.controller
   }
 
   // String map observer delegate
 
   getStringMapKeyForAttribute(attributeName: string) {
-    if (attributeName.startsWith(this.prefix)) {
-      const name = attributeName.slice(this.prefix.length)
-      return camelize(name)
-    }
+    return this.keysByAttributeName[attributeName]
   }
 
-  stringMapValueChanged(value: string | null, key: string) {
+  stringMapValueChanged(attributeValue: string | null, key: string) {
     const methodName = `${key}Changed`
     const method = this.receiver[methodName]
     if (typeof method == "function") {
+      const value = this.receiver[key]
       method.call(this.receiver, value)
     }
   }
 
-  private get prefix() {
-    return `data-${this.identifier}-`
+  private getKeysByAttributeName() {
+    return Object.keys(this.valueAttributeMap).reduce((keys, attributeName) => {
+      return { ...keys, [this.valueAttributeMap[attributeName]]: attributeName }
+    }, {} as { [attributeName: string]: string })
+  }
+
+  private get valueAttributeMap() {
+    return (this.controller as any).valueAttributeMap
   }
 }

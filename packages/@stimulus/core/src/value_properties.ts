@@ -5,20 +5,28 @@ import { capitalize } from "./string_helpers"
 
 /** @hidden */
 export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
-  const values = readInheritableStaticArray(constructor, "values")
-  return values.reduce((properties, valueDefinition) => {
+  const valueDefinitions = readInheritableStaticArray<T, ValueDefinition>(constructor, "values")
+  const propertyDescriptorMap: PropertyDescriptorMap = {
+    valueAttributeMap: {
+      get(this: Controller) {
+        return valueDefinitions.reduce((result, valueDefinition) => {
+          const { name, key } = parseValueDefinition(valueDefinition)
+          return { ...result, [name]: this.data.getAttributeNameForKey(key) }
+        }, {})
+      }
+    }
+  }
+
+  return valueDefinitions.reduce((properties, valueDefinition) => {
     return Object.assign(properties, propertiesForValueDefinition(valueDefinition))
-  }, {} as PropertyDescriptorMap)
+  }, propertyDescriptorMap)
 }
 
 /** @hidden */
 export function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition): PropertyDescriptorMap {
-  const key = typeof valueDefinition == "string" ? valueDefinition : valueDefinition.name
-  const type = typeof valueDefinition == "string" ? "string" : valueDefinition.type || "string"
-  const defaultValue = typeof valueDefinition == "string" ? undefined : valueDefinition.default
+  const { name, key, type, defaultValue } = parseValueDefinition(valueDefinition)
   const getDefaultValue = defaultValue instanceof Function ? defaultValue : () => defaultValue
   const read = readers[type]
-  const name = `${key}Value`
 
   return {
     [name]: {
@@ -47,6 +55,14 @@ type ValueDefinition = string | {
   name: string,
   type: "boolean" | "integer" | "float" | "string" | undefined,
   default: any
+}
+
+function parseValueDefinition(valueDefinition: ValueDefinition) {
+  const key = typeof valueDefinition == "string" ? valueDefinition : valueDefinition.name
+  const type = typeof valueDefinition == "string" ? "string" : valueDefinition.type || "string"
+  const defaultValue = typeof valueDefinition == "string" ? undefined : valueDefinition.default
+  const name = `${key}Value`
+  return { name, key, type, defaultValue }
 }
 
 function getWithDefault<T>(key: string, read: Reader, getDefaultValue: () => T) {
