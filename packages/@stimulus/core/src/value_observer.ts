@@ -1,17 +1,18 @@
 import { Context } from "./context"
 import { StringMapObserver, StringMapObserverDelegate } from "@stimulus/mutation-observers"
+import { ValueDescriptor } from "./value_properties"
 
 export class ValueObserver implements StringMapObserverDelegate {
   readonly context: Context
   readonly receiver: any
   private stringMapObserver: StringMapObserver
-  private keysByAttributeName: { [attributeName: string]: string }
+  private valueDescriptors: { [attributeName: string]: ValueDescriptor }
 
   constructor(context: Context, receiver: any) {
     this.context = context
     this.receiver = receiver
     this.stringMapObserver = new StringMapObserver(this.element, this)
-    this.keysByAttributeName = this.getKeysByAttributeName()
+    this.valueDescriptors = (this.controller as any).valueDescriptors
   }
 
   start() {
@@ -33,7 +34,9 @@ export class ValueObserver implements StringMapObserverDelegate {
   // String map observer delegate
 
   getStringMapKeyForAttribute(attributeName: string) {
-    return this.keysByAttributeName[attributeName]
+    if (attributeName in this.valueDescriptors) {
+      return this.valueDescriptors[attributeName].name
+    }
   }
 
   stringMapValueChanged(attributeValue: string | null, key: string) {
@@ -43,15 +46,5 @@ export class ValueObserver implements StringMapObserverDelegate {
       const value = this.receiver[key]
       method.call(this.receiver, value)
     }
-  }
-
-  private getKeysByAttributeName() {
-    return Object.keys(this.valueAttributeMap).reduce((keys, attributeName) => {
-      return { ...keys, [this.valueAttributeMap[attributeName]]: attributeName }
-    }, {} as { [attributeName: string]: string })
-  }
-
-  private get valueAttributeMap() {
-    return (this.controller as any).valueAttributeMap
   }
 }

@@ -3,7 +3,7 @@ import { Controller } from "stimulus"
 export default class extends Controller {
   static targets = [ "slide" ]
   static classes = [ "currentSlide" ]
-  static values = [{ name: "index", type: "integer", default: 0 }]
+  static values = [{ name: "index", type: "integer", defaultValue: 0 }]
 
   initialize() {
     this.render()
