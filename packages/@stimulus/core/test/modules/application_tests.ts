@@ -1,5 +1,5 @@
-import { ApplicationTestCase } from "../application_test_case"
-import { LogController } from "../log_controller"
+import { ApplicationTestCase } from "../cases/application_test_case"
+import { LogController } from "../controllers/log_controller"
 
 class AController extends LogController {}
 class BController extends LogController {}

@@ -1,4 +1,4 @@
-import { Controller } from "../src/controller"
+import { Controller } from "../../src/controller"
 
 export class BaseTargetController extends Controller {
   static targets = [ "alpha" ]

@@ -1,6 +1,7 @@
-import { TargetControllerTestCase } from "../target_controller_test_case"
+import { ControllerTestCase } from "../cases/controller_test_case"
+import { TargetController } from "../controllers/target_controller"
 
-export default class TargetTests extends TargetControllerTestCase {
+export default class TargetTests extends ControllerTestCase(TargetController) {
   fixtureHTML = `
     <div data-controller="${this.identifier}">
       <div data-target="${this.identifier}.alpha" id="alpha1"></div>
