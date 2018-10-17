@@ -2,7 +2,7 @@ import { Constructor } from "./constructor"
 
 export function readInheritableStaticArray<T, U = string>(constructor: Constructor<T>, propertyName: string) {
   const ancestors = getAncestorsForConstructor(constructor)
-  return Array.from(ancestors.reduce((values, constructor) => {
+  return Array.from(ancestors.reduceRight((values, constructor) => {
     getOwnStaticArrayValues(constructor, propertyName).forEach(name => values.add(name))
     return values
   }, new Set as Set<U>))

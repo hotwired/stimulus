@@ -60,7 +60,7 @@ export type ValueDescriptor = {
 
 export type ValueDescriptorMap = { [attributeName: string]: ValueDescriptor }
 
-type ValueDefinition = string | Partial<ValueDescriptor>
+export type ValueDefinition = string | Partial<ValueDescriptor>
 
 function parseValueDefinition(valueDefinition: ValueDefinition): ValueDescriptor {
   const key = typeof valueDefinition == "string" ? valueDefinition : valueDefinition.name

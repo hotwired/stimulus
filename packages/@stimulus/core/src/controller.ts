@@ -6,13 +6,14 @@ import { DataMap } from "./data_map"
 import { Scope } from "./scope"
 import { TargetPropertiesBlessing } from "./target_properties"
 import { TargetSet } from "./target_set"
-import { ValuePropertiesBlessing } from "./value_properties"
+import { ValuePropertiesBlessing, ValueDefinition } from "./value_properties"
 
 export type ControllerConstructor = Constructor<Controller>
 
 export class Controller {
   static blessings = [ ClassPropertiesBlessing, TargetPropertiesBlessing, ValuePropertiesBlessing ]
   static targets: string[] = []
+  static values: ValueDefinition[] = []
 
   readonly context: Context
 
