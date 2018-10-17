@@ -7,7 +7,7 @@ import { capitalize } from "./string_helpers"
 export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
   const valueDefinitions = readInheritableStaticArray<T, ValueDefinition>(constructor, "values")
   const propertyDescriptorMap: PropertyDescriptorMap = {
-    valueDescriptors: {
+    valueDescriptorMap: {
       get(this: Controller) {
         return valueDefinitions.reduce((result, valueDefinition) => {
           const valueDescriptor = parseValueDefinition(valueDefinition)

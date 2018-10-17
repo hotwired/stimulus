@@ -5,10 +5,6 @@ export default class extends Controller {
   static classes = [ "currentSlide" ]
   static values = [{ name: "index", type: "integer", defaultValue: 0 }]
 
-  initialize() {
-    this.render()
-  }
-
   next() {
     if (this.indexValue < this.lastIndex) {
       this.indexValue++

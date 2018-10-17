@@ -26,8 +26,12 @@ export class ValueController extends BaseValueController {
   stringWithDefaultValue!: string
 
   loggedNumericValues: number[] = []
-
   numericValueChanged(value: number) {
     this.loggedNumericValues.push(value)
+  }
+
+  loggedStringWithDefaultValues: string[] = []
+  stringWithDefaultValueChanged(value: string) {
+    this.loggedStringWithDefaultValues.push(value)
   }
 }

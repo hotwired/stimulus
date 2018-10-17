@@ -95,7 +95,7 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.assert.notOk(this.has("string-with-default"))
   }
 
-  async "test change notifications"() {
+  async "test changed callbacks"() {
     this.assert.deepEqual(this.controller.loggedNumericValues, [123])
 
     this.controller.numericValue = 0
@@ -105,6 +105,18 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.set("numeric", "1")
     await this.nextFrame
     this.assert.deepEqual(this.controller.loggedNumericValues, [123, 0, 1])
+  }
+
+  async "test default values trigger changed callbacks"() {
+    this.assert.deepEqual(this.controller.loggedStringWithDefaultValues, ["hello"])
+
+    this.controller.stringWithDefaultValue = "goodbye"
+    await this.nextFrame
+    this.assert.deepEqual(this.controller.loggedStringWithDefaultValues, ["hello", "goodbye"])
+
+    this.controller.stringWithDefaultValue = undefined as any
+    await this.nextFrame
+    this.assert.deepEqual(this.controller.loggedStringWithDefaultValues, ["hello", "goodbye", "hello"])
   }
 
   has(name: string) {
