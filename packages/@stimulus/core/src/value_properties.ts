@@ -54,7 +54,7 @@ export function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition
 export type ValueDescriptor = {
   key: string,
   name: string,
-  type: "boolean" | "integer" | "float" | "string",
+  type: "boolean" | "number" | "string",
   defaultValue: any
 }
 
@@ -98,11 +98,7 @@ const readers: { [type: string]: Reader } = {
     return !(value == "0" || value == "false")
   },
 
-  integer(value: string): number {
-    return parseInt(value, 10)
-  },
-
-  float(value: string): number {
+  number(value: string): number {
     return parseFloat(value)
   },
 

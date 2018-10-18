@@ -1,7 +1,7 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
-  static values = [ "url", { name: "refreshInterval", type: "integer" } ]
+  static values = [ "url", { name: "refreshInterval", type: "number" } ]
 
   connect() {
     this.load()

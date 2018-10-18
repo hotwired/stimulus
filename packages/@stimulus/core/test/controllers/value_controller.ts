@@ -6,7 +6,7 @@ class BaseValueController extends Controller {
     "shadowedBoolean",
     "string",
     { name: "explicitString", type: "string" },
-    { name: "numeric", type: "integer" }
+    { name: "numeric", type: "number" }
   ]
 
   stringValue!: string
@@ -17,12 +17,10 @@ class BaseValueController extends Controller {
 export class ValueController extends BaseValueController {
   static values: ValueDefinition[] = [
     { name: "shadowedBoolean", type: "boolean" },
-    { name: "floatingPoint", type: "float" },
     { name: "stringWithDefault", defaultValue: "hello" }
   ]
 
   shadowedBooleanValue!: boolean
-  floatingPointValue!: number
   stringWithDefaultValue!: string
 
   loggedNumericValues: number[] = []

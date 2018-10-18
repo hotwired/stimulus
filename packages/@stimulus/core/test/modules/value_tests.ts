@@ -7,8 +7,7 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
       data-${this.identifier}-shadowed-boolean="true"
       data-${this.identifier}-numeric="123"
       data-${this.identifier}-string="ok"
-      data-${this.identifier}-explicit-string="$#!%"
-      data-${this.identifier}-floating-point="0.456">
+      data-${this.identifier}-explicit-string="$#!%">
     </div>
   `
 
@@ -22,7 +21,7 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.assert.deepEqual(this.controller.explicitStringValue, "$#!%")
   }
 
-  "test integer values"() {
+  "test numeric values"() {
     this.assert.deepEqual(this.controller.numericValue, 123)
 
     this.controller.numericValue = 456
@@ -32,28 +31,17 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.controller.numericValue = "789" as any
     this.assert.deepEqual(this.controller.numericValue, 789)
 
-    this.controller.numericValue = 7.89
-    this.assert.deepEqual(this.controller.numericValue, 7)
+    this.controller.numericValue = 1.23
+    this.assert.deepEqual(this.controller.numericValue, 1.23)
+    this.assert.deepEqual(this.get("numeric"), "1.23")
+
+    this.controller.numericValue = Infinity
+    this.assert.deepEqual(this.controller.numericValue, Infinity)
+    this.assert.deepEqual(this.get("numeric"), "Infinity")
 
     this.controller.numericValue = "garbage" as any
     this.assert.ok(isNaN(this.controller.numericValue))
     this.assert.equal(this.get("numeric"), "garbage")
-  }
-
-  "test floating-point values"() {
-    this.assert.deepEqual(this.controller.floatingPointValue, 0.456)
-
-    this.controller.floatingPointValue = 1.23
-    this.assert.deepEqual(this.controller.floatingPointValue, 1.23)
-    this.assert.deepEqual(this.get("floating-point"), "1.23")
-
-    this.controller.floatingPointValue = Infinity
-    this.assert.deepEqual(this.controller.floatingPointValue, Infinity)
-    this.assert.deepEqual(this.get("floating-point"), "Infinity")
-
-    this.controller.floatingPointValue = "garbage" as any
-    this.assert.ok(isNaN(this.controller.floatingPointValue))
-    this.assert.equal(this.get("floating-point"), "garbage")
   }
 
   "test boolean values"() {
@@ -139,4 +127,3 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     return this.controller.element
   }
 }
-
