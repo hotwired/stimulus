@@ -26,7 +26,7 @@ export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
 /** @hidden */
 export function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition): PropertyDescriptorMap {
   const { name, key, type, defaultValue } = parseValueDefinition(valueDefinition)
-  const read = readers[type]
+  const read = readers[type], write = writers[type] || writers.default
 
   return {
     [name]: {
@@ -38,7 +38,7 @@ export function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition
         if (value == undefined) {
           this.data.delete(key)
         } else {
-          this.data.set(key, `${value}`)
+          this.data.set(key, write(value))
         }
       }
     },
@@ -54,7 +54,7 @@ export function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition
 export type ValueDescriptor = {
   key: string,
   name: string,
-  type: "boolean" | "number" | "string",
+  type: "boolean" | "date" | "number" | "string",
   defaultValue: any
 }
 
@@ -98,11 +98,38 @@ const readers: { [type: string]: Reader } = {
     return !(value == "0" || value == "false")
   },
 
+  date(value: string): Date {
+    const numericValue = Number(value)
+    const date = new Date(isNaN(numericValue) ? value : numericValue)
+
+    if (isNaN(date.getTime())) {
+      throw new Error(`Invalid date "${value}"`)
+    } else {
+      return date
+    }
+  },
+
   number(value: string): number {
     return parseFloat(value)
   },
 
   string(value: string): string {
     return value
+  }
+}
+
+type Writer = (value: any) => string
+
+const writers: { [type: string]: Writer } = {
+  date(value: any) {
+    if (value && typeof value.toISOString == "function") {
+      return value.toISOString()
+    } else {
+      return `${value}`
+    }
+  },
+
+  default(value: any) {
+    return `${value}`
   }
 }

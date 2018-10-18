@@ -1,13 +1,16 @@
 import { ControllerTestCase } from "../cases/controller_test_case"
 import { ValueController } from "../controllers/value_controller"
 
+const date = new Date(Date.parse("2018-10-18T15:33:33.333Z"))
+
 export default class ValueTests extends ControllerTestCase(ValueController) {
   fixtureHTML = `
     <div data-controller="${this.identifier}"
       data-${this.identifier}-shadowed-boolean="true"
       data-${this.identifier}-numeric="123"
       data-${this.identifier}-string="ok"
-      data-${this.identifier}-explicit-string="$#!%">
+      data-${this.identifier}-explicit-string="$#!%"
+      data-${this.identifier}-date="${date.toISOString()}">
     </div>
   `
 
@@ -62,6 +65,24 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.controller.shadowedBooleanValue = 1 as any
     this.assert.deepEqual(this.controller.shadowedBooleanValue, true)
     this.assert.deepEqual(this.get("shadowed-boolean"), "1")
+  }
+
+  "test date values"() {
+    this.assert.deepEqual(this.controller.dateValue, date)
+
+    const now = new Date
+    this.controller.dateValue = now
+    this.assert.deepEqual(this.controller.dateValue, now)
+    this.assert.deepEqual(this.get("date"), now.toISOString())
+
+    const oneSecondAgo = new Date(now.valueOf() - 1000)
+    this.controller.dateValue = oneSecondAgo.valueOf() as any
+    this.assert.deepEqual(this.controller.dateValue, oneSecondAgo)
+    this.assert.deepEqual(this.get("date"), oneSecondAgo.valueOf().toString())
+
+    this.controller.dateValue = "garbage" as any
+    this.assert.throws(() => this.controller.dateValue)
+    this.assert.equal(this.get("date"), "garbage")
   }
 
   "test accessing a value throws when the attribute is not present"() {
