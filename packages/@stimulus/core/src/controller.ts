@@ -1,11 +1,7 @@
-import { Application } from "./application"
 import { ClassPropertiesBlessing } from "./class_properties"
 import { Constructor } from "./constructor"
 import { Context } from "./context"
-import { DataMap } from "./data_map"
-import { Scope } from "./scope"
 import { TargetPropertiesBlessing } from "./target_properties"
-import { TargetSet } from "./target_set"
 import { ValuePropertiesBlessing, ValueDefinitionMap } from "./value_properties"
 
 export type ControllerConstructor = Constructor<Controller>
@@ -21,27 +17,31 @@ export class Controller {
     this.context = context
   }
 
-  get application(): Application {
+  get application() {
     return this.context.application
   }
 
-  get scope(): Scope {
+  get scope() {
     return this.context.scope
   }
 
-  get element(): Element {
+  get element() {
     return this.scope.element
   }
 
-  get identifier(): string {
+  get identifier() {
     return this.scope.identifier
   }
 
-  get targets(): TargetSet {
+  get targets() {
     return this.scope.targets
   }
 
-  get data(): DataMap {
+  get classes() {
+    return this.scope.classes
+  }
+
+  get data() {
     return this.scope.data
   }
 

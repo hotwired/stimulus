@@ -17,8 +17,8 @@ function propertiesForClassDefinition(key: string) {
   return {
     [name]: {
       get(this: Controller) {
-        if (this.data.has(key)) {
-          return this.data.get(key)
+        if (this.classes.has(key)) {
+          return this.classes.get(key)
         } else {
           return (this as any)[defaultName]
         }

@@ -1,3 +1,4 @@
+import { ClassMap } from "./class_map"
 import { DataMap } from "./data_map"
 import { Schema } from "./schema"
 import { TargetSet } from "./target_set"
@@ -8,6 +9,7 @@ export class Scope {
   readonly identifier: string
   readonly element: Element
   readonly targets: TargetSet
+  readonly classes: ClassMap
   readonly data: DataMap
 
   constructor(schema: Schema, identifier: string, element: Element) {
@@ -15,6 +17,7 @@ export class Scope {
     this.identifier = identifier
     this.element = element
     this.targets = new TargetSet(this)
+    this.classes = new ClassMap(this)
     this.data = new DataMap(this)
   }
 
