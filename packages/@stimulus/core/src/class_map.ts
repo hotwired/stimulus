@@ -28,8 +28,16 @@ export class ClassMap {
   }
 
   get descriptorStrings() {
-    const value = this.element.getAttribute("data-class") || ""
+    const value = this.element.getAttribute(this.classAttribute) || ""
     return value.split(/\s+/)
+  }
+
+  get classAttribute() {
+    return this.schema.classAttribute
+  }
+
+  get schema() {
+    return this.scope.schema
   }
 
   get element() {
