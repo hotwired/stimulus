@@ -30,12 +30,12 @@ export function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition
 
   return {
     [name]: {
-      get: defaultValue == undefined
+      get: defaultValue === undefined
         ? getOrThrow(key, read)
         : getWithDefault(key, read, defaultValue),
 
       set(this: Controller, value: T | undefined) {
-        if (value == undefined) {
+        if (value === undefined) {
           this.data.delete(key)
         } else {
           this.data.set(key, write(value))
@@ -45,7 +45,7 @@ export function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition
 
     [`has${capitalize(name)}`]: {
       get(this: Controller): boolean {
-        return defaultValue != undefined || this.data.has(key)
+        return defaultValue !== undefined || this.data.has(key)
       }
     }
   }
@@ -54,7 +54,7 @@ export function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition
 export type ValueDescriptor = {
   key: string,
   name: string,
-  type: "boolean" | "date" | "number" | "string",
+  type: "boolean" | "date" | "json" | "number" | "string",
   defaultValue: any
 }
 
@@ -109,6 +109,10 @@ const readers: { [type: string]: Reader } = {
     }
   },
 
+  json(value: string): any {
+    return JSON.parse(value)
+  },
+
   number(value: string): number {
     return parseFloat(value)
   },
@@ -127,6 +131,10 @@ const writers: { [type: string]: Writer } = {
     } else {
       return `${value}`
     }
+  },
+
+  json(value: any) {
+    return JSON.stringify(value)
   },
 
   default(value: any) {

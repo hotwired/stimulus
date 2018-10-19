@@ -10,7 +10,8 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
       data-${this.identifier}-numeric="123"
       data-${this.identifier}-string="ok"
       data-${this.identifier}-explicit-string="$#!%"
-      data-${this.identifier}-date="${date.toISOString()}">
+      data-${this.identifier}-date="${date.toISOString()}"
+      data-${this.identifier}-json='{"one":[2,3]}'>
     </div>
   `
 
@@ -83,6 +84,30 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.controller.dateValue = "garbage" as any
     this.assert.throws(() => this.controller.dateValue)
     this.assert.equal(this.get("date"), "garbage")
+  }
+
+  "test json values"() {
+    this.assert.deepEqual(this.controller.jsonValue, { "one": [2, 3] })
+
+    this.controller.jsonValue = "hello"
+    this.assert.deepEqual(this.controller.jsonValue, "hello")
+    this.assert.deepEqual(this.get("json"), '"hello"')
+
+    this.controller.jsonValue = 123.45
+    this.assert.deepEqual(this.controller.jsonValue, 123.45)
+    this.assert.deepEqual(this.get("json"), "123.45")
+
+    this.controller.jsonValue = [6, 7, [8, 9, 10]]
+    this.assert.deepEqual(this.controller.jsonValue, [6, 7, [8, 9, 10]])
+    this.assert.deepEqual(this.get("json"), "[6,7,[8,9,10]]")
+
+    this.controller.jsonValue = false
+    this.assert.deepEqual(this.controller.jsonValue, false)
+    this.assert.deepEqual(this.get("json"), "false")
+
+    this.controller.jsonValue = null
+    this.assert.deepEqual(this.controller.jsonValue, null)
+    this.assert.deepEqual(this.get("json"), "null")
   }
 
   "test accessing a value throws when the attribute is not present"() {
