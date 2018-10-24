@@ -1,5 +1,5 @@
+import { parseClassDescriptorStringForIdentifier } from "./class_descriptor"
 import { Scope } from "./scope"
-import { parseDescriptorString } from "./class_descriptor"
 
 export class ClassMap {
   readonly scope: Scope
@@ -19,8 +19,8 @@ export class ClassMap {
   get values() {
     const { identifier } = this
     return this.descriptorStrings.reduce((values, descriptorString) => {
-      const descriptor = parseDescriptorString(descriptorString)
-      if (descriptor && descriptor.identifier == identifier) {
+      const descriptor = parseClassDescriptorStringForIdentifier(descriptorString, identifier)
+      if (descriptor) {
         values[descriptor.name] = descriptor.className
       }
       return values
