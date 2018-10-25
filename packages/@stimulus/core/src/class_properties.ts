@@ -1,6 +1,6 @@
 import { Constructor } from "./constructor"
 import { Controller } from "./controller"
-import { readInheritableStaticArray } from "./inheritable_static_array"
+import { readInheritableStaticArray } from "./inheritable_statics"
 import { capitalize, dasherize } from "./string_helpers"
 
 /** @hidden */

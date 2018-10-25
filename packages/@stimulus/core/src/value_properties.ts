@@ -1,16 +1,16 @@
 import { Constructor } from "./constructor"
 import { Controller } from "./controller"
-import { readInheritableStaticArray } from "./inheritable_static_array"
+import { readInheritableStaticObjectPairs } from "./inheritable_statics"
 import { capitalize } from "./string_helpers"
 
 /** @hidden */
 export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
-  const valueDefinitions = readInheritableStaticArray<T, ValueDefinition>(constructor, "values")
+  const valueDefinitionPairs = readInheritableStaticObjectPairs<T, ValueDefinition>(constructor, "values")
   const propertyDescriptorMap: PropertyDescriptorMap = {
     valueDescriptorMap: {
       get(this: Controller) {
-        return valueDefinitions.reduce((result, valueDefinition) => {
-          const valueDescriptor = parseValueDefinition(valueDefinition)
+        return valueDefinitionPairs.reduce((result, valueDefinitionPair) => {
+          const valueDescriptor = parseValueDefinitionPair(valueDefinitionPair)
           const attributeName = this.data.getAttributeNameForKey(valueDescriptor.key)
           return Object.assign(result, { [attributeName]: valueDescriptor })
         }, {} as ValueDescriptorMap)
@@ -18,14 +18,14 @@ export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
     }
   }
 
-  return valueDefinitions.reduce((properties, valueDefinition) => {
-    return Object.assign(properties, propertiesForValueDefinition(valueDefinition))
+  return valueDefinitionPairs.reduce((properties, valueDefinition) => {
+    return Object.assign(properties, propertiesForValueDefinitionPair(valueDefinition))
   }, propertyDescriptorMap)
 }
 
 /** @hidden */
-export function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition): PropertyDescriptorMap {
-  const { name, key, type, defaultValue } = parseValueDefinition(valueDefinition)
+export function propertiesForValueDefinitionPair<T>(valueDefinitionPair: ValueDefinitionPair): PropertyDescriptorMap {
+  const { key, name, type, defaultValue } = parseValueDefinitionPair(valueDefinitionPair)
   const read = readers[type], write = writers[type] || writers.default
 
   return {
@@ -54,22 +54,50 @@ export function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition
 export type ValueDescriptor = {
   key: string,
   name: string,
-  type: "boolean" | "json" | "number" | "string",
+  type: ValueType,
   defaultValue: any
 }
 
 export type ValueDescriptorMap = { [attributeName: string]: ValueDescriptor }
 
-export type ValueDefinition = string | Partial<ValueDescriptor>
+export type ValueDefinition = ValueTypeConstant | [ValueTypeConstant, any]
 
-function parseValueDefinition(valueDefinition: ValueDefinition): ValueDescriptor {
-  const key = typeof valueDefinition == "string" ? valueDefinition : valueDefinition.name
-  if (!key) throw new Error("missing key")
+export type ValueDefinitionMap = { [key: string]: ValueDefinition }
+
+export type ValueDefinitionPair = [string, ValueDefinition]
+
+export type ValueType = "boolean" | "json" | "number" | "string"
+
+export type ValueTypeConstant = typeof Boolean | typeof JSON | typeof Number | typeof String
+
+function parseValueDefinitionPair([key, definition]: ValueDefinitionPair): ValueDescriptor {
+  const { 0: typeConstant, 1: defaultValue }
+    = Array.isArray(definition)
+    ? definition
+    : [definition, defaultValueForValueTypeConstant(definition)]
   return {
     key,
     name: `${key}Value`,
-    type: typeof valueDefinition == "string" ? "string" : valueDefinition.type || "string",
-    defaultValue: typeof valueDefinition == "string" ? undefined : valueDefinition.defaultValue
+    type: parseValueTypeConstant(typeConstant),
+    defaultValue
+  }
+}
+
+function parseValueTypeConstant(typeConstant: ValueTypeConstant) {
+  switch (typeConstant) {
+    case Boolean: return "boolean"
+    case JSON:    return "json"
+    case Number:  return "number"
+    case String:  return "string"
+  }
+  throw new Error(`Unknown value type constant "${typeConstant}"`)
+}
+
+function defaultValueForValueTypeConstant(typeConstant: ValueTypeConstant) {
+  switch (typeConstant) {
+    case Boolean: return false
+    case Number:  return 0
+    case String:  return ""
   }
 }
 

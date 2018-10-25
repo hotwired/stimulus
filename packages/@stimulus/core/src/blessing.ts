@@ -1,5 +1,5 @@
 import { Constructor } from "./constructor"
-import { readInheritableStaticArray } from "./inheritable_static_array"
+import { readInheritableStaticArray } from "./inheritable_statics"
 
 /** @hidden */
 export type Blessing<T> = (constructor: Constructor<T>) => PropertyDescriptorMap

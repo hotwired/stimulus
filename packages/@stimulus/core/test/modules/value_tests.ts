@@ -7,19 +7,16 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
       data-${this.identifier}-shadowed-boolean="true"
       data-${this.identifier}-numeric="123"
       data-${this.identifier}-string="ok"
-      data-${this.identifier}-explicit-string="$#!%"
       data-${this.identifier}-json='{"one":[2,3]}'>
     </div>
   `
 
-  "test values are strings by default"() {
+  "test string values"() {
     this.assert.deepEqual(this.controller.stringValue, "ok")
 
     this.controller.stringValue = "cool"
     this.assert.deepEqual(this.controller.stringValue, "cool")
     this.assert.deepEqual(this.get("string"), "cool")
-
-    this.assert.deepEqual(this.controller.explicitStringValue, "$#!%")
   }
 
   "test numeric values"() {
@@ -89,13 +86,31 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.assert.deepEqual(this.get("json"), "null")
   }
 
-  "test accessing a value throws when the attribute is not present"() {
+  "test accessing a string value returns the empty string when the attribute is not present"() {
     this.controller.stringValue = undefined as any
     this.assert.notOk(this.has("string"))
-    this.assert.raises(() => this.controller.stringValue)
+    this.assert.deepEqual(this.controller.stringValue, "")
   }
 
-  "test accessing a value returns its default when the attribute is not present"() {
+  "test accessing a numeric value returns zero when the attribute is not present"() {
+    this.controller.numericValue = undefined as any
+    this.assert.notOk(this.has("numeric"))
+    this.assert.deepEqual(this.controller.numericValue, 0)
+  }
+
+  "test accessing a boolean value returns false when the attribute is not present"() {
+    this.controller.shadowedBooleanValue = undefined as any
+    this.assert.notOk(this.has("shadowed-boolean"))
+    this.assert.deepEqual(this.controller.shadowedBooleanValue, false)
+  }
+
+  "test accessing a json value throws when the attribute is not present"() {
+    this.controller.jsonValue = undefined as any
+    this.assert.notOk(this.has("json"))
+    this.assert.raises(() => this.controller.jsonValue)
+  }
+
+  "test accessing a value returns its specified default when the attribute is not present"() {
     this.assert.deepEqual(this.controller.stringWithDefaultValue, "hello")
     this.assert.notOk(this.has("string-with-default"))
 
@@ -106,6 +121,15 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.controller.stringWithDefaultValue = undefined as any
     this.assert.deepEqual(this.controller.stringWithDefaultValue, "hello")
     this.assert.notOk(this.has("string-with-default"))
+  }
+
+  "test accessing a value throws when the default is undefined and the attribute is not present"() {
+    this.assert.notOk(this.has("string-without-default"))
+    this.assert.raises(() => this.controller.stringWithoutDefaultValue)
+
+    this.controller.stringWithoutDefaultValue = "ok"
+    this.assert.deepEqual(this.controller.stringWithoutDefaultValue, "ok")
+    this.assert.deepEqual(this.get("string-without-default"), "ok")
   }
 
   async "test changed callbacks"() {

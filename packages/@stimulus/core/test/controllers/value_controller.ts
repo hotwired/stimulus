@@ -1,28 +1,29 @@
 import { Controller } from "../../src/controller"
-import { ValueDefinition } from "../../src/value_properties"
+import { ValueDefinitionMap } from "../../src/value_properties"
 
 class BaseValueController extends Controller {
-  static values: ValueDefinition[] = [
-    "shadowedBoolean",
-    "string",
-    { name: "explicitString", type: "string" },
-    { name: "numeric", type: "number" }
-  ]
+  static values: ValueDefinitionMap = {
+    shadowedBoolean: String,
+    string: String,
+    numeric: Number
+  }
 
   stringValue!: string
-  explicitStringValue!: string
   numericValue!: number
 }
 
 export class ValueController extends BaseValueController {
-  static values: ValueDefinition[] = [
-    { name: "shadowedBoolean", type: "boolean" },
-    { name: "stringWithDefault", defaultValue: "hello" },
-    { name: "json", type: "json" }
-  ]
+  static values: ValueDefinitionMap = {
+    shadowedBoolean: Boolean,
+    stringWithDefault: [String, "hello"],
+    stringWithoutDefault: [String, undefined],
+    json: JSON
+  }
 
   shadowedBooleanValue!: boolean
   stringWithDefaultValue!: string
+  stringWithoutDefaultValue!: string
+  dateValue!: Date
   jsonValue!: any
 
   loggedNumericValues: number[] = []
