@@ -54,7 +54,7 @@ export function propertiesForValueDefinition<T>(valueDefinition: ValueDefinition
 export type ValueDescriptor = {
   key: string,
   name: string,
-  type: "boolean" | "date" | "json" | "number" | "string",
+  type: "boolean" | "json" | "number" | "string",
   defaultValue: any
 }
 
@@ -98,17 +98,6 @@ const readers: { [type: string]: Reader } = {
     return !(value == "0" || value == "false")
   },
 
-  date(value: string): Date {
-    const numericValue = Number(value)
-    const date = new Date(isNaN(numericValue) ? value : numericValue)
-
-    if (isNaN(date.getTime())) {
-      throw new Error(`Invalid date "${value}"`)
-    } else {
-      return date
-    }
-  },
-
   json(value: string): any {
     return JSON.parse(value)
   },
@@ -125,14 +114,6 @@ const readers: { [type: string]: Reader } = {
 type Writer = (value: any) => string
 
 const writers: { [type: string]: Writer } = {
-  date(value: any) {
-    if (value && typeof value.toISOString == "function") {
-      return value.toISOString()
-    } else {
-      return `${value}`
-    }
-  },
-
   json(value: any) {
     return JSON.stringify(value)
   },

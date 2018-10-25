@@ -18,13 +18,11 @@ export class ValueController extends BaseValueController {
   static values: ValueDefinition[] = [
     { name: "shadowedBoolean", type: "boolean" },
     { name: "stringWithDefault", defaultValue: "hello" },
-    { name: "date", type: "date" },
     { name: "json", type: "json" }
   ]
 
   shadowedBooleanValue!: boolean
   stringWithDefaultValue!: string
-  dateValue!: Date
   jsonValue!: any
 
   loggedNumericValues: number[] = []
