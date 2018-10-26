@@ -15,24 +15,23 @@ class BaseValueController extends Controller {
 export class ValueController extends BaseValueController {
   static values: ValueDefinitionMap = {
     shadowedBoolean: Boolean,
-    stringWithDefault: [String, "hello"],
-    stringWithoutDefault: [String, undefined],
-    json: JSON
+    missingString: String,
+    ids: Array,
+    options: Object
   }
 
   shadowedBooleanValue!: boolean
-  stringWithDefaultValue!: string
-  stringWithoutDefaultValue!: string
-  dateValue!: Date
-  jsonValue!: any
+  missingStringValue!: string
+  idsValue!: any[]
+  optionsValue!: { [key: string]: any }
 
   loggedNumericValues: number[] = []
   numericValueChanged(value: number) {
     this.loggedNumericValues.push(value)
   }
 
-  loggedStringWithDefaultValues: string[] = []
-  stringWithDefaultValueChanged(value: string) {
-    this.loggedStringWithDefaultValues.push(value)
+  loggedMissingStringValues: string[] = []
+  missingStringValueChanged(value: string) {
+    this.loggedMissingStringValues.push(value)
   }
 }

@@ -7,7 +7,8 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
       data-${this.identifier}-shadowed-boolean="true"
       data-${this.identifier}-numeric="123"
       data-${this.identifier}-string="ok"
-      data-${this.identifier}-json='{"one":[2,3]}'>
+      data-${this.identifier}-ids="[1,2,3]"
+      data-${this.identifier}-options='{"one":[2,3]}'>
     </div>
   `
 
@@ -62,74 +63,74 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.assert.deepEqual(this.get("shadowed-boolean"), "1")
   }
 
-  "test json values"() {
-    this.assert.deepEqual(this.controller.jsonValue, { "one": [2, 3] })
+  "test array values"() {
+    this.assert.deepEqual(this.controller.idsValue, [1, 2, 3])
 
-    this.controller.jsonValue = "hello"
-    this.assert.deepEqual(this.controller.jsonValue, "hello")
-    this.assert.deepEqual(this.get("json"), '"hello"')
+    this.controller.idsValue.push(4)
+    this.assert.deepEqual(this.controller.idsValue, [1, 2, 3])
 
-    this.controller.jsonValue = 123.45
-    this.assert.deepEqual(this.controller.jsonValue, 123.45)
-    this.assert.deepEqual(this.get("json"), "123.45")
+    this.controller.idsValue = []
+    this.assert.deepEqual(this.controller.idsValue, [])
+    this.assert.deepEqual(this.get("ids"), "[]")
 
-    this.controller.jsonValue = [6, 7, [8, 9, 10]]
-    this.assert.deepEqual(this.controller.jsonValue, [6, 7, [8, 9, 10]])
-    this.assert.deepEqual(this.get("json"), "[6,7,[8,9,10]]")
+    this.controller.idsValue = null as any
+    this.assert.throws(() => this.controller.idsValue)
 
-    this.controller.jsonValue = false
-    this.assert.deepEqual(this.controller.jsonValue, false)
-    this.assert.deepEqual(this.get("json"), "false")
-
-    this.controller.jsonValue = null
-    this.assert.deepEqual(this.controller.jsonValue, null)
-    this.assert.deepEqual(this.get("json"), "null")
+    this.controller.idsValue = {} as any
+    this.assert.throws(() => this.controller.idsValue)
   }
 
-  "test accessing a string value returns the empty string when the attribute is not present"() {
+  "test object values"() {
+    this.assert.deepEqual(this.controller.optionsValue, { "one": [2, 3] })
+
+    this.controller.optionsValue["one"] = 0
+    this.assert.deepEqual(this.controller.optionsValue, { "one": [2, 3] })
+
+    this.controller.optionsValue = {}
+    this.assert.deepEqual(this.controller.optionsValue, {})
+    this.assert.deepEqual(this.get("options"), "{}")
+
+    this.controller.optionsValue = null as any
+    this.assert.throws(() => this.controller.optionsValue)
+
+    this.controller.optionsValue = [] as any
+    this.assert.throws(() => this.controller.optionsValue)
+  }
+
+  "test accessing a string value returns the empty string when the attribute is missing"() {
     this.controller.stringValue = undefined as any
     this.assert.notOk(this.has("string"))
     this.assert.deepEqual(this.controller.stringValue, "")
   }
 
-  "test accessing a numeric value returns zero when the attribute is not present"() {
+  "test accessing a numeric value returns zero when the attribute is missing"() {
     this.controller.numericValue = undefined as any
     this.assert.notOk(this.has("numeric"))
     this.assert.deepEqual(this.controller.numericValue, 0)
   }
 
-  "test accessing a boolean value returns false when the attribute is not present"() {
+  "test accessing a boolean value returns false when the attribute is missing"() {
     this.controller.shadowedBooleanValue = undefined as any
     this.assert.notOk(this.has("shadowed-boolean"))
     this.assert.deepEqual(this.controller.shadowedBooleanValue, false)
   }
 
-  "test accessing a json value throws when the attribute is not present"() {
-    this.controller.jsonValue = undefined as any
-    this.assert.notOk(this.has("json"))
-    this.assert.raises(() => this.controller.jsonValue)
+  "test accessing an array value returns an empty array when the attribute is missing"() {
+    this.controller.idsValue = undefined as any
+    this.assert.notOk(this.has("ids"))
+    this.assert.deepEqual(this.controller.idsValue, [])
+
+    this.controller.idsValue.push(1)
+    this.assert.deepEqual(this.controller.idsValue, [])
   }
 
-  "test accessing a value returns its specified default when the attribute is not present"() {
-    this.assert.deepEqual(this.controller.stringWithDefaultValue, "hello")
-    this.assert.notOk(this.has("string-with-default"))
+  "test accessing an object value returns an empty object when the attribute is missing"() {
+    this.controller.optionsValue = undefined as any
+    this.assert.notOk(this.has("options"))
+    this.assert.deepEqual(this.controller.optionsValue, {})
 
-    this.controller.stringWithDefaultValue = "goodbye"
-    this.assert.deepEqual(this.controller.stringWithDefaultValue, "goodbye")
-    this.assert.deepEqual(this.get("string-with-default"), "goodbye")
-
-    this.controller.stringWithDefaultValue = undefined as any
-    this.assert.deepEqual(this.controller.stringWithDefaultValue, "hello")
-    this.assert.notOk(this.has("string-with-default"))
-  }
-
-  "test accessing a value throws when the default is undefined and the attribute is not present"() {
-    this.assert.notOk(this.has("string-without-default"))
-    this.assert.raises(() => this.controller.stringWithoutDefaultValue)
-
-    this.controller.stringWithoutDefaultValue = "ok"
-    this.assert.deepEqual(this.controller.stringWithoutDefaultValue, "ok")
-    this.assert.deepEqual(this.get("string-without-default"), "ok")
+    this.controller.optionsValue.hello = true
+    this.assert.deepEqual(this.controller.optionsValue, {})
   }
 
   async "test changed callbacks"() {
@@ -145,15 +146,15 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
   }
 
   async "test default values trigger changed callbacks"() {
-    this.assert.deepEqual(this.controller.loggedStringWithDefaultValues, ["hello"])
+    this.assert.deepEqual(this.controller.loggedMissingStringValues, [""])
 
-    this.controller.stringWithDefaultValue = "goodbye"
+    this.controller.missingStringValue = "hello"
     await this.nextFrame
-    this.assert.deepEqual(this.controller.loggedStringWithDefaultValues, ["hello", "goodbye"])
+    this.assert.deepEqual(this.controller.loggedMissingStringValues, ["", "hello"])
 
-    this.controller.stringWithDefaultValue = undefined as any
+    this.controller.missingStringValue = undefined as any
     await this.nextFrame
-    this.assert.deepEqual(this.controller.loggedStringWithDefaultValues, ["hello", "goodbye", "hello"])
+    this.assert.deepEqual(this.controller.loggedMissingStringValues, ["", "hello", ""])
   }
 
   has(name: string) {
