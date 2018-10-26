@@ -18,8 +18,8 @@ export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
     }
   }
 
-  return valueDefinitionPairs.reduce((properties, valueDefinition) => {
-    return Object.assign(properties, propertiesForValueDefinitionPair(valueDefinition))
+  return valueDefinitionPairs.reduce((properties, valueDefinitionPair) => {
+    return Object.assign(properties, propertiesForValueDefinitionPair(valueDefinitionPair))
   }, propertyDescriptorMap)
 }
 
