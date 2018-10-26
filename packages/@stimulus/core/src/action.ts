@@ -1,4 +1,4 @@
-import { ActionDescriptor, parseDescriptorString, stringifyEventTarget } from "./action_descriptor"
+import { ActionDescriptor, parseActionDescriptorString, stringifyEventTarget } from "./action_descriptor"
 import { Token } from "@stimulus/mutation-observers"
 
 export class Action {
@@ -10,7 +10,7 @@ export class Action {
   readonly methodName: string
 
   static forToken(token: Token) {
-    return new this(token.element, token.index, parseDescriptorString(token.content))
+    return new this(token.element, token.index, parseActionDescriptorString(token.content))
   }
 
   constructor(element: Element, index: number, descriptor: Partial<ActionDescriptor>) {

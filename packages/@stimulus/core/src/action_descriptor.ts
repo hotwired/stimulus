@@ -8,7 +8,7 @@ export interface ActionDescriptor {
 // capture nos.:            12   23 4               43   1 5   56 7  76
 const descriptorPattern = /^((.+?)(@(window|document))?->)?(.+?)(#(.+))?$/
 
-export function parseDescriptorString(descriptorString: string): Partial<ActionDescriptor> {
+export function parseActionDescriptorString(descriptorString: string): Partial<ActionDescriptor> {
   const source = descriptorString.trim()
   const matches = source.match(descriptorPattern) || []
   return {
