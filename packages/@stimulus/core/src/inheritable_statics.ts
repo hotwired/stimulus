@@ -1,6 +1,6 @@
 import { Constructor } from "./constructor"
 
-export function readInheritableStaticArray<T, U = string>(constructor: Constructor<T>, propertyName: string) {
+export function readInheritableStaticArrayValues<T, U = string>(constructor: Constructor<T>, propertyName: string) {
   const ancestors = getAncestorsForConstructor(constructor)
   return Array.from(ancestors.reduce((values, constructor) => {
     getOwnStaticArrayValues(constructor, propertyName).forEach(name => values.add(name))

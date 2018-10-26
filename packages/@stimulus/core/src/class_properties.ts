@@ -1,11 +1,11 @@
 import { Constructor } from "./constructor"
 import { Controller } from "./controller"
-import { readInheritableStaticArray } from "./inheritable_statics"
+import { readInheritableStaticArrayValues } from "./inheritable_statics"
 import { capitalize, dasherize } from "./string_helpers"
 
 /** @hidden */
 export function ClassPropertiesBlessing<T>(constructor: Constructor<T>) {
-  const classes = readInheritableStaticArray(constructor, "classes")
+  const classes = readInheritableStaticArrayValues(constructor, "classes")
   return classes.reduce((properties, classDefinition) => {
     return Object.assign(properties, propertiesForClassDefinition(classDefinition))
   }, {} as PropertyDescriptorMap)

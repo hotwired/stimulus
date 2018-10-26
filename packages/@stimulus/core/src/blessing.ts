@@ -1,5 +1,5 @@
 import { Constructor } from "./constructor"
-import { readInheritableStaticArray } from "./inheritable_statics"
+import { readInheritableStaticArrayValues } from "./inheritable_statics"
 
 /** @hidden */
 export type Blessing<T> = (constructor: Constructor<T>) => PropertyDescriptorMap
@@ -22,7 +22,7 @@ function shadow<T>(constructor: Constructor<T>, properties: PropertyDescriptorMa
 }
 
 function getBlessedProperties<T>(constructor: Constructor<T>) {
-  const blessings = readInheritableStaticArray(constructor, "blessings") as Blessing<T>[]
+  const blessings = readInheritableStaticArrayValues(constructor, "blessings") as Blessing<T>[]
   return blessings.reduce((blessedProperties, blessing) => {
     const properties = blessing(constructor)
     for (const key in properties) {

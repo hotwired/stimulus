@@ -1,11 +1,11 @@
 import { Constructor } from "./constructor"
 import { Controller } from "./controller"
-import { readInheritableStaticArray } from "./inheritable_statics"
+import { readInheritableStaticArrayValues } from "./inheritable_statics"
 import { capitalize } from "./string_helpers"
 
 /** @hidden */
 export function TargetPropertiesBlessing<T>(constructor: Constructor<T>) {
-  const targets = readInheritableStaticArray(constructor, "targets")
+  const targets = readInheritableStaticArrayValues(constructor, "targets")
   return targets.reduce((properties, targetDefinition) => {
     return Object.assign(properties, propertiesForTargetDefinition(targetDefinition))
   }, {} as PropertyDescriptorMap)
