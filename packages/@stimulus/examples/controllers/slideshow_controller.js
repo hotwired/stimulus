@@ -3,7 +3,7 @@ import { Controller } from "stimulus"
 export default class extends Controller {
   static targets = [ "slide" ]
   static classes = [ "currentSlide" ]
-  static values = [{ name: "index", type: "number", defaultValue: 0 }]
+  static values = { index: Number }
 
   next() {
     if (this.indexValue < this.lastIndex) {

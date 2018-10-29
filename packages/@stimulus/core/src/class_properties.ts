@@ -1,7 +1,7 @@
 import { Constructor } from "./constructor"
 import { Controller } from "./controller"
 import { readInheritableStaticArrayValues } from "./inheritable_statics"
-import { capitalize, dasherize } from "./string_helpers"
+import { capitalize } from "./string_helpers"
 
 /** @hidden */
 export function ClassPropertiesBlessing<T>(constructor: Constructor<T>) {
@@ -12,22 +12,24 @@ export function ClassPropertiesBlessing<T>(constructor: Constructor<T>) {
 }
 
 function propertiesForClassDefinition(key: string) {
-  const name = `${key}Class`, defaultName = `default${capitalize(name)}`
+  const name = `${key}Class`
 
   return {
     [name]: {
       get(this: Controller) {
-        if (this.classes.has(key)) {
-          return this.classes.get(key)
+        const { classes } = this
+        if (classes.has(key)) {
+          return classes.get(key)
         } else {
-          return (this as any)[defaultName]
+          const { classAttribute } = classes
+          throw new Error(`Missing class descriptor for property "${name}" in attribute "${classAttribute}"`)
         }
       }
     },
 
-    [defaultName]: {
+    [`has${capitalize(key)}Class`]: {
       get(this: Controller) {
-        return `${this.identifier}--${dasherize(key)}`
+        return this.classes.has(key)
       }
     }
   }
