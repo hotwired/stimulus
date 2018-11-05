@@ -8,7 +8,8 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
       data-${this.identifier}-numeric="123"
       data-${this.identifier}-string="ok"
       data-${this.identifier}-ids="[1,2,3]"
-      data-${this.identifier}-options='{"one":[2,3]}'>
+      data-${this.identifier}-options='{"one":[2,3]}'
+      data-${this.identifier}-time-24hr="true">
     </div>
   `
 
@@ -155,6 +156,10 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.controller.missingStringValue = undefined as any
     await this.nextFrame
     this.assert.deepEqual(this.controller.loggedMissingStringValues, ["", "hello", ""])
+  }
+
+  "test keys may be specified in kebab-case"() {
+    this.assert.equal(this.controller.time24hrValue, true)
   }
 
   has(name: string) {

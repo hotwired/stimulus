@@ -1,5 +1,5 @@
 import { Controller } from "../../src/controller"
-import { ValueDefinitionMap } from "../../src/value_properties"
+import { ValueDefinitionMap, ValueDescriptorMap } from "../../src/value_properties"
 
 class BaseValueController extends Controller {
   static values: ValueDefinitionMap = {
@@ -8,6 +8,7 @@ class BaseValueController extends Controller {
     numeric: Number
   }
 
+  valueDescriptorMap!: ValueDescriptorMap
   stringValue!: string
   numericValue!: number
 }
@@ -17,13 +18,15 @@ export class ValueController extends BaseValueController {
     shadowedBoolean: Boolean,
     missingString: String,
     ids: Array,
-    options: Object
+    options: Object,
+    "time-24hr": Boolean
   }
 
   shadowedBooleanValue!: boolean
   missingStringValue!: string
   idsValue!: any[]
   optionsValue!: { [key: string]: any }
+  time24hrValue!: Boolean
 
   loggedNumericValues: number[] = []
   numericValueChanged(value: number) {

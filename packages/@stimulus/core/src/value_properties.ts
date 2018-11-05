@@ -1,7 +1,7 @@
 import { Constructor } from "./constructor"
 import { Controller } from "./controller"
 import { readInheritableStaticObjectPairs } from "./inheritable_statics"
-import { capitalize } from "./string_helpers"
+import { camelize, capitalize } from "./string_helpers"
 
 /** @hidden */
 export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
@@ -93,7 +93,7 @@ function parseValueTypeConstant(typeConstant: ValueTypeConstant) {
 function valueDescriptorForKeyAndType(key: string, type: ValueType) {
   return {
     key,
-    name: `${key}Value`,
+    name: `${camelize(key)}Value`,
     type,
     get defaultValue() { return defaultValuesByType[type] }
   }

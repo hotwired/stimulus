@@ -1,5 +1,5 @@
 export function camelize(value: string) {
-  return value.replace(/(?:[_-])([a-z])/g, (_, char) => char.toUpperCase())
+  return value.replace(/(?:[_-])([a-z0-9])/g, (_, char) => char.toUpperCase())
 }
 
 export function capitalize(value: string) {
