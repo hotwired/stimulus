@@ -18,7 +18,7 @@ Begin by sketching the inbox in `public/index.html`:
 
 ```html
 <div data-controller="content-loader"
-     data-content-loader-url="/messages.html"></div>
+     data-contentLoader-url="/messages.html"></div>
 ```
 
 Then create a new `public/messages.html` file with some HTML for our message list:
@@ -53,7 +53,7 @@ export default class extends Controller {
 }
 ```
 
-When the controller connects, we kick off a [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) request to the URL specified in the element's `data-content-loader-url` attribute. Then we load the returned HTML by assigning it to our element's `innerHTML` property.
+When the controller connects, we kick off a [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) request to the URL specified in the element's `data-contentLoader-url` attribute. Then we load the returned HTML by assigning it to our element's `innerHTML` property.
 
 Open the network tab in your browser's developer console and reload the page. You'll see an initial full page request to `index.html`, followed by our controller's subsequent request to `messages.html`.
 
@@ -61,12 +61,12 @@ Open the network tab in your browser's developer console and reload the page. Yo
 
 Let's improve our controller by changing it to periodically refresh the inbox so it's always up-to-date.
 
-We'll use the `data-content-loader-refresh-interval` attribute to specify how often the controller should reload its contents, in milliseconds:
+We'll use the `data-contentLoader-refresh-interval` attribute to specify how often the controller should reload its contents, in milliseconds:
 
 ```html
 <div data-controller="content-loader"
-     data-content-loader-url="/messages.html"
-     data-content-loader-refresh-interval="5000"></div>
+     data-contentLoader-url="/messages.html"
+     data-contentLoader-refresh-interval="5000"></div>
 ```
 
 Now we can update the controller to check for the interval and, if present, start a refresh timer:

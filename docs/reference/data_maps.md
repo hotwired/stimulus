@@ -7,11 +7,11 @@ order: 04
 
 Each Stimulus controller has a _data map_ which lets you access special data attributes on the controller's element.
 
-<meta data-controller="callout" data-callout-value="data-content-loader-url=&quot;/messages&quot;">
+<meta data-controller="callout" data-callout-value="data-contentLoader-url=&quot;/messages&quot;">
 
 ```html
 <div data-controller="content-loader"
-     data-content-loader-url="/messages">
+     data-contentLoader-url="/messages">
 </div>
 ```
 
