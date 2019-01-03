@@ -15,9 +15,12 @@ export class DataMap {
     return this.scope.identifier
   }
 
-  get(key: string): string | null {
-    key = this.getFormattedKey(key)
-    return this.element.getAttribute(key)
+  get(key: string, defaultValue = null): string | null {
+    if (this.has(key)) {
+      key = this.getFormattedKey(key)
+      return this.element.getAttribute(key)
+    }
+    return defaultValue
   }
 
   set(key: string, value: string): string | null {
