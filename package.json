@@ -29,7 +29,7 @@
     "karma-qunit": "^2.1.0",
     "karma-sauce-launcher": "^2.0.2",
     "karma-webpack": "^3.0.0",
-    "lerna": "^3.0.0-rc.0",
+    "lerna": "^3.8.5",
     "qunit": "^2.6.2",
     "rimraf": "^2.6.2",
     "ts-loader": "^4.5.0",
