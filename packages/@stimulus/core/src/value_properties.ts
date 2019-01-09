@@ -1,7 +1,7 @@
 import { Constructor } from "./constructor"
 import { Controller } from "./controller"
 import { readInheritableStaticObjectPairs } from "./inheritable_statics"
-import { camelize, capitalize } from "./string_helpers"
+import { camelize, capitalize, dasherize } from "./string_helpers"
 
 /** @hidden */
 export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
@@ -26,7 +26,7 @@ export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
 /** @hidden */
 export function propertiesForValueDefinitionPair<T>(valueDefinitionPair: ValueDefinitionPair): PropertyDescriptorMap {
   const definition = parseValueDefinitionPair(valueDefinitionPair)
-  const { key, name, type } = definition
+  const { type, key, name } = definition
   const read = readers[type], write = writers[type] || writers.default
 
   return {
@@ -58,15 +58,15 @@ export function propertiesForValueDefinitionPair<T>(valueDefinitionPair: ValueDe
 }
 
 export type ValueDescriptor = {
+  type: ValueType,
   key: string,
   name: string,
-  type: ValueType,
   defaultValue: any
 }
 
 export type ValueDescriptorMap = { [attributeName: string]: ValueDescriptor }
 
-export type ValueDefinitionMap = { [key: string]: ValueTypeConstant }
+export type ValueDefinitionMap = { [token: string]: ValueTypeConstant }
 
 export type ValueDefinitionPair = [string, ValueTypeConstant]
 
@@ -74,9 +74,9 @@ export type ValueTypeConstant = typeof Array | typeof Boolean | typeof Number | 
 
 export type ValueType = "array" | "boolean" | "number" | "object" | "string"
 
-function parseValueDefinitionPair([key, typeConstant]: ValueDefinitionPair): ValueDescriptor {
+function parseValueDefinitionPair([token, typeConstant]: ValueDefinitionPair): ValueDescriptor {
   const type = parseValueTypeConstant(typeConstant)
-  return valueDescriptorForKeyAndType(key, type)
+  return valueDescriptorForTokenAndType(token, type)
 }
 
 function parseValueTypeConstant(typeConstant: ValueTypeConstant) {
@@ -90,11 +90,12 @@ function parseValueTypeConstant(typeConstant: ValueTypeConstant) {
   throw new Error(`Unknown value type constant "${typeConstant}"`)
 }
 
-function valueDescriptorForKeyAndType(key: string, type: ValueType) {
+function valueDescriptorForTokenAndType(token: string, type: ValueType) {
+  const key = `${dasherize(token)}-value`
   return {
-    key,
-    name: `${camelize(key)}Value`,
     type,
+    key,
+    name: camelize(key),
     get defaultValue() { return defaultValuesByType[type] }
   }
 }

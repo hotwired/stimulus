@@ -45,7 +45,7 @@ export class ValueObserver implements StringMapObserverDelegate {
   }
 
   private invokeChangedCallbacksForDefaultValues() {
-    for (const { name, key, defaultValue } of this.valueDescriptors) {
+    for (const { key, name, defaultValue } of this.valueDescriptors) {
       if (defaultValue != undefined && !this.controller.data.has(key)) {
         this.invokeChangedCallbackForValue(name)
       }
