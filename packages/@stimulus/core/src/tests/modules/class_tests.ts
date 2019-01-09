@@ -3,12 +3,11 @@ import { ClassController } from "../controllers/class_controller"
 
 export default class ValueTests extends ControllerTestCase(ClassController) {
   fixtureHTML = `
-    <div data-controller="${this.identifier}" data-class="
-      active:test--active
-      loading:loading
-      ${this.identifier}.loading:busy
-      nonexistent.loading:xxx
-    "></div>
+    <div data-controller="${this.identifier}"
+      data-${this.identifier}-active-class="test--active"
+      data-${this.identifier}-loading-class="busy"
+      data-loading-class="xxx"
+    ></div>
   `
 
   "test accessing a class property"() {
@@ -21,7 +20,7 @@ export default class ValueTests extends ControllerTestCase(ClassController) {
     this.assert.raises(() => this.controller.enabledClass)
   }
 
-  "test classes can be scoped by identifier"() {
+  "test classes must be scoped by identifier"() {
     this.assert.equal(this.controller.loadingClass, "busy")
   }
 }

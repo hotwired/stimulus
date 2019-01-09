@@ -21,13 +21,13 @@ function propertiesForClassDefinition(key: string) {
         if (classes.has(key)) {
           return classes.get(key)
         } else {
-          const { classAttribute } = classes
-          throw new Error(`Missing class descriptor for property "${name}" in attribute "${classAttribute}"`)
+          const attribute = classes.getAttributeName(key)
+          throw new Error(`Missing attribute "${attribute}"`)
         }
       }
     },
 
-    [`has${capitalize(key)}Class`]: {
+    [`has${capitalize(name)}`]: {
       get(this: Controller) {
         return this.classes.has(key)
       }

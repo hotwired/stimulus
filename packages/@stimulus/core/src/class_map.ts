@@ -1,4 +1,3 @@
-import { parseClassDescriptorStringForIdentifier } from "./class_descriptor"
 import { Scope } from "./scope"
 
 export class ClassMap {
@@ -9,42 +8,22 @@ export class ClassMap {
   }
 
   has(name: string) {
-    return name in this.values
+    return this.data.has(this.getDataKey(name))
   }
 
   get(name: string) {
-    return this.values[name]
+    return this.data.get(this.getDataKey(name))
   }
 
-  get values() {
-    const { identifier } = this
-    return this.descriptorStrings.reduce((values, descriptorString) => {
-      const descriptor = parseClassDescriptorStringForIdentifier(descriptorString, identifier)
-      if (descriptor) {
-        values[descriptor.name] = descriptor.className
-      }
-      return values
-    }, {} as { [name: string]: string })
+  getAttributeName(name: string) {
+    return this.data.getAttributeNameForKey(this.getDataKey(name))
   }
 
-  get descriptorStrings() {
-    const value = this.element.getAttribute(this.classAttribute) || ""
-    return value.split(/\s+/)
+  getDataKey(name: string) {
+    return `${name}-class`
   }
 
-  get classAttribute() {
-    return this.schema.classAttribute
-  }
-
-  get schema() {
-    return this.scope.schema
-  }
-
-  get element() {
-    return this.scope.element
-  }
-
-  get identifier() {
-    return this.scope.identifier
+  get data() {
+    return this.scope.data
   }
 }
