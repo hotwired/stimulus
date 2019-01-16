@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.build.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "outDir": "dist",
+    "sourceMap": false
+  },
+  "include": [
+    "."
+  ],
+  "exclude": [
+    "dist"
+  ],
+  "references": [
+    { "path": "../core/tsconfig.build.json" }
+  ]
+}

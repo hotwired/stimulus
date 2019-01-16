@@ -12,16 +12,13 @@
   "types": "dist/index.d.ts",
   "license": "MIT",
   "files": [
-    "dist/index*",
-    "dist/src"
+    "dist"
   ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "clean": "rimraf dist",
-    "lint": "tslint -p . -c ../../../config/tslint.json",
-    "build": "{ [ ! -r dist ] || { find src -newer dist | grep .; }>/dev/null; } && { tsc && touch dist; } || true",
-    "watch": "tsc --watch"
+    "lint": "tslint -p . -c ../../../config/tslint.json"
   }
 }
