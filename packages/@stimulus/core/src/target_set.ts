@@ -57,16 +57,31 @@ export class TargetSet {
 
   private findLegacyTarget(targetName: string) {
     const selector = this.getLegacySelectorForTargetName(targetName)
-    return this.scope.findElement(selector)
+    return this.deprecate(this.scope.findElement(selector), targetName)
   }
 
   private findAllLegacyTargets(targetName: string) {
     const selector = this.getLegacySelectorForTargetName(targetName)
-    return this.scope.findAllElements(selector)
+    return this.scope.findAllElements(selector).map(element => this.deprecate(element, targetName))
   }
 
   private getLegacySelectorForTargetName(targetName: string) {
     const targetDescriptor = `${this.identifier}.${targetName}`
     return attributeValueContainsToken(this.schema.targetAttribute, targetDescriptor)
+  }
+
+  private deprecate<T>(element: T, targetName: string) {
+    if (element) {
+      const { identifier } = this
+      const attributeName = this.schema.targetAttribute
+      this.guide.warn(element, `target:${targetName}`,
+        `Please replace ${attributeName}="${identifier}.${targetName}" with data-${identifier}-target="${targetName}". ` +
+        `The ${attributeName} attribute is deprecated and will be removed in a future version of Stimulus.`)
+    }
+    return element
+  }
+
+  private get guide() {
+    return this.scope.guide
   }
 }

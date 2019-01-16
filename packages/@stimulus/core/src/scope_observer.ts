@@ -4,6 +4,7 @@ import { Scope } from "./scope"
 import { Token, ValueListObserver, ValueListObserverDelegate } from "@stimulus/mutation-observers"
 
 export interface ScopeObserverDelegate extends ErrorHandler {
+  createScopeForElementAndIdentifier(element: Element, identifier: string): Scope
   scopeConnected(scope: Scope): void
   scopeDisconnected(scope: Scope): void
 }
@@ -46,7 +47,7 @@ export class ScopeObserver implements ValueListObserverDelegate<Scope> {
 
     let scope = scopesByIdentifier.get(identifier)
     if (!scope) {
-      scope = new Scope(this.schema, identifier, element)
+      scope = this.delegate.createScopeForElementAndIdentifier(element, identifier)
       scopesByIdentifier.set(identifier, scope)
     }
 

@@ -1,24 +1,25 @@
 import { ClassMap } from "./class_map"
 import { DataMap } from "./data_map"
+import { Guide } from "./guide"
+import { Logger } from "./logger"
 import { Schema } from "./schema"
-import { TargetSet } from "./target_set"
 import { attributeValueContainsToken } from "./selectors"
+import { TargetSet } from "./target_set"
 
 export class Scope {
   readonly schema: Schema
-  readonly identifier: string
   readonly element: Element
-  readonly targets: TargetSet
-  readonly classes: ClassMap
-  readonly data: DataMap
+  readonly identifier: string
+  readonly guide: Guide
+  readonly targets = new TargetSet(this)
+  readonly classes = new ClassMap(this)
+  readonly data = new DataMap(this)
 
-  constructor(schema: Schema, identifier: string, element: Element) {
+  constructor(schema: Schema, element: Element, identifier: string, logger: Logger) {
     this.schema = schema
-    this.identifier = identifier
     this.element = element
-    this.targets = new TargetSet(this)
-    this.classes = new ClassMap(this)
-    this.data = new DataMap(this)
+    this.identifier = identifier
+    this.guide = new Guide(logger)
   }
 
   findElement(selector: string): Element | undefined {

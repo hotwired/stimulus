@@ -3,7 +3,6 @@ import { Context } from "./context"
 import { Definition } from "./definition"
 import { Module } from "./module"
 import { Multimap } from "@stimulus/multimap"
-import { Schema } from "./schema"
 import { Scope } from "./scope"
 import { ScopeObserver, ScopeObserverDelegate } from "./scope_observer"
 
@@ -20,23 +19,27 @@ export class Router implements ScopeObserverDelegate {
     this.modulesByIdentifier = new Map
   }
 
-  get element(): Element {
+  get element() {
     return this.application.element
   }
 
-  get schema(): Schema {
+  get schema() {
     return this.application.schema
+  }
+
+  get logger() {
+    return this.application.logger
   }
 
   get controllerAttribute(): string {
     return this.schema.controllerAttribute
   }
 
-  get modules(): Module[] {
+  get modules() {
     return Array.from(this.modulesByIdentifier.values())
   }
 
-  get contexts(): Context[] {
+  get contexts() {
     return this.modules.reduce((contexts, module) => contexts.concat(module.contexts), [] as Context[])
   }
 
@@ -61,7 +64,7 @@ export class Router implements ScopeObserverDelegate {
     }
   }
 
-  getContextForElementAndIdentifier(element: Element, identifier: string): Context | undefined {
+  getContextForElementAndIdentifier(element: Element, identifier: string) {
     const module = this.modulesByIdentifier.get(identifier)
     if (module) {
       return module.contexts.find(context => context.element == element)
@@ -76,6 +79,11 @@ export class Router implements ScopeObserverDelegate {
   }
 
   // Scope observer delegate
+
+  /** @hidden */
+  createScopeForElementAndIdentifier(element: Element, identifier: string) {
+    return new Scope(this.schema, element, identifier, this.logger)
+  }
 
   /** @hidden */
   scopeConnected(scope: Scope) {
