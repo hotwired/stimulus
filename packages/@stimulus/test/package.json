@@ -18,7 +18,6 @@
     "access": "public"
   },
   "scripts": {
-    "clean": "rimraf dist",
-    "lint": "tslint -p . -c ../../../config/tslint.json"
+    "clean": "rimraf dist"
   }
 }
