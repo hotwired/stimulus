@@ -17,9 +17,6 @@
   "devDependencies": {
     "@stimulus/test": "^1.1.1"
   },
-  "files": [
-    "dist"
-  ],
   "publishConfig": {
     "access": "public"
   },

@@ -11,9 +11,6 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
-  "files": [
-    "dist"
-  ],
   "publishConfig": {
     "access": "public"
   },
