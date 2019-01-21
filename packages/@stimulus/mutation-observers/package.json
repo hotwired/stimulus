@@ -17,17 +17,10 @@
   "devDependencies": {
     "@stimulus/test": "^1.1.1"
   },
-  "files": [
-    "dist/index*",
-    "dist/src"
-  ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "clean": "rimraf dist",
-    "lint": "tslint -p . -c ../../../config/tslint.json",
-    "build": "{ [ ! -r dist ] || { find src index.ts -newer dist | grep .; }>/dev/null; } && { tsc && touch dist; } || true",
-    "watch": "tsc --watch"
+    "clean": "rimraf dist"
   }
 }
