@@ -14,7 +14,7 @@ To install Stimulus in your application, add the [`stimulus` npm package](https:
 
 Stimulus integrates with the [webpack](https://webpack.js.org/) asset packager to automatically load controller files from a folder in your app.
 
-Call webpack's [`require.context`](https://webpack.js.org/api/module-methods/#require-context) helper with the path to the folder containing your Stimulus controllers. Then, pass the resulting context to the `Application#load` method using the `definitionsFromContext` helper:
+Call webpack's [`require.context`](https://webpack.js.org/api/module-methods/#require-context) helper with the path to the folder containing your Stimulus controllers, ex. `app/javascript/controllers`. Then, pass the resulting context to the `Application#load` method using the `definitionsFromContext` helper:
 
 ```js
 // src/application.js
@@ -22,7 +22,7 @@ import { Application } from "stimulus"
 import { definitionsFromContext } from "stimulus/webpack-helpers"
 
 const application = Application.start()
-const context = require.context("./controllers", true, /\.js$/)
+const context = require.context("../controllers", true, /\.js$/)
 application.load(definitionsFromContext(context))
 ```
 
