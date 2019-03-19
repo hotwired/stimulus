@@ -41,7 +41,7 @@ export default class extends Controller {
 }
 ```
 
-**Note:** You may need to enable support in your JavaScript environment for the static class properties standard (see [babel-plugin-transform-class-properties](https://babeljs.io/docs/en/babel-plugin-transform-class-properties/)).
+**Note:** You may need to enable support in your JavaScript environment for the static class properties standard (see [@babel/plugin-proposal-class-properties](https://babeljs.io/docs/en/babel-plugin-proposal-class-properties)).
 
 ## Properties
 

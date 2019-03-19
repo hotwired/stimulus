@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "sourceMap": true
+  },
+  "files": [],
+  "references": [
+    { "path": "@stimulus/core/tsconfig.build.json" },
+    { "path": "@stimulus/examples/tsconfig.build.json" },
+    { "path": "@stimulus/multimap/tsconfig.build.json" },
+    { "path": "@stimulus/mutation-observers/tsconfig.build.json" },
+    { "path": "@stimulus/test/tsconfig.build.json" },
+    { "path": "@stimulus/webpack-helpers/tsconfig.build.json" }
+  ]
+}

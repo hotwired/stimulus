@@ -1,6 +1,6 @@
 {
   "name": "@stimulus/polyfills",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Polyfills to support Stimulus in older browsers",
   "repository": "https://github.com/stimulusjs/stimulus",
   "author": "Basecamp, LLC",
@@ -10,9 +10,9 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "core-js": ">=2.5.3",
+    "core-js": "^2.5.3",
     "element-closest": ">=3.0.0",
-    "mutation-observer-inner-html-shim": ">=1.0.0"
+    "mutation-observer-inner-html-shim": "^1.0.0"
   },
   "publishConfig": {
     "access": "public"

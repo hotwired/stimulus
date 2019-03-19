@@ -23,6 +23,7 @@ export default {
     name: "Stimulus",
     banner
   },
+  context: "window",
   plugins: [
     resolve(),
     uglify(uglifyOptions)

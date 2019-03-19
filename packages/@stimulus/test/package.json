@@ -1,6 +1,6 @@
 {
   "name": "@stimulus/test",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Stimulus JavaScript framework: Test helpers",
   "repository": "https://github.com/stimulusjs/stimulus",
   "author": "Basecamp, LLC",
@@ -11,17 +11,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
-  "files": [
-    "dist/index*",
-    "dist/src"
-  ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "clean": "rimraf dist",
-    "lint": "tslint -p . -c ../../../config/tslint.json",
-    "build": "{ [ ! -r dist ] || { find src -newer dist | grep .; }>/dev/null; } && { tsc && touch dist; } || true",
-    "watch": "tsc --watch"
+    "clean": "rimraf dist"
   }
 }
