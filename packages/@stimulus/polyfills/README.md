@@ -7,9 +7,10 @@ The `@stimulus/polyfills` package provides support for Stimulus in older browser
   * `Map`
   * `Object.assign()`
   * `Promise`
+  * `Reflect.construct`
   * `Set`
 * [element-closest](https://www.npmjs.com/package/element-closest)
   * `Element.closest()`
 * [mutation-observer-inner-html-shim](https://www.npmjs.com/package/mutation-observer-inner-html-shim)
   * `MutationObserver` support for Internet Explorer 11
-  
+
