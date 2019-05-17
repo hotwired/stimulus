@@ -7,7 +7,7 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
       data-${this.identifier}-shadowed-boolean-value="true"
       data-${this.identifier}-numeric-value="123"
       data-${this.identifier}-string-value="ok"
-      data-${this.identifier}-ids-value="[1,2,3]"
+      data-${this.identifier}-id-values="[1,2,3]"
       data-${this.identifier}-options-value='{"one":[2,3]}'
       data-${this.identifier}-time-24hr-value="true">
     </div>
@@ -65,20 +65,20 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
   }
 
   "test array values"() {
-    this.assert.deepEqual(this.controller.idsValue, [1, 2, 3])
+    this.assert.deepEqual(this.controller.idValues, [1, 2, 3])
 
-    this.controller.idsValue.push(4)
-    this.assert.deepEqual(this.controller.idsValue, [1, 2, 3])
+    this.controller.idValues.push(4)
+    this.assert.deepEqual(this.controller.idValues, [1, 2, 3])
 
-    this.controller.idsValue = []
-    this.assert.deepEqual(this.controller.idsValue, [])
-    this.assert.deepEqual(this.get("ids-value"), "[]")
+    this.controller.idValues = []
+    this.assert.deepEqual(this.controller.idValues, [])
+    this.assert.deepEqual(this.get("id-values"), "[]")
 
-    this.controller.idsValue = null as any
-    this.assert.throws(() => this.controller.idsValue)
+    this.controller.idValues = null as any
+    this.assert.throws(() => this.controller.idValues)
 
-    this.controller.idsValue = {} as any
-    this.assert.throws(() => this.controller.idsValue)
+    this.controller.idValues = {} as any
+    this.assert.throws(() => this.controller.idValues)
   }
 
   "test object values"() {
@@ -117,12 +117,12 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
   }
 
   "test accessing an array value returns an empty array when the attribute is missing"() {
-    this.controller.idsValue = undefined as any
-    this.assert.notOk(this.has("ids-value"))
-    this.assert.deepEqual(this.controller.idsValue, [])
+    this.controller.idValues = undefined as any
+    this.assert.notOk(this.has("id-values"))
+    this.assert.deepEqual(this.controller.idValues, [])
 
-    this.controller.idsValue.push(1)
-    this.assert.deepEqual(this.controller.idsValue, [])
+    this.controller.idValues.push(1)
+    this.assert.deepEqual(this.controller.idValues, [])
   }
 
   "test accessing an object value returns an empty object when the attribute is missing"() {
