@@ -3,20 +3,22 @@ import { Binding } from "./binding"
 export class EventListener implements EventListenerObject {
   readonly eventTarget: EventTarget
   readonly eventName: string
+  readonly eventOptions: AddEventListenerOptions
   private unorderedBindings: Set<Binding>
 
-  constructor(eventTarget: EventTarget, eventName: string) {
+  constructor(eventTarget: EventTarget, eventName: string, eventOptions: AddEventListenerOptions) {
     this.eventTarget = eventTarget
     this.eventName = eventName
-    this.unorderedBindings = new Set
+    this.eventOptions = eventOptions
+    this.unorderedBindings = new Set()
   }
 
   connect() {
-    this.eventTarget.addEventListener(this.eventName, this, false)
+    this.eventTarget.addEventListener(this.eventName, this, this.eventOptions)
   }
 
   disconnect() {
-    this.eventTarget.removeEventListener(this.eventName, this, false)
+    this.eventTarget.removeEventListener(this.eventName, this, this.eventOptions)
   }
 
   // Binding observer delegate
@@ -48,6 +50,7 @@ export class EventListener implements EventListenerObject {
       return leftIndex < rightIndex ? -1 : leftIndex > rightIndex ? 1 : 0
     })
   }
+
 }
 
 function extendEvent(event: Event) {

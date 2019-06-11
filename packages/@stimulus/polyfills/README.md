@@ -12,4 +12,6 @@ The `@stimulus/polyfills` package provides support for Stimulus in older browser
   * `Element.closest()`
 * [mutation-observer-inner-html-shim](https://www.npmjs.com/package/mutation-observer-inner-html-shim)
   * `MutationObserver` support for Internet Explorer 11
+* [eventlistener-polyfill](https://github.com/github/eventlistener-polyfill)
+  * once & passive support for Internet Explorer 11 & Edge
   

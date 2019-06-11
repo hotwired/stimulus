@@ -45,12 +45,12 @@ if (process.env.CI) {
     sl_chrome_latest: {
       base: "SauceLabs",
       browserName: "chrome",
-      version: "71"
+      version: "74"
     },
     sl_chrome_latest_i8n: {
       base: "SauceLabs",
       browserName: "chrome",
-      version: "71",
+      version: "74",
       chromeOptions: {
         args: ["--lang=tr"]
       }
@@ -63,7 +63,7 @@ if (process.env.CI) {
     sl_firefox_latest: {
       base: "SauceLabs",
       browserName: "firefox",
-      version: "64"
+      version: "67"
     },
     sl_safari_9: {
       base: "SauceLabs",
@@ -81,7 +81,7 @@ if (process.env.CI) {
       base: "SauceLabs",
       browserName: "safari",
       platform: "macOS 10.13",
-      version: "12.0"
+      version: "12.1"
     },
     sl_edge_17: {
       base: "SauceLabs",
@@ -106,7 +106,7 @@ if (process.env.CI) {
       browserName: "safari",
       platform: "ios",
       device: "iPhone X Simulator",
-      version: "12.0"
+      version: "12.2"
     },
     sl_android_latest: {
       base: "SauceLabs",
@@ -121,6 +121,6 @@ if (process.env.CI) {
   config.reporters = ["dots", "saucelabs"]
 }
 
-module.exports = function(karmaConfig) {
+module.exports = function (karmaConfig) {
   karmaConfig.set(config)
 }
