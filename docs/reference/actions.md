@@ -81,11 +81,11 @@ You can append `@window` or `@document` to the event name in an action descripto
 
 ### Options
 
-Sometimes you may need to pass [additional options](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Parameters) to the Event Listener attached to the action. 
+Sometimes you may need to pass [additional options](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Parameters) to the _Event Listener_ attached to the action. 
 
-* Options are set by adding one of the allowed token to the end of the action descriptor. 
-* The token is the name of the option with an exclamation mark `!` to negate its value.
+* Options are set by adding one of the allowed tokens to the end of the _action descriptor_ 
 * Options are separated from the method by a column `:`
+* Add an exclamation mark `!` before a token to negate its value
 
 **The followng option tokens are allowed:**
 
