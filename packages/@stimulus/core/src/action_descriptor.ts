@@ -30,18 +30,10 @@ function parseEventTarget(eventTargetName: string): EventTarget | undefined {
   }
 }
 
-function parseEventOptions(eventOptionTokens: string = ""): AddEventListenerOptions {
-  const allowedTokens = ["passive", "!passive", "once", "capture"];
-  const tokens = eventOptionTokens.split(":").filter(option => allowedTokens.indexOf(option) !== -1)
-  const regexBoolean = /^[^!]{1}.+$/; // ! negates a token
-
-  return tokens.reduce(
-    (result, option) => ({
-      ...result,
-      [option.replace(/!/, "")]: regexBoolean.test(option)
-    }),
-    {} as AddEventListenerOptions
-  )
+function parseEventOptions(eventOptions: string = ""): AddEventListenerOptions {
+  return eventOptions.split(":").reduce((options, token) =>
+    Object.assign(options, { [token.replace(/^!/, "")]: !/^!/.test(token) })
+    , {})
 }
 
 export function stringifyEventTarget(eventTarget: EventTarget) {
