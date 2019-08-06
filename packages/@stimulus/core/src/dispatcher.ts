@@ -52,22 +52,23 @@ export class Dispatcher implements BindingObserverDelegate {
   }
 
   private fetchEventListenerForBinding(binding: Binding): EventListener {
-    const { eventTarget, eventName } = binding
-    return this.fetchEventListener(eventTarget, eventName)
+    const { eventTarget, eventName, eventOptions } = binding
+    return this.fetchEventListener(eventTarget, eventName, eventOptions)
   }
 
-  private fetchEventListener(eventTarget: EventTarget, eventName: string): EventListener {
+  private fetchEventListener(eventTarget: EventTarget, eventName: string, eventOptions: AddEventListenerOptions): EventListener {
     const eventListenerMap = this.fetchEventListenerMapForEventTarget(eventTarget)
-    let eventListener = eventListenerMap.get(eventName)
+    const cacheKey = this.cacheKey(eventName, eventOptions)
+    let eventListener = eventListenerMap.get(cacheKey)
     if (!eventListener) {
-      eventListener = this.createEventListener(eventTarget, eventName)
-      eventListenerMap.set(eventName, eventListener)
+      eventListener = this.createEventListener(eventTarget, eventName, eventOptions)
+      eventListenerMap.set(cacheKey, eventListener)
     }
     return eventListener
   }
 
-  private createEventListener(eventTarget: EventTarget, eventName: string): EventListener {
-    const eventListener = new EventListener(eventTarget, eventName)
+  private createEventListener(eventTarget: EventTarget, eventName: string, eventOptions: AddEventListenerOptions): EventListener {
+    const eventListener = new EventListener(eventTarget, eventName, eventOptions)
     if (this.started) {
       eventListener.connect()
     }
@@ -81,5 +82,9 @@ export class Dispatcher implements BindingObserverDelegate {
       this.eventListenerMaps.set(eventTarget, eventListenerMap)
     }
     return eventListenerMap
+  }
+
+  private cacheKey(eventName: string, eventOptions: any): string {
+    return eventName + JSON.stringify(Object.keys(eventOptions).sort().map(key => [key, eventOptions[key]]))
   }
 }

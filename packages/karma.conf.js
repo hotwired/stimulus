@@ -121,6 +121,6 @@ if (process.env.CI) {
   config.reporters = ["dots", "saucelabs"]
 }
 
-module.exports = function(karmaConfig) {
+module.exports = function (karmaConfig) {
   karmaConfig.set(config)
 }

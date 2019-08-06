@@ -79,6 +79,28 @@ You can append `@window` or `@document` to the event name in an action descripto
 </div>
 ```
 
+### Options
+
+Sometimes you may need to pass [additional options](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Parameters) to the _Event Listener_ attached to the action. 
+
+* Options are set by adding one of the allowed tokens to the end of the _action descriptor_ 
+* Options are separated from the method by a column `:`
+* Add an exclamation mark `!` before a token to negate its value
+
+**The followng option tokens are allowed:**
+
+Tokens        | EventListener option 
+------------- | ---------------------
+`capture`     | `{ capture: true }`
+`once`        | `{ once: true }`
+`passive`     | `{ passive: true }`
+`!passive`    | `{ passive: false }`
+
+
+**Options can be combined if needed**
+
+`click->controller#method:!passive:once` 
+
 ## Event Objects
 
 An _action method_ is the method in a controller which serves as an action's event listener.
