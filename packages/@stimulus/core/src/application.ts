@@ -26,13 +26,13 @@ export class Application implements ErrorHandler {
 
   async start() {
     await domReady()
-    this.router.start()
     this.dispatcher.start()
+    this.router.start()
   }
 
   stop() {
-    this.router.stop()
     this.dispatcher.stop()
+    this.router.stop()
   }
 
   register(identifier: string, controllerConstructor: ControllerConstructor) {
