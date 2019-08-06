@@ -38,9 +38,9 @@ const defaultEventNames: { [tagName: string]: (element: Element) => string } = {
   "a":        e => "click",
   "button":   e => "click",
   "form":     e => "submit",
-  "input":    e => e.getAttribute("type") == "submit" ? "click" : "change",
+  "input":    e => e.getAttribute("type") == "submit" ? "click" : "input",
   "select":   e => "change",
-  "textarea": e => "change"
+  "textarea": e => "input"
 }
 
 export function getDefaultEventNameForElement(element: Element): string | undefined {

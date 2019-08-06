@@ -59,10 +59,10 @@ Element           | Default Event
 a                 | click
 button            | click
 form              | submit
-input             | change
+input             | input
 input type=submit | click
 select            | change
-textarea          | change
+textarea          | input
 
 ### Global Events
 

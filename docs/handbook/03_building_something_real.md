@@ -97,10 +97,10 @@ We want a click on the button to invoke the `copy()` method in our controller, s
 > a                 | click
 > button            | click
 > form              | submit
-> input             | change
+> input             | input
 > input type=submit | click
 > select            | change
-> textarea          | change
+> textarea          | input
 
 Finally, in our `copy()` method, we can select the input field's contents and call the clipboard API:
 
