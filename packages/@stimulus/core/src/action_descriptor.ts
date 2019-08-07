@@ -12,11 +12,10 @@ const descriptorPattern = /^((.+?)(@(window|document))?->)?(.+?)(#([^:]+?))(:(.+
 export function parseDescriptorString(descriptorString: string): Partial<ActionDescriptor> {
   const source = descriptorString.trim()
   const matches = source.match(descriptorPattern) || []
-
   return {
     eventTarget:  parseEventTarget(matches[4]),
     eventName:    matches[2],
-    eventOptions: parseEventOptions(matches[9]),
+    eventOptions: matches[9] ? parseEventOptions(matches[9]) : {},
     identifier:   matches[5],
     methodName:   matches[7]
   }
@@ -30,10 +29,10 @@ function parseEventTarget(eventTargetName: string): EventTarget | undefined {
   }
 }
 
-function parseEventOptions(eventOptions: string = ""): AddEventListenerOptions {
+function parseEventOptions(eventOptions: string): AddEventListenerOptions {
   return eventOptions.split(":").reduce((options, token) =>
     Object.assign(options, { [token.replace(/^!/, "")]: !/^!/.test(token) })
-    , {})
+  , {})
 }
 
 export function stringifyEventTarget(eventTarget: EventTarget) {
