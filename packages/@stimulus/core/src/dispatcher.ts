@@ -85,6 +85,10 @@ export class Dispatcher implements BindingObserverDelegate {
   }
 
   private cacheKey(eventName: string, eventOptions: any): string {
-    return eventName + JSON.stringify(Object.keys(eventOptions).sort().map(key => [key, eventOptions[key]]))
+    const parts = [ eventName ]
+    Object.keys(eventOptions).sort().forEach(key => {
+      parts.push(`${eventOptions[key] ? "" : "!"}${key}`)
+    })
+    return parts.join(":")
   }
 }
