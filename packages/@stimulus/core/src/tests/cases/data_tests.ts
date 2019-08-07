@@ -15,7 +15,7 @@ export default class DataTests extends BareControllerTestCase {
   }
 
   "test DataSet#set"() {
-    this.controller.data.set("alpha", "ok")
+    this.assert.equal(this.controller.data.set("alpha", "ok"), "ok")
     this.assert.equal(this.controller.data.get("alpha"), "ok")
     this.assert.equal(this.findElement("div").getAttribute(`data-${this.identifier}-alpha`), "ok")
   }
