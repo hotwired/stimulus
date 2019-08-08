@@ -16,25 +16,25 @@ export class DataMap {
   }
 
   get(key: string): string | null {
-    key = this.getFormattedKey(key)
-    return this.element.getAttribute(key)
+    const formattedKey = this.getFormattedKey(key)
+    return this.element.getAttribute(formattedKey)
   }
 
   set(key: string, value: string): string | null {
-    key = this.getFormattedKey(key)
-    this.element.setAttribute(key, value)
+    const formattedKey = this.getFormattedKey(key)
+    this.element.setAttribute(formattedKey, value)
     return this.get(key)
   }
 
   has(key: string): boolean {
-    key = this.getFormattedKey(key)
-    return this.element.hasAttribute(key)
+    const formattedKey = this.getFormattedKey(key)
+    return this.element.hasAttribute(formattedKey)
   }
 
   delete(key: string): boolean {
     if (this.has(key)) {
-      key = this.getFormattedKey(key)
-      this.element.removeAttribute(key)
+      const formattedKey = this.getFormattedKey(key)
+      this.element.removeAttribute(formattedKey)
       return true
     } else {
       return false
