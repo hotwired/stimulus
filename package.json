@@ -21,22 +21,22 @@
     "packages/@stimulus/*"
   ],
   "dependencies": {
-    "@types/qunit": "^2.5.2",
-    "@types/webpack-env": "^1.13.3",
-    "karma": "^4.1.0",
-    "karma-chrome-launcher": "^2.2.0",
-    "karma-qunit": "^3.1.2",
+    "@types/qunit": "^2.9.0",
+    "@types/webpack-env": "^1.14.0",
+    "karma": "^4.2.0",
+    "karma-chrome-launcher": "^3.0.0",
+    "karma-qunit": "^4.0.0",
     "karma-sauce-launcher": "^2.0.2",
-    "karma-webpack": "^3.0.5",
+    "karma-webpack": "^4.0.2",
     "lerna": "^3.8.5",
     "qunit": "^2.9.2",
     "rimraf": "^2.6.2",
-    "rollup": "^1.1.0",
-    "rollup-plugin-node-resolve": "^4.0.0",
-    "rollup-plugin-uglify": "^6.0.1",
-    "ts-loader": "^4.5.0",
-    "typedoc": "^0.11.1",
+    "rollup": "^1.19.4",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-uglify": "^6.0.2",
+    "ts-loader": "^6.0.4",
+    "typedoc": "^0.15.0",
     "typescript": "^3.2.2",
-    "webpack": "^4.33.0"
+    "webpack": "^4.39.1"
   }
 }
