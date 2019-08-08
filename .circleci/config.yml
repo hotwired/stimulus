@@ -2,7 +2,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:12.4.0
     steps:
       - checkout
       - run:
