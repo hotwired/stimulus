@@ -1,9 +1,12 @@
 import { ControllerTestCase } from "./controller_test_case"
 import { LogController, ActionLogEntry } from "../controllers/log_controller"
+import { ControllerConstructor } from "../.."
 
 export class LogControllerTestCase extends ControllerTestCase(LogController) {
+  controllerConstructor!: ControllerConstructor & { actionLog: ActionLogEntry[] }
+
   async setup() {
-    LogController.actionLog = []
+    this.controllerConstructor.actionLog = []
     await super.setup()
   }
 
@@ -23,7 +26,7 @@ export class LogControllerTestCase extends ControllerTestCase(LogController) {
   }
 
   get actionLog(): ActionLogEntry[] {
-    return LogController.actionLog
+    return this.controllerConstructor.actionLog
   }
 }
 

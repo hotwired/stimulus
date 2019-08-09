@@ -1,5 +1,7 @@
 dist: trusty
 sudo: false
+language: node_js
+node_js: "12.4.0"
 cache:
 - yarn
 script: scripts/autopublish.sh

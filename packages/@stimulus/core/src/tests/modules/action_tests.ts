@@ -24,9 +24,9 @@ export default class ActionTests extends LogControllerTestCase {
   }
 
   async "test non-bubbling events"() {
-    await this.triggerEvent("span", "click", false)
+    await this.triggerEvent("span", "click", { bubbles: false })
     this.assertNoActions()
-    await this.triggerEvent("button", "click", false)
+    await this.triggerEvent("button", "click", { bubbles: false })
     this.assertActions({ eventType: "click" })
   }
 

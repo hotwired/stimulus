@@ -1,5 +1,15 @@
 import { TestCase } from "./test_case"
 
+interface TriggerEventOptions {
+  bubbles?: boolean,
+  setDefaultPrevented?: boolean
+}
+
+const defaultTriggerEventOptions: TriggerEventOptions = {
+   bubbles: true,
+   setDefaultPrevented: true
+}
+
 export class DOMTestCase extends TestCase {
   fixtureSelector: string = "#qunit-fixture"
   fixtureHTML: string = ""
@@ -23,14 +33,17 @@ export class DOMTestCase extends TestCase {
     }
   }
 
-  async triggerEvent(selectorOrTarget: string | EventTarget, type: string, bubbles: boolean = true) {
+  async triggerEvent(selectorOrTarget: string | EventTarget, type: string, options: TriggerEventOptions = {}) {
+    const { bubbles, setDefaultPrevented } = { ...defaultTriggerEventOptions, ...options }
     const eventTarget = typeof selectorOrTarget == "string" ? this.findElement(selectorOrTarget) : selectorOrTarget
     const event = document.createEvent("Events")
     event.initEvent(type, bubbles, true)
 
     // IE <= 11 does not set `defaultPrevented` when `preventDefault()` is called on synthetic events
-    event.preventDefault = function() {
-      Object.defineProperty(this, "defaultPrevented", { get: () => true, configurable: true })
+    if (setDefaultPrevented) {
+      event.preventDefault = function() {
+        Object.defineProperty(this, "defaultPrevented", { get: () => true, configurable: true })
+      }
     }
 
     eventTarget.dispatchEvent(event)

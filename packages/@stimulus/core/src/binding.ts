@@ -20,6 +20,10 @@ export class Binding {
     return this.action.eventTarget
   }
 
+  get eventOptions(): AddEventListenerOptions {
+    return this.action.eventOptions
+  }
+
   get identifier(): string {
     return this.context.identifier
   }

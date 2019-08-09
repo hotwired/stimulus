@@ -1,8 +1,8 @@
 {
   "presets": [
-    ["es2015", { "modules": false }]
+    ["@babel/preset-env", { "loose": true }]
   ],
   "plugins": [
-    "transform-class-properties"
+    ["@babel/plugin-proposal-class-properties", { "loose": true }]
   ]
 }

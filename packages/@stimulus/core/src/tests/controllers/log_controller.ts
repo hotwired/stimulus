@@ -7,6 +7,7 @@ export type ActionLogEntry = {
   eventType: string
   currentTarget: EventTarget | null
   defaultPrevented: boolean
+  passive: boolean
 }
 
 export class LogController extends Controller {
@@ -39,6 +40,15 @@ export class LogController extends Controller {
     this.recordAction("log3", event)
   }
 
+  logPassive(event: Event) {
+    event.preventDefault()
+    if (event.defaultPrevented) {
+      this.recordAction("logPassive", event, false)
+    } else {
+      this.recordAction("logPassive", event, true)
+    }
+  }
+
   stop(event: Event) {
     this.recordAction("stop", event)
     event.stopImmediatePropagation()
@@ -48,14 +58,15 @@ export class LogController extends Controller {
     return (this.constructor as typeof LogController).actionLog
   }
 
-  private recordAction(name: string, event: Event) {
+  private recordAction(name: string, event: Event, passive?: boolean) {
     this.actionLog.push({
       name,
       controller: this,
       identifier: this.identifier,
       eventType: event.type,
       currentTarget: event.currentTarget,
-      defaultPrevented: event.defaultPrevented
+      defaultPrevented: event.defaultPrevented,
+      passive: passive || false
     })
   }
 }
