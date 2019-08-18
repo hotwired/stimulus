@@ -21,6 +21,6 @@
     "access": "public"
   },
   "scripts": {
-    "clean": "rimraf dist"
+    "clean": "rimraf dist *.tsbuildinfo"
   }
 }
