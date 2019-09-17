@@ -11,6 +11,9 @@ export default class ActionTests extends LogControllerTestCase {
       <div id="multiple" data-action="click->c#log click->c#log2 mousedown->c#log"></div>
     </div>
     <div id="outside"></div>
+    <svg id="svgRoot" data-controller="c" data-action="click->c#log">
+      <circle id="svgChild" data-action="mousedown->c#log" cx="5" cy="5" r="5">
+    </svg>
   `
 
   async "test default event"() {
@@ -49,6 +52,15 @@ export default class ActionTests extends LogControllerTestCase {
       { name: "log", eventType: "mousedown" },
       { name: "log", eventType: "click" },
       { name: "log2", eventType: "click" }
+    )
+  }
+
+  async "test actions on svg elements"() {
+    await this.triggerEvent("#svgRoot", "click")
+    await this.triggerEvent("#svgChild", "mousedown")
+    this.assertActions(
+      { name: "log", eventType: "click" },
+      { name: "log", eventType: "mousedown" }
     )
   }
 }
