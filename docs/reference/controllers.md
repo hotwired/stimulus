@@ -1,5 +1,6 @@
 ---
 permalink: /reference/controllers
+redirect_from: /reference/
 order: 00
 ---
 
