@@ -19,21 +19,24 @@ export class Scope {
   }
 
   findElement(selector: string): Element | undefined {
-    return this.findAllElements(selector)[0]
+    return this.element.matches(selector)
+      ? this.element
+      : this.queryElements(selector).find(this.containsElement)
   }
 
   findAllElements(selector: string): Element[] {
-    const head = this.element.matches(selector) ? [this.element] : []
-    const tail = this.filterElements(Array.from(this.element.querySelectorAll(selector)))
-    return head.concat(tail)
+    return [
+      ...this.element.matches(selector) ? [this.element] : [],
+      ...this.queryElements(selector).filter(this.containsElement)
+    ]
   }
 
-  filterElements(elements: Element[]): Element[] {
-    return elements.filter(element => this.containsElement(element))
-  }
-
-  containsElement(element: Element) {
+  containsElement = (element: Element): boolean => {
     return element.closest(this.controllerSelector) === this.element
+  }
+
+  private queryElements(selector: string): Element[] {
+    return Array.from(this.element.querySelectorAll(selector))
   }
 
   private get controllerSelector(): string {
