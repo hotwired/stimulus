@@ -8,11 +8,11 @@ How does it work? Sprinkle your HTML with controller, target, and action attribu
 
 ```html
 <div data-controller="hello">
-  <input data-target="hello.name" type="text">
+  <input data-target="hello.name" autocomplete="given-name">
 
   <button data-action="click->hello#greet">Greet</button>
 
-  <span data-target="hello.output"></span>
+  <output data-target="hello.output"></output>
 </div>
 ```
 
@@ -26,7 +26,7 @@ export default class extends Controller {
   static targets = [ "name", "output" ]
 
   greet() {
-    this.outputTarget.textContent =
+    this.outputTarget.value =
       `Hello, ${this.nameTarget.value}!`
   }
 }
