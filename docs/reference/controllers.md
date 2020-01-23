@@ -61,7 +61,7 @@ For example, the `<div>` and `<h1>` below are part of the controller's scope, bu
 
 ## Nested Scopes
 
-When controllers are nested, they're aware of _only_ their own scope and not the scope of any controllers nested within them.
+When nested, each controller is only aware of its own scope excluding the scope of any controllers nested within.
 
 For example, the `#parent` controller below is only aware of the `list.item` targets directly within its scope, but not any targets of the `#child` controller.
 
