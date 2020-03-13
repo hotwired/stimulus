@@ -1,4 +1,4 @@
-import resolve from "rollup-plugin-node-resolve"
+import resolve from "@rollup/plugin-node-resolve"
 import { uglify } from "rollup-plugin-uglify"
 import { version } from "../../lerna.json"
 

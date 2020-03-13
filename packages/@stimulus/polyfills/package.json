@@ -10,7 +10,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "core-js": "^2.5.3",
+    "core-js": "^3.4.0",
     "element-closest": "^2.0.2",
     "mutation-observer-inner-html-shim": "^1.0.0",
     "eventlistener-polyfill": "^1.0.5"

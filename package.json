@@ -21,6 +21,7 @@
     "packages/@stimulus/*"
   ],
   "dependencies": {
+    "@rollup/plugin-node-resolve": "^7.1.1",
     "@types/qunit": "^2.9.0",
     "@types/webpack-env": "^1.14.0",
     "karma": "^4.2.0",
@@ -30,10 +31,9 @@
     "karma-webpack": "^4.0.2",
     "lerna": "^3.8.5",
     "qunit": "^2.9.2",
-    "rimraf": "^2.6.2",
-    "rollup": "^1.19.4",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-uglify": "^6.0.2",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.0.6",
+    "rollup-plugin-uglify": "^6.0.4",
     "ts-loader": "^6.0.4",
     "typedoc": "^0.15.0",
     "typescript": "^3.2.2",
