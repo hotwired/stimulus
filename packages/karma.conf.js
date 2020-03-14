@@ -34,6 +34,8 @@ const config = {
     }
   },
 
+  hostname: "0.0.0.0",
+
   captureTimeout: 180000,
   browserDisconnectTimeout: 180000,
   browserDisconnectTolerance: 3,
@@ -45,12 +47,12 @@ if (process.env.CI) {
     sl_chrome_latest: {
       base: "SauceLabs",
       browserName: "chrome",
-      version: "74"
+      version: "latest"
     },
     sl_chrome_latest_i8n: {
       base: "SauceLabs",
       browserName: "chrome",
-      version: "74",
+      version: "latest",
       chromeOptions: {
         args: ["--lang=tr"]
       }
@@ -63,7 +65,7 @@ if (process.env.CI) {
     sl_firefox_latest: {
       base: "SauceLabs",
       browserName: "firefox",
-      version: "67"
+      version: "latest"
     },
     sl_safari_9: {
       base: "SauceLabs",
@@ -81,7 +83,7 @@ if (process.env.CI) {
       base: "SauceLabs",
       browserName: "safari",
       platform: "macOS 10.13",
-      version: "12.1"
+      version: "latest"
     },
     sl_edge_17: {
       base: "SauceLabs",
@@ -106,14 +108,14 @@ if (process.env.CI) {
       browserName: "safari",
       platform: "ios",
       device: "iPhone X Simulator",
-      version: "12.2"
+      version: "13.0"
     },
     sl_android_latest: {
       base: "SauceLabs",
       browserName: "chrome",
       platform: "android",
       device: "Android GoogleAPI Emulator",
-      version: "7.1"
+      version: "10.0"
     }
   }
   config.browsers = Object.keys(config.customLaunchers)
