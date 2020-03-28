@@ -58,6 +58,13 @@ const application = Application.start()
 application.register("hello", HelloController)
 application.register("clipboard", ClipboardController)
 ```
+## Using Webpacker in Rails
+
+Stimulus can be installed with a single command for Rails 5.1+ apps using [Webpacker](https://github.com/rails/webpacker).
+
+```
+bundle exec rails webpacker:install:stimulus
+```
 
 ## Using Babel
 
