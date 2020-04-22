@@ -70,6 +70,13 @@ export class Context implements ErrorHandler {
     return this.element.parentElement
   }
 
+  dispatch(eventName: String, { target = this.element, detail = {}, bubbles = true, cancelable = true } = {}) {
+    const type = `${this.identifier}:${eventName}`
+    const event = new CustomEvent(type, { detail, bubbles, cancelable })
+    target.dispatchEvent(event)
+    return event
+  }
+
   // Error handling
 
   handleError(error: Error, message: string, detail: object = {}) {
