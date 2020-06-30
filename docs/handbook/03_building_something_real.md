@@ -51,7 +51,7 @@ Then add `data-controller="clipboard"` to the outer `<div>`. Any time this attri
 
 ## Defining the Target
 
-We'll need a reference to the text field so we can select its contents before invoking the clipboard API. Add `data-target="clipboard.source"` to the text field:
+We'll need a reference to the text field so we can select its contents before invoking the clipboard API. This data-target must be inside the  <div data-controller defined in the last step.  Add `data-target="clipboard.source"` to the text field:
 
 ```html
   PIN: <input data-target="clipboard.source" type="text" value="1234" readonly>
