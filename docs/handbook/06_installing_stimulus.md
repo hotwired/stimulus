@@ -25,6 +25,17 @@ const application = Application.start()
 const context = require.context("./controllers", true, /\.js$/)
 application.load(definitionsFromContext(context))
 ```
+### Integrating Stimulus with Rails (via Webpacker)
+
+If you are running a Rails 6+ application, getting a working example of Stimulus as simple as hammering: 
+
+`bundle exec rails webpacker:install:stimulus`
+
+This [does the following](https://github.com/rails/webpacker/blob/master/lib/install/stimulus.rb):
+
+* Appends some set up code to your `./app/javascript/packs/application.js` file.
+* Creates a stimulus controller directory in your `Webpacker.config.source_path` (i.e. `./app/javascript/packs/controllers`) with an example controller.
+* Installs stimulus via yarn.
 
 ### Controller Filenames Map to Identifiers
 
