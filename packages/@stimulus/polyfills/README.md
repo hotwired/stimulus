@@ -1,6 +1,7 @@
 The `@stimulus/polyfills` package provides support for Stimulus in older browsers like Internet Explorer 11 and Safari 9.
 
 * [core-js](https://www.npmjs.com/package/core-js)
+  * `Symbol.iterator`
   * `Array.find()`
   * `Array.findIndex()`
   * `Array.from()`
@@ -14,4 +15,3 @@ The `@stimulus/polyfills` package provides support for Stimulus in older browser
   * `MutationObserver` support for Internet Explorer 11
 * [eventlistener-polyfill](https://github.com/github/eventlistener-polyfill)
   * once & passive support for Internet Explorer 11 & Edge
-  
