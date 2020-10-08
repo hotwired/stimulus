@@ -1,14 +1,14 @@
 import resolve from "@rollup/plugin-node-resolve"
-import { uglify } from "rollup-plugin-uglify"
+import { terser } from "rollup-plugin-terser"
 import { version } from "../../lerna.json"
 
 const year = new Date().getFullYear()
 const banner = `/*\nStimulus ${version}\nCopyright © ${year} Basecamp, LLC\n */`
 
-const uglifyOptions = {
+const terserOptions = {
   mangle: false,
   compress: false,
-  output: {
+  format: {
     beautify: true,
     indent_level: 2,
     comments: /Copyright/
@@ -26,6 +26,6 @@ export default {
   context: "window",
   plugins: [
     resolve(),
-    uglify(uglifyOptions)
+    terser(terserOptions)
   ]
 }
