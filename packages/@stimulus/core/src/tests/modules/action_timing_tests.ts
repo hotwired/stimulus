@@ -20,7 +20,7 @@ export default class ActionTimingTests extends ControllerTestCase(ActionTimingCo
   identifier = "c"
   fixtureHTML = `
     <div data-controller="c">
-      <button data-target="c.button" data-action="c#record">Log</button>
+      <button data-c-target="button" data-action="c#record">Log</button>
     </div>
   `
 

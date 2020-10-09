@@ -6,8 +6,8 @@
 </head>
 <body>
   <div data-controller="a">
-    <span data-target="a.item"></span>
-    <span data-target="a.item"></span>
+    <span data-a-target="item"></span>
+    <span data-a-target="item"></span>
     <script>
       // If "a" controller is loaded while the document is loading,
       // synchronously accessing `this.itemTargets` will only return
@@ -16,7 +16,7 @@
       // See: https://github.com/stimulusjs/stimulus/issues/97
       1 + 1
     </script>
-    <span data-target="a.item"></span>
+    <span data-a-target="item"></span>
   </div>
 </body>
 </html>
