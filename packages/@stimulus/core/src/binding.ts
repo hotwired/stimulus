@@ -63,7 +63,7 @@ export class Binding {
     } else if (eventTarget instanceof Element && this.element.contains(eventTarget)) {
       return this.scope.containsElement(eventTarget)
     } else {
-      return true
+      return this.scope.containsElement(this.action.element)
     }
   }
 

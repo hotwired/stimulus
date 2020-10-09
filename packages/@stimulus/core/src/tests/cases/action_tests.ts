@@ -6,7 +6,7 @@ export default class ActionTests extends LogControllerTestCase {
     <div data-controller="c" data-action="keydown@window->c#log">
       <button data-action="c#log"><span>Log</span></button>
       <div id="outer" data-action="click->c#log">
-        <div id="inner" data-controller="c" data-action="click->c#log"></div>
+        <div id="inner" data-controller="c" data-action="click->c#log keyup@window->c#log"></div>
       </div>
       <div id="multiple" data-action="click->c#log click->c#log2 mousedown->c#log"></div>
     </div>
@@ -43,6 +43,12 @@ export default class ActionTests extends LogControllerTestCase {
   async "test global actions"() {
     await this.triggerEvent("#outside", "keydown")
     this.assertActions({ name: "log", eventType: "keydown" })
+  }
+
+  async "test nested global actions"() {
+    const innerController = this.controllers[1]
+    await this.triggerEvent("#outside", "keyup")
+    this.assertActions({ controller: innerController, eventType: "keyup" })
   }
 
   async "test multiple actions"() {
