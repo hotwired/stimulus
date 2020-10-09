@@ -1,5 +1,6 @@
 ---
 permalink: /reference/controllers
+redirect_from: /reference/
 order: 00
 ---
 
@@ -91,7 +92,7 @@ Always use camelCase for method and property names in a controller class.
 
 When an identifier is composed of more than one word, write the words in kebab-case (i.e., by using dashes: `date-picker`, `list-item`).
 
-In filenames, separate multiple words using either dashes or underscores (kebab-case or snake_case: `controllers/date_picker.js`, `controllers/list-item.js`).
+In filenames, separate multiple words using either underscores or dashes (snake_case or kebab-case: `controllers/date_picker_controller.js`, `controllers/list-item-controller.js`).
 
 ## Registration
 

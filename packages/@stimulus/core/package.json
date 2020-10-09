@@ -23,6 +23,6 @@
     "@stimulus/test": "^1.1.1"
   },
   "scripts": {
-    "clean": "rimraf dist"
+    "clean": "rimraf dist *.tsbuildinfo"
   }
 }

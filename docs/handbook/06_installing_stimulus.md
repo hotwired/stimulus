@@ -96,7 +96,7 @@ Define targets using `static get targets()` methods instead of `static targets =
       })
     })()
   </script>
-<head>
+</head>
 <body>
   <div data-controller="hello">
     <input data-target="hello.name" type="text">
