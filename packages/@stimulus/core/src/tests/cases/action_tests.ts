@@ -5,6 +5,7 @@ export default class ActionTests extends LogControllerTestCase {
   fixtureHTML = `
     <div data-controller="c" data-action="keydown@window->c#log">
       <button data-action="c#log"><span>Log</span></button>
+      <button type="button" id="escaped" data-action="click-&gt;c#log"></button>
       <div id="outer" data-action="click->c#log">
         <div id="inner" data-controller="c" data-action="click->c#log keyup@window->c#log"></div>
       </div>
@@ -18,6 +19,11 @@ export default class ActionTests extends LogControllerTestCase {
 
   async "test default event"() {
     await this.triggerEvent("button", "click")
+    this.assertActions({ name: "log", eventType: "click" })
+  }
+
+  async "test escaped action"() {
+    await this.triggerEvent("#escaped", "click")
     this.assertActions({ name: "log", eventType: "click" })
   }
 
