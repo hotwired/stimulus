@@ -5,7 +5,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
   fixtureHTML = `
     <div data-controller="c d">
       <button data-id-param="123"
-              data-url-param="/path"
+              data-multi-word-example-param="/path"
               data-active-param="true"
               data-payload-param='${JSON.stringify({value: 1})}'
               data-param-something="not-reported"
@@ -20,7 +20,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
-      { identifier: "c", params: { id: 123, url: "/path", payload: { value: 1 }, active: true } },
+      { identifier: "c", params: { id: 123, multiWordExample: "/path", payload: { value: 1 }, active: true } },
     )
   }
 
@@ -30,8 +30,8 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
-      { identifier: "c", params: { id: 123, url: "/path", payload: { value: 1 }, active: true } },
-      { identifier: "d", params: { id: 123, url: "/path", payload: { value: 1 }, active: true } },
+      { identifier: "c", params: { id: 123, multiWordExample: "/path", payload: { value: 1 }, active: true } },
+      { identifier: "d", params: { id: 123, multiWordExample: "/path", payload: { value: 1 }, active: true } },
     )
   }
 
@@ -41,7 +41,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
-      { identifier: "c", params: { id: 123, url: "/path", payload: { value: 1 }, active: true } },
+      { identifier: "c", params: { id: 123, multiWordExample: "/path", payload: { value: 1 }, active: true } },
     )
 
     await this.buttonElement.setAttribute("data-id-param", "234")
@@ -50,8 +50,8 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
-      { identifier: "c", params: { id: 123, url: "/path", payload: { value: 1 }, active: true } },
-      { identifier: "c", params: { id: 234, url: "/path", new: "new", active: true } },
+      { identifier: "c", params: { id: 123, multiWordExample: "/path", payload: { value: 1 }, active: true } },
+      { identifier: "c", params: { id: 234, multiWordExample: "/path", new: "new", active: true } },
     )
   }
 
@@ -60,7 +60,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.nextFrame
     await this.triggerEvent(this.nestedElement, "click")
 
-    this.assertActions({ identifier: "c", params: { id: 123, url: "/path", payload: { value: 1 }, active: true } })
+    this.assertActions({ identifier: "c", params: { id: 123, multiWordExample: "/path", payload: { value: 1 }, active: true } })
   }
 
   set actionValue(value: string) {

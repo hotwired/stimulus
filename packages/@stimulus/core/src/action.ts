@@ -38,7 +38,7 @@ export class Action {
         const match = name.match(pattern)
         const key = match && match[1]
         if (key) {
-          Object.assign(params, { [key]: typecast(value) })
+          Object.assign(params, { [camelize(key)]: typecast(value) })
         }
       })
     }
@@ -76,4 +76,9 @@ function typecast(value: any): any {
   } catch (o_O) {
     return value
   }
+}
+
+
+function camelize(s: string): string {
+  return s.replace(/-./g, x => x.toUpperCase()[1])
 }
