@@ -30,21 +30,19 @@ export class Action {
   }
 
   get params(): object {
+    const params = {}
     if (this.eventTarget instanceof HTMLElement && SVGElement) {
-      return this.filteredParams(this.eventTarget.dataset)
-    } else {
-      return {}
+      const pattern = new RegExp(`^data-(.+)-param$`)
+      const attributes = Array.from(this.eventTarget.attributes)
+      attributes.forEach(({ name, value }: { name: string, value: string }) =>{
+        const match = name.match(pattern)
+        const key = match && match[1]
+        if (key) {
+          Object.assign(params, { [key]: typecast(value) })
+        }
+      })
     }
-  }
-
-  private filteredParams(dataset: any): object {
-    return Object.keys(dataset).reduce((params, key) =>{
-      if (key.endsWith("Param")) {
-        return Object.assign(params, { [key.replace(/Param$/, "")]: dataset[key] })
-       } else {
-         return params
-       }
-    }, {})
+    return params
   }
 
   private get eventTargetName() {
@@ -70,4 +68,12 @@ export function getDefaultEventNameForElement(element: Element): string | undefi
 
 function error(message: string): never {
   throw new Error(message)
+}
+
+function typecast(value: any): any {
+  try {
+    return JSON.parse(value)
+  } catch (o_O) {
+    return value
+  }
 }

@@ -4,8 +4,10 @@ export default class EventOptionsTests extends LogControllerTestCase {
   identifier = ["c", "d"]
   fixtureHTML = `
     <div data-controller="c d">
-      <button data-first-param="first"
-              data-second-parameter-param="second"
+      <button data-id-param="123"
+              data-url-param="/path"
+              data-active-param="true"
+              data-payload-param='${JSON.stringify({value: 1})}'
               data-param-something="not-reported"
               data-something="not-reported">
         <div id="nested"></div>
@@ -18,7 +20,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
-      { identifier: "c", params: { first: "first", secondParameter: "second" } },
+      { identifier: "c", params: { id: 123, url: "/path", payload: { value: 1 }, active: true } },
     )
   }
 
@@ -28,8 +30,8 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
-      { identifier: "c", params: { first: "first", secondParameter: "second" } },
-      { identifier: "d", params: { first: "first", secondParameter: "second" } }
+      { identifier: "c", params: { id: 123, url: "/path", payload: { value: 1 }, active: true } },
+      { identifier: "d", params: { id: 123, url: "/path", payload: { value: 1 }, active: true } },
     )
   }
 
@@ -39,18 +41,17 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
-      { identifier: "c", params: { first: "first", secondParameter: "second" } },
+      { identifier: "c", params: { id: 123, url: "/path", payload: { value: 1 }, active: true } },
     )
 
-    await this.buttonElement.setAttribute("data-first-param", "updated")
+    await this.buttonElement.setAttribute("data-id-param", "234")
     await this.buttonElement.setAttribute("data-new-param", "new")
-    await this.buttonElement.removeAttribute("data-second-parameter-param")
-    await this.nextFrame
+    await this.buttonElement.removeAttribute("data-payload-param")
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
-      { identifier: "c", params: { first: "first", secondParameter: "second" } },
-      { identifier: "c", params: { first: "updated", new: "new"} },
+      { identifier: "c", params: { id: 123, url: "/path", payload: { value: 1 }, active: true } },
+      { identifier: "c", params: { id: 234, url: "/path", new: "new", active: true } },
     )
   }
 
@@ -59,7 +60,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.nextFrame
     await this.triggerEvent(this.nestedElement, "click")
 
-    this.assertActions({ params: { first: "first", secondParameter: "second" } })
+    this.assertActions({ identifier: "c", params: { id: 123, url: "/path", payload: { value: 1 }, active: true } })
   }
 
   set actionValue(value: string) {
