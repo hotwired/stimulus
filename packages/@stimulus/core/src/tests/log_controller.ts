@@ -1,4 +1,4 @@
-import { Controller } from ".."
+import { Controller, ExtendedEvent } from ".."
 
 export type ActionLogEntry = {
   name: string
@@ -6,6 +6,7 @@ export type ActionLogEntry = {
   identifier: string
   eventType: string
   currentTarget: EventTarget | null
+  params: object
   defaultPrevented: boolean
   passive: boolean
 }
@@ -34,19 +35,19 @@ export class LogController extends Controller {
     this.disconnectCount++
   }
 
-  log(event: Event) {
+  log(event: ExtendedEvent) {
     this.recordAction("log", event)
   }
 
-  log2(event: Event) {
+  log2(event: ExtendedEvent) {
     this.recordAction("log2", event)
   }
 
-  log3(event: Event) {
+  log3(event: ExtendedEvent) {
     this.recordAction("log3", event)
   }
 
-  logPassive(event: Event) {
+  logPassive(event: ExtendedEvent) {
     event.preventDefault()
     if (event.defaultPrevented) {
       this.recordAction("logPassive", event, false)
@@ -55,7 +56,7 @@ export class LogController extends Controller {
     }
   }
 
-  stop(event: Event) {
+  stop(event: ExtendedEvent) {
     this.recordAction("stop", event)
     event.stopImmediatePropagation()
   }
@@ -64,13 +65,14 @@ export class LogController extends Controller {
     return (this.constructor as typeof LogController).actionLog
   }
 
-  private recordAction(name: string, event: Event, passive?: boolean) {
+  private recordAction(name: string, event: ExtendedEvent, passive?: boolean) {
     this.actionLog.push({
       name,
       controller: this,
       identifier: this.identifier,
       eventType: event.type,
       currentTarget: event.currentTarget,
+      params: event.params,
       defaultPrevented: event.defaultPrevented,
       passive: passive || false
     })

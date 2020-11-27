@@ -29,6 +29,24 @@ export class Action {
     return `${this.eventName}${eventNameSuffix}->${this.identifier}#${this.methodName}`
   }
 
+  get params(): object {
+    if (this.eventTarget instanceof HTMLElement && SVGElement) {
+      return this.filteredParams(this.eventTarget.dataset)
+    } else {
+      return {}
+    }
+  }
+
+  private filteredParams(dataset: any): object {
+    return Object.keys(dataset).reduce((params, key) =>{
+      if (key.endsWith("Param")) {
+        return Object.assign(params, { [key.replace(/Param$/, "")]: dataset[key] })
+       } else {
+         return params
+       }
+    }, {})
+  }
+
   private get eventTargetName() {
     return stringifyEventTarget(this.eventTarget)
   }

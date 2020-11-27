@@ -1,4 +1,5 @@
 export { Application } from "./application"
+export { ExtendedEvent } from "./binding"
 export { Context } from "./context"
 export { Controller, ControllerConstructor } from "./controller"
 export { Definition } from "./definition"
