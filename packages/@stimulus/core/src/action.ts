@@ -32,12 +32,12 @@ export class Action {
   get params(): object {
     const params = {}
     if (this.eventTarget instanceof HTMLElement && SVGElement) {
-      const pattern = new RegExp(`^data-(.+)-param$`)
+      const pattern = new RegExp(`^data-${this.identifier}-(.+)-param$`)
       const attributes = Array.from(this.eventTarget.attributes)
       attributes.forEach(({ name, value }: { name: string, value: string }) =>{
         const match = name.match(pattern)
         const key = match && match[1]
-        if (key) {
+        if (key && value) {
           Object.assign(params, { [camelize(key)]: typecast(value) })
         }
       })

@@ -4,12 +4,13 @@ export default class EventOptionsTests extends LogControllerTestCase {
   identifier = ["c", "d"]
   fixtureHTML = `
     <div data-controller="c d">
-      <button data-id-param="123"
-              data-multi-word-example-param="/path"
-              data-active-param="true"
-              data-payload-param='${JSON.stringify({value: 1})}'
-              data-param-something="not-reported"
-              data-something="not-reported">
+      <button data-c-id-param="123"
+              data-c-multi-word-example-param="/path"
+              data-c-active-param="true"
+              data-c-payload-param='${JSON.stringify({value: 1})}'
+              data-c-param-something="not-reported"
+              data-something-param="not-reported"
+              data-d-id-param="234">
         <div id="nested"></div>
       </button>
     </div>
@@ -24,14 +25,14 @@ export default class EventOptionsTests extends LogControllerTestCase {
     )
   }
 
-  async "test clicking on the element does return params to multiple controllers"() {
+  async "test passing params to namespaced controller"() {
     this.actionValue = "click->c#log click->d#log2"
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
       { identifier: "c", params: { id: 123, multiWordExample: "/path", payload: { value: 1 }, active: true } },
-      { identifier: "d", params: { id: 123, multiWordExample: "/path", payload: { value: 1 }, active: true } },
+      { identifier: "d", params: { id: 234 } },
     )
   }
 
@@ -44,9 +45,9 @@ export default class EventOptionsTests extends LogControllerTestCase {
       { identifier: "c", params: { id: 123, multiWordExample: "/path", payload: { value: 1 }, active: true } },
     )
 
-    await this.buttonElement.setAttribute("data-id-param", "234")
-    await this.buttonElement.setAttribute("data-new-param", "new")
-    await this.buttonElement.removeAttribute("data-payload-param")
+    await this.buttonElement.setAttribute("data-c-id-param", "234")
+    await this.buttonElement.setAttribute("data-c-new-param", "new")
+    await this.buttonElement.removeAttribute("data-c-payload-param")
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
