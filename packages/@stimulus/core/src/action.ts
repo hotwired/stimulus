@@ -34,6 +34,7 @@ export class Action {
     if (this.eventTarget instanceof HTMLElement && SVGElement) {
       const pattern = new RegExp(`^data-${this.identifier}-(.+)-param$`)
       const attributes = Array.from(this.eventTarget.attributes)
+
       attributes.forEach(({ name, value }: { name: string, value: string }) =>{
         const match = name.match(pattern)
         const key = match && match[1]
@@ -77,7 +78,6 @@ function typecast(value: any): any {
     return value
   }
 }
-
 
 function camelize(s: string): string {
   return s.replace(/-./g, x => x.toUpperCase()[1])
