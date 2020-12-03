@@ -29,9 +29,9 @@ Then visit http://localhost:9000/ in your browser.
 
 ## It All Starts With HTML
 
-Let's begin with a simple exercise: a text field with a button. When you click the button, we'll display the value of the text field in the console.
+Let's begin with a simple exercise using a text field and a button. When you click the button, we'll display the value of the text field in the console.
 
-Every Stimulus project starts with HTML, and this project is no exception. Open `public/index.html` and add the following markup just after the opening `<body>` tag:
+Every Stimulus project starts with HTML. Open `public/index.html` and add the following markup just after the opening `<body>` tag:
 
 ```html
 <div>
@@ -44,7 +44,7 @@ Reload the page in your browser and you should see the text field and button.
 
 ## Controllers Bring HTML to Life
 
-At its core, Stimulus' purpose is to automatically connect DOM elements to JavaScript objects. Those objects are called _controllers_.
+At its core, Stimulus's purpose is to automatically connect DOM elements to JavaScript objects. Those objects are called _controllers_.
 
 Let's create our first controller by extending the framework's built-in `Controller` class. Create a new file named `hello_controller.js` in the `src/controllers/` folder. Then place the following code inside:
 
@@ -67,7 +67,7 @@ Next, we need to tell Stimulus how this controller should be connected to our HT
 </div>
 ```
 
-Identifiers serve as the link between elements and controllers. In this case, the identifier `hello` tells Stimulus to create an instance of the controller class in `hello_controller.js`. You can learn more about how automatic controller loading works in the [Installation Guide]({% link docs/handbook/06_installing_stimulus.md %}).
+Identifiers serve as the link between elements and controllers. In this case, the identifier `hello` tells Stimulus to create an instance of the controller class in `hello_controller.js`. You can learn more about how automatic controller loading works in the [Installation Guide]({% link docs/handbook/07_installing_stimulus.md %}).
 
 ## Is This Thing On?
 
@@ -108,7 +108,7 @@ export default class extends Controller {
 
 We want to call the `greet()` method when the button's `click` event is triggered. In Stimulus, controller methods which handle events are called _action methods_.
 
-To connect our action method to the button's `click` event, open `public/index.html` and add a magic `data-action` attribute to the button:
+To connect our action method to the button's `click` event, open `public/index.html` and add a `data-action` attribute to the button:
 
 ```html
 <div data-controller="hello">
@@ -132,22 +132,16 @@ We'll finish the exercise by changing our action to say hello to whatever name w
 
 In order to do that, first we need a reference to the input element inside our controller. Then we can read the `value` property to get its contents.
 
-Stimulus lets us mark important elements as _targets_ so we can easily reference them in the controller through corresponding properties. Open `public/index.html` and add a magic `data-target` attribute to the input element:
+Stimulus lets us mark important elements as _targets_ so we can easily reference them in the controller through corresponding properties. Open `public/index.html` and add a `data-hello-target` attribute to the input element:
 
 ```html
 <div data-controller="hello">
-  <input data-target="hello.name" type="text">
+  <input data-hello-target="name" type="text">
   <button data-action="click->hello#greet">Greet</button>
 </div>
 ```
 
-> ### Target Descriptors Explained
->
-> The `data-target` value `hello.name` is called a _target descriptor_. This particular descriptor says:
-> * `hello` is the controller identifier
-> * `name` is the target name
-
-When we add `name` to our controller's list of target definitions, Stimulus automatically creates a `this.nameTarget` property which returns the first matching target element. We can use this property to read the element's `value` and build our greeting string.
+Next, we'll create a property for the target by adding `name` to our controller's list of target definitions. Stimulus will automatically create a `this.nameTarget` property which returns the first matching target element. We can use this property to read the element's `value` and build our greeting string.
 
 Let's try it out. Open `hello_controller.js` and update it like so:
 
@@ -195,4 +189,4 @@ export default class extends Controller {
 
 Congratulations—you've just written your first Stimulus controller!
 
-We've covered the framework's core concepts: controllers, identifiers, actions, and targets. In the next chapter, we'll see how to put those together to build a real-life controller taken right from Basecamp.
+We've covered the framework's most important concepts: controllers, actions, and targets. In the next chapter, we'll see how to put those together to build a real-life controller taken right from Basecamp.
