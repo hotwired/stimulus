@@ -2,6 +2,7 @@ import { Controller, ControllerConstructor } from "./controller"
 import { Definition } from "./definition"
 import { Dispatcher } from "./dispatcher"
 import { ErrorHandler } from "./error_handler"
+import { Logger } from "./logger"
 import { Router } from "./router"
 import { Schema, defaultSchema } from "./schema"
 
@@ -10,6 +11,7 @@ export class Application implements ErrorHandler {
   readonly schema: Schema
   readonly dispatcher: Dispatcher
   readonly router: Router
+  logger: Logger = console
 
   static start(element?: Element, schema?: Schema): Application {
     const application = new Application(element, schema)
@@ -67,7 +69,7 @@ export class Application implements ErrorHandler {
   // Error handling
 
   handleError(error: Error, message: string, detail: object) {
-    console.error(`%s\n\n%o\n\n%o`, message, error, detail)
+    this.logger.error(`%s\n\n%o\n\n%o`, message, error, detail)
   }
 }
 

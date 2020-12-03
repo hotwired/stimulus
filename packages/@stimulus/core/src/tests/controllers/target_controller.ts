@@ -1,6 +1,6 @@
-import { Controller } from ".."
+import { Controller } from "../../controller"
 
-export class BaseTargetController extends Controller {
+class BaseTargetController extends Controller {
   static targets = [ "alpha" ]
 
   alphaTarget!: Element | null

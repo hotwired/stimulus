@@ -1,7 +1,8 @@
 import { ApplicationTestCase } from "./application_test_case"
-import { ControllerConstructor } from ".."
+import { Constructor } from "../../constructor"
+import { Controller, ControllerConstructor } from "../../controller"
 
-export class ControllerTestCase<T> extends ApplicationTestCase {
+export class ControllerTests<T extends Controller> extends ApplicationTestCase {
   identifier: string | string[] = "test"
   controllerConstructor!: ControllerConstructor
   fixtureHTML = `<div data-controller="${this.identifiers.join(" ")}">`
@@ -32,4 +33,12 @@ export class ControllerTestCase<T> extends ApplicationTestCase {
   get controllers(): T[] {
     return this.application.controllers as any as T[]
   }
+}
+
+export function ControllerTestCase(): Constructor<ControllerTests<Controller>>
+export function ControllerTestCase<T extends Controller>(constructor: Constructor<T>): Constructor<ControllerTests<T>>
+export function ControllerTestCase<T extends Controller>(constructor?: Constructor<T>): Constructor<ControllerTests<T>> {
+  return class extends ControllerTests<T> {
+    controllerConstructor = constructor || Controller as any
+  } as any
 }

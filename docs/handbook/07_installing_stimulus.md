@@ -61,13 +61,20 @@ application.register("clipboard", ClipboardController)
 
 ## Using Babel
 
-If you're using [Babel](https://babeljs.io/) with your build system, you'll need to install the [@babel/plugin-proposal-class-properties](https://babeljs.io/docs/en/babel-plugin-proposal-class-properties) and add it to your configuration:
+If you're using [Babel](https://babeljs.io/) with your build system, you'll need to add the [@babel/plugin-proposal-class-properties](https://babeljs.io/docs/en/babel-plugin-proposal-class-properties) plugin to your configuration:
 
-```js
-// .babelrc
+```json
 {
   "presets": ["@babel/preset-env"],
   "plugins": ["@babel/plugin-proposal-class-properties"]
+}
+```
+
+Or, by enabling the [`shippedPropsals`](https://babeljs.io/docs/en/babel-preset-env#shippedproposals) option with [Babel `^7.10.0`](https://babeljs.io/blog/2020/05/25/7.10.0):
+
+```json
+{
+  "presets": [["@babel/preset-env", { "shippedProposals": true }]]
 }
 ```
 
@@ -99,7 +106,7 @@ Define targets using `static get targets()` methods instead of `static targets =
 </head>
 <body>
   <div data-controller="hello">
-    <input data-target="hello.name" type="text">
+    <input data-hello-target="name" type="text">
     …
   </div>
 </body>

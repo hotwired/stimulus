@@ -1,49 +1,47 @@
-import { Application } from "./application"
+import { ClassPropertiesBlessing } from "./class_properties"
+import { Constructor } from "./constructor"
 import { Context } from "./context"
-import { DataMap } from "./data_map"
-import { Scope } from "./scope"
-import { TargetSet } from "./target_set"
-import { defineTargetProperties } from "./target_properties"
+import { TargetPropertiesBlessing } from "./target_properties"
+import { ValuePropertiesBlessing, ValueDefinitionMap } from "./value_properties"
 
-export interface ControllerConstructor {
-  bless(): void
-  new(context: Context): Controller
-}
+export type ControllerConstructor = Constructor<Controller>
 
 export class Controller {
+  static blessings = [ ClassPropertiesBlessing, TargetPropertiesBlessing, ValuePropertiesBlessing ]
   static targets: string[] = []
+  static values: ValueDefinitionMap = {}
 
   readonly context: Context
-
-  static bless() {
-    defineTargetProperties(this)
-  }
 
   constructor(context: Context) {
     this.context = context
   }
 
-  get application(): Application {
+  get application() {
     return this.context.application
   }
 
-  get scope(): Scope {
+  get scope() {
     return this.context.scope
   }
 
-  get element(): Element {
+  get element() {
     return this.scope.element
   }
 
-  get identifier(): string {
+  get identifier() {
     return this.scope.identifier
   }
 
-  get targets(): TargetSet {
+  get targets() {
     return this.scope.targets
   }
 
-  get data(): DataMap {
+  get classes() {
+    return this.scope.classes
+  }
+
+  get data() {
     return this.scope.data
   }
 

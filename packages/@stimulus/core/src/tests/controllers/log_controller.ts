@@ -1,4 +1,4 @@
-import { Controller } from ".."
+import { Controller } from "../../controller"
 
 export type ActionLogEntry = {
   name: string
@@ -11,16 +11,10 @@ export type ActionLogEntry = {
 }
 
 export class LogController extends Controller {
-  static blessCount = 0
   static actionLog: ActionLogEntry[] = []
   initializeCount = 0
   connectCount = 0
   disconnectCount = 0
-
-  static bless() {
-    super.bless()
-    this.blessCount++
-  }
 
   initialize() {
     this.initializeCount++

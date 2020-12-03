@@ -5,28 +5,34 @@ redirect_from: /handbook/
 
 # Introduction
 
-Stimulus is a JavaScript framework with _modest_ ambitions. Unlike other frameworks, Stimulus doesn't take over your application's entire front-end. Rather, it's designed to augment your HTML by connecting elements to JavaScript objects automatically.
+## About Stimulus
 
-## Connecting HTML to JavaScript
+Stimulus is a JavaScript framework with modest ambitions. Unlike other front-end frameworks, Stimulus is designed to enhance _static_ or _server-rendered_ HTML—the "HTML you already have"—by connecting JavaScript objects to elements on the page using simple annotations.
 
-Stimulus works by continuously monitoring the page, waiting for the magic `data-controller` attribute to appear. Like the `class` attribute, you can put more than one value inside it. But instead of applying or removing CSS class names, `data-controller` values connect and disconnect Stimulus _controllers_.
+These JavaScript objects are called _controllers_, and Stimulus continuously monitors the page waiting for HTML `data-controller` attributes to appear. For each attribute, Stimulus looks at the attribute's value to find a corresponding controller class, creates a new instance of that class, and connects it to the element.
 
-Think of it like this: in the same way that `class` is a bridge connecting HTML to CSS, `data-controller` is a bridge from HTML to JavaScript.
+You can think of it this way: just like the `class` attribute is a bridge connecting HTML to CSS, Stimulus's `data-controller` attribute is a bridge connecting HTML to JavaScript.
 
-On top of this foundation, Stimulus adds the magic `data-action` attribute, which describes how events on the page should trigger controller methods, and the magic `data-target` attribute, which gives you a handle for finding elements in the controller's scope.
+Aside from controllers, the three other major Stimulus concepts are:
 
-## Separation of Concerns
+* _actions_, which connect controller methods to DOM events using `data-action` attributes
+* _targets_, which locate elements of significance within a controller
+* _values_, which read, write, and observe data attributes on the controller's element
 
-Stimulus' magic attributes let you cleanly separate content from behavior in the same way you already separate content from presentation with CSS. Plus, Stimulus' conventions naturally encourage you to group related code by name.
+Stimulus's use of data attributes helps separate content from behavior in the same way CSS separates content from presentation. Further, Stimulus's conventions naturally encourage you to group related code by name.
 
-This arrangement helps you build reusable, trait-like controllers, giving you just enough structure to keep your code from devolving into "JavaScript soup."
+In turn, Stimulus helps you build small, reusable controllers, giving you just enough structure to keep your code from devolving into "JavaScript soup."
 
-## A Readable Document
+## About This Book
 
-When your JavaScript behavior is mapped out in magic attributes, you can _read_ a fragment of HTML and know what's going on. That's a welcome relief when you return to a template six months later and don't recall exactly how things fit together.
+This handbook will guide you through Stimulus's core concepts by demonstrating how to write several fully functional controllers. Each chapter builds on the one before it; from start to finish, you'll learn how to:
 
-Readable markup also means that others on your team can easily look at templates—or even the developer console on a production page—to quickly trace behavior or diagnose an issue.
+* print a greeting addressed to the name in a text field
+* copy text from a text field to the system clipboard when a button is clicked
+* navigate through a slide show with multiple slides
+* fetch HTML from the server into an element on the page automatically
+* set up Stimulus in your own application
 
-## The Water's Warm
+Once you've completed the exercises here, you may find the [reference documentation](../reference/controllers) helpful for understanding technical details about the Stimulus API.
 
-Now's a great time to dip your toes in and discover how Stimulus works. Keep reading to learn how to build your first controller.
+Let's get started!
