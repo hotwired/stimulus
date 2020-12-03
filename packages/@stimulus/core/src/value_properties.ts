@@ -91,9 +91,7 @@ function parseValueTypeConstant(typeConstant: ValueTypeConstant) {
 }
 
 function valueDescriptorForTokenAndType(token: string, type: ValueType) {
-  const plural = type == "array"
-  const suffix = plural ? "values" : "value"
-  const key = `${dasherize(token)}-${suffix}`
+  const key = `${dasherize(token)}-value`
   return {
     type,
     key,

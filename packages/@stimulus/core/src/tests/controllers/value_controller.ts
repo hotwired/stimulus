@@ -17,14 +17,14 @@ export class ValueController extends BaseValueController {
   static values: ValueDefinitionMap = {
     shadowedBoolean: Boolean,
     missingString: String,
-    id: Array,
+    ids: Array,
     options: Object,
     "time-24hr": Boolean
   }
 
   shadowedBooleanValue!: boolean
   missingStringValue!: string
-  idValues!: any[]
+  idsValue!: any[]
   optionsValue!: { [key: string]: any }
   time24hrValue!: Boolean
 
