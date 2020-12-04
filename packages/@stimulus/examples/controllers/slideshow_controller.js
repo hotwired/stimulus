@@ -2,40 +2,29 @@ import { Controller } from "stimulus"
 
 export default class extends Controller {
   static targets = [ "slide" ]
-
-  initialize() {
-    this.showCurrentSlide()
-  }
+  static classes = [ "currentSlide" ]
+  static values = { index: Number }
 
   next() {
-    if (this.index < this.lastIndex) {
-      this.index++
+    if (this.indexValue < this.lastIndex) {
+      this.indexValue++
     }
   }
 
   previous() {
-    if (this.index > 0) {
-      this.index--
+    if (this.indexValue > 0) {
+      this.indexValue--
     }
   }
 
-  showCurrentSlide() {
+  indexValueChanged() {
+    this.render()
+  }
+
+  render() {
     this.slideTargets.forEach((element, index) => {
-      element.classList.toggle("slide--current", index == this.index)
+      element.classList.toggle(this.currentSlideClass, index == this.indexValue)
     })
-  }
-
-  get index() {
-    if (this.data.has("index")) {
-      return parseInt(this.data.get("index"))
-    } else {
-      return 0
-    }
-  }
-
-  set index(value) {
-    this.data.set("index", value)
-    this.showCurrentSlide()
   }
 
   get lastIndex() {

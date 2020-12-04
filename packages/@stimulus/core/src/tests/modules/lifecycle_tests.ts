@@ -1,4 +1,4 @@
-import { LogControllerTestCase } from "../log_controller_test_case"
+import { LogControllerTestCase } from "../cases/log_controller_test_case"
 
 export default class LifecycleTests extends LogControllerTestCase {
   controllerElement!: Element
@@ -19,7 +19,6 @@ export default class LifecycleTests extends LogControllerTestCase {
     this.assert.equal(this.controller.connectCount, 1)
     await this.reconnectControllerElement()
     this.assert.equal(this.controller.connectCount, 2)
-    this.assert.equal((this.controller.constructor as any)["blessCount"], 1)
   }
 
   async "test Controller#disconnect"() {

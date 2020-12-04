@@ -1,5 +1,5 @@
 import { Controller } from "../.."
-import { ControllerTestCase } from "../controller_test_case"
+import { ControllerTestCase } from "../cases/controller_test_case"
 
 class ActionTimingController extends Controller {
   static targets = [ "button" ]
@@ -15,12 +15,12 @@ class ActionTimingController extends Controller {
   }
 }
 
-export default class ActionTimingTests extends ControllerTestCase<ActionTimingController> {
+export default class ActionTimingTests extends ControllerTestCase(ActionTimingController) {
   controllerConstructor = ActionTimingController
   identifier = "c"
   fixtureHTML = `
     <div data-controller="c">
-      <button data-target="c.button" data-action="c#record">Log</button>
+      <button data-c-target="button" data-action="c#record">Log</button>
     </div>
   `
 

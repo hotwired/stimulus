@@ -1,6 +1,6 @@
-import { BareControllerTestCase } from "../bare_controller_test_case"
+import { ControllerTestCase } from "../cases/controller_test_case"
 
-export default class DataTests extends BareControllerTestCase {
+export default class DataTests extends ControllerTestCase() {
   fixtureHTML = `
     <div data-controller="${this.identifier}"
       data-${this.identifier}-alpha="hello world"

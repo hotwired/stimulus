@@ -8,11 +8,11 @@ How does it work? Sprinkle your HTML with controller, target, and action attribu
 
 ```html
 <div data-controller="hello">
-  <input data-target="hello.name" type="text">
+  <input data-hello-target="name" type="text">
 
   <button data-action="click->hello#greet">Greet</button>
 
-  <span data-target="hello.output"></span>
+  <span data-hello-target="output"></span>
 </div>
 ```
 
@@ -60,8 +60,8 @@ We expect all Stimulus contributors to abide by the terms of our [Code of Conduc
 
 Stimulus is [MIT-licensed](LICENSE.md) open-source software from [Basecamp](https://basecamp.com/), the creators of [Ruby on Rails](http://rubyonrails.org).
 
-Continuous integration is generously provided by open-source grants from [CircleCI](https://circleci.com), [Sauce Labs](https://saucelabs.com/open-source), and [Travis CI](https://travis-ci.com).
+Continuous integration is generously provided by open-source grants from [CircleCI](https://circleci.com) and [Sauce Labs](https://saucelabs.com/open-source).
 
 ---
 
-© 2018 Basecamp, LLC.
+© 2020 Basecamp, LLC.

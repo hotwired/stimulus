@@ -112,6 +112,6 @@ main {
   font-size: 6rem;
 }
 
-.slide.slide--current {
+.slide--current {
   display: block;
 }

@@ -1,4 +1,3 @@
-import { Schema } from "./schema"
 import { Scope } from "./scope"
 import { attributeValueContainsToken } from "./selectors"
 
@@ -9,38 +8,80 @@ export class TargetSet {
     this.scope = scope
   }
 
-  get element(): Element {
+  get element() {
     return this.scope.element
   }
 
-  get identifier(): string {
+  get identifier() {
     return this.scope.identifier
   }
 
-  get schema(): Schema {
+  get schema() {
     return this.scope.schema
   }
 
-  has(targetName: string): boolean {
+  has(targetName: string) {
     return this.find(targetName) != null
   }
 
-  find(...targetNames: string[]): Element | undefined {
-    const selector = this.getSelectorForTargetNames(targetNames)
+  find(...targetNames: string[]) {
+    return targetNames.reduce((target, targetName) =>
+         target
+      || this.findTarget(targetName)
+      || this.findLegacyTarget(targetName)
+    , undefined as Element | undefined)
+  }
+
+  findAll(...targetNames: string[]) {
+    return targetNames.reduce((targets, targetName) => [
+      ...targets,
+      ...this.findAllTargets(targetName),
+      ...this.findAllLegacyTargets(targetName)
+    ], [] as Element[])
+  }
+
+  private findTarget(targetName: string) {
+    const selector = this.getSelectorForTargetName(targetName)
     return this.scope.findElement(selector)
   }
 
-  findAll(...targetNames: string[]): Element[] {
-    const selector = this.getSelectorForTargetNames(targetNames)
+  private findAllTargets(targetName: string) {
+    const selector = this.getSelectorForTargetName(targetName)
     return this.scope.findAllElements(selector)
   }
 
-  private getSelectorForTargetNames(targetNames: string[]): string {
-    return targetNames.map(targetName => this.getSelectorForTargetName(targetName)).join(", ")
+  private getSelectorForTargetName(targetName: string) {
+    const attributeName = `data-${this.identifier}-target`
+    return attributeValueContainsToken(attributeName, targetName)
   }
 
-  private getSelectorForTargetName(targetName: string): string {
+  private findLegacyTarget(targetName: string) {
+    const selector = this.getLegacySelectorForTargetName(targetName)
+    return this.deprecate(this.scope.findElement(selector), targetName)
+  }
+
+  private findAllLegacyTargets(targetName: string) {
+    const selector = this.getLegacySelectorForTargetName(targetName)
+    return this.scope.findAllElements(selector).map(element => this.deprecate(element, targetName))
+  }
+
+  private getLegacySelectorForTargetName(targetName: string) {
     const targetDescriptor = `${this.identifier}.${targetName}`
     return attributeValueContainsToken(this.schema.targetAttribute, targetDescriptor)
+  }
+
+  private deprecate<T>(element: T, targetName: string) {
+    if (element) {
+      const { identifier } = this
+      const attributeName = this.schema.targetAttribute
+      this.guide.warn(element, `target:${targetName}`,
+        `Please replace ${attributeName}="${identifier}.${targetName}" with data-${identifier}-target="${targetName}". ` +
+        `The ${attributeName} attribute is deprecated and will be removed in a future version of Stimulus.`)
+    }
+    return element
+  }
+
+  private get guide() {
+    return this.scope.guide
   }
 }

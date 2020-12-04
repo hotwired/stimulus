@@ -1,5 +1,5 @@
-import { ApplicationTestCase } from "../application_test_case"
-import { LogController } from "../log_controller"
+import { ApplicationTestCase } from "../cases/application_test_case"
+import { LogController } from "../controllers/log_controller"
 
 class AController extends LogController {}
 class BController extends LogController {}
@@ -29,12 +29,10 @@ export default class ApplicationTests extends ApplicationTestCase {
     this.assert.ok(this.controllers[0] instanceof AController)
     this.assert.equal(this.controllers[0].initializeCount, 1)
     this.assert.equal(this.controllers[0].connectCount, 1)
-    this.assert.equal((this.controllers[0].constructor as any)["blessCount"], 1)
 
     this.assert.ok(this.controllers[1] instanceof BController)
     this.assert.equal(this.controllers[1].initializeCount, 1)
     this.assert.equal(this.controllers[1].connectCount, 1)
-    this.assert.equal((this.controllers[1].constructor as any)["blessCount"], 1)
   }
 
   "test Application#unload"() {
@@ -60,7 +58,6 @@ export default class ApplicationTests extends ApplicationTestCase {
     this.assert.ok(this.controllers[1] instanceof CController)
     this.assert.equal(this.controllers[1].initializeCount, 1)
     this.assert.equal(this.controllers[1].connectCount, 1)
-    this.assert.equal((this.controllers[1].constructor as any)["blessCount"], 1)
   }
 
   get controllers() {

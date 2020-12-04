@@ -1,13 +1,13 @@
 <% include layout/head %>
 
-<div data-controller="slideshow">
+<div data-controller="slideshow" data-slideshow-current-slide-class="slide--current">
   <button data-action="slideshow#previous">←</button>
   <button data-action="slideshow#next">→</button>
 
-  <div data-target="slideshow.slide" class="slide">🐵</div>
-  <div data-target="slideshow.slide" class="slide">🙈</div>
-  <div data-target="slideshow.slide" class="slide">🙉</div>
-  <div data-target="slideshow.slide" class="slide">🙊</div>
+  <div data-slideshow-target="slide" class="slide">🐵</div>
+  <div data-slideshow-target="slide" class="slide">🙈</div>
+  <div data-slideshow-target="slide" class="slide">🙉</div>
+  <div data-slideshow-target="slide" class="slide">🙊</div>
 </div>
 
 <% include layout/tail %>

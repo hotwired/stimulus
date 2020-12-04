@@ -9,7 +9,7 @@ module.exports = {
     filename: "[name].js"
   },
 
-  mode: "production",
+  mode: "development",
   devtool: "inline-source-map",
 
   module: {

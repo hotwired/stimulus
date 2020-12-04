@@ -1,4 +1,4 @@
-import { LogControllerTestCase } from "../log_controller_test_case"
+import { LogControllerTestCase } from "../cases/log_controller_test_case"
 
 export default class EventOptionsTests extends LogControllerTestCase {
   identifier = ["c", "d"]
@@ -10,7 +10,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
   `
   async "test different syntaxes for once action"() {
     this.actionValue = "click->c#log:once d#log2:once c#log3:once"
-    
+
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
     await this.triggerEvent(this.buttonElement, "click")
@@ -24,7 +24,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
 
   async "test mix once and standard actions"() {
     this.actionValue = "c#log:once d#log2 c#log3"
-    
+
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
     await this.triggerEvent(this.buttonElement, "click")
@@ -58,7 +58,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
 
   async "test global once actions"() {
     this.actionValue = "keydown@window->c#log:once"
-    
+
     await this.nextFrame
     await this.triggerEvent("#outside", "keydown")
     await this.triggerEvent("#outside", "keydown")
@@ -71,7 +71,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
     await this.triggerEvent(this.buttonElement, "click")
-    
+
     //modify with a setAttribute and c#log should not be called anyhow
     this.actionValue = "c#log2 c#log:once d#log"
     await this.nextFrame

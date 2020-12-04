@@ -1,4 +1,5 @@
 import { Scope } from "./scope"
+import { dasherize } from "./string_helpers"
 
 export class DataMap {
   readonly scope: Scope
@@ -16,36 +17,32 @@ export class DataMap {
   }
 
   get(key: string): string | null {
-    const formattedKey = this.getFormattedKey(key)
-    return this.element.getAttribute(formattedKey)
+    const name = this.getAttributeNameForKey(key)
+    return this.element.getAttribute(name)
   }
 
   set(key: string, value: string): string | null {
-    const formattedKey = this.getFormattedKey(key)
-    this.element.setAttribute(formattedKey, value)
+    const name = this.getAttributeNameForKey(key)
+    this.element.setAttribute(name, value)
     return this.get(key)
   }
 
   has(key: string): boolean {
-    const formattedKey = this.getFormattedKey(key)
-    return this.element.hasAttribute(formattedKey)
+    const name = this.getAttributeNameForKey(key)
+    return this.element.hasAttribute(name)
   }
 
   delete(key: string): boolean {
     if (this.has(key)) {
-      const formattedKey = this.getFormattedKey(key)
-      this.element.removeAttribute(formattedKey)
+      const name = this.getAttributeNameForKey(key)
+      this.element.removeAttribute(name)
       return true
     } else {
       return false
     }
   }
 
-  private getFormattedKey(key: string): string {
+  getAttributeNameForKey(key: string): string {
     return `data-${this.identifier}-${dasherize(key)}`
   }
-}
-
-function dasherize(value: string) {
-  return value.replace(/([A-Z])/g, (_, char) => `-${char.toLowerCase()}`)
 }
