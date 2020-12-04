@@ -8,11 +8,11 @@ How does it work? Sprinkle your HTML with controller, target, and action attribu
 
 ```html
 <div data-controller="hello">
-  <input data-target="hello.name" type="text">
+  <input data-hello-target="name" type="text">
 
   <button data-action="click->hello#greet">Greet</button>
 
-  <span data-target="hello.output"></span>
+  <span data-hello-target="output"></span>
 </div>
 ```
 
@@ -64,4 +64,4 @@ Continuous integration is generously provided by open-source grants from [Circle
 
 ---
 
-© 2019 Basecamp, LLC.
+© 2020 Basecamp, LLC.
