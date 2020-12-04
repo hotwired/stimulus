@@ -1,6 +1,6 @@
 {
   "name": "@stimulus/test",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "Stimulus JavaScript framework: Test helpers",
   "repository": "https://github.com/stimulusjs/stimulus",
   "author": "Basecamp, LLC",
