@@ -39,7 +39,7 @@ export class Action {
       attributes.forEach(({ name, value }: { name: string, value: string }) =>{
         const match = name.match(pattern)
         const key = match && match[1]
-        if (key && value) {
+        if (key) {
           Object.assign(params, { [camelize(key)]: typecast(value) })
         }
       })
