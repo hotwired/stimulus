@@ -1,12 +1,15 @@
 import { LogControllerTestCase } from "../cases/log_controller_test_case"
 
-export default class EventOptionsTests extends LogControllerTestCase {
+
+export default class ActionParamsTests extends LogControllerTestCase {
   identifier = ["c", "d"]
   fixtureHTML = `
     <div data-controller="c d">
       <button data-c-id-param="123"
               data-c-multi-word-example-param="/path"
               data-c-active-param="true"
+              data-c-inactive-param="false"
+              data-c-empty-param=""
               data-c-payload-param='${JSON.stringify({value: 1})}'
               data-c-param-something="not-reported"
               data-something-param="not-reported"
@@ -15,13 +18,24 @@ export default class EventOptionsTests extends LogControllerTestCase {
       </button>
     </div>
   `
+  expectedParamsForC = {
+    id: 123,
+    multiWordExample: "/path",
+    payload: {
+      value: 1
+    },
+    active: true,
+    empty: "",
+    inactive: false
+  }
+
   async "test clicking on the element does return its params"() {
     this.actionValue = "click->c#log"
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
-      { identifier: "c", params: { id: 123, multiWordExample: "/path", payload: { value: 1 }, active: true } },
+      { identifier: "c", params: this.expectedParamsForC },
     )
   }
 
@@ -31,7 +45,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
-      { identifier: "c", params: { id: 123, multiWordExample: "/path", payload: { value: 1 }, active: true } },
+      { identifier: "c", params: this.expectedParamsForC },
       { identifier: "d", params: { id: 234 } },
     )
   }
@@ -42,7 +56,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
-      { identifier: "c", params: { id: 123, multiWordExample: "/path", payload: { value: 1 }, active: true } },
+      { identifier: "c", params: this.expectedParamsForC },
     )
 
     await this.buttonElement.setAttribute("data-c-id-param", "234")
@@ -51,8 +65,14 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
-      { identifier: "c", params: { id: 123, multiWordExample: "/path", payload: { value: 1 }, active: true } },
-      { identifier: "c", params: { id: 234, multiWordExample: "/path", new: "new", active: true } },
+      { identifier: "c", params: this.expectedParamsForC },
+      {
+        identifier: "c", params: {
+          id: 234, new: "new",
+          multiWordExample: "/path",
+          active: true,
+          empty: "",
+          inactive: false} },
     )
   }
 
@@ -61,7 +81,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.nextFrame
     await this.triggerEvent(this.nestedElement, "click")
 
-    this.assertActions({ identifier: "c", params: { id: 123, multiWordExample: "/path", payload: { value: 1 }, active: true } })
+    this.assertActions({ identifier: "c", params: this.expectedParamsForC })
   }
 
   set actionValue(value: string) {
