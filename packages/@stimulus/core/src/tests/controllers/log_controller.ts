@@ -1,4 +1,4 @@
-import { ExtendedEvent } from "../../binding"
+import { ActionEvent } from "../../action_event"
 import { Controller } from "../../controller"
 
 export type ActionLogEntry = {
@@ -30,19 +30,19 @@ export class LogController extends Controller {
     this.disconnectCount++
   }
 
-  log(event: ExtendedEvent) {
+  log(event: ActionEvent) {
     this.recordAction("log", event)
   }
 
-  log2(event: ExtendedEvent) {
+  log2(event: ActionEvent) {
     this.recordAction("log2", event)
   }
 
-  log3(event: ExtendedEvent) {
+  log3(event: ActionEvent) {
     this.recordAction("log3", event)
   }
 
-  logPassive(event: ExtendedEvent) {
+  logPassive(event: ActionEvent) {
     event.preventDefault()
     if (event.defaultPrevented) {
       this.recordAction("logPassive", event, false)
@@ -51,7 +51,7 @@ export class LogController extends Controller {
     }
   }
 
-  stop(event: ExtendedEvent) {
+  stop(event: ActionEvent) {
     this.recordAction("stop", event)
     event.stopImmediatePropagation()
   }
@@ -60,7 +60,7 @@ export class LogController extends Controller {
     return (this.constructor as typeof LogController).actionLog
   }
 
-  private recordAction(name: string, event: ExtendedEvent, passive?: boolean) {
+  private recordAction(name: string, event: ActionEvent, passive?: boolean) {
     this.actionLog.push({
       name,
       controller: this,

@@ -1,11 +1,8 @@
 import { Action } from "./action"
+import { ActionEvent } from "./action_event"
 import { Context } from "./context"
 import { Controller } from "./controller"
 import { Scope } from "./scope"
-
-export interface ExtendedEvent extends Event {
-  params: object
-}
 
 export class Binding {
   readonly context: Context
@@ -53,7 +50,8 @@ export class Binding {
   private invokeWithEvent(event: Event) {
     try {
       const { params } = this.action
-      this.method.call(this.controller, Object.assign(event, { params }))
+      const actionEvent: ActionEvent = Object.assign(event, { params })
+      this.method.call(this.controller, actionEvent)
     } catch (error) {
       const { identifier, controller, element, index } = this
       const detail = { identifier, controller, element, index, event }
