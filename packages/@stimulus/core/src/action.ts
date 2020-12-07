@@ -32,7 +32,7 @@ export class Action {
 
   get params(): object {
     const params = {}
-    if (this.eventTarget instanceof HTMLElement && SVGElement) {
+    if (this.eventTarget instanceof Element) {
       const pattern = new RegExp(`^data-${this.identifier}-(.+)-param$`)
       const attributes = Array.from(this.eventTarget.attributes)
 
