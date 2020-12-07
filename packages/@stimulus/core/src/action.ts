@@ -1,5 +1,6 @@
 import { ActionDescriptor, parseActionDescriptorString, stringifyEventTarget } from "./action_descriptor"
 import { Token } from "@stimulus/mutation-observers"
+import { camelize } from "./string_helpers"
 
 export class Action {
   readonly element: Element
@@ -79,6 +80,3 @@ function typecast(value: any): any {
   }
 }
 
-function camelize(s: string): string {
-  return s.replace(/-./g, x => x.toUpperCase()[1])
-}
