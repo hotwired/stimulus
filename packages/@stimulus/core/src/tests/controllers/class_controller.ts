@@ -13,6 +13,7 @@ export class ClassController extends BaseClassController {
 
   readonly hasEnabledClass!: boolean
   readonly enabledClass!: string
+  readonly enabledClasses!: string[]
   readonly loadingClass!: string
   readonly successClasses!: string[]
 }

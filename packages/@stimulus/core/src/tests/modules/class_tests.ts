@@ -20,6 +20,7 @@ export default class ValueTests extends ControllerTestCase(ClassController) {
   "test accessing a missing class property throws an error"() {
     this.assert.notOk(this.controller.hasEnabledClass)
     this.assert.raises(() => this.controller.enabledClass)
+    this.assert.equal(this.controller.enabledClasses.length, 0)
   }
 
   "test classes must be scoped by identifier"() {
