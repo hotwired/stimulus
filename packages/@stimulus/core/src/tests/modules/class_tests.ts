@@ -6,6 +6,7 @@ export default class ValueTests extends ControllerTestCase(ClassController) {
     <div data-controller="${this.identifier}"
       data-${this.identifier}-active-class="test--active"
       data-${this.identifier}-loading-class="busy"
+      data-${this.identifier}-success-class="bg-green-400 border border-green-600"
       data-loading-class="xxx"
     ></div>
   `
@@ -13,6 +14,7 @@ export default class ValueTests extends ControllerTestCase(ClassController) {
   "test accessing a class property"() {
     this.assert.ok(this.controller.hasActiveClass)
     this.assert.equal(this.controller.activeClass, "test--active")
+    this.assert.deepEqual(this.controller.activeClasses, ["test--active"])
   }
 
   "test accessing a missing class property throws an error"() {
@@ -22,5 +24,9 @@ export default class ValueTests extends ControllerTestCase(ClassController) {
 
   "test classes must be scoped by identifier"() {
     this.assert.equal(this.controller.loadingClass, "busy")
+  }
+
+  "test space separated classes map to array"() {
+    this.assert.deepEqual(this.controller.successClasses, ["bg-green-400", "border", "border-green-600"])
   }
 }
