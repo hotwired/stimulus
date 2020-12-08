@@ -19,7 +19,7 @@ function propertiesForTargetDefinition(name: string) {
         if (target) {
           return target
         } else {
-          throw new Error(`Missing target element : data-${this.identifier}-target="${name}"`)
+          throw new Error(`Missing target element "${name}" for "${this.identifier}" controller`)
         }
       }
     },
