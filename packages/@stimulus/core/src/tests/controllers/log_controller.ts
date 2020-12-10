@@ -7,7 +7,7 @@ export type ActionLogEntry = {
   identifier: string
   eventType: string
   currentTarget: EventTarget | null
-  params: object
+  params: { [key: string]: any }
   defaultPrevented: boolean
   passive: boolean
 }
