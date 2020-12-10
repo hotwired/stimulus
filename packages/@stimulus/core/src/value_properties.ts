@@ -78,7 +78,6 @@ function parseValueDefinitionPair([token, typeConstant]: ValueDefinitionPair): V
   const isTypeConstant = [Array, Boolean, Number, Object, String].find(constant => {
     return typeConstant === constant
   })
-  console.log(isTypeConstant)
   if (isTypeConstant) {
     return valueDescriptorForTokenAndType(token, parseValueTypeConstant(typeConstant), undefined)
   } else {
