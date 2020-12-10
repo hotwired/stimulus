@@ -27,7 +27,7 @@ function propertiesForClassDefinition(key: string) {
 
     [`${key}Classes`]: {
       get(this: Controller) {
-        return this.classes.get(key)?.split(" ") || []
+        return this.classes.getAll(key)
       }
     },
 

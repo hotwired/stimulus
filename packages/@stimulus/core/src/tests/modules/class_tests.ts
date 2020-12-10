@@ -27,7 +27,11 @@ export default class ValueTests extends ControllerTestCase(ClassController) {
     this.assert.equal(this.controller.loadingClass, "busy")
   }
 
-  "test space separated classes map to array"() {
+  "test utility classes map to array"() {
     this.assert.deepEqual(this.controller.successClasses, ["bg-green-400", "border", "border-green-600"])
+  }
+
+  "test accessing a class property returns first class if utility classes are used"() {
+    this.assert.equal(this.controller.successClass, "bg-green-400");
   }
 }

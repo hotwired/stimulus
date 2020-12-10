@@ -12,7 +12,11 @@ export class ClassMap {
   }
 
   get(name: string) {
-    return this.data.get(this.getDataKey(name))
+    return this.getAll(name)[0];
+  }
+
+  getAll(name: string) {
+    return this.data.get(this.getDataKey(name))?.split(" ") || []
   }
 
   getAttributeName(name: string) {
