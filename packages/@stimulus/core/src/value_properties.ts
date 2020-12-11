@@ -58,7 +58,7 @@ export function propertiesForValueDefinitionPair<T>(valueDefinitionPair: ValueDe
 }
 
 export type ValueDescriptor = {
-  type: any,
+  type: ValueType,
   key: string,
   name: string,
   defaultValue: any
@@ -68,31 +68,15 @@ export type ValueDescriptorMap = { [attributeName: string]: ValueDescriptor }
 
 export type ValueDefinitionMap = { [token: string]: ValueTypeConstant }
 
-export type ValueDefinitionPair = [string, any]
+export type ValueDefinitionPair = [string, ValueTypeConstant]
 
 export type ValueTypeConstant = typeof Array | typeof Boolean | typeof Number | typeof Object | typeof String
 
 export type ValueType = "array" | "boolean" | "number" | "object" | "string"
 
 function parseValueDefinitionPair([token, typeConstant]: ValueDefinitionPair): ValueDescriptor {
-  const isTypeConstant = [Array, Boolean, Number, Object, String].find(constant => {
-    return typeConstant === constant
-  })
-  if (isTypeConstant) {
-    return valueDescriptorForTokenAndType(token, parseValueTypeConstant(typeConstant), undefined)
-  } else {
-    if (Array.isArray(typeConstant)) {
-      return valueDescriptorForTokenAndType(token, "array", typeConstant)
-    } else {
-      switch (typeof typeConstant) {
-        case "boolean": return valueDescriptorForTokenAndType(token, "boolean", typeConstant)
-        case "number": return valueDescriptorForTokenAndType(token, "number", typeConstant)
-        case "object": return valueDescriptorForTokenAndType(token, "object", typeConstant)
-        case "string": return valueDescriptorForTokenAndType(token, "string", typeConstant)
-      }
-      throw new Error(`Unknown value type constant "${typeConstant}"`)
-    }
-  }
+  const type = parseValueTypeConstant(typeConstant)
+  return valueDescriptorForTokenAndType(token, type, typeConstant)
 }
 
 function parseValueTypeConstant(typeConstant: ValueTypeConstant) {
@@ -103,10 +87,20 @@ function parseValueTypeConstant(typeConstant: ValueTypeConstant) {
     case Object:  return "object"
     case String:  return "string"
   }
+
+  switch (typeof typeConstant) {
+    case "boolean": return "boolean"
+    case "number":  return "number"
+    case "object":  return "object"
+    case "string":  return "string"
+  }
+
+  if (Array.isArray(typeConstant)) return "array"
+
   throw new Error(`Unknown value type constant "${typeConstant}"`)
 }
 
-function valueDescriptorForTokenAndType(token: string, type: ValueType, value: any) {
+function valueDescriptorForTokenAndType(token: string, type: ValueType, value: ValueTypeConstant) {
   const key = `${dasherize(token)}-value`
   return {
     type,
