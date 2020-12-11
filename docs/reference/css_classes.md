@@ -112,7 +112,6 @@ export default class extends Controller {
 }
 ```
 
-
 ## Naming Conventions
 
 Use camelCase to specify logical names in CSS class definitions. Logical names map to camelCase CSS class properties:
