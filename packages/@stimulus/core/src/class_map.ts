@@ -16,7 +16,13 @@ export class ClassMap {
   }
 
   getAll(name: string) {
-    return this.data.get(this.getDataKey(name))?.split(" ") || []
+    const classAttribute = this.data.get(this.getDataKey(name));
+
+    if (classAttribute) {
+      return classAttribute.split(" ")
+    } else {
+      return []
+    }
   }
 
   getAttributeName(name: string) {
