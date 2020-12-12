@@ -83,7 +83,7 @@ function parseValueDefinitionPair([token, typeDefinition]: ValueDefinitionPair):
   return valueDescriptorForTokenAndTypeDefinition(token, typeDefinition)
 }
 
-function valueConstantToType(constant: ValueTypeConstant) {
+function parseValueTypeConstant(constant: ValueTypeConstant) {
   switch (constant) {
     case Array:   return "array"
     case Boolean: return "boolean"
@@ -93,7 +93,7 @@ function valueConstantToType(constant: ValueTypeConstant) {
   }
 }
 
-function defaultValueToType(defaultValue: ValueTypeDefault) {
+function parseValueTypeDefault(defaultValue: ValueTypeDefault) {
   switch (typeof defaultValue) {
     case "boolean": return "boolean"
     case "number":  return "number"
@@ -105,8 +105,8 @@ function defaultValueToType(defaultValue: ValueTypeDefault) {
 }
 
 function parseValueTypeDefinition(typeDefinition: ValueTypeDefinition): ValueType {
-  const typeFromDefaultValue = defaultValueToType(typeDefinition as ValueTypeDefault)
-  const typeFromConstant = valueConstantToType(typeDefinition as ValueTypeConstant)
+  const typeFromDefaultValue = parseValueTypeDefault(typeDefinition as ValueTypeDefault)
+  const typeFromConstant = parseValueTypeConstant(typeDefinition as ValueTypeConstant)
 
   const type = typeFromDefaultValue || typeFromConstant
   if (type) return type
@@ -115,7 +115,7 @@ function parseValueTypeDefinition(typeDefinition: ValueTypeDefinition): ValueTyp
 }
 
 function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): ValueTypeDefault {
-  const constant = valueConstantToType(typeDefinition as ValueTypeConstant)
+  const constant = parseValueTypeConstant(typeDefinition as ValueTypeConstant)
 
   if (constant) return defaultValuesByType[constant]
   return typeDefinition
@@ -129,7 +129,7 @@ function valueDescriptorForTokenAndTypeDefinition(token: string, typeDefinition:
     key,
     name: camelize(key),
     get defaultValue() { return defaultValueForDefinition(typeDefinition) },
-    get hasCustomDefaultValue() { return defaultValueToType(typeDefinition) !== undefined }
+    get hasCustomDefaultValue() { return parseValueTypeDefault(typeDefinition) !== undefined }
   }
 }
 
