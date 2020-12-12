@@ -5,7 +5,7 @@ import { camelize, capitalize, dasherize } from "./string_helpers"
 
 /** @hidden */
 export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
-  const valueDefinitionPairs = readInheritableStaticObjectPairs<T, ValueTypeConstant>(constructor, "values")
+  const valueDefinitionPairs = readInheritableStaticObjectPairs<T, ValueTypeDefinition>(constructor, "values")
   const propertyDescriptorMap: PropertyDescriptorMap = {
     valueDescriptorMap: {
       get(this: Controller) {
@@ -61,52 +61,73 @@ export type ValueDescriptor = {
   type: ValueType,
   key: string,
   name: string,
-  defaultValue: any
+  defaultValue: ValueTypeDefault
 }
 
 export type ValueDescriptorMap = { [attributeName: string]: ValueDescriptor }
 
-export type ValueDefinitionMap = { [token: string]: ValueTypeConstant }
+export type ValueDefinitionMap = { [token: string]: ValueTypeDefinition }
 
-export type ValueDefinitionPair = [string, ValueTypeConstant]
+export type ValueDefinitionPair = [string, ValueTypeDefinition]
 
 export type ValueTypeConstant = typeof Array | typeof Boolean | typeof Number | typeof Object | typeof String
 
+export type ValueTypeDefault = Array<any> | Boolean | Number | Object | String
+
+export type ValueTypeDefinition = ValueTypeConstant | ValueTypeDefault
+
 export type ValueType = "array" | "boolean" | "number" | "object" | "string"
 
-function parseValueDefinitionPair([token, typeConstant]: ValueDefinitionPair): ValueDescriptor {
-  const type = parseValueTypeConstant(typeConstant)
-  return valueDescriptorForTokenAndType(token, type, typeConstant)
+function parseValueDefinitionPair([token, typeDefinition]: ValueDefinitionPair): ValueDescriptor {
+  return valueDescriptorForTokenAndTypeDefinition(token, typeDefinition)
 }
 
-function parseValueTypeConstant(typeConstant: ValueTypeConstant) {
-  switch (typeConstant) {
+function valueConstantToType(constant: ValueTypeConstant) {
+  switch (constant) {
     case Array:   return "array"
     case Boolean: return "boolean"
     case Number:  return "number"
     case Object:  return "object"
     case String:  return "string"
   }
+}
 
-  switch (typeof typeConstant) {
+function defaultValueToType(defaultValue: ValueTypeDefault) {
+  switch (typeof defaultValue) {
     case "boolean": return "boolean"
     case "number":  return "number"
-    case "object":  return "object"
     case "string":  return "string"
   }
 
-  if (Array.isArray(typeConstant)) return "array"
-
-  throw new Error(`Unknown value type constant "${typeConstant}"`)
+  if (Array.isArray(defaultValue)) return "array"
+  if (Object.prototype.toString.call(defaultValue) === "[object Object]") return "object"
 }
 
-function valueDescriptorForTokenAndType(token: string, type: ValueType, value: ValueTypeConstant) {
+function parseValueTypeDefinition(typeDefinition: ValueTypeDefinition): ValueType {
+  const typeFromDefaultValue = defaultValueToType(typeDefinition as ValueTypeDefault)
+  const typeFromConstant = valueConstantToType(typeDefinition as ValueTypeConstant)
+
+  const type = typeFromDefaultValue || typeFromConstant
+  if (type) return type
+
+  throw new Error(`Unknown value type "${typeDefinition}"`)
+}
+
+function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): ValueTypeDefault {
+  const constant = valueConstantToType(typeDefinition as ValueTypeConstant)
+
+  if (constant) return defaultValuesByType[constant]
+  return typeDefinition
+}
+
+function valueDescriptorForTokenAndTypeDefinition(token: string, typeDefinition: ValueTypeDefinition) {
   const key = `${dasherize(token)}-value`
+  const type = parseValueTypeDefinition(typeDefinition)
   return {
     type,
     key,
     name: camelize(key),
-    get defaultValue() { return value || defaultValuesByType[type] }
+    get defaultValue() { return defaultValueForDefinition(typeDefinition) }
   }
 }
 
