@@ -51,7 +51,7 @@ export function propertiesForValueDefinitionPair<T>(valueDefinitionPair: ValueDe
 
     [`has${capitalize(name)}`]: {
       get(this: Controller): boolean {
-        return this.data.has(key)
+        return this.data.has(key) || definition.hasCustomDefaultValue
       }
     }
   }
@@ -61,7 +61,8 @@ export type ValueDescriptor = {
   type: ValueType,
   key: string,
   name: string,
-  defaultValue: ValueTypeDefault
+  defaultValue: ValueTypeDefault,
+  hasCustomDefaultValue: boolean
 }
 
 export type ValueDescriptorMap = { [attributeName: string]: ValueDescriptor }
@@ -127,7 +128,8 @@ function valueDescriptorForTokenAndTypeDefinition(token: string, typeDefinition:
     type,
     key,
     name: camelize(key),
-    get defaultValue() { return defaultValueForDefinition(typeDefinition) }
+    get defaultValue() { return defaultValueForDefinition(typeDefinition) },
+    get hasCustomDefaultValue() { return defaultValueToType(typeDefinition) !== undefined }
   }
 }
 
