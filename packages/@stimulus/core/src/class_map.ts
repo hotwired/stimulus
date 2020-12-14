@@ -1,4 +1,5 @@
 import { Scope } from "./scope"
+import { tokenize } from "./string_helpers"
 
 export class ClassMap {
   readonly scope: Scope
@@ -17,7 +18,7 @@ export class ClassMap {
 
   getAll(name: string) {
     const tokenString = this.data.get(this.getDataKey(name)) || ""
-    return tokenString.trim().split(/\s+/).filter(content => content.length)
+    return tokenize(tokenString)
   }
 
   getAttributeName(name: string) {
