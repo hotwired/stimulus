@@ -64,7 +64,7 @@ Construct a CSS class attribute by joining together the controller identifier an
 </form>
 ```
 
-If you are working with utility classes and want to define multiple CSS classes for an attribute, separate the CSS class names with spaces.
+If you want to define multiple CSS classes for an attribute, separate the CSS class names with spaces.
 
 ## Properties
 
@@ -96,7 +96,7 @@ export default class extends Controller {
 
 **Note:** Stimulus will throw an error if you attempt to access a CSS class property when no matching CSS class attribute is present.
 
-If you are using utility classes, access the plural class property. You can apply the array of CSS classes to elements using [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax).
+If you want to use multiple classes, access the plural class property. You can apply the array of CSS classes to elements using [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax).
 
 <meta data-controller="callout" data-callout-text-value="...this.loadingClasses">
 

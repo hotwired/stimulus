@@ -1,7 +1,7 @@
 import { ControllerTestCase } from "../cases/controller_test_case"
 import { ClassController } from "../controllers/class_controller"
 
-export default class ValueTests extends ControllerTestCase(ClassController) {
+export default class ClassTests extends ControllerTestCase(ClassController) {
   fixtureHTML = `
     <div data-controller="${this.identifier}"
       data-${this.identifier}-active-class="test--active"
@@ -27,11 +27,11 @@ export default class ValueTests extends ControllerTestCase(ClassController) {
     this.assert.equal(this.controller.loadingClass, "busy")
   }
 
-  "test utility classes map to array"() {
+  "test multiple classes map to array"() {
     this.assert.deepEqual(this.controller.successClasses, ["bg-green-400", "border", "border-green-600"])
   }
 
-  "test accessing a class property returns first class if utility classes are used"() {
+  "test accessing a class property returns first class if multiple classes are used"() {
     this.assert.equal(this.controller.successClass, "bg-green-400");
   }
 }

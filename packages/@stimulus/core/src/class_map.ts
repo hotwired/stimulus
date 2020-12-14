@@ -12,17 +12,12 @@ export class ClassMap {
   }
 
   get(name: string) {
-    return this.getAll(name)[0];
+    return this.getAll(name)[0]
   }
 
   getAll(name: string) {
-    const classAttribute = this.data.get(this.getDataKey(name));
-
-    if (classAttribute) {
-      return classAttribute.split(" ")
-    } else {
-      return []
-    }
+    const tokenString = this.data.get(this.getDataKey(name)) || ""
+    return tokenString.trim().split(/\s+/).filter(content => content.length)
   }
 
   getAttributeName(name: string) {
