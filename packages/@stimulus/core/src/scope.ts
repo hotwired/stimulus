@@ -40,7 +40,7 @@ export class Scope {
   }
 
   private queryElements(selector: string): Element[] {
-    return Array.from(this.element.querySelectorAll(selector))
+    return Array.from(this.element.querySelectorAll(CSS.escape(selector)))
   }
 
   private get controllerSelector(): string {
