@@ -43,7 +43,9 @@ export default class extends Controller {
     this.index = 0
     this.showCurrentSlide()
   }
-
+  
+  // Actions
+  
   next() {
     this.index++
     this.showCurrentSlide()
@@ -53,7 +55,9 @@ export default class extends Controller {
     this.index--
     this.showCurrentSlide()
   }
-
+  
+  // Private
+  
   showCurrentSlide() {
     this.slideTargets.forEach((element, index) => {
       element.hidden = index != this.index
@@ -152,7 +156,9 @@ export default class extends Controller {
   initialize() {
     this.showCurrentSlide()
   }
-
+  
+  // Actions
+  
   next() {
     this.indexValue++
     this.showCurrentSlide()
@@ -162,7 +168,9 @@ export default class extends Controller {
     this.indexValue--
     this.showCurrentSlide()
   }
-
+  
+  // Private
+  
   showCurrentSlide() {
     this.slideTargets.forEach((element, index) => {
       element.hidden = index != this.indexValue
@@ -188,6 +196,12 @@ export default class extends Controller {
   static targets = [ "slide" ]
   static values = { index: Number }
 
+  indexValueChanged() {
+    this.showCurrentSlide()
+  }
+  
+  // Actions
+  
   next() {
     this.indexValue++
   }
@@ -195,11 +209,9 @@ export default class extends Controller {
   previous() {
     this.indexValue--
   }
-
-  indexValueChanged() {
-    this.showCurrentSlide()
-  }
-
+  
+  // Private
+  
   showCurrentSlide() {
     this.slideTargets.forEach((element, index) => {
       element.hidden = index != this.indexValue
