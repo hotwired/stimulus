@@ -36,7 +36,7 @@ export class Application implements ErrorHandler {
   }
 
   stop() {
-    this.logDebugActivity("application", "stoping")
+    this.logDebugActivity("application", "stopping")
     this.dispatcher.stop()
     this.router.stop()
     this.logDebugActivity("application", "stoped")
