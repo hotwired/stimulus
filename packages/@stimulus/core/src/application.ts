@@ -32,14 +32,14 @@ export class Application implements ErrorHandler {
     this.logDebugActivity("application", "starting")
     this.dispatcher.start()
     this.router.start()
-    this.logDebugActivity("application", "started")
+    this.logDebugActivity("application", "start")
   }
 
   stop() {
     this.logDebugActivity("application", "stopping")
     this.dispatcher.stop()
     this.router.stop()
-    this.logDebugActivity("application", "stoped")
+    this.logDebugActivity("application", "stop")
   }
 
   register(identifier: string, controllerConstructor: ControllerConstructor) {
