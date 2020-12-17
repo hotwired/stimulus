@@ -47,8 +47,10 @@ export class Binding {
   }
 
   private invokeWithEvent(event: Event) {
+    const { target, currentTarget } = event
     try {
       this.method.call(this.controller, event)
+      this.context.logDebugActivity(this.methodName, { event, target, currentTarget, action: this.methodName })
     } catch (error) {
       const { identifier, controller, element, index } = this
       const detail = { identifier, controller, element, index, event }
