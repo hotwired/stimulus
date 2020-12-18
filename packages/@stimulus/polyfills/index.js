@@ -9,6 +9,7 @@ import "core-js/es/string/starts-with"
 import "element-closest"
 import "mutation-observer-inner-html-shim"
 import "eventlistener-polyfill"
+import "css.escape"
 
 if (typeof SVGElement.prototype.contains != "function") {
   SVGElement.prototype.contains = function(node) {

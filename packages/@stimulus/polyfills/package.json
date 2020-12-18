@@ -11,6 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "core-js": "^3.4.0",
+    "css.escape": "^1.5.1",
     "element-closest": "^2.0.2",
     "eventlistener-polyfill": "^1.0.5",
     "mutation-observer-inner-html-shim": "^1.0.0"
