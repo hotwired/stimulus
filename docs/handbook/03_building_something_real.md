@@ -93,15 +93,17 @@ We want a click on the button to invoke the `copy()` method in our controller, s
 >
 > Certain other elements have default events, too. Here's the full list:
 >
-> Element           | Default Event
-> ----------------- | -------------
-> a                 | click
-> button            | click
-> form              | submit
-> input             | input
-> input type=submit | click
-> select            | change
-> textarea          | input
+> Element             | Default Event
+> ------------------- | -------------
+> a                   | click
+> button              | click
+> form                | submit
+> input               | input
+> input type=checkbox | change
+> input type=radio    | change
+> input type=submit   | click
+> select              | change
+> textarea            | input
 
 Finally, in our `copy()` method, we can select the input field's contents and call the clipboard API:
 

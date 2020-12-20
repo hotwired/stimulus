@@ -54,15 +54,17 @@ Stimulus lets you shorten the action descriptors for some common element/event p
 
 The full set of these shorthand pairs is as follows:
 
-Element           | Default Event
------------------ | -------------
-a                 | click
-button            | click
-form              | submit
-input             | input
-input type=submit | click
-select            | change
-textarea          | input
+Element             | Default Event
+------------------- | -------------
+a                   | click
+button              | click
+form                | submit
+input               | input
+input type=checkbox | change
+input type=radio    | change
+input type=submit   | click
+select              | change
+textarea            | input
 
 ### Global Events
 

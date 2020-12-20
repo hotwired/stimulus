@@ -38,7 +38,13 @@ const defaultEventNames: { [tagName: string]: (element: Element) => string } = {
   "a":        e => "click",
   "button":   e => "click",
   "form":     e => "submit",
-  "input":    e => e.getAttribute("type") == "submit" ? "click" : "input",
+  "input":    e => {
+    switch (e.getAttribute("type")) {
+      case "submit": return "click";
+      case "checkbox": case "radio": return "change";
+      default: return "input";
+    }
+  },
   "select":   e => "change",
   "textarea": e => "input"
 }
