@@ -34,9 +34,9 @@ export default class extends Controller {
 
 Stimulus continuously watches the page, kicking in as soon as attributes appear or disappear. It works with any update to the DOM, regardless of whether it comes from a full page load, a Turbolinks page change, or an Ajax request. Stimulus manages the whole lifecycle.
 
-You can write your first controller in five minutes by following along in the [Stimulus Handbook](https://stimulusjs.org/handbook/introduction).
+You can write your first controller in five minutes by following along in the [Stimulus Handbook](https://stimulus.hotwire.dev/handbook/introduction).
 
-You can read more about why we created this new framework in [The Origin of Stimulus](https://stimulusjs.org/handbook/origin).
+You can read more about why we created this new framework in [The Origin of Stimulus](https://stimulus.hotwire.dev/handbook/origin).
 
 ## Installing Stimulus
 
@@ -44,13 +44,13 @@ Stimulus integrates with the [webpack](https://webpack.js.org/) asset packager t
 
 You can use Stimulus with other asset packaging systems, too. And if you prefer no build step at all, just drop a `<script>` tag on the page and get right down to business.
 
-See the [Installation Guide](https://stimulusjs.org/handbook/installing) for detailed instructions.
+See the [Installation Guide](https://stimulus.hotwire.dev/handbook/installing) for detailed instructions.
 
 ## Getting Help & Contributing Back
 
-Looking for the docs? Once you've read through the Handbook, consult the [Stimulus Reference](https://stimulusjs.org/reference/controllers) for API details.
+Looking for the docs? Once you've read through the Handbook, consult the [Stimulus Reference](https://stimulus.hotwire.dev/reference/controllers) for API details.
 
-Have a question about Stimulus? Connect with other Stimulus developers on the [Stimulus Discourse](https://discourse.stimulusjs.org/) community forum.
+Have a question about Stimulus? Connect with other Stimulus developers on the [Hotwire Discourse](https://discuss.hotwire.dev/) community forum.
 
 Find a bug? Head over to our [issue tracker](https://github.com/stimulusjs/stimulus/issues) and we'll do our best to help. We love pull requests, too!
 
