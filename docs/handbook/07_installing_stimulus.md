@@ -70,7 +70,7 @@ If you're using [Babel](https://babeljs.io/) with your build system, you'll need
 }
 ```
 
-Or, by enabling the [`shippedPropsals`](https://babeljs.io/docs/en/babel-preset-env#shippedproposals) option with [Babel `^7.10.0`](https://babeljs.io/blog/2020/05/25/7.10.0):
+Or, by enabling the [`shippedProposals`](https://babeljs.io/docs/en/babel-preset-env#shippedproposals) option with [Babel `^7.10.0`](https://babeljs.io/blog/2020/05/25/7.10.0):
 
 ```json
 {
