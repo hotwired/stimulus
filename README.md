@@ -50,7 +50,7 @@ See the [Installation Guide](https://stimulus.hotwire.dev/handbook/installing) f
 
 Looking for the docs? Once you've read through the Handbook, consult the [Stimulus Reference](https://stimulus.hotwire.dev/reference/controllers) for API details.
 
-Have a question about Stimulus? Connect with other Stimulus developers on the [Stimulus Discourse](https://discourse.stimulus.hotwire.dev/) community forum.
+Have a question about Stimulus? Connect with other Stimulus developers on the [Hotwire Discourse](https://discuss.hotwire.dev/) community forum.
 
 Find a bug? Head over to our [issue tracker](https://github.com/stimulusjs/stimulus/issues) and we'll do our best to help. We love pull requests, too!
 
