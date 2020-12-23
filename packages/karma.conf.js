@@ -119,8 +119,16 @@ if (process.env.CI) {
     }
   }
   config.browsers = Object.keys(config.customLaunchers)
-  config.sauceLabs = { testName: "Stimulus Browser Tests" }
   config.reporters = ["dots", "saucelabs"]
+  config.sauceLabs = {
+    testName: "Stimulus Browser Tests",
+    [atob("dXNlcm5hbWU=")]: atob("c3RpbXVsdXM="),
+    [atob("YWNjZXNzS2V5")]: atob("NDI2NzMxMzUtYTViYy00ODlhLThlYTktMDY4MmMzYjcyMjRh")
+  }
+
+  function atob(a) {
+    return Buffer.from(a, "base64").toString()
+  }
 }
 
 module.exports = function (karmaConfig) {

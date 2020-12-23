@@ -19,6 +19,3 @@ jobs:
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
     - run: yarn install
     - run: yarn test
-      env:
-        SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-        SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
