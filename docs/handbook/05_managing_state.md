@@ -6,7 +6,7 @@ permalink: /handbook/managing-state
 
 Most contemporary frameworks encourage you to keep state in JavaScript at all times. They treat the DOM as a write-only rendering target, reconciled by client-side templates consuming JSON from the server.
 
-Stimulus takes a different approach. A Stimulus application's state lives as attributes in the DOM; controllers themselves are largely stateless. This approach makes it possible to work with HTML from anywhere—the initial document, an Ajax request, a Turbolinks visit, or even another JavaScript library—and have associated controllers spring to life automatically without any explicit initialization step.
+Stimulus takes a different approach. A Stimulus application's state lives as attributes in the DOM; controllers themselves are largely stateless. This approach makes it possible to work with HTML from anywhere—the initial document, an Ajax request, a Turbo visit, or even another JavaScript library—and have associated controllers spring to life automatically without any explicit initialization step.
 
 ## Building a Slideshow
 
