@@ -6,6 +6,7 @@ export default class ActionTests extends LogControllerTestCase {
     <div data-controller="c" data-action="keydown@window->c#log">
       <button data-action="c#log"><span>Log</span></button>
       <div id="outer" data-action="click->c#log">
+        <div id="outer-button"></div>
         <div id="inner" data-controller="c" data-action="click->c#log keyup@window->c#log"></div>
       </div>
       <div id="multiple" data-action="click->c#log click->c#log2 mousedown->c#log"></div>
@@ -14,6 +15,11 @@ export default class ActionTests extends LogControllerTestCase {
     <svg id="svgRoot" data-controller="c" data-action="click->c#log">
       <circle id="svgChild" data-action="mousedown->c#log" cx="5" cy="5" r="5">
     </svg>
+    <div data-controller="c" data-action="click->c#log">
+      <div data-controller="c">
+        <button id="inner-button">Log</button>
+      </div>
+    </div>
   `
 
   async "test default event"() {
@@ -33,12 +39,18 @@ export default class ActionTests extends LogControllerTestCase {
     this.assertActions({ eventType: "click" })
   }
 
+  async "test bubbling events to transverse non controller without action"() {
+    await this.triggerEvent("#inner-button", "click")
+    this.assertActions({ eventType: "click" })
+  }
+
   async "test nested actions"() {
     const innerController = this.controllers[1]
     await this.triggerEvent("#inner", "click")
     this.assert.ok(true)
     this.assertActions({ controller: innerController, eventType: "click" })
   }
+
 
   async "test global actions"() {
     await this.triggerEvent("#outside", "keydown")
@@ -48,6 +60,12 @@ export default class ActionTests extends LogControllerTestCase {
   async "test nested global actions"() {
     const innerController = this.controllers[1]
     await this.triggerEvent("#outside", "keyup")
+    this.assertActions({ controller: innerController, eventType: "keyup" })
+  }
+
+  async "test nested global actions emitted from outer controller"() {
+    const innerController = this.controllers[1]
+    await this.triggerEvent("#outer-button", "keyup")
     this.assertActions({ controller: innerController, eventType: "keyup" })
   }
 
