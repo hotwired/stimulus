@@ -1,7 +1,7 @@
 import { ControllerTestCase } from "../cases/controller_test_case"
 import { ClassController } from "../controllers/class_controller"
 
-export default class ValueTests extends ControllerTestCase(ClassController) {
+export default class ClassTests extends ControllerTestCase(ClassController) {
   fixtureHTML = `
     <div data-controller="${this.identifier}"
       data-${this.identifier}-active-class="test--active"
