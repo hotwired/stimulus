@@ -7,6 +7,10 @@ export class Multimap<K, V> {
     this.valuesByKey = new Map<K, Set<V>>()
   }
 
+  get keys() {
+    return Array.from(this.valuesByKey.keys())
+  }
+
   get values(): V[] {
     const sets = Array.from(this.valuesByKey.values())
     return sets.reduce((values, set) => values.concat(Array.from(set)), <V[]> [])

@@ -88,6 +88,32 @@ if (this.hasResultsTarget) {
 }
 ```
 
+## Connected and Disconnected Callbacks
+
+Target _element callbacks_ let you respond whenever a target element is added or
+removed within the controller's element.
+
+Define a method `[name]TargetConnected` or `[name]TargetDisconnected` in the controller, where `[name]` is the name of the target you want to observe for additions or removals. The method receives the element as the first argument.
+
+Stimulus invokes each element callback any time its target elements are added or removed after `connect()` and before `disconnect()` lifecycle hooks.
+
+```js
+export default class extends Controller {
+  static targets = [ "item" ]
+
+  itemTargetConnected(element) {
+    this.sortElements(this.itemTargets)
+  }
+
+  itemTargetDisconnected(element) {
+    this.sortElements(this.itemTargets)
+  }
+
+  // Private
+  sortElements(itemTargets) { /* ... */ }
+}
+```
+
 ## Naming Conventions
 
 Always use camelCase to specify target names, since they map directly to properties on your controller.

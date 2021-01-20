@@ -27,7 +27,9 @@ Method       | Invoked by Stimulus…
 ------------ | --------------------
 initialize() | Once, when the controller is first instantiated
 connect()    | Anytime the controller is connected to the DOM
+[name]TargetConnected(target: Element) | Anytime a target is connected to the DOM
 disconnect() | Anytime the controller is disconnected from the DOM
+[name]TargetDisconnected(target: Element) | Anytime a target is disconnected from the DOM
 
 ## Connection
 
@@ -37,6 +39,15 @@ A controller is _connected_ to the document when both of the following condition
 * its identifier is present in the element's `data-controller` attribute
 
 When a controller becomes connected, Stimulus calls its `connect()` method.
+
+### Targets
+
+A target is _connected_ to the document when both of the following conditions are true:
+
+* its element is present in the document as a descendant of its corresponding controller's element
+* its identifier is present in the element's `data-{identifier}-target` attribute
+
+When a target becomes connected, Stimulus calls its controller's `[name]TargetConnected()` method, passing the target element as a parameter.
 
 ## Disconnection
 
@@ -50,11 +61,25 @@ A connected controller will later become _disconnected_ when either of the prece
 
 When a controller becomes disconnected, Stimulus calls its `disconnect()` method.
 
+### Targets
+
+A connected target will later become _disconnected_ when either of the preceding conditions becomes false, such as under any of the following scenarios:
+
+* the element is explicitly removed from the document with `Node#removeChild()` or `ChildNode#remove()`
+* one of the element's parent elements is removed from the document
+* one of the element's parent elements has its contents replaced by `Element#innerHTML=`
+* the element's `data-{identifier}-target` attribute is removed or modified
+* the document installs a new `<body>` element, such as during a Turbo page change
+
+When a target becomes disconnected, Stimulus calls its controller's `[name]TargetDisconnected()` method, passing the target element as a parameter.
+
 ## Reconnection
 
 A disconnected controller may become connected again at a later time.
 
 When this happens, such as after removing the controller's element from the document and then re-attaching it, Stimulus will reuse the element's previous controller instance, calling its `connect()` method multiple times.
+
+Similarly, a disconnected target may be connected again at a later time. Stimulus will invoke its controller's `[name]TargetConnected()` method multiple times.
 
 ## Order and Timing
 

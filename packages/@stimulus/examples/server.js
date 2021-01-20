@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 })
 
 app.get("/uptime", (req, res, next) => {
-  res.send(process.uptime().toString())
+  res.send(`<span data-content-loader-target="item">${process.uptime().toString()}</span>`)
 })
 
 app.get("/:page", (req, res, next) => {
