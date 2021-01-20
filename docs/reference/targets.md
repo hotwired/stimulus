@@ -88,6 +88,29 @@ if (this.hasResultsTarget) {
 }
 ```
 
+## Addition and Removal Callbacks
+
+Target _element callbacks_ let you respond whenever a target element is added or
+removed within the controller's element.
+
+Define a method `[name]TargetAdded` or `[name]TargetRemoved` in the controller, where `[name]` is the name of the target you want to observe for additions or removals. The method receives the element as the first argument.
+
+Stimulus invokes each element callback any time its target elements are added or removed after `connect()` and before `disconnect()` lifecycle hooks.
+
+```js
+export default class extends Controller {
+  static targets = [ "input" ]
+
+  inputTargetAdded(element) {
+    element.classList.add("added-animation")
+  }
+
+  inputTargetRemoved(element) {
+    element.classList.add("removed-animation")
+  }
+}
+```
+
 ## Naming Conventions
 
 Always use camelCase to specify target names, since they map directly to properties on your controller.

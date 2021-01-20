@@ -12,6 +12,7 @@ export class Controller {
   static values: ValueDefinitionMap = {}
 
   readonly context: Context
+  isConnected = false
 
   constructor(context: Context) {
     this.context = context

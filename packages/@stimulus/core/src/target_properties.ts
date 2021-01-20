@@ -33,6 +33,9 @@ function propertiesForTargetDefinition(name: string) {
       get(this: Controller) {
         return this.targets.has(name)
       }
-    }
+    },
+
+    [`${name}TargetAdded`]: (element: Element) => {},
+    [`${name}TargetRemoved`]: (element: Element) => {},
   }
 }

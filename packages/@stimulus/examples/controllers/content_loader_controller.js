@@ -1,6 +1,7 @@
 import { Controller } from "stimulus"
 
 export default class extends Controller {
+  static targets = ["item"]
   static values = { url: String, refreshInterval: Number }
 
   connect() {
@@ -9,6 +10,14 @@ export default class extends Controller {
     if (this.hasRefreshIntervalValue) {
       this.startRefreshing()
     }
+  }
+
+  itemTargetAdded(target) {
+    console.log("itemTargetAdded:", target)
+  }
+
+  itemTargetRemoved(target) {
+    console.log("itemTargetRemoved:", target)
   }
 
   disconnect() {
