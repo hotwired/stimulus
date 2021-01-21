@@ -60,6 +60,23 @@ export default class ApplicationTests extends ApplicationTestCase {
     this.assert.equal(this.controllers[1].connectCount, 1)
   }
 
+  async "test autoloading a module"() {
+    let did_autoload = false
+
+    this.application.register_autoloader((name, app) => {
+      this.assert.equal("log", name)
+      app.register(name, LogController)
+      did_autoload = true
+    })
+
+    this.assert.equal(this.controllers.length, 0)
+    this.assert.equal(did_autoload, false)
+    await this.renderFixture(`<div data-controller="log">`)
+    this.assert.equal(this.controllers[0].initializeCount, 1)
+    this.assert.equal(this.controllers[0].connectCount, 1)
+    this.assert.equal(did_autoload, true)
+  }
+
   get controllers() {
     return this.application.controllers as LogController[]
   }

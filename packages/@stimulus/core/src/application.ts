@@ -6,11 +6,14 @@ import { Logger } from "./logger"
 import { Router } from "./router"
 import { Schema, defaultSchema } from "./schema"
 
+type Autoloader = (identifier: string, application: Application) => void
+
 export class Application implements ErrorHandler {
   readonly element: Element
   readonly schema: Schema
   readonly dispatcher: Dispatcher
   readonly router: Router
+  private autoloader?: Autoloader
   logger: Logger = console
 
   static start(element?: Element, schema?: Schema): Application {
@@ -39,6 +42,14 @@ export class Application implements ErrorHandler {
 
   register(identifier: string, controllerConstructor: ControllerConstructor) {
     this.load({ identifier, controllerConstructor })
+  }
+
+  register_autoloader(autoloader: Autoloader) {
+    this.autoloader = autoloader
+  }
+
+  missing(identifier: string) {
+    this.autoloader?.(identifier, this)
   }
 
   load(...definitions: Definition[]): void
