@@ -16,7 +16,7 @@ export class AttributeObserver implements ElementObserverDelegate {
     this.attributeName = attributeName
     this.delegate = delegate
 
-    this.elementObserver = new ElementObserver(element, this)
+    this.elementObserver = new ElementObserver(element, this, [attributeName])
   }
 
   get element(): Element {
@@ -68,7 +68,7 @@ export class AttributeObserver implements ElementObserverDelegate {
   }
 
   elementAttributeChanged(element: Element, attributeName: string) {
-    if (this.delegate.elementAttributeValueChanged && this.attributeName == attributeName) {
+    if (this.delegate.elementAttributeValueChanged) {
       this.delegate.elementAttributeValueChanged(element, attributeName)
     }
   }

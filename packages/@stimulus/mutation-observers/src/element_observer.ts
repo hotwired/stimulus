@@ -10,16 +10,18 @@ export interface ElementObserverDelegate {
 export class ElementObserver {
   element: Element
   started: boolean
+  attributeFilter: string[]
   private delegate: ElementObserverDelegate
 
   private elements: Set<Element>
   private mutationObserver: MutationObserver
 
-  constructor(element: Element, delegate: ElementObserverDelegate) {
+  constructor(element: Element, delegate: ElementObserverDelegate, attributeFilter: string[]) {
     this.element = element
     this.started = false
     this.delegate = delegate
 
+    this.attributeFilter = attributeFilter
     this.elements = new Set
     this.mutationObserver = new MutationObserver((mutations) => this.processMutations(mutations))
   }
@@ -27,7 +29,7 @@ export class ElementObserver {
   start() {
     if (!this.started) {
       this.started = true
-      this.mutationObserver.observe(this.element, { attributes: true, childList: true, subtree: true })
+      this.mutationObserver.observe(this.element, { attributes: true, childList: true, subtree: true, attributeFilter: this.attributeFilter })
       this.refresh()
     }
   }
