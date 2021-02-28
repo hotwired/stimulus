@@ -73,10 +73,10 @@ export class Application implements ErrorHandler {
   }
 }
 
-function domReady(): Promise<any> {
-  return new Promise(resolve => {
+function domReady() {
+  return new Promise<void>(resolve => {
     if (document.readyState == "loading") {
-      document.addEventListener("DOMContentLoaded", resolve)
+      document.addEventListener("DOMContentLoaded", () => resolve())
     } else {
       resolve()
     }
