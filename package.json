@@ -36,7 +36,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "ts-loader": "^6.0.4",
     "typedoc": "^0.15.0",
-    "typescript": "^3.2.2",
+    "typescript": "^4.2.3",
     "webpack": "^4.39.1"
   }
 }
