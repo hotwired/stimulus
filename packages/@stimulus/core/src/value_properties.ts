@@ -1,60 +1,87 @@
-import { Constructor } from "./constructor"
-import { Controller } from "./controller"
+import { BasicController } from "./basic_controller"
+import { blessed } from "./blessing"
+import { Constructor, getAncestorsForConstructor } from "./class"
 import { readInheritableStaticObjectPairs } from "./inheritable_statics"
+import { Mixin } from "./mixin"
 import { camelize, capitalize, dasherize } from "./string_helpers"
 
-/** @hidden */
-export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
-  const valueDefinitionPairs = readInheritableStaticObjectPairs<T, ValueTypeConstant>(constructor, "values")
-  const propertyDescriptorMap: PropertyDescriptorMap = {
-    valueDescriptorMap: {
-      get(this: Controller) {
-        return valueDefinitionPairs.reduce((result, valueDefinitionPair) => {
-          const valueDescriptor = parseValueDefinitionPair(valueDefinitionPair)
-          const attributeName = this.data.getAttributeNameForKey(valueDescriptor.key)
-          return Object.assign(result, { [attributeName]: valueDescriptor })
+const Values = Mixin
+  .forConstructor(BasicController)
+  .define(base =>
+    class Values extends base {
+      get valueDescriptorMap() {
+        const descriptors = getValueDescriptorsForConstructor(this.constructor)
+        return descriptors.reduce((result, descriptor) => {
+          const attributeName = this.data.getAttributeNameForKey(descriptor.key)
+          return { ...result, [attributeName]: descriptor }
         }, {} as ValueDescriptorMap)
       }
     }
-  }
+  )
 
-  return valueDefinitionPairs.reduce((properties, valueDefinitionPair) => {
-    return Object.assign(properties, propertiesForValueDefinitionPair(valueDefinitionPair))
-  }, propertyDescriptorMap)
-}
-
-/** @hidden */
-export function propertiesForValueDefinitionPair<T>(valueDefinitionPair: ValueDefinitionPair): PropertyDescriptorMap {
-  const definition = parseValueDefinitionPair(valueDefinitionPair)
-  const { type, key, name } = definition
-  const read = readers[type], write = writers[type] || writers.default
-
-  return {
-    [name]: {
-      get(this: Controller) {
-        const value = this.data.get(key)
-        if (value !== null) {
-          return read(value)
-        } else {
-          return definition.defaultValue
-        }
+export const BlessedValueProperties = Values
+  .define(base =>
+    blessed(
+      class BlessedValues extends base {
+        static values: ValueDefinitionMap
       },
 
-      set(this: Controller, value: T | undefined) {
-        if (value === undefined) {
-          this.data.delete(key)
-        } else {
-          this.data.set(key, write(value))
-        }
+      base => {
+        const valueDefinitionPairs = readInheritableStaticObjectPairs<ValueTypeConstant>(base, "values")
+        return valueDefinitionPairs.reduce((extended, [name, type]) => {
+          return mixinForValue(name, type).extends(extended)
+        }, base)
       }
-    },
+    )
+  )
 
-    [`has${capitalize(name)}`]: {
-      get(this: Controller): boolean {
-        return this.data.has(key)
+const valueDescriptorsByConstructor = new WeakMap<Constructor, ValueDescriptor>()
+
+function registerValueDescriptorForConstructor<C extends Constructor>(constructor: C, descriptor: ValueDescriptor): C {
+  valueDescriptorsByConstructor.set(constructor, descriptor)
+  return constructor
+}
+
+function getValueDescriptorsForConstructor(constructor: any) {
+  const ancestors = getAncestorsForConstructor(constructor)
+  return ancestors.reduce((result, ancestor) => {
+    const descriptor = valueDescriptorsByConstructor.get(ancestor)
+    return descriptor ? [ ...result, descriptor ] : result
+  }, [] as ValueDescriptor[])
+}
+
+function mixinForValue<T extends string, V extends ValueTypeConstant>(token: T, typeConstant: V) {
+  type Value = ParseValueTypeConstant<V>
+  const definition = definitionForValue(token, typeConstant)
+  const { key, name, type } = definition
+
+  const descriptor = valueDescriptorForTokenAndType(token, type)
+  const read: Reader<Value> = readers[type]
+  const write: Writer<Value> = writers[type] || writers.default
+
+  return Mixin
+    .forMixin(Values)
+    .define(base => {
+      return registerValueDescriptorForConstructor(base, descriptor)
+    })
+    .defineSetter(name, function(value?: Value) {
+      if (value === undefined) {
+        this.data.delete(key)
+      } else {
+        this.data.set(key, write(value as any))
       }
-    }
-  }
+    })
+    .defineGetter(name, function(): Value {
+      const value = this.data.get(key)
+      if (value !== null) {
+        return read(value)
+      } else {
+        return definition.defaultValue as any
+      }
+    })
+    .defineGetter(`has${capitalize(name)}` as const, function() {
+      return this.data.has(key)
+    })
 }
 
 export type ValueDescriptor = {
@@ -74,12 +101,25 @@ export type ValueTypeConstant = typeof Array | typeof Boolean | typeof Number | 
 
 export type ValueType = "array" | "boolean" | "number" | "object" | "string"
 
-function parseValueDefinitionPair([token, typeConstant]: ValueDefinitionPair): ValueDescriptor {
+function definitionForValue<T extends string, V extends ValueTypeConstant>(token: T, typeConstant: V) {
   const type = parseValueTypeConstant(typeConstant)
   return valueDescriptorForTokenAndType(token, type)
 }
 
-function parseValueTypeConstant(typeConstant: ValueTypeConstant) {
+export type ParseValueTypeConstant<V extends ValueTypeConstant>
+  = V extends typeof Array
+    ? any[]
+    : V extends typeof Boolean
+      ? boolean
+      : V extends typeof Number
+        ? number
+        : V extends typeof Object
+          ? object
+          : V extends typeof String
+            ? string
+            : never
+
+function parseValueTypeConstant<V extends ValueTypeConstant>(typeConstant: V): ValueType {
   switch (typeConstant) {
     case Array:   return "array"
     case Boolean: return "boolean"
@@ -90,12 +130,11 @@ function parseValueTypeConstant(typeConstant: ValueTypeConstant) {
   throw new Error(`Unknown value type constant "${typeConstant}"`)
 }
 
-function valueDescriptorForTokenAndType(token: string, type: ValueType) {
-  const key = `${dasherize(token)}-value`
+function valueDescriptorForTokenAndType<T extends string>(token: T, type: ValueType) {
   return {
     type,
-    key,
-    name: camelize(key),
+    name: `${camelize(token)}Value` as const,
+    key: `${dasherize(token)}-value`,
     get defaultValue() { return defaultValuesByType[type] }
   }
 }
@@ -108,7 +147,7 @@ const defaultValuesByType = {
   string: ""
 }
 
-type Reader = (value: string) => any
+type Reader<T = any> = (value: string) => T
 
 const readers: { [type: string]: Reader } = {
   array(value: string): any[] {
@@ -140,7 +179,7 @@ const readers: { [type: string]: Reader } = {
   }
 }
 
-type Writer = (value: any) => string
+type Writer<T = any> = (value: T | undefined) => string
 
 const writers: { [type: string]: Writer } = {
   default: writeString,

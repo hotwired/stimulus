@@ -1,6 +1,6 @@
 import { Application } from "./application"
+import { BasicController } from "./basic_controller"
 import { BindingObserver } from "./binding_observer"
-import { Controller } from "./controller"
 import { Dispatcher } from "./dispatcher"
 import { ErrorHandler } from "./error_handler"
 import { Module } from "./module"
@@ -11,7 +11,7 @@ import { ValueObserver } from "./value_observer"
 export class Context implements ErrorHandler {
   readonly module: Module
   readonly scope: Scope
-  readonly controller: Controller
+  readonly controller: BasicController
   private bindingObserver: BindingObserver
   private valueObserver: ValueObserver
 

@@ -1,4 +1,4 @@
-import { Controller, ControllerConstructor } from "./controller"
+import { ControllerConstructor } from "./controller"
 import { Definition } from "./definition"
 import { Dispatcher } from "./dispatcher"
 import { ErrorHandler } from "./error_handler"
@@ -57,11 +57,11 @@ export class Application implements ErrorHandler {
 
   // Controllers
 
-  get controllers(): Controller[] {
+  get controllers() {
     return this.router.contexts.map(context => context.controller)
   }
 
-  getControllerForElementAndIdentifier(element: Element, identifier: string): Controller | null {
+  getControllerForElementAndIdentifier(element: Element, identifier: string) {
     const context = this.router.getContextForElementAndIdentifier(element, identifier)
     return context ? context.controller : null
   }

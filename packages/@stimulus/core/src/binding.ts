@@ -1,6 +1,5 @@
 import { Action } from "./action"
 import { Context } from "./context"
-import { Controller } from "./controller"
 import { Scope } from "./scope"
 
 export class Binding {
@@ -67,7 +66,7 @@ export class Binding {
     }
   }
 
-  private get controller(): Controller {
+  private get controller() {
     return this.context.controller
   }
 

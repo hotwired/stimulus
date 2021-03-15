@@ -1,5 +1,5 @@
 import { ApplicationTestCase } from "./application_test_case"
-import { Constructor } from "../../constructor"
+import { Constructor } from "../../class"
 import { Controller, ControllerConstructor } from "../../controller"
 
 export class ControllerTests<T extends Controller> extends ApplicationTestCase {

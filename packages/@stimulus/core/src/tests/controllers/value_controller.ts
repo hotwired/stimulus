@@ -1,5 +1,5 @@
 import { Controller } from "../../controller"
-import { ValueDefinitionMap, ValueDescriptorMap } from "../../value_properties"
+import { ValueDefinitionMap } from "../../value_properties"
 
 class BaseValueController extends Controller {
   static values: ValueDefinitionMap = {
@@ -8,7 +8,6 @@ class BaseValueController extends Controller {
     numeric: Number
   }
 
-  valueDescriptorMap!: ValueDescriptorMap
   stringValue!: string
   numericValue!: number
 }
