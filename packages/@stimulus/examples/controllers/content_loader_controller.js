@@ -1,8 +1,9 @@
-import { Controller } from "stimulus"
+import { BikeshedController } from "stimulus"
 
-export default class extends Controller {
-  static values = { url: String, refreshInterval: Number }
-
+export default class extends BikeshedController
+  .value("url", String)
+  .value("refreshInterval", Number)
+{
   connect() {
     this.load()
 

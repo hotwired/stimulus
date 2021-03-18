@@ -1,10 +1,10 @@
-import { Controller } from "stimulus"
+import { BikeshedController } from "stimulus"
 
-export default class extends Controller {
-  static targets = [ "slide" ]
-  static classes = [ "currentSlide" ]
-  static values = { index: Number }
-
+export default class extends BikeshedController
+  .target("slide")
+  .class("currentSlide")
+  .value("index", Number)
+{
   next() {
     if (this.indexValue < this.lastIndex) {
       this.indexValue++

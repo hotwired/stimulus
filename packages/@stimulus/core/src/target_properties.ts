@@ -30,6 +30,15 @@ export const BlessedTargetProperties = Targets
     )
   )
 
+export const TargetPropertiesMacro = Targets
+  .define(base =>
+    class TargetMacro extends base {
+      static target<T extends typeof base, K extends string>(this: T, key: K) {
+        return this.uses(mixinForTarget(key))
+      }
+    }
+  )
+
 function mixinForTarget<K extends string>(key: K) {
   const name = `${key}Target` as const
 

@@ -30,6 +30,15 @@ export const BlessedClassProperties = Classes
     )
   )
 
+export const ClassPropertiesMacro = Classes
+  .define(base =>
+    class ClassMacro extends base {
+      static class<T extends typeof base, K extends string>(this: T, key: K) {
+        return this.uses(mixinForClass(key))
+      }
+    }
+  )
+
 function mixinForClass<K extends string>(key: K) {
   const name = `${key}Class` as const
 

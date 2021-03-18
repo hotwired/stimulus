@@ -1,8 +1,8 @@
-import { Controller } from "stimulus"
+import { BikeshedController } from "stimulus"
 
-export default class extends Controller {
-  static targets = ["name"]
-
+export default class extends BikeshedController
+  .target("name")
+{
   greet() {
     alert(`Hello, ${this.name}!`)
   }

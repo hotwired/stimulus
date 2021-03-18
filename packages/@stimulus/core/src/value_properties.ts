@@ -35,6 +35,15 @@ export const BlessedValueProperties = Values
     )
   )
 
+export const ValuePropertiesMacro = Values
+  .define(base =>
+    class ValueMacro extends base {
+      static value<T extends typeof ValueMacro, S extends string, V extends ValueTypeConstant>(this: T, token: S, typeConstant: V) {
+        return this.uses(mixinForValue(token, typeConstant))
+      }
+    }
+  )
+
 const valueDescriptorsByConstructor = new WeakMap<Constructor, ValueDescriptor>()
 
 function registerValueDescriptorForConstructor<C extends Constructor>(constructor: C, descriptor: ValueDescriptor): C {
