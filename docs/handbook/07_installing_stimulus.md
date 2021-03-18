@@ -26,6 +26,42 @@ const context = require.context("./controllers", true, /\.js$/)
 application.load(definitionsFromContext(context))
 ```
 
+## Using esbuild
+
+A community plugin for [esbuild](https://esbuild.github.io/) is available to automatically load controller files from a folder in your app.
+
+First, install the esbuild plugin:
+
+```shell
+npm install --save-dev esbuild-plugin-stimulus
+```
+
+Next, add the plugin to your esbuild script:
+
+```js
+// build.js
+
+const esbuild = require('esbuild')
+const { stimulusPlugin } = require('esbuild-plugin-stimulus')
+
+esbuild.build({
+  plugins: [stimulusPlugin()],
+  // ...
+}).catch(() => process.exit(1))
+```
+
+Finally, import the directory you want with a `stimulus:` prefix:
+
+```js
+// src/application.js
+
+import { Application } from "stimulus"
+import { definitions } from "stimulus:./controllers"
+
+const application = Application.start()
+application.load(definitions)
+```
+
 ### Controller Filenames Map to Identifiers
 
 Name your controller files `[identifier]_controller.js`, where `identifier` corresponds to each controller's `data-controller` identifier in your HTML.
