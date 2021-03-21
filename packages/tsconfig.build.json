@@ -4,7 +4,7 @@
     "composite": true,
     "declaration": true,
     "declarationMap": true,
-    "module": "es2015",
+    "module": "es2020",
     "moduleResolution": "node",
     "sourceMap": true
   },

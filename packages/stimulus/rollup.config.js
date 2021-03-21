@@ -17,12 +17,19 @@ const terserOptions = {
 
 export default {
   input: "index.js",
-  output: {
-    file: "dist/stimulus.umd.js",
-    format: "umd",
-    name: "Stimulus",
-    banner
-  },
+  output: [
+    {
+      file: "dist/stimulus.es2017-esm.js",
+      format: "es",
+      banner
+    },
+    {
+      file: "dist/stimulus.es2017-umd.js",
+      format: "umd",
+      banner,
+      name: "Stimulus"
+    }
+  ],
   context: "window",
   plugins: [
     resolve(),

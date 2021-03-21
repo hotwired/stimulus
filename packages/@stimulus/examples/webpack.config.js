@@ -16,18 +16,22 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        use: [
-          { loader: "ts-loader" }
-        ]
+        use: {
+          loader: "ts-loader"
+        }
       },
       {
         test: /\.js$/,
         exclude: [
           /node_modules/
         ],
-        use: [
-          { loader: "babel-loader" }
-        ]
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-transform-runtime"]
+          }
+        }
       }
     ]
   },

@@ -9,8 +9,8 @@
     "Javan Makhmali <javan@javan.us>",
     "Sam Stephenson <sstephenson@gmail.com>"
   ],
-  "main": "dist/stimulus.umd.js",
-  "module": "index.js",
+  "main": "dist/stimulus.es2017-umd.js",
+  "module": "dist/stimulus.es2017-esm.js",
   "license": "MIT",
   "dependencies": {
     "@stimulus/core": "^2.0.0",
