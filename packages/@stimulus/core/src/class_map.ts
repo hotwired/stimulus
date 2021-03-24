@@ -12,7 +12,7 @@ export class ClassMap {
     return this.data.has(this.getDataKey(name))
   }
 
-  get(name: string) {
+  get(name: string): string | undefined {
     return this.getAll(name)[0]
   }
 
