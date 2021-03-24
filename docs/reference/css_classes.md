@@ -51,9 +51,11 @@ The logical names defined in the controller's `static classes` array map to _CSS
 </form>
 ```
 
-Construct a CSS class attribute by joining together the controller identifier and logical name in the format `data-[identifier]-[logical-name]-class`. The attribute's value is a single CSS class name.
+Construct a CSS class attribute by joining together the controller identifier and logical name in the format `data-[identifier]-[logical-name]-class`. The attribute's value can be a single CSS class name or a list of multiple class names.
 
 **Note:** CSS class attributes must be specified on the same element as the `data-controller` attribute.
+
+If you want to specify multiple CSS classes for a logical name, separate the classes with spaces:
 
 <meta data-controller="callout" data-callout-text-value="data-search-loading-class=&quot;bg-gray-500 animate-spinner cursor-busy&quot;">
 
@@ -64,8 +66,6 @@ Construct a CSS class attribute by joining together the controller identifier an
 </form>
 ```
 
-If you want to define multiple CSS classes for an attribute, separate the CSS class names with spaces.
-
 ## Properties
 
 For each logical name defined in the `static classes` array, Stimulus adds the following _CSS class properties_ to your controller:
@@ -73,7 +73,7 @@ For each logical name defined in the `static classes` array, Stimulus adds the f
 Kind        | Name                         | Value
 ----------- | ---------------------------- | -----
 Singular    | `this.[logicalName]Class`    | The value of the CSS class attribute corresponding to `logicalName`
-Plural      | `this.[logicalName]Classes`  | An array of all CSS class attributes, split by spaces
+Plural      | `this.[logicalName]Classes`  | An array of all classes in the corresponding CSS class attribute, split by spaces
 Existential | `this.has[LogicalName]Class` | A boolean indicating whether or not the CSS class attribute is present
 
 <br>Use these properties to apply CSS classes to elements with the `add()` and `remove()` methods of the [DOM `classList` API](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList).
@@ -94,9 +94,9 @@ export default class extends Controller {
 }
 ```
 
-**Note:** Stimulus will throw an error if you attempt to access a CSS class property when no matching CSS class attribute is present.
+If a CSS class attribute contains a list of class names, its singular CSS class property returns the first class in the list.
 
-If you want to use multiple classes, access the plural class property. You can apply the array of CSS classes to elements using [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax).
+Use the plural CSS class property to access all class names as an array. Combine this with [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) to apply multiple classes at once:
 
 <meta data-controller="callout" data-callout-text-value="...this.loadingClasses">
 
@@ -111,6 +111,8 @@ export default class extends Controller {
   }
 }
 ```
+
+**Note:** Stimulus will throw an error if you attempt to access a CSS class property when a matching CSS class attribute is not present.
 
 ## Naming Conventions
 
