@@ -120,9 +120,29 @@ Stimulus supports all evergreen, self-updating desktop and mobile browsers out o
 If your application needs to support older browsers like Internet Explorer 11, include the [`@stimulus/polyfills`](https://www.npmjs.com/package/@stimulus/polyfills) package before loading Stimulus.
 
 ```js
+// src/application.js
 import "@stimulus/polyfills"
 import { Application } from "stimulus"
 
 const application = Application.start()
 // …
+```
+
+## Error handling
+
+All calls from Stimulus to your application's code are wrapped in a `try ... catch` block.
+
+If your code throws an error, it will be caught by Stimulus and logged to the browser console, including extra detail such as the controller name and event or lifecycle function being called. If you use an error tracking system that defines `window.onerror`, Stimulus will also pass the error on to it.
+
+You can override how Stimulus handles errors by defining `Application#handleError`:
+
+```js
+// src/application.js
+import { Application } from "stimulus"
+const application = Application.start()
+
+application.handleError = (error, message, detail) => {
+  console.warn(message, detail)
+  ErrorTrackingSystem.captureException(error)
+}
 ```
