@@ -73,19 +73,16 @@ export class Router implements ScopeObserverDelegate {
 
   // Error handler delegate
 
-  /** @hidden */
   handleError(error: Error, message: string, detail: any) {
     this.application.handleError(error, message, detail)
   }
 
   // Scope observer delegate
 
-  /** @hidden */
   createScopeForElementAndIdentifier(element: Element, identifier: string) {
     return new Scope(this.schema, element, identifier, this.logger)
   }
 
-  /** @hidden */
   scopeConnected(scope: Scope) {
     this.scopesByIdentifier.add(scope.identifier, scope)
     const module = this.modulesByIdentifier.get(scope.identifier)
@@ -94,7 +91,6 @@ export class Router implements ScopeObserverDelegate {
     }
   }
 
-  /** @hidden */
   scopeDisconnected(scope: Scope) {
     this.scopesByIdentifier.delete(scope.identifier, scope)
     const module = this.modulesByIdentifier.get(scope.identifier)

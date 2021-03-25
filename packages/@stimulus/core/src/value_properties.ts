@@ -3,7 +3,6 @@ import { Controller } from "./controller"
 import { readInheritableStaticObjectPairs } from "./inheritable_statics"
 import { camelize, capitalize, dasherize } from "./string_helpers"
 
-/** @hidden */
 export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
   const valueDefinitionPairs = readInheritableStaticObjectPairs<T, ValueTypeConstant>(constructor, "values")
   const propertyDescriptorMap: PropertyDescriptorMap = {
@@ -23,7 +22,6 @@ export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
   }, propertyDescriptorMap)
 }
 
-/** @hidden */
 export function propertiesForValueDefinitionPair<T>(valueDefinitionPair: ValueDefinitionPair): PropertyDescriptorMap {
   const definition = parseValueDefinitionPair(valueDefinitionPair)
   const { type, key, name } = definition
