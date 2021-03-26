@@ -52,7 +52,7 @@ When using Stimulus without a build system, define values using `static get valu
 
 ```js
 static get values() {
-  return  {
+  return {
     url: String,
     interval: Number,
     params: Object
