@@ -38,6 +38,15 @@ export default class extends Controller {
 }
 ```
 
+When using Stimulus without a build system, define CSS classes using `static get classes()` methods instead of `static classes = […]` class properties, which aren't supported natively [yet](https://github.com/tc39/proposal-static-class-features/).
+
+```js
+static get classes() {
+  return [ "loading" ]
+}
+```
+
+
 ## Attributes
 
 The logical names defined in the controller's `static classes` array map to _CSS class attributes_ on the controller's element.

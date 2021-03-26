@@ -46,6 +46,14 @@ export default class extends Controller {
 }
 ```
 
+When using Stimulus without a build system, define targets using `static get targets()` methods instead of `static targets = […]` class properties, which aren't supported natively [yet](https://github.com/tc39/proposal-static-class-features/).
+
+```js
+static get targets() {
+  return [ "query", "errorMessage", "results" ]
+}
+```
+
 ## Properties
 
 For each target name defined in the `static targets` array, Stimulus adds the following properties to your controller, where `[name]` corresponds to the target's name:

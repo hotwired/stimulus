@@ -48,6 +48,18 @@ export default class extends Controller {
 }
 ```
 
+When using Stimulus without a build system, define values using `static get values()` methods instead of `static values = {…}` class properties, which aren't supported natively [yet](https://github.com/tc39/proposal-static-class-features/).
+
+```js
+static get values() {
+  return  {
+    url: String,
+    interval: Number,
+    params: Object
+  }
+}
+```
+
 ## Types
 
 A value's type is one of `Array`, `Boolean`, `Number`, `Object`, or `String`. The type determines how the value is transcoded between JavaScript and HTML.
