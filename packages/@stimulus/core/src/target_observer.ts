@@ -36,9 +36,13 @@ export class TargetObserver implements TokenListObserverDelegate {
   }
 
   private containsDescendantWithToken(element: Element, content: string): boolean {
-    const targetTokens = parseTokenString(element.getAttribute(this.attributeName) || "", element, this.attributeName)
+    let containsTargetToken = false
 
-    return targetTokens.map(token => token.content).includes(content) && this.context.element.contains(element)
+    for (const token of parseTokenString(element.getAttribute(this.attributeName) || "", element, this.attributeName)) {
+      containsTargetToken = containsTargetToken || token.content == content
+    }
+
+    return containsTargetToken && this.context.element.contains(element)
   }
 
   private dispatchCallback(method: string, element: Element) {
