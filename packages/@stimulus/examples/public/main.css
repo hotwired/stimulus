@@ -4,114 +4,75 @@
   padding: 0;
 }
 
-html, body {
-  height: 100%;
-  width: 100%;
+*:not(:active) {
+  color: #333;
+}
+
+a:active {
+  color: #333;
 }
 
 body {
-  padding: 10px;
+  background: #fff;
   font-family: -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  color: #333;
-  background-color: rgb(255, 235, 140);
-}
-
-a {
-  color: #333;
-}
-
-button {
-  padding: 2px 6px 3px 6px;
+  font-size: 16px;
+  padding: 2ex 0;
+  line-height: 1.5;
 }
 
 p {
-  margin: 1em 0;
+  margin-bottom: 2ex;
 }
 
 textarea {
-  font-size: inherit;
-  padding: 0.6em;
-  border-radius: 3px;
   resize: none;
 }
 
-input {
-  padding: 0.15em 0.3em;
+button,
+input,
+textarea {
+  background: #fff;
+  border: 0.25ex solid #333;
+  border-radius: 0.5em;
+  margin: 0.5ex 0.5em;
+  padding: 0.5ex 0.5em;
+  font-family: inherit;
+  font-size: 16px;
+  box-shadow: 0 0 0 0.5ex rgba(0, 0, 0, 0.25);
+  vertical-align: middle;
 }
 
-main {
-  display: flex;
-  flex-flow: row;
-  justify-content: space-around;
+button {
+  background: #ccc;
+  border-left-color: #fff;
+  border-top-color: #fff;
 }
 
-.sidebar {
-  flex-basis: auto;
-  margin: 10px 20px;
+button:active {
+  border-left-color: #333;
+  border-top-color: #333;
+  border-bottom-color: #ccc;
+  border-right-color: #ccc;
+  color: #333;
+  padding: calc(0.5ex + 1px) calc(0.5em - 1px) calc(0.5ex - 1px) calc(0.5em + 1px);
+  margin: calc(0.5ex - 1px) calc(0.5em + 1px) calc(0.5ex + 1px) calc(0.5em - 1px);
+  transform: translate(1px, 1px);
 }
 
-.nav {
-  white-space: nowrap;
-  margin: 10px 0;
+button:active,
+button:focus {
+  outline: none;
 }
 
-.nav li {
-  list-style: none;
-  margin: 0 0 8px 0;
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 0.5ex rgba(0, 51, 255, 0.5);
 }
 
-.nav a {
-  display: block;
-  position: relative;
-  text-decoration: none;
-}
-
-.nav a.active {
-  font-weight: bold;
-  color: #000;
-}
-
-.nav a.active::before {
-  content: "👉";
-  display: inline-block;
-  position: absolute;
-  font-size: 28px;
-  left: -32px;
-  top: -6px;
-}
-
-.container {
-  flex-grow: 1;
-  border-radius: 3px;
-  min-height: 300px;
-  padding: 20px;
-  margin: 10px;
-  background-color: white;
-}
-
-.clipboard-button {
-  display: none;
-}
-
-.clipboard--supported .clipboard-button {
-  display: initial;
-}
-
-.clipboard-source {
-  margin: 0;
-  padding: 0;
-  border: none;
-  background-color: transparent;
-  color: inherit;
-  font-size: inherit;
-}
-
-.slide {
-  display: none;
-  font-size: 6rem;
-}
-
-.slide--current {
-  display: block;
+input,
+textarea {
+  border-bottom-color: #ccc;
+  border-right-color: #ccc;
 }
