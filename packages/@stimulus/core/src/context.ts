@@ -6,6 +6,7 @@ import { ErrorHandler } from "./error_handler"
 import { Module } from "./module"
 import { Schema } from "./schema"
 import { Scope } from "./scope"
+import { TargetObserver } from "./target_observer"
 import { ValueObserver } from "./value_observer"
 
 export class Context implements ErrorHandler {
@@ -13,6 +14,7 @@ export class Context implements ErrorHandler {
   readonly scope: Scope
   readonly controller: Controller
   private bindingObserver: BindingObserver
+  private targetObserver: TargetObserver
   private valueObserver: ValueObserver
 
   constructor(module: Module, scope: Scope) {
@@ -20,6 +22,7 @@ export class Context implements ErrorHandler {
     this.scope = scope
     this.controller = new module.controllerConstructor(this)
     this.bindingObserver = new BindingObserver(this, this.dispatcher)
+    this.targetObserver = new TargetObserver(this, this)
     this.valueObserver = new ValueObserver(this, this.controller)
 
     try {
@@ -31,6 +34,7 @@ export class Context implements ErrorHandler {
 
   connect() {
     this.bindingObserver.start()
+    this.targetObserver.start()
     this.valueObserver.start()
 
     try {
@@ -42,6 +46,7 @@ export class Context implements ErrorHandler {
 
   disconnect() {
     try {
+      this.targetObserver.stop()
       this.controller.disconnect()
     } catch (error) {
       this.handleError(error, "disconnecting controller")
@@ -81,5 +86,24 @@ export class Context implements ErrorHandler {
     const { identifier, controller, element } = this
     detail = Object.assign({ identifier, controller, element }, detail)
     this.application.handleError(error, `Error ${message}`, detail)
+  }
+
+  // Target observer delegate
+
+  targetConnected(element: Element, name: string) {
+    this.invokeControllerMethod(`${name}TargetConnected`, element)
+  }
+
+  targetDisconnected(element: Element, name: string) {
+    this.invokeControllerMethod(`${name}TargetDisconnected`, element)
+  }
+
+  // Private
+
+  invokeControllerMethod(methodName: string, ...args: any[]) {
+    const controller: any = this.controller
+    if (typeof controller[methodName] == "function") {
+      controller[methodName](...args)
+    }
   }
 }
