@@ -70,13 +70,15 @@ export class Application implements ErrorHandler {
 
   handleError(error: Error, message: string, detail: object) {
     this.logger.error(`%s\n\n%o\n\n%o`, message, error, detail)
+
+    window.onerror?.(message, "", 0, 0, error)
   }
 }
 
-function domReady(): Promise<any> {
-  return new Promise(resolve => {
+function domReady() {
+  return new Promise<void>(resolve => {
     if (document.readyState == "loading") {
-      document.addEventListener("DOMContentLoaded", resolve)
+      document.addEventListener("DOMContentLoaded", () => resolve())
     } else {
       resolve()
     }

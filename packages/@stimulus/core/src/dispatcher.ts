@@ -35,12 +35,10 @@ export class Dispatcher implements BindingObserverDelegate {
 
   // Binding observer delegate
 
-  /** @hidden */
   bindingConnected(binding: Binding) {
     this.fetchEventListenerForBinding(binding).bindingConnected(binding)
   }
 
-  /** @hidden */
   bindingDisconnected(binding: Binding) {
     this.fetchEventListenerForBinding(binding).bindingDisconnected(binding)
   }

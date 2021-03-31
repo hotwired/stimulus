@@ -6,7 +6,6 @@ export interface Definition {
   controllerConstructor: ControllerConstructor
 }
 
-/** @hidden */
 export function blessDefinition(definition: Definition): Definition {
   return {
     identifier: definition.identifier,

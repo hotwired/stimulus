@@ -3,7 +3,6 @@ import { Controller } from "./controller"
 import { readInheritableStaticArrayValues } from "./inheritable_statics"
 import { capitalize } from "./string_helpers"
 
-/** @hidden */
 export function TargetPropertiesBlessing<T>(constructor: Constructor<T>) {
   const targets = readInheritableStaticArrayValues(constructor, "targets")
   return targets.reduce((properties, targetDefinition) => {

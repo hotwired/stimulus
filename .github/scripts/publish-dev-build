@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+set -eux
+
+package-name() {
+  node -e "
+    const package = JSON.parse(fs.readFileSync('package.json'))
+    console.log(package.name)
+  "
+}
+
+rewrite-package-json() {
+  ARCHIVE_URL="https://github.com/${DEV_BUILD_REPO_NAME}/archive" \
+  PACKAGE_LIST="$package_list" node -e "
+    const url = process.env.ARCHIVE_URL
+    const sha = process.env.GITHUB_SHA.slice(0, 7)
+    const package = JSON.parse(fs.readFileSync('package.json'))
+    if (package.dependencies) {
+      const packageNames = JSON.parse(process.env.PACKAGE_LIST).map(_ => _.name)
+      for (const name in package.dependencies)
+        if (packageNames.indexOf(name) != -1)
+          package.dependencies[name] = url + '/' + name + '/' + sha + '.tar.gz'
+      fs.writeFileSync('package.json', JSON.stringify(package))
+    }
+  "
+}
+
+DEV_BUILD_REPO_NAME="hotwired/dev-builds"
+DEV_BUILD_ORIGIN_URL="https://${1}@github.com/${DEV_BUILD_REPO_NAME}.git"
+BUILD_PATH="$HOME/publish-dev-build"
+
+cd "$GITHUB_WORKSPACE"
+
+_IFS="$IFS"
+IFS=$'\n'
+package_list="$(yarn -s lerna list --no-private --json 2>/dev/null)"
+package_paths=( $(yarn -s lerna exec --no-private pwd 2>/dev/null) )
+IFS="$_IFS"
+
+name="$(git log -n 1 --format=format:%cn)"
+email="$(git log -n 1 --format=format:%ce)"
+subject="$(git log -n 1 --format=format:%s)"
+date="$(git log -n 1 --format=format:%ai)"
+url="https://github.com/${GITHUB_REPOSITORY}/tree/${GITHUB_SHA}"
+
+for package_path in "${package_paths[@]}"; do
+  pushd "$package_path"
+    package_name="$(package-name)"
+    tag="${package_name}/${GITHUB_SHA:0:7}"
+    message="$tag $subject"$'\n'$'\n'"$url"
+  popd
+
+  mkdir -p "$BUILD_PATH"
+
+  pushd "$BUILD_PATH"
+    git init .
+    git remote add origin "$DEV_BUILD_ORIGIN_URL"
+    git symbolic-ref HEAD refs/heads/publish-dev-build
+
+    shopt -s nullglob
+      cp -R "$package_path"/{*.json,*.js,dist} . || true
+    shopt -u nullglob
+    rewrite-package-json
+    git add .
+
+    GIT_AUTHOR_DATE="$date" GIT_COMMITTER_DATE="$date" \
+    GIT_AUTHOR_NAME="$name" GIT_COMMITTER_NAME="$name" \
+    GIT_AUTHOR_EMAIL="$email" GIT_COMMITTER_EMAIL="$email" \
+      git commit -m "$message"
+
+    git tag "$tag"
+    [ "$GITHUB_REF" != "refs/heads/main" ] || git tag -f "${package_name}/latest"
+    git push -f --tags
+  popd
+
+  rm -fr "$BUILD_PATH"
+done
+
+echo done
