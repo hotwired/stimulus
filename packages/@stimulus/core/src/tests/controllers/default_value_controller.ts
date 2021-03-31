@@ -4,23 +4,23 @@ import { ValueDefinitionMap, ValueDescriptorMap } from "../../value_properties"
 export class DefaultValueController extends Controller {
   static values: ValueDefinitionMap = {
     defaultBoolean: false,
-    defaultBooleanTrue: true,
+    defaultBooleanTrue: { type: Boolean, default: true },
     defaultBooleanOverride: true,
 
     defaultString: "",
-    defaultStringHello: "Hello",
+    defaultStringHello: { type: String, default: "Hello" },
     defaultStringOverride: "Override me",
 
     defaultNumber: 0,
-    defaultNumberThousand: 1000,
+    defaultNumberThousand: { type: Number, default: 1000 },
     defaultNumberOverride: 9999,
 
     defaultArray: [],
-    defaultArrayFilled: [1, 2, 3],
-    defaultArrayOverride: [9,9,9],
+    defaultArrayFilled: { type: Array, default: [1, 2, 3] },
+    defaultArrayOverride: [9, 9, 9],
 
     defaultObject: {},
-    defaultObjectPerson: { name: "David" },
+    defaultObjectPerson: { type: Object, default: { name: "David" } },
     defaultObjectOverride: { override: "me" }
   }
 

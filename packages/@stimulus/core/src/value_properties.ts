@@ -73,7 +73,9 @@ export type ValueTypeConstant = typeof Array | typeof Boolean | typeof Number | 
 
 export type ValueTypeDefault = Array<any> | Boolean | Number | Object | String
 
-export type ValueTypeDefinition = ValueTypeConstant | ValueTypeDefault
+export type ValueTypeObject = { type: ValueTypeConstant, default: ValueTypeDefault }
+
+export type ValueTypeDefinition = ValueTypeConstant | ValueTypeDefault | ValueTypeObject
 
 export type ValueType = "array" | "boolean" | "number" | "object" | "string"
 
@@ -102,11 +104,26 @@ function parseValueTypeDefault(defaultValue: ValueTypeDefault) {
   if (Object.prototype.toString.call(defaultValue) === "[object Object]") return "object"
 }
 
+function parseValueTypeObject(typeObject: ValueTypeObject) {
+  const typeFromObject = parseValueTypeConstant(typeObject.type)
+
+  if (typeFromObject) {
+    const defaultValueType = parseValueTypeDefault(typeObject.default)
+
+    if (typeFromObject !== defaultValueType) {
+      throw new Error(`Type "${typeFromObject}" must match the type of the default value. Given default value: "${typeObject.default}" as "${defaultValueType}"`)
+    }
+
+    return typeFromObject
+  }
+}
+
 function parseValueTypeDefinition(typeDefinition: ValueTypeDefinition): ValueType {
+  const typeFromObject = parseValueTypeObject(typeDefinition as ValueTypeObject)
   const typeFromDefaultValue = parseValueTypeDefault(typeDefinition as ValueTypeDefault)
   const typeFromConstant = parseValueTypeConstant(typeDefinition as ValueTypeConstant)
 
-  const type = typeFromDefaultValue || typeFromConstant
+  const type = typeFromObject || typeFromDefaultValue || typeFromConstant
   if (type) return type
 
   throw new Error(`Unknown value type "${typeDefinition}"`)
@@ -116,7 +133,10 @@ function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): ValueTy
   const constant = parseValueTypeConstant(typeDefinition as ValueTypeConstant)
 
   if (constant) return defaultValuesByType[constant]
-  return typeDefinition
+
+  const defaultValue = (typeDefinition as ValueTypeObject).default
+
+  return defaultValue || typeDefinition
 }
 
 function valueDescriptorForTokenAndTypeDefinition(token: string, typeDefinition: ValueTypeDefinition) {
