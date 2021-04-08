@@ -127,7 +127,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
     this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 0)
     this.assert.notOk(disconnectedInput.classList.contains("disconnected"), `expected "${disconnectedInput.className}" not to contain "disconnected"`)
 
-    disconnectedInput.remove()
+    disconnectedInput.parentElement?.removeChild(disconnectedInput)
     await this.nextFrame
 
     this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 1)

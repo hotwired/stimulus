@@ -19,7 +19,7 @@ if (typeof SVGElement.prototype.contains != "function") {
 // From https://developer.mozilla.org/en-US/docs/Web/API/Node/isConnected#polyfill
 if (!("isConnected" in Node.prototype)) {
   Object.defineProperty(Node.prototype, "isConnected", {
-    get() {
+    get: function() {
       return (
         !this.ownerDocument ||
         !(
