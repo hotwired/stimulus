@@ -88,7 +88,7 @@ if (this.hasResultsTarget) {
 }
 ```
 
-## Addition and Removal Callbacks
+## Connected and Disconnected Callbacks
 
 Target _element callbacks_ let you respond whenever a target element is added or
 removed within the controller's element.
