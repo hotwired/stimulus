@@ -99,15 +99,18 @@ Stimulus invokes each element callback any time its target elements are added or
 
 ```js
 export default class extends Controller {
-  static targets = [ "input" ]
+  static targets = [ "item" ]
 
-  inputTargetConnected(element) {
-    element.classList.add("added-animation")
+  itemTargetConnected(element) {
+    this.sortElements(this.itemTargets)
   }
 
-  inputTargetDisconnected(element) {
-    element.classList.add("removed-animation")
+  itemTargetDisconnected(element) {
+    this.sortElements(this.itemTargets)
   }
+
+  // Private
+  sortElements(itemTargets) { /* ... */ }
 }
 ```
 

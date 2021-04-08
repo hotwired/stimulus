@@ -33,6 +33,6 @@ function propertiesForTargetDefinition(name: string) {
       get(this: Controller) {
         return this.targets.has(name)
       }
-    },
+    }
   }
 }

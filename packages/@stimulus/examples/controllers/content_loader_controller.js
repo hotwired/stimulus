@@ -12,12 +12,12 @@ export default class extends Controller {
     }
   }
 
-  itemTargetAdded(target) {
-    console.log("itemTargetAdded:", target)
+  itemTargetConnected(target) {
+    console.log("itemTargetConnected:", target)
   }
 
-  itemTargetRemoved(target) {
-    console.log("itemTargetRemoved:", target)
+  itemTargetDisconnected(target) {
+    console.log("itemTargetDisconnected:", target)
   }
 
   disconnect() {
