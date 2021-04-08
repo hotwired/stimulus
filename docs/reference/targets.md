@@ -93,7 +93,7 @@ if (this.hasResultsTarget) {
 Target _element callbacks_ let you respond whenever a target element is added or
 removed within the controller's element.
 
-Define a method `[name]TargetAdded` or `[name]TargetRemoved` in the controller, where `[name]` is the name of the target you want to observe for additions or removals. The method receives the element as the first argument.
+Define a method `[name]TargetConnected` or `[name]TargetDisconnected` in the controller, where `[name]` is the name of the target you want to observe for additions or removals. The method receives the element as the first argument.
 
 Stimulus invokes each element callback any time its target elements are added or removed after `connect()` and before `disconnect()` lifecycle hooks.
 
@@ -101,11 +101,11 @@ Stimulus invokes each element callback any time its target elements are added or
 export default class extends Controller {
   static targets = [ "input" ]
 
-  inputTargetAdded(element) {
+  inputTargetConnected(element) {
     element.classList.add("added-animation")
   }
 
-  inputTargetRemoved(element) {
+  inputTargetDisconnected(element) {
     element.classList.add("removed-animation")
   }
 }

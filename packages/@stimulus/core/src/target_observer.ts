@@ -25,13 +25,13 @@ export class TargetObserver implements TokenListObserverDelegate {
 
   tokenMatched(token: Token): void {
     if (this.controller.isConnected && this.containsDescendantWithToken(token.element, token.content)) {
-      this.dispatchCallback(`${token.content}TargetAdded`, token.element)
+      this.dispatchCallback(`${token.content}TargetConnected`, token.element)
     }
   }
 
   tokenUnmatched(token: Token): void {
     if (this.controller.isConnected && !this.containsDescendantWithToken(token.element, token.content)) {
-      this.dispatchCallback(`${token.content}TargetRemoved`, token.element)
+      this.dispatchCallback(`${token.content}TargetDisconnected`, token.element)
     }
   }
 

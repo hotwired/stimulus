@@ -67,7 +67,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
     const addedInputs = this.controller.inputTargets.filter(target => target.classList.contains("added"))
 
     this.assert.equal(addedInputs.length, 0)
-    this.assert.equal(this.controller.inputTargetAddedCallCountValue, 0)
+    this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 0)
   }
 
   async "test target added callback when element is inserted"() {
@@ -77,7 +77,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
     this.controller.element.appendChild(addedInput)
     await this.nextFrame
 
-    this.assert.equal(this.controller.inputTargetAddedCallCountValue, 1)
+    this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 1)
     this.assert.ok(addedInput.classList.contains("added"), `expected "${addedInput.className}" to contain "added"`)
     this.assert.ok(addedInput.isConnected, "element is present in document")
   }
@@ -88,7 +88,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
     element.setAttribute(`data-${this.controller.identifier}-target`, "input")
     await this.nextFrame
 
-    this.assert.equal(this.controller.inputTargetAddedCallCountValue, 1)
+    this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 1)
     this.assert.ok(element.classList.contains("added"), `expected "${element.className}" to contain "added"`)
     this.assert.ok(element.isConnected, "element is still present in document")
   }
@@ -99,7 +99,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
     element.setAttribute(`data-${this.controller.identifier}-target`, "alpha input")
     await this.nextFrame
 
-    this.assert.equal(this.controller.inputTargetAddedCallCountValue, 1)
+    this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 1)
     this.assert.ok(element.classList.contains("added"), `expected "${element.className}" to contain "added"`)
     this.assert.ok(element.isConnected, "element is still present in document")
   }
@@ -113,7 +113,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
     const removedInputs = inputs.filter(target => target.classList.contains("removed"))
 
     this.assert.equal(removedInputs.length, 0)
-    this.assert.equal(this.controller.inputTargetRemovedCallCountValue, 0)
+    this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 0)
   }
 
   async "test target removed callback when element is removed"() {
@@ -122,7 +122,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
     removedInput.remove()
     await this.nextFrame
 
-    this.assert.equal(this.controller.inputTargetRemovedCallCountValue, 1)
+    this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 1)
     this.assert.ok(removedInput.classList.contains("removed"), `expected "${removedInput.className}" to contain "removed"`)
     this.assert.notOk(removedInput.isConnected, "element is not present in document")
   }
@@ -133,7 +133,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
     element.removeAttribute(`data-${this.controller.identifier}-target`)
     await this.nextFrame
 
-    this.assert.equal(this.controller.inputTargetRemovedCallCountValue, 1)
+    this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 1)
     this.assert.ok(element.classList.contains("removed"), `expected "${element.className}" to contain "removed"`)
     this.assert.ok(element.isConnected, "element is still present in document")
   }
@@ -144,7 +144,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
     element.setAttribute(`data-${this.controller.identifier}-target`, "input")
     await this.nextFrame
 
-    this.assert.equal(this.controller.inputTargetRemovedCallCountValue, 0)
+    this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 0)
     this.assert.notOk(element.classList.contains("removed"), `expected "${element.className}" not to contain "removed"`)
     this.assert.ok(element.isConnected, "element is still present in document")
   }

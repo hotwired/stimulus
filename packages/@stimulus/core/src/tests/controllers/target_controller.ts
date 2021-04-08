@@ -11,7 +11,7 @@ class BaseTargetController extends Controller {
 export class TargetController extends BaseTargetController {
   static classes = [ "added", "removed" ]
   static targets = [ "beta", "input" ]
-  static values = { inputTargetAddedCallCount: Number, inputTargetRemovedCallCount: Number }
+  static values = { inputTargetConnectedCallCount: Number, inputTargetDisconnectedCallCount: Number }
 
   betaTarget!: Element | null
   betaTargets!: Element[]
@@ -26,16 +26,16 @@ export class TargetController extends BaseTargetController {
   addedClass!: string
   removedClass!: string
 
-  inputTargetAddedCallCountValue = 0
-  inputTargetRemovedCallCountValue = 0
+  inputTargetConnectedCallCountValue = 0
+  inputTargetDisconnectedCallCountValue = 0
 
-  inputTargetAdded(element: Element) {
-    this.inputTargetAddedCallCountValue++
+  inputTargetConnected(element: Element) {
+    this.inputTargetConnectedCallCountValue++
     if (this.hasAddedClass) element.classList.add(this.addedClass)
   }
 
-  inputTargetRemoved(element: Element) {
-    this.inputTargetRemovedCallCountValue++
+  inputTargetDisconnected(element: Element) {
+    this.inputTargetDisconnectedCallCountValue++
     if (this.hasRemovedClass) element.classList.add(this.removedClass)
   }
 }
