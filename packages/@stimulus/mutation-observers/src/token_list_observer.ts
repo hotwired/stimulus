@@ -102,7 +102,7 @@ export class TokenListObserver implements AttributeObserverDelegate {
   }
 }
 
-export function parseTokenString(tokenString: string, element: Element, attributeName: string): Token[] {
+function parseTokenString(tokenString: string, element: Element, attributeName: string): Token[] {
   return tokenString.trim().split(/\s+/).filter(content => content.length)
     .map((content, index) => ({ element, attributeName, content, index }))
 }

@@ -3,7 +3,7 @@ import { TargetController } from "../controllers/target_controller"
 
 export default class TargetTests extends ControllerTestCase(TargetController) {
   fixtureHTML = `
-    <div data-controller="${this.identifier}" data-${this.identifier}-added-class="added" data-${this.identifier}-removed-class="removed">
+    <div data-controller="${this.identifier}" data-${this.identifier}-connected-class="connected" data-${this.identifier}-disconnected-class="disconnected">
       <div data-${this.identifier}-target="alpha" id="alpha1"></div>
       <div data-${this.identifier}-target="alpha" id="alpha2"></div>
       <div data-${this.identifier}-target="beta" id="beta1">
@@ -63,89 +63,105 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
     this.assert.throws(() => this.controller.betaTarget)
   }
 
-  "test target added callback fires after connect()"() {
-    const addedInputs = this.controller.inputTargets.filter(target => target.classList.contains("added"))
+  "test target connected callback fires after initialize() and when calling connect()"() {
+    const connectedInputs = this.controller.inputTargets.filter(target => target.classList.contains("connected"))
 
-    this.assert.equal(addedInputs.length, 0)
-    this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 0)
+    this.assert.equal(connectedInputs.length, 1)
+    this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 1)
   }
 
-  async "test target added callback when element is inserted"() {
-    const addedInput = document.createElement("input")
-    addedInput.setAttribute(`data-${this.controller.identifier}-target`, "input")
-
-    this.controller.element.appendChild(addedInput)
-    await this.nextFrame
+  async "test target connected callback when element is inserted"() {
+    const connectedInput = document.createElement("input")
+    connectedInput.setAttribute(`data-${this.controller.identifier}-target`, "input")
 
     this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 1)
-    this.assert.ok(addedInput.classList.contains("added"), `expected "${addedInput.className}" to contain "added"`)
-    this.assert.ok(addedInput.isConnected, "element is present in document")
+
+    this.controller.element.appendChild(connectedInput)
+    await this.nextFrame
+
+    this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 2)
+    this.assert.ok(connectedInput.classList.contains("connected"), `expected "${connectedInput.className}" to contain "connected"`)
+    this.assert.ok(connectedInput.isConnected, "element is present in document")
   }
 
-  async "test target added callback when present element adds the target attribute"() {
-    const element = this.findElement("#child")
+  async "test target connected callback when present element adds the target attribute"() {
+    const element = this.findElement("#alpha1")
+
+    this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 1)
 
     element.setAttribute(`data-${this.controller.identifier}-target`, "input")
     await this.nextFrame
 
-    this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 1)
-    this.assert.ok(element.classList.contains("added"), `expected "${element.className}" to contain "added"`)
+    this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 2)
+    this.assert.ok(element.classList.contains("connected"), `expected "${element.className}" to contain "connected"`)
     this.assert.ok(element.isConnected, "element is still present in document")
   }
 
-  async "test target added callback when present element adds a token to an existing target attribute"() {
+  async "test target connected callback when element adds a token to an existing target attribute"() {
     const element = this.findElement("#alpha1")
+
+    this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 1)
 
     element.setAttribute(`data-${this.controller.identifier}-target`, "alpha input")
     await this.nextFrame
 
-    this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 1)
-    this.assert.ok(element.classList.contains("added"), `expected "${element.className}" to contain "added"`)
+    this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 2)
+    this.assert.ok(element.classList.contains("connected"), `expected "${element.className}" to contain "connected"`)
     this.assert.ok(element.isConnected, "element is still present in document")
   }
 
-  async "test target remove callback fires before disconnect()"() {
-    const inputs = this.controller.inputTargets
+  async "test target disconnected callback fires when calling disconnect() on the controller"() {
+    this.assert.equal(this.controller.inputTargets.filter(target => target.classList.contains("disconnected")).length, 0)
+    this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 0)
 
-    this.controller.disconnect()
+    this.controller.context.disconnect()
     await this.nextFrame
 
-    const removedInputs = inputs.filter(target => target.classList.contains("removed"))
-
-    this.assert.equal(removedInputs.length, 0)
-    this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 0)
+    this.assert.equal(this.controller.inputTargets.filter(target => target.classList.contains("disconnected")).length, 1)
+    this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 1)
   }
 
-  async "test target removed callback when element is removed"() {
-    const removedInput = this.findElement("#input1")
+  async "test target disconnected callback when element is removed"() {
+    const disconnectedInput = this.findElement("#input1")
 
-    removedInput.remove()
+    this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 0)
+    this.assert.notOk(disconnectedInput.classList.contains("disconnected"), `expected "${disconnectedInput.className}" not to contain "disconnected"`)
+
+    disconnectedInput.remove()
     await this.nextFrame
 
     this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 1)
-    this.assert.ok(removedInput.classList.contains("removed"), `expected "${removedInput.className}" to contain "removed"`)
-    this.assert.notOk(removedInput.isConnected, "element is not present in document")
+    this.assert.ok(disconnectedInput.classList.contains("disconnected"), `expected "${disconnectedInput.className}" to contain "disconnected"`)
+    this.assert.notOk(disconnectedInput.isConnected, "element is not present in document")
   }
 
-  async "test target removed callback when an element present in the document removes the target attribute"() {
+  async "test target disconnected callback when an element present in the document removes the target attribute"() {
     const element = this.findElement("#input1")
+
+    this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 0)
+    this.assert.notOk(element.classList.contains("disconnected"), `expected "${element.className}" not to contain "disconnected"`)
 
     element.removeAttribute(`data-${this.controller.identifier}-target`)
     await this.nextFrame
 
     this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 1)
-    this.assert.ok(element.classList.contains("removed"), `expected "${element.className}" to contain "removed"`)
+    this.assert.ok(element.classList.contains("disconnected"), `expected "${element.className}" to contain "disconnected"`)
     this.assert.ok(element.isConnected, "element is still present in document")
   }
 
-  async "test target removed callback does not fire when the target name is present after the attribute change"() {
+  async "test target disconnected(), then connected() callback fired when the target name is present after the attribute change"() {
     const element = this.findElement("#input1")
+
+    this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 1)
+    this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 0)
+    this.assert.notOk(element.classList.contains("disconnected"), `expected "${element.className}" not to contain "disconnected"`)
 
     element.setAttribute(`data-${this.controller.identifier}-target`, "input")
     await this.nextFrame
 
-    this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 0)
-    this.assert.notOk(element.classList.contains("removed"), `expected "${element.className}" not to contain "removed"`)
+    this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 2)
+    this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 1)
+    this.assert.ok(element.classList.contains("disconnected"), `expected "${element.className}" to contain "disconnected"`)
     this.assert.ok(element.isConnected, "element is still present in document")
   }
 }

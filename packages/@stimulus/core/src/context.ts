@@ -7,9 +7,9 @@ import { Module } from "./module"
 import { Schema } from "./schema"
 import { Scope } from "./scope"
 import { ValueObserver } from "./value_observer"
-import { TargetObserver } from "./target_observer"
+import { TargetObserver, TargetObserverDelegate } from "./target_observer"
 
-export class Context implements ErrorHandler {
+export class Context implements ErrorHandler, TargetObserverDelegate {
   readonly module: Module
   readonly scope: Scope
   readonly controller: Controller
@@ -23,7 +23,7 @@ export class Context implements ErrorHandler {
     this.controller = new module.controllerConstructor(this)
     this.bindingObserver = new BindingObserver(this, this.dispatcher)
     this.valueObserver = new ValueObserver(this, this.controller)
-    this.targetObserver = new TargetObserver(this, this.controller)
+    this.targetObserver = new TargetObserver(this, this)
 
     try {
       this.controller.initialize()
@@ -39,7 +39,6 @@ export class Context implements ErrorHandler {
 
     try {
       this.controller.connect()
-      this.controller.isConnected = true
     } catch (error) {
       this.handleError(error, "connecting controller")
     }
@@ -48,7 +47,6 @@ export class Context implements ErrorHandler {
   disconnect() {
     try {
       this.controller.disconnect()
-      this.controller.isConnected = false
     } catch (error) {
       this.handleError(error, "disconnecting controller")
     }
@@ -88,5 +86,24 @@ export class Context implements ErrorHandler {
     const { identifier, controller, element } = this
     detail = Object.assign({ identifier, controller, element }, detail)
     this.application.handleError(error, `Error ${message}`, detail)
+  }
+
+  // Target observer delegate
+
+  targetConnected(element: Element, name: string) {
+    this.invokeControllerMethod(`${name}TargetConnected`, element)
+  }
+
+  targetDisconnected(element: Element, name: string) {
+    this.invokeControllerMethod(`${name}TargetDisconnected`, element)
+  }
+
+  // Private
+
+  invokeControllerMethod(methodName: string, ...args: any[]) {
+    const controller: any = this.controller
+    if (typeof controller[methodName] == "function") {
+      controller[methodName](...args)
+    }
   }
 }
