@@ -15,3 +15,18 @@ if (typeof SVGElement.prototype.contains != "function") {
     return this === node || this.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_CONTAINED_BY
   }
 }
+
+// From https://developer.mozilla.org/en-US/docs/Web/API/Node/isConnected#polyfill
+if (!("isConnected" in Node.prototype)) {
+  Object.defineProperty(Node.prototype, "isConnected", {
+    get() {
+      return (
+        !this.ownerDocument ||
+        !(
+          this.ownerDocument.compareDocumentPosition(this) &
+          this.DOCUMENT_POSITION_DISCONNECTED
+        )
+      )
+    }
+  })
+}
