@@ -42,6 +42,10 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.controller.numericValue = "garbage" as any
     this.assert.ok(isNaN(this.controller.numericValue))
     this.assert.equal(this.get("numeric-value"), "garbage")
+
+    this.controller.numericValue = "" as any
+    this.assert.equal(this.controller.numericValue, 0)
+    this.assert.equal(this.get("numeric-value"), "")
   }
 
   "test boolean values"() {
