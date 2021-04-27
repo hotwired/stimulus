@@ -1,12 +1,13 @@
 import { ControllerTestCase } from "./controller_test_case"
-import { LogController, ActionLogEntry } from "../controllers/log_controller"
+import { LogController, ActionLogEntry, MutationLogEntry } from "../controllers/log_controller"
 import { ControllerConstructor } from "../../core/controller"
 
 export class LogControllerTestCase extends ControllerTestCase(LogController) {
-  controllerConstructor!: ControllerConstructor & { actionLog: ActionLogEntry[] }
+  controllerConstructor!: ControllerConstructor & { actionLog: ActionLogEntry[], mutationLog: MutationLogEntry[] }
 
   async setup() {
     this.controllerConstructor.actionLog = []
+    this.controllerConstructor.mutationLog = []
     await super.setup()
   }
 
@@ -27,6 +28,25 @@ export class LogControllerTestCase extends ControllerTestCase(LogController) {
 
   get actionLog(): ActionLogEntry[] {
     return this.controllerConstructor.actionLog
+  }
+
+  assertMutations(...mutations: any[]) {
+    this.assert.equal(this.mutationLog.length, mutations.length)
+
+    mutations.forEach((expected, index) => {
+      const keys = Object.keys(expected)
+      const actual = slice(this.mutationLog[index] || {}, keys)
+      const result = keys.every(key => expected[key] === actual[key])
+      this.assert.pushResult({ result, actual, expected, message: "" })
+    })
+  }
+
+  assertNoMutations() {
+    this.assert.equal(this.mutationLog.length, 0)
+  }
+
+  get mutationLog(): MutationLogEntry[] {
+    return this.controllerConstructor.mutationLog
   }
 }
 

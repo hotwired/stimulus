@@ -33,6 +33,20 @@ export class DOMTestCase extends TestCase {
     }
   }
 
+  async setAttribute(selector: string, attributeName: string, value: string) {
+    const element = this.findElement(selector)
+    element.setAttribute(attributeName, value)
+
+    await this.nextFrame
+  }
+
+  async removeAttribute(selector: string, attributeName: string) {
+    const element = this.findElement(selector)
+    element.removeAttribute(attributeName)
+
+    await this.nextFrame
+  }
+
   async triggerEvent(selectorOrTarget: string | EventTarget, type: string, options: TriggerEventOptions = {}) {
     const { bubbles, setDefaultPrevented } = { ...defaultTriggerEventOptions, ...options }
     const eventTarget = typeof selectorOrTarget == "string" ? this.findElement(selectorOrTarget) : selectorOrTarget
