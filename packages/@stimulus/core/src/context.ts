@@ -24,6 +24,7 @@ export class Context implements ErrorHandler {
 
     try {
       this.controller.initialize()
+      this.logDebugActivity("initialize")
     } catch (error) {
       this.handleError(error, "initializing controller")
     }
@@ -35,6 +36,7 @@ export class Context implements ErrorHandler {
 
     try {
       this.controller.connect()
+      this.logDebugActivity("connect")
     } catch (error) {
       this.handleError(error, "connecting controller")
     }
@@ -43,6 +45,7 @@ export class Context implements ErrorHandler {
   disconnect() {
     try {
       this.controller.disconnect()
+      this.logDebugActivity("disconnect")
     } catch (error) {
       this.handleError(error, "disconnecting controller")
     }
@@ -81,5 +84,13 @@ export class Context implements ErrorHandler {
     const { identifier, controller, element } = this
     detail = Object.assign({ identifier, controller, element }, detail)
     this.application.handleError(error, `Error ${message}`, detail)
+  }
+
+  // Debug logging
+
+  logDebugActivity = (functionName: string, detail: object = {}): void => {
+    const { identifier, controller, element } = this
+    detail = Object.assign({ identifier, controller, element }, detail)
+    this.application.logDebugActivity(this.identifier, functionName, detail)
   }
 }
