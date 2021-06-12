@@ -122,7 +122,7 @@ const readers: { [type: string]: Reader } = {
   },
 
   number(value: string): number {
-    return parseFloat(value)
+    return Number(value)
   },
 
   object(value: string): object {
