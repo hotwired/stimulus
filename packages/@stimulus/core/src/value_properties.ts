@@ -24,8 +24,7 @@ export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
 
 export function propertiesForValueDefinitionPair<T>(valueDefinitionPair: ValueDefinitionPair): PropertyDescriptorMap {
   const definition = parseValueDefinitionPair(valueDefinitionPair)
-  const { type, key, name } = definition
-  const read = readers[type], write = writers[type] || writers.default
+  const { key, name, reader: read, writer: write } = definition
 
   return {
     [name]: {
@@ -59,7 +58,9 @@ export type ValueDescriptor = {
   type: ValueType,
   key: string,
   name: string,
-  defaultValue: any
+  defaultValue: any,
+  reader: Reader,
+  writer: Writer
 }
 
 export type ValueDescriptorMap = { [attributeName: string]: ValueDescriptor }
@@ -94,7 +95,9 @@ function valueDescriptorForTokenAndType(token: string, type: ValueType) {
     type,
     key,
     name: camelize(key),
-    get defaultValue() { return defaultValuesByType[type] }
+    get defaultValue() { return defaultValuesByType[type] },
+    reader: readers[type],
+    writer: writers[type] || writers.default
   }
 }
 
