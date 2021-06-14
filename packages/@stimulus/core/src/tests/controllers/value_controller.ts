@@ -29,12 +29,23 @@ export class ValueController extends BaseValueController {
   time24hrValue!: Boolean
 
   loggedNumericValues: number[] = []
-  numericValueChanged(value: number) {
+  oldLoggedNumericValues: any[] = []
+  numericValueChanged(value: number, oldValue: any) {
     this.loggedNumericValues.push(value)
+    this.oldLoggedNumericValues.push(oldValue)
   }
 
   loggedMissingStringValues: string[] = []
-  missingStringValueChanged(value: string) {
+  oldLoggedMissingStringValues: any[] = []
+  missingStringValueChanged(value: string, oldValue: any) {
     this.loggedMissingStringValues.push(value)
+    this.oldLoggedMissingStringValues.push(oldValue)
+  }
+
+  optionsValues: Object[] = []
+  oldOptionsValues: any[] = []
+  optionsValueChanged(value: Object, oldValue: any) {
+    this.optionsValues.push(value)
+    this.oldOptionsValues.push(oldValue)
   }
 }
