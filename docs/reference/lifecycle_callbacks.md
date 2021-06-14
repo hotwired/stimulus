@@ -46,7 +46,7 @@ A connected controller will later become _disconnected_ when either of the prece
 * one of the element's parent elements is removed from the document
 * one of the element's parent elements has its contents replaced by `Element#innerHTML=`
 * the element's `data-controller` attribute is removed or modified
-* the document installs a new `<body>` element, such as during a Turbolinks page change
+* the document installs a new `<body>` element, such as during a Turbo page change
 
 When a controller becomes disconnected, Stimulus calls its `disconnect()` method.
 

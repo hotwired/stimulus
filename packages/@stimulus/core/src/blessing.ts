@@ -1,15 +1,12 @@
 import { Constructor } from "./constructor"
 import { readInheritableStaticArrayValues } from "./inheritable_statics"
 
-/** @hidden */
 export type Blessing<T> = (constructor: Constructor<T>) => PropertyDescriptorMap
 
-/** @hidden */
 export interface Blessable<T> extends Constructor<T> {
   readonly blessings?: Blessing<T>[]
 }
 
-/** @hidden */
 export function bless<T>(constructor: Blessable<T>): Constructor<T> {
   return shadow(constructor, getBlessedProperties(constructor))
 }

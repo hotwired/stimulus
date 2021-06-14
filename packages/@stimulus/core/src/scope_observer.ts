@@ -40,7 +40,6 @@ export class ScopeObserver implements ValueListObserverDelegate<Scope> {
 
   // Value observer delegate
 
-  /** @hidden */
   parseValueForToken(token: Token): Scope | undefined {
     const { element, content: identifier } = token
     const scopesByIdentifier = this.fetchScopesByIdentifierForElement(element)
@@ -54,7 +53,6 @@ export class ScopeObserver implements ValueListObserverDelegate<Scope> {
     return scope
   }
 
-  /** @hidden */
   elementMatchedValue(element: Element, value: Scope) {
     const referenceCount = (this.scopeReferenceCounts.get(value) || 0) + 1
     this.scopeReferenceCounts.set(value, referenceCount)
@@ -63,7 +61,6 @@ export class ScopeObserver implements ValueListObserverDelegate<Scope> {
     }
   }
 
-  /** @hidden */
   elementUnmatchedValue(element: Element, value: Scope) {
     const referenceCount = this.scopeReferenceCounts.get(value)
     if (referenceCount) {

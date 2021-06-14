@@ -5,13 +5,14 @@
   <meta charset="utf-8">
   <title>Stimulus: <%= currentPage.title %> Example</title>
   <link rel="stylesheet" href="/main.css">
+  <link rel="stylesheet" href="/examples.css">
   <script src="/main.js" defer></script>
 </head>
 
 <body>
   <main>
     <div class="sidebar">
-      <img src="/logo.svg" class="logo" alt="Stimulus logo" width="75" height="75">
+      <img id="logo" src="/logo.svg" class="logo" alt="Stimulus logo" data-turbolinks-permanent>
 
       <ul class="nav">
         <% pages.forEach(page => { %>
@@ -24,4 +25,4 @@
       </ul>
     </div>
 
-    <div class="container">
+    <div class="container container--<%= currentPage.path.slice(1) %>">

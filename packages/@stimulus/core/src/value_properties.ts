@@ -3,7 +3,6 @@ import { Controller } from "./controller"
 import { readInheritableStaticObjectPairs } from "./inheritable_statics"
 import { camelize, capitalize, dasherize } from "./string_helpers"
 
-/** @hidden */
 export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
   const valueDefinitionPairs = readInheritableStaticObjectPairs<T, ValueTypeConstant>(constructor, "values")
   const propertyDescriptorMap: PropertyDescriptorMap = {
@@ -23,11 +22,9 @@ export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
   }, propertyDescriptorMap)
 }
 
-/** @hidden */
 export function propertiesForValueDefinitionPair<T>(valueDefinitionPair: ValueDefinitionPair): PropertyDescriptorMap {
   const definition = parseValueDefinitionPair(valueDefinitionPair)
-  const { type, key, name } = definition
-  const read = readers[type], write = writers[type] || writers.default
+  const { key, name, reader: read, writer: write } = definition
 
   return {
     [name]: {
@@ -61,7 +58,9 @@ export type ValueDescriptor = {
   type: ValueType,
   key: string,
   name: string,
-  defaultValue: any
+  defaultValue: any,
+  reader: Reader,
+  writer: Writer
 }
 
 export type ValueDescriptorMap = { [attributeName: string]: ValueDescriptor }
@@ -96,7 +95,9 @@ function valueDescriptorForTokenAndType(token: string, type: ValueType) {
     type,
     key,
     name: camelize(key),
-    get defaultValue() { return defaultValuesByType[type] }
+    get defaultValue() { return defaultValuesByType[type] },
+    reader: readers[type],
+    writer: writers[type] || writers.default
   }
 }
 
@@ -124,7 +125,7 @@ const readers: { [type: string]: Reader } = {
   },
 
   number(value: string): number {
-    return parseFloat(value)
+    return Number(value)
   },
 
   object(value: string): object {

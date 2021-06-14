@@ -3,7 +3,6 @@ import { Controller } from "./controller"
 import { readInheritableStaticArrayValues } from "./inheritable_statics"
 import { capitalize } from "./string_helpers"
 
-/** @hidden */
 export function ClassPropertiesBlessing<T>(constructor: Constructor<T>) {
   const classes = readInheritableStaticArrayValues(constructor, "classes")
   return classes.reduce((properties, classDefinition) => {
@@ -12,10 +11,8 @@ export function ClassPropertiesBlessing<T>(constructor: Constructor<T>) {
 }
 
 function propertiesForClassDefinition(key: string) {
-  const name = `${key}Class`
-
   return {
-    [name]: {
+    [`${key}Class`]: {
       get(this: Controller) {
         const { classes } = this
         if (classes.has(key)) {
@@ -27,7 +24,13 @@ function propertiesForClassDefinition(key: string) {
       }
     },
 
-    [`has${capitalize(name)}`]: {
+    [`${key}Classes`]: {
+      get(this: Controller) {
+        return this.classes.getAll(key)
+      }
+    },
+
+    [`has${capitalize(key)}Class`]: {
       get(this: Controller) {
         return this.classes.has(key)
       }

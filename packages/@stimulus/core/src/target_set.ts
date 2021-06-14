@@ -51,7 +51,7 @@ export class TargetSet {
   }
 
   private getSelectorForTargetName(targetName: string) {
-    const attributeName = `data-${this.identifier}-target`
+    const attributeName = this.schema.targetAttributeForScope(this.identifier)
     return attributeValueContainsToken(attributeName, targetName)
   }
 
@@ -74,8 +74,9 @@ export class TargetSet {
     if (element) {
       const { identifier } = this
       const attributeName = this.schema.targetAttribute
+      const revisedAttributeName = this.schema.targetAttributeForScope(identifier)
       this.guide.warn(element, `target:${targetName}`,
-        `Please replace ${attributeName}="${identifier}.${targetName}" with data-${identifier}-target="${targetName}". ` +
+        `Please replace ${attributeName}="${identifier}.${targetName}" with ${revisedAttributeName}="${targetName}". ` +
         `The ${attributeName} attribute is deprecated and will be removed in a future version of Stimulus.`)
     }
     return element

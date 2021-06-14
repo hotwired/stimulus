@@ -1,0 +1,96 @@
+body {
+  background: rgb(251, 247, 240);
+}
+
+main {
+  display: flex;
+  flex-flow: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.logo {
+  width: 6ex;
+  height: 6ex;
+  margin: 0 0 1ex;
+}
+
+.sidebar {
+  width: 10em;
+  margin-top: 3ex;
+  margin-left: 2em;
+}
+
+.nav {
+  white-space: nowrap;
+}
+
+.nav li {
+  list-style: none;
+}
+
+.nav a {
+  display: block;
+  position: relative;
+  text-decoration: none;
+}
+
+.nav a.active {
+  font-weight: bold;
+  color: #000;
+}
+
+.nav a.active::before {
+  content: "►";
+  display: inline-block;
+  position: absolute;
+  left: -1em;
+  font-size: 1em;
+}
+
+.container {
+  flex-grow: 0;
+  background-color: #fff;
+  border: 0.25ex solid #333;
+  border-radius: 1ex;
+  box-shadow: 1ex 1ex 0 0 rgba(0, 0, 0, 0.25);
+  margin: 7ex 3em 0 0;
+  padding: 2.5ex 2em;
+  display: flex;
+  flex-direction: column;
+}
+
+.clipboard-button {
+  display: none;
+}
+
+.clipboard--supported .clipboard-button {
+  display: initial;
+}
+
+.clipboard-source {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  color: inherit;
+  font-size: inherit;
+}
+
+.clipboard-paste {
+  min-width: 20em;
+  min-height: 8ex;
+}
+
+.slide {
+  display: none;
+  font-size: 6rem;
+}
+
+.slide--current {
+  display: block;
+}
+
+.container--content-loader {
+  min-width: 16em;
+}
+

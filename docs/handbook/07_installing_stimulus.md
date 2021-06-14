@@ -21,10 +21,12 @@ Call webpack's [`require.context`](https://webpack.js.org/api/module-methods/#re
 import { Application } from "stimulus"
 import { definitionsFromContext } from "stimulus/webpack-helpers"
 
-const application = Application.start()
+window.Stimulus = Application.start()
 const context = require.context("./controllers", true, /\.js$/)
-application.load(definitionsFromContext(context))
+Stimulus.load(definitionsFromContext(context))
 ```
+
+Assigning the application instance to `window.Stimulus` lets you to debug instantiated controllers via `Stimulus.controllers` and turn on debug logging with `Stimulus.debug = true`. If you don't want to use a global instance, you can also assign it to a local const, like `application`, instead.
 
 ### Controller Filenames Map to Identifiers
 
@@ -54,9 +56,9 @@ import { Application } from "stimulus"
 import HelloController from "./controllers/hello_controller"
 import ClipboardController from "./controllers/clipboard_controller"
 
-const application = Application.start()
-application.register("hello", HelloController)
-application.register("clipboard", ClipboardController)
+window.Stimulus = Application.start()
+Stimulus.register("hello", HelloController)
+Stimulus.register("clipboard", ClipboardController)
 ```
 
 ## Using Babel
@@ -70,7 +72,7 @@ If you're using [Babel](https://babeljs.io/) with your build system, you'll need
 }
 ```
 
-Or, by enabling the [`shippedPropsals`](https://babeljs.io/docs/en/babel-preset-env#shippedproposals) option with [Babel `^7.10.0`](https://babeljs.io/blog/2020/05/25/7.10.0):
+Or, by enabling the [`shippedProposals`](https://babeljs.io/docs/en/babel-preset-env#shippedproposals) option with [Babel `^7.10.0`](https://babeljs.io/blog/2020/05/25/7.10.0):
 
 ```json
 {
@@ -120,9 +122,29 @@ Stimulus supports all evergreen, self-updating desktop and mobile browsers out o
 If your application needs to support older browsers like Internet Explorer 11, include the [`@stimulus/polyfills`](https://www.npmjs.com/package/@stimulus/polyfills) package before loading Stimulus.
 
 ```js
+// src/application.js
 import "@stimulus/polyfills"
 import { Application } from "stimulus"
 
-const application = Application.start()
+window.Stimulus = Application.start()
 // …
+```
+
+## Error handling
+
+All calls from Stimulus to your application's code are wrapped in a `try ... catch` block.
+
+If your code throws an error, it will be caught by Stimulus and logged to the browser console, including extra detail such as the controller name and event or lifecycle function being called. If you use an error tracking system that defines `window.onerror`, Stimulus will also pass the error on to it.
+
+You can override how Stimulus handles errors by defining `Application#handleError`:
+
+```js
+// src/application.js
+import { Application } from "stimulus"
+window.Stimulus = Application.start()
+
+Stimulus.handleError = (error, message, detail) => {
+  console.warn(message, detail)
+  ErrorTrackingSystem.captureException(error)
+}
 ```

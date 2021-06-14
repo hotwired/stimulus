@@ -1,8 +1,8 @@
 export interface StringMapObserverDelegate {
   getStringMapKeyForAttribute(attributeName: string): string | undefined
   stringMapKeyAdded?(key: string, attributeName: string): void
-  stringMapValueChanged?(value: string | null, key: string): void
-  stringMapKeyRemoved?(key: string, attributeName: string): void
+  stringMapValueChanged?(value: string | null, key: string, oldValue: string | null): void
+  stringMapKeyRemoved?(key: string, attributeName: string, oldValue: string | null): void
 }
 
 export class StringMapObserver {
@@ -23,7 +23,7 @@ export class StringMapObserver {
   start() {
     if (!this.started) {
       this.started = true
-      this.mutationObserver.observe(this.element, { attributes: true })
+      this.mutationObserver.observe(this.element, { attributes: true, attributeOldValue: true })
       this.refresh()
     }
   }
@@ -39,7 +39,7 @@ export class StringMapObserver {
   refresh() {
     if (this.started) {
       for (const attributeName of this.knownAttributeNames) {
-        this.refreshAttribute(attributeName)
+        this.refreshAttribute(attributeName, null)
       }
     }
   }
@@ -57,13 +57,13 @@ export class StringMapObserver {
   private processMutation(mutation: MutationRecord) {
     const attributeName = mutation.attributeName
     if (attributeName) {
-      this.refreshAttribute(attributeName)
+      this.refreshAttribute(attributeName, mutation.oldValue)
     }
   }
 
   // State tracking
 
-  private refreshAttribute(attributeName: string) {
+  private refreshAttribute(attributeName: string, oldValue: string | null) {
     const key = this.delegate.getStringMapKeyForAttribute(attributeName)
     if (key != null) {
       if (!this.stringMap.has(attributeName)) {
@@ -72,12 +72,13 @@ export class StringMapObserver {
 
       const value = this.element.getAttribute(attributeName)
       if (this.stringMap.get(attributeName) != value) {
-        this.stringMapValueChanged(value, key)
+        this.stringMapValueChanged(value, key, oldValue)
       }
 
       if (value == null) {
+        const oldValue = this.stringMap.get(attributeName)
         this.stringMap.delete(attributeName)
-        this.stringMapKeyRemoved(key, attributeName)
+        if (oldValue) this.stringMapKeyRemoved(key, attributeName, oldValue)
       } else {
         this.stringMap.set(attributeName, value)
       }
@@ -90,15 +91,15 @@ export class StringMapObserver {
     }
   }
 
-  private stringMapValueChanged(value: string | null, key: string) {
+  private stringMapValueChanged(value: string | null, key: string, oldValue: string | null) {
     if (this.delegate.stringMapValueChanged) {
-      this.delegate.stringMapValueChanged(value, key)
+      this.delegate.stringMapValueChanged(value, key, oldValue)
     }
   }
 
-  private stringMapKeyRemoved(key: string, attributeName: string) {
+  private stringMapKeyRemoved(key: string, attributeName: string, oldValue: string | null) {
     if (this.delegate.stringMapKeyRemoved) {
-      this.delegate.stringMapKeyRemoved(key, attributeName)
+      this.delegate.stringMapKeyRemoved(key, attributeName, oldValue)
     }
   }
 

@@ -1,8 +1,10 @@
 <% include layout/head %>
 
-<div data-controller="hello">
-  <input data-hello-target="name" type="text" placeholder="Type your name…">
-  <button data-action="click->hello#greet">Greet</button>
-</div>
+<form method="dialog" data-controller="hello">
+  <p>
+    <input data-hello-target="name" type="text" placeholder="Type your name…" autofocus>
+    <button data-action="click->hello#greet">Greet</button>
+  </p>
+</form>
 
 <% include layout/tail %>

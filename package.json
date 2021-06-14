@@ -7,7 +7,6 @@
     "reset": "yarn clean && lerna clean",
     "clean": "lerna run --parallel clean",
     "build": "tsc -b packages/tsconfig.build.json && lerna run --stream --prefix build",
-    "build:doc": "typedoc --out docs/api --name Stimulus --mode file --readme none --excludePrivate --excludeProtected --excludeNotExported --hideGenerator --tsconfig packages/@stimulus/core/tsconfig.json packages/@stimulus/core/src",
     "watch": "tsc -b -w packages/tsconfig.build.json && lerna run --parallel watch",
     "start": "lerna run --scope @stimulus/examples --stream start",
     "test": "yarn build && karma start packages/karma.conf.js",
@@ -21,13 +20,16 @@
     "packages/@stimulus/*"
   ],
   "dependencies": {
+    "@babel/core": "^7.13.13",
+    "@babel/plugin-transform-runtime": "^7.13.10",
+    "@babel/runtime": "^7.13.10",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@types/qunit": "^2.9.0",
     "@types/webpack-env": "^1.14.0",
     "karma": "^5.2.3",
     "karma-chrome-launcher": "^3.1.0",
     "karma-qunit": "^4.0.0",
-    "karma-sauce-launcher": "4.1.4",
+    "karma-sauce-launcher": "4.3.4",
     "karma-webpack": "^4.0.2",
     "lerna": "^3.8.5",
     "qunit": "^2.9.2",
@@ -35,8 +37,7 @@
     "rollup": "^2.0.6",
     "rollup-plugin-terser": "^7.0.2",
     "ts-loader": "^6.0.4",
-    "typedoc": "^0.15.0",
-    "typescript": "^3.2.2",
+    "typescript": "^4.2.3",
     "webpack": "^4.39.1"
   }
 }

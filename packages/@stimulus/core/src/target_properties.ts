@@ -3,7 +3,6 @@ import { Controller } from "./controller"
 import { readInheritableStaticArrayValues } from "./inheritable_statics"
 import { capitalize } from "./string_helpers"
 
-/** @hidden */
 export function TargetPropertiesBlessing<T>(constructor: Constructor<T>) {
   const targets = readInheritableStaticArrayValues(constructor, "targets")
   return targets.reduce((properties, targetDefinition) => {
@@ -19,7 +18,7 @@ function propertiesForTargetDefinition(name: string) {
         if (target) {
           return target
         } else {
-          throw new Error(`Missing target element "${this.identifier}.${name}"`)
+          throw new Error(`Missing target element "${name}" for "${this.identifier}" controller`)
         }
       }
     },
