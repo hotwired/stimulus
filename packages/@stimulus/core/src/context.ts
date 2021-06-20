@@ -86,7 +86,13 @@ export class Context implements ErrorHandler {
     this.application.handleError(error, `Error ${message}`, detail)
   }
 
-  // Debug logging
+  // Logging
+
+  handleWarning(warning: string, message: string, detail: object = {}) {
+    const { identifier, controller, element } = this
+    detail = Object.assign({ identifier, controller, element }, detail)
+    this.application.handleWarning(warning, `Warning ${message}`, detail)
+  }
 
   logDebugActivity = (functionName: string, detail: object = {}): void => {
     const { identifier, controller, element } = this

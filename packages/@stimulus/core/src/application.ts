@@ -71,6 +71,12 @@ export class Application implements ErrorHandler {
     return context ? context.controller : null
   }
 
+  // Warning handling
+
+  handleWarning(warning: string, message: string, detail: object) {
+    this.logger.warn(`%s\n\n%s\n\n%o`, message, warning, detail)
+  }
+
   // Error handling
 
   handleError(error: Error, message: string, detail: object) {
