@@ -13,6 +13,7 @@ export class Application implements ErrorHandler {
   readonly router: Router
   logger: Logger = console
   debug: boolean = false
+  warnings: boolean = true
 
   static start(element?: Element, schema?: Schema): Application {
     const application = new Application(element, schema)
@@ -74,7 +75,9 @@ export class Application implements ErrorHandler {
   // Warning handling
 
   handleWarning(warning: string, message: string, detail: object) {
-    this.logger.warn(`%s\n\n%s\n\n%o`, message, warning, detail)
+    if (this.warnings) {
+      this.logger.warn(`%s\n\n%s\n\n%o`, message, warning, detail)
+    }
   }
 
   // Error handling
