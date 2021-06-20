@@ -17,7 +17,7 @@
     "@stimulus/webpack-helpers": "^2.0.0"
   },
   "scripts": {
-    "prepack": "cp ../../README.md .",
+    "prepack": "cp ../../README.md . && cp ../../LICENSE.md .",
     "prepublishOnly": "yarn run build",
     "clean": "rimraf dist",
     "build": "rollup --config rollup.config.js",
