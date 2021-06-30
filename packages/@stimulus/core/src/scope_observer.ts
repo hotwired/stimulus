@@ -71,6 +71,8 @@ export class ScopeObserver implements ValueListObserverDelegate<Scope> {
     }
   }
 
+  elementMatchedNoValue(token: Token) {}
+
   private fetchScopesByIdentifierForElement(element: Element) {
     let scopesByIdentifier = this.scopesByIdentifierByElement.get(element)
     if (!scopesByIdentifier) {
