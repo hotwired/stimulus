@@ -18,6 +18,9 @@ class MockLogger {
   warn(event: any) {
     this.warns.push(event)
   }
+
+  groupCollapsed() {}
+  groupEnd() {}
 }
 
 class ErrorWhileConnectingController extends Controller {

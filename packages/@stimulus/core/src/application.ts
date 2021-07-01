@@ -12,6 +12,8 @@ export class Application implements ErrorHandler {
   readonly dispatcher: Dispatcher
   readonly router: Router
   logger: Logger = console
+  debug: boolean = false
+  warnings: boolean = true
 
   static start(element?: Element, schema?: Schema): Application {
     const application = new Application(element, schema)
@@ -28,13 +30,17 @@ export class Application implements ErrorHandler {
 
   async start() {
     await domReady()
+    this.logDebugActivity("application", "starting")
     this.dispatcher.start()
     this.router.start()
+    this.logDebugActivity("application", "start")
   }
 
   stop() {
+    this.logDebugActivity("application", "stopping")
     this.dispatcher.stop()
     this.router.stop()
+    this.logDebugActivity("application", "stop")
   }
 
   register(identifier: string, controllerConstructor: ControllerConstructor) {
@@ -66,12 +72,38 @@ export class Application implements ErrorHandler {
     return context ? context.controller : null
   }
 
+  // Warning handling
+
+  handleWarning(warning: string, message: string, detail: object) {
+    if (this.warnings) {
+      this.logger.warn(`%s\n\n%s\n\n%o`, message, warning, detail)
+    }
+  }
+
   // Error handling
 
   handleError(error: Error, message: string, detail: object) {
     this.logger.error(`%s\n\n%o\n\n%o`, message, error, detail)
 
     window.onerror?.(message, "", 0, 0, error)
+  }
+
+  // Debug logging
+
+  logDebugActivity = (identifier: string, functionName: string, detail: object = {}): void => {
+    if (this.debug) {
+      this.logFormattedMessage(identifier, functionName, detail)
+    }
+  }
+
+  private logFormattedMessage(identifier: string, functionName: string, detail: object = {}) {
+    const darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    const color = darkMode ? "#ffe000" : "#5D2F85"
+    detail = Object.assign({ application: this }, detail)
+
+    this.logger.groupCollapsed(`%c${identifier}%c #${functionName}`, `color: ${color}`, 'color: unset')
+    this.logger.log("details:", { ...detail })
+    this.logger.groupEnd()
   }
 }
 

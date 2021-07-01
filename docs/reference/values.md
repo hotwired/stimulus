@@ -52,13 +52,13 @@ export default class extends Controller {
 
 A value's type is one of `Array`, `Boolean`, `Number`, `Object`, or `String`. The type determines how the value is transcoded between JavaScript and HTML.
 
-Type | Encoded as…
----- | -----------
-Array | `JSON.stringify(array)`
-Boolean | `boolean.toString()`
-Number | `number.toString()`
-Object | `JSON.stringify(object)`
-String | Itself
+Type | Encoded as… | Decoded as…
+---- | ----------- | -----------
+Array | `JSON.stringify(array)` | `JSON.parse(value)`
+Boolean | `boolean.toString()` | `!(value == "0" \|\| value == "false")`
+Number | `number.toString()` | `Number(value)`
+Object | `JSON.stringify(object)` | `JSON.parse(value)`
+String | Itself | Itself
 
 ## Properties and Attributes
 
@@ -98,7 +98,7 @@ The existential property for a value evaluates to `true` when the associated dat
 
 Value _change callbacks_ let you respond whenever a value's data attribute changes.
 
-Define a method `[name]ValueChanged` in the controller, where `[name]` is the name of the value you want to observe for changes. The method receives its decoded value as the first argument.
+Define a method `[name]ValueChanged` in the controller, where `[name]` is the name of the value you want to observe for changes. The method receives its decoded value as the first argument and the decoded previous value as the second argument.
 
 Stimulus invokes each change callback after the controller is initialized and again any time its associated data attribute changes. This includes changes as a result of assignment to the value's setter.
 
@@ -111,6 +111,22 @@ export default class extends Controller {
   }
 }
 ```
+
+### Previous Values
+
+You can access the previous value of a `[name]ValueChanged` callback by defining the callback method with two arguments in your controller.
+
+```js
+export default class extends Controller {
+  static values = { url: String }
+
+  urlValueChanged(value, previousValue) {
+    /* … */
+  }
+}
+```
+
+The two arguments can be named as you like. You could also use `urlValueChanged(current, old)`.
 
 ## Naming Conventions
 

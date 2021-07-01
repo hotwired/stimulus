@@ -16,6 +16,7 @@ export class ApplicationTestCase extends DOMTestCase {
     try {
       this.setupApplication()
       this.application.start()
+      this.application.warnings = false
       await super.runTest(testName)
     } finally {
       this.application.stop()

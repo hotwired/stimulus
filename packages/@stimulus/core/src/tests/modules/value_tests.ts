@@ -42,6 +42,10 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.controller.numericValue = "garbage" as any
     this.assert.ok(isNaN(this.controller.numericValue))
     this.assert.equal(this.get("numeric-value"), "garbage")
+
+    this.controller.numericValue = "" as any
+    this.assert.equal(this.controller.numericValue, 0)
+    this.assert.equal(this.get("numeric-value"), "")
   }
 
   "test boolean values"() {
@@ -136,26 +140,47 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
 
   async "test changed callbacks"() {
     this.assert.deepEqual(this.controller.loggedNumericValues, [123])
+    this.assert.deepEqual(this.controller.oldLoggedNumericValues, [0])
 
     this.controller.numericValue = 0
     await this.nextFrame
     this.assert.deepEqual(this.controller.loggedNumericValues, [123, 0])
+    this.assert.deepEqual(this.controller.oldLoggedNumericValues, [0, 123])
 
     this.set("numeric-value", "1")
     await this.nextFrame
     this.assert.deepEqual(this.controller.loggedNumericValues, [123, 0, 1])
+    this.assert.deepEqual(this.controller.oldLoggedNumericValues, [0, 123, 0])
+  }
+
+  async "test changed callbacks for object"() {
+    this.assert.deepEqual(this.controller.optionsValues, [{ one: [2, 3] }])
+    this.assert.deepEqual(this.controller.oldOptionsValues, [{}])
+
+    this.controller.optionsValue = { person: { name: 'John', age: 42, active: true } }
+    await this.nextFrame
+    this.assert.deepEqual(this.controller.optionsValues, [{ one: [2, 3] }, { person: { name: 'John', age: 42, active: true } }])
+    this.assert.deepEqual(this.controller.oldOptionsValues, [{}, { one: [2, 3] }])
+
+    this.set("options-value", "{}")
+    await this.nextFrame
+    this.assert.deepEqual(this.controller.optionsValues, [{ one: [2, 3] }, { person: { name: 'John', age: 42, active: true } }, {}])
+    this.assert.deepEqual(this.controller.oldOptionsValues, [{}, { one: [2, 3] }, { person: { name: 'John', age: 42, active: true } }])
   }
 
   async "test default values trigger changed callbacks"() {
     this.assert.deepEqual(this.controller.loggedMissingStringValues, [""])
+    this.assert.deepEqual(this.controller.oldLoggedMissingStringValues, [undefined])
 
     this.controller.missingStringValue = "hello"
     await this.nextFrame
     this.assert.deepEqual(this.controller.loggedMissingStringValues, ["", "hello"])
+    this.assert.deepEqual(this.controller.oldLoggedMissingStringValues, [undefined, ""])
 
     this.controller.missingStringValue = undefined as any
     await this.nextFrame
     this.assert.deepEqual(this.controller.loggedMissingStringValues, ["", "hello", ""])
+    this.assert.deepEqual(this.controller.oldLoggedMissingStringValues, [undefined, "", "hello"])
   }
 
   "test keys may be specified in kebab-case"() {

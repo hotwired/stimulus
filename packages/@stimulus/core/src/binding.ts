@@ -1,4 +1,5 @@
 import { Action } from "./action"
+import { ActionEvent } from "./action_event"
 import { Context } from "./context"
 import { Controller } from "./controller"
 import { Scope } from "./scope"
@@ -47,8 +48,12 @@ export class Binding {
   }
 
   private invokeWithEvent(event: Event) {
+    const { target, currentTarget } = event
     try {
-      this.method.call(this.controller, event)
+      const { params } = this.action
+      const actionEvent: ActionEvent = Object.assign(event, { params })
+      this.method.call(this.controller, actionEvent)
+      this.context.logDebugActivity(this.methodName, { event, target, currentTarget, action: this.methodName })
     } catch (error) {
       const { identifier, controller, element, index } = this
       const detail = { identifier, controller, element, index, event }
