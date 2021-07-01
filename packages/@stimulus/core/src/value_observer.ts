@@ -45,7 +45,7 @@ export class ValueObserver implements StringMapObserverDelegate {
     const descriptor = this.valueDescriptorMap[attributeName]
 
     if (!this.hasValue(key)) {
-      this.invokeChangedCallbackForValue(key, descriptor.defaultValue)
+      this.invokeChangedCallbackForValue(key, descriptor.defaultValue as string)
     }
   }
 
