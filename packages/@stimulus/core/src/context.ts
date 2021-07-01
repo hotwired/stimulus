@@ -8,14 +8,16 @@ import { Schema } from "./schema"
 import { Scope } from "./scope"
 import { TargetGuide } from "./target_guide"
 import { ValueObserver } from "./value_observer"
+import { TargetObserver, TargetObserverDelegate } from "./target_observer"
 
-export class Context implements ErrorHandler {
+export class Context implements ErrorHandler, TargetObserverDelegate {
   readonly module: Module
   readonly scope: Scope
   readonly controller: Controller
   readonly targetGuide: TargetGuide
   private bindingObserver: BindingObserver
   private valueObserver: ValueObserver
+  private targetObserver: TargetObserver
 
   constructor(module: Module, scope: Scope) {
     this.module = module
@@ -24,6 +26,7 @@ export class Context implements ErrorHandler {
     this.targetGuide = new TargetGuide(this.scope, this.controller)
     this.bindingObserver = new BindingObserver(this, this.dispatcher)
     this.valueObserver = new ValueObserver(this, this.controller)
+    this.targetObserver = new TargetObserver(this, this)
 
     try {
       this.controller.initialize()
@@ -36,6 +39,7 @@ export class Context implements ErrorHandler {
   connect() {
     this.bindingObserver.start()
     this.valueObserver.start()
+    this.targetObserver.start()
 
     try {
       this.controller.connect()
@@ -53,6 +57,7 @@ export class Context implements ErrorHandler {
       this.handleError(error, "disconnecting controller")
     }
 
+    this.targetObserver.stop()
     this.valueObserver.stop()
     this.bindingObserver.stop()
   }
@@ -101,5 +106,24 @@ export class Context implements ErrorHandler {
     const { identifier, controller, element } = this
     detail = Object.assign({ identifier, controller, element }, detail)
     this.application.logDebugActivity(this.identifier, functionName, detail)
+  }
+
+  // Target observer delegate
+
+  targetConnected(element: Element, name: string) {
+    this.invokeControllerMethod(`${name}TargetConnected`, element)
+  }
+
+  targetDisconnected(element: Element, name: string) {
+    this.invokeControllerMethod(`${name}TargetDisconnected`, element)
+  }
+
+  // Private
+
+  invokeControllerMethod(methodName: string, ...args: any[]) {
+    const controller: any = this.controller
+    if (typeof controller[methodName] == "function") {
+      controller[methodName](...args)
+    }
   }
 }

@@ -9,7 +9,9 @@ class BaseTargetController extends Controller {
 }
 
 export class TargetController extends BaseTargetController {
+  static classes = [ "connected", "disconnected" ]
   static targets = [ "beta", "input" ]
+  static values = { inputTargetConnectedCallCount: Number, inputTargetDisconnectedCallCount: Number }
 
   betaTarget!: Element | null
   betaTargets!: Element[]
@@ -18,4 +20,22 @@ export class TargetController extends BaseTargetController {
   inputTarget!: Element | null
   inputTargets!: Element[]
   hasInputTarget!: boolean
+
+  hasConnectedClass!: boolean
+  hasDisconnectedClass!: boolean
+  connectedClass!: string
+  disconnectedClass!: string
+
+  inputTargetConnectedCallCountValue = 0
+  inputTargetDisconnectedCallCountValue = 0
+
+  inputTargetConnected(element: Element) {
+    if (this.hasConnectedClass) element.classList.add(this.connectedClass)
+    this.inputTargetConnectedCallCountValue++
+  }
+
+  inputTargetDisconnected(element: Element) {
+    if (this.hasDisconnectedClass) element.classList.add(this.disconnectedClass)
+    this.inputTargetDisconnectedCallCountValue++
+  }
 }
