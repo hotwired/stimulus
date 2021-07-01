@@ -1,5 +1,6 @@
 import { ActionDescriptor, parseActionDescriptorString, stringifyEventTarget } from "./action_descriptor"
 import { Token } from "@stimulus/mutation-observers"
+import { camelize } from "./string_helpers"
 
 export class Action {
   readonly element: Element
@@ -29,6 +30,29 @@ export class Action {
     return `${this.eventName}${eventNameSuffix}->${this.identifier}#${this.methodName}`
   }
 
+  get params(): object {
+    if (this.eventTarget instanceof Element) {
+      return this.getParamsFromEventTargetAttributes(this.eventTarget)
+    } else {
+      return {}
+    }
+  }
+
+  private getParamsFromEventTargetAttributes(eventTarget: Element): {[key: string]: any} {
+    const params = {}
+    const pattern = new RegExp(`^data-${this.identifier}-(.+)-param$`)
+    const attributes = Array.from(eventTarget.attributes)
+
+    attributes.forEach(({ name, value }: { name: string, value: string }) => {
+      const match = name.match(pattern)
+      const key = match && match[1]
+      if (key) {
+        Object.assign(params, { [camelize(key)]: typecast(value) })
+      }
+    })
+    return params
+  }
+
   private get eventTargetName() {
     return stringifyEventTarget(this.eventTarget)
   }
@@ -53,3 +77,12 @@ export function getDefaultEventNameForElement(element: Element): string | undefi
 function error(message: string): never {
   throw new Error(message)
 }
+
+function typecast(value: any): any {
+  try {
+    return JSON.parse(value)
+  } catch (o_O) {
+    return value
+  }
+}
+
