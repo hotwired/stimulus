@@ -42,46 +42,57 @@ export class ValueObserver implements StringMapObserverDelegate {
   }
 
   stringMapKeyAdded(key: string, attributeName: string) {
-    const descriptor = this.valueDescriptorMap[attributeName]
+    const descriptor = this.valueDescriptorMap[key]
 
     if (!this.hasValue(key)) {
-      this.invokeChangedCallbackForValue(key, descriptor.writer(descriptor.defaultValue))
+      this.invokeChangedCallbackForValue(key, descriptor.writer(this.receiver[key]), descriptor.writer(descriptor.defaultValue))
     }
   }
 
-  stringMapValueChanged(value: string | null, name: string, oldValue: string | null) {
-    this.invokeChangedCallbackForValue(name, oldValue)
+  stringMapValueChanged(value: string, name: string, oldValue: string) {
+    const descriptor = this.valueDescriptorNameMap[name]
+
+    if (value === null) return
+
+    if (oldValue === null) {
+      oldValue = descriptor.writer(descriptor.defaultValue)
+    }
+
+    this.invokeChangedCallbackForValue(name, value, oldValue)
   }
 
-  stringMapKeyRemoved(key: string, attributeName: string, oldValue: string | null) {
+  stringMapKeyRemoved(key: string, attributeName: string, oldValue: string) {
+    const descriptor = this.valueDescriptorNameMap[key]
+
     if (this.hasValue(key)) {
-      this.invokeChangedCallbackForValue(key, oldValue)
+      this.invokeChangedCallbackForValue(key, descriptor.writer(this.receiver[key]), oldValue)
+    } else {
+      this.invokeChangedCallbackForValue(key, descriptor.writer(descriptor.defaultValue), oldValue)
     }
   }
 
   private invokeChangedCallbacksForDefaultValues() {
-    for (const { key, name, defaultValue } of this.valueDescriptors) {
+    for (const { key, name, defaultValue, writer } of this.valueDescriptors) {
       if (defaultValue != undefined && !this.controller.data.has(key)) {
-        this.invokeChangedCallbackForValue(name, null)
+        this.invokeChangedCallbackForValue(name, writer(defaultValue), undefined)
       }
     }
   }
 
-  private invokeChangedCallbackForValue(name: string, oldValue: string | null) {
+  private invokeChangedCallbackForValue(name: string, rawValue: string, rawOldValue: string | undefined) {
     const changedMethodName = `${name}Changed`
     const changedMethod = this.receiver[changedMethodName]
 
     if (typeof changedMethod == "function") {
-      const value = this.receiver[name]
       const descriptor = this.valueDescriptorNameMap[name]
+      const value = descriptor.reader(rawValue)
+      let oldValue = rawOldValue
 
-      if (oldValue) {
-        changedMethod.call(this.receiver, value, descriptor.reader(oldValue))
-      } else if (this.hasValue(name)) {
-        changedMethod.call(this.receiver, value, descriptor.defaultValue)
-      } else {
-        changedMethod.call(this.receiver, value)
+      if (rawOldValue) {
+        oldValue = descriptor.reader(rawOldValue)
       }
+
+      changedMethod.call(this.receiver, value, oldValue)
     }
   }
 
