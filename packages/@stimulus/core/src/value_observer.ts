@@ -42,10 +42,10 @@ export class ValueObserver implements StringMapObserverDelegate {
   }
 
   stringMapKeyAdded(key: string, attributeName: string) {
-    const descriptor = this.valueDescriptorMap[key]
+    const descriptor = this.valueDescriptorMap[attributeName]
 
     if (!this.hasValue(key)) {
-      this.invokeChangedCallbackForValue(key, descriptor.writer(this.receiver[key]), descriptor.writer(descriptor.defaultValue))
+      this.invokeChangedCallback(key, descriptor.writer(this.receiver[key]), descriptor.writer(descriptor.defaultValue))
     }
   }
 
@@ -58,28 +58,28 @@ export class ValueObserver implements StringMapObserverDelegate {
       oldValue = descriptor.writer(descriptor.defaultValue)
     }
 
-    this.invokeChangedCallbackForValue(name, value, oldValue)
+    this.invokeChangedCallback(name, value, oldValue)
   }
 
   stringMapKeyRemoved(key: string, attributeName: string, oldValue: string) {
     const descriptor = this.valueDescriptorNameMap[key]
 
     if (this.hasValue(key)) {
-      this.invokeChangedCallbackForValue(key, descriptor.writer(this.receiver[key]), oldValue)
+      this.invokeChangedCallback(key, descriptor.writer(this.receiver[key]), oldValue)
     } else {
-      this.invokeChangedCallbackForValue(key, descriptor.writer(descriptor.defaultValue), oldValue)
+      this.invokeChangedCallback(key, descriptor.writer(descriptor.defaultValue), oldValue)
     }
   }
 
   private invokeChangedCallbacksForDefaultValues() {
     for (const { key, name, defaultValue, writer } of this.valueDescriptors) {
       if (defaultValue != undefined && !this.controller.data.has(key)) {
-        this.invokeChangedCallbackForValue(name, writer(defaultValue), undefined)
+        this.invokeChangedCallback(name, writer(defaultValue), undefined)
       }
     }
   }
 
-  private invokeChangedCallbackForValue(name: string, rawValue: string, rawOldValue: string | undefined) {
+  private invokeChangedCallback(name: string, rawValue: string, rawOldValue: string | undefined) {
     const changedMethodName = `${name}Changed`
     const changedMethod = this.receiver[changedMethodName]
 
