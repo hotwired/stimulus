@@ -2,7 +2,7 @@
   "name": "@stimulus/core",
   "version": "2.0.0",
   "description": "Stimulus JavaScript framework: Core library",
-  "repository": "https://github.com/stimulusjs/stimulus",
+  "repository": "https://stimulus.hotwired.dev",
   "author": "Basecamp, LLC",
   "contributors": [
     "David Heinemeier Hansson <david@basecamp.com>",

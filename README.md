@@ -52,7 +52,7 @@ Looking for the docs? Once you've read through the Handbook, consult the [Stimul
 
 Have a question about Stimulus? Connect with other Stimulus developers on the [Hotwire Discourse](https://discuss.hotwired.dev/) community forum.
 
-Find a bug? Head over to our [issue tracker](https://github.com/stimulusjs/stimulus/issues) and we'll do our best to help. We love pull requests, too!
+Find a bug? Head over to our [issue tracker](https://github.com/hotwired/stimulus/issues) and we'll do our best to help. We love pull requests, too!
 
 We expect all Stimulus contributors to abide by the terms of our [Code of Conduct](CODE_OF_CONDUCT.md).
 
