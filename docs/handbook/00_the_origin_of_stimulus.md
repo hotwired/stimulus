@@ -17,7 +17,7 @@ And it’s also not to say that the proliferation of single-page JavaScript appl
 
 We wanted Basecamp to feel like that too. As though we had followed the herd and rewritten everything with client-side rendering or gone full-native on mobile.
 
-This desire led us to a two-punch solution: [Turbo](https://turbo.hotwire.dev) and Stimulus.
+This desire led us to a two-punch solution: [Turbo](https://turbo.hotwired.dev) and Stimulus.
 
 ### Turbo up high, Stimulus down low
 
