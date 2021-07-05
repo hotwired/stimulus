@@ -13,6 +13,7 @@ export class DefaultValueController extends Controller {
 
     defaultNumber: 0,
     defaultNumberThousand: { type: Number, default: 1000 },
+    defaultNumberZero: { type: Number, default: 0 },
     defaultNumberOverride: 9999,
 
     defaultArray: [],
@@ -44,6 +45,8 @@ export class DefaultValueController extends Controller {
   hasDefaultNumberValue!: boolean
   defaultNumberThousandValue!: number
   hasDefaultNumberThousandValue!: boolean
+  defaultNumberZeroValue!: number
+  hasDefaultNumberZeroValue!: boolean
   defaultNumberOverrideValue!: number
   hasDefaultNumberOverrideValue!: boolean
 

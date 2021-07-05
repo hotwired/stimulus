@@ -83,6 +83,10 @@ export default class DefaultValueTests extends ControllerTestCase(DefaultValueCo
     this.assert.deepEqual(this.controller.defaultNumberThousandValue, 1000)
     this.assert.ok(this.controller.hasDefaultNumberThousandValue)
     this.assert.deepEqual(this.get("default-number-thousand-value"), null)
+
+    this.assert.deepEqual(this.controller.defaultNumberZeroValue, 0)
+    this.assert.ok(this.controller.hasDefaultNumberZeroValue)
+    this.assert.deepEqual(this.get("default-number-zero-value"), null)
   }
 
   "test should be able to set a new value for custom default number values"() {
