@@ -22,6 +22,10 @@ export default class DefaultValueTests extends ControllerTestCase(DefaultValueCo
     this.assert.deepEqual(this.controller.defaultBooleanTrueValue, true)
     this.assert.ok(this.controller.hasDefaultBooleanTrueValue)
     this.assert.deepEqual(this.get("default-boolean-true-value"), null)
+
+    this.assert.deepEqual(this.controller.defaultBooleanFalseValue, false)
+    this.assert.ok(this.controller.hasDefaultBooleanFalseValue)
+    this.assert.deepEqual(this.get("default-boolean-false-value"), null)
   }
 
   "test should be able to set a new value for custom default boolean values"() {
