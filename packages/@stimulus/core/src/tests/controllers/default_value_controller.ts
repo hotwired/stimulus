@@ -5,6 +5,7 @@ export class DefaultValueController extends Controller {
   static values: ValueDefinitionMap = {
     defaultBoolean: false,
     defaultBooleanTrue: { type: Boolean, default: true },
+    defaultBooleanFalse: { type: Boolean, default: false },
     defaultBooleanOverride: true,
 
     defaultString: "",
@@ -30,7 +31,9 @@ export class DefaultValueController extends Controller {
   defaultBooleanValue!: boolean
   hasDefaultBooleanValue!: boolean
   defaultBooleanTrueValue!: boolean
+  defaultBooleanFalseValue!: boolean
   hasDefaultBooleanTrueValue!: boolean
+  hasDefaultBooleanFalseValue!: boolean
   defaultBooleanOverrideValue!: boolean
   hasDefaultBooleanOverrideValue!: boolean
 
