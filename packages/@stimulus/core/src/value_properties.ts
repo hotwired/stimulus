@@ -136,8 +136,9 @@ function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): ValueTy
   if (constant) return defaultValuesByType[constant]
 
   const defaultValue = (typeDefinition as ValueTypeObject).default
+  if (defaultValue !== undefined) return defaultValue
 
-  return defaultValue || typeDefinition
+  return typeDefinition
 }
 
 function valueDescriptorForTokenAndTypeDefinition(token: string, typeDefinition: ValueTypeDefinition) {
