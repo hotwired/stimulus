@@ -1,43 +1,47 @@
 {
-  "name": "stimulus-repo",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@hotwired/stimulus",
+  "version": "3.0.0-beta.1",
   "license": "MIT",
-  "scripts": {
-    "reset": "yarn clean && lerna clean",
-    "clean": "lerna run --parallel clean",
-    "build": "tsc -b packages/tsconfig.build.json && lerna run --stream --prefix build",
-    "watch": "tsc -b -w packages/tsconfig.build.json && lerna run --parallel watch",
-    "start": "lerna run --scope @stimulus/examples --stream start",
-    "test": "yarn build && karma start packages/karma.conf.js",
-    "test:watch": "yarn test --auto-watch --no-single-run",
-    "prerelease": "yarn build",
-    "release": "lerna publish",
-    "release:beta": "yarn release --npm-tag=beta"
-  },
-  "workspaces": [
-    "packages/*",
-    "packages/@stimulus/*"
+  "description": "A modest JavaScript framework for the HTML you already have.",
+  "author": "Basecamp, LLC",
+  "contributors": [
+    "David Heinemeier Hansson <david@basecamp.com>",
+    "Javan Makhmali <javan@javan.us>",
+    "Sam Stephenson <sstephenson@gmail.com>"
   ],
-  "dependencies": {
-    "@babel/core": "^7.13.13",
-    "@babel/plugin-transform-runtime": "^7.13.10",
-    "@babel/runtime": "^7.13.10",
-    "@rollup/plugin-node-resolve": "^9.0.0",
-    "@types/qunit": "^2.9.0",
+  "homepage": "https://stimulus.hotwired.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hotwired/turbo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hotwired/turbo/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "main": "dist/stimulus.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist/*.js",
+    "dist/*.js.map",
+    "dist/types/**/*"
+  ],
+  "scripts": {
+    "clean": "rm -fr dist",
+    "build": "tsc --noEmit false --declaration true --emitDeclarationOnly true --outDir dist/types && rollup -c",
+    "watch": "rollup -wc",
+    "prerelease": "yarn build && git --no-pager diff && echo && npm pack --dry-run",
+    "release": "npm publish"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-typescript": "^8.2.1",
     "@types/webpack-env": "^1.14.0",
-    "karma": "^5.2.3",
-    "karma-chrome-launcher": "^3.1.0",
-    "karma-qunit": "^4.0.0",
-    "karma-sauce-launcher": "4.3.4",
-    "karma-webpack": "^4.0.2",
-    "lerna": "^3.8.5",
-    "qunit": "^2.9.2",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.0.6",
-    "rollup-plugin-terser": "^7.0.2",
-    "ts-loader": "^6.0.4",
-    "typescript": "^4.2.3",
+    "rollup": "^2.53",
+    "tslib": "^2.3.0",
+    "typescript": "^4.3.5",
     "webpack": "^4.39.1"
   }
 }
