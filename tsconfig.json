@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "lib": [ "dom", "dom.iterable" ],
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "rootDir": "src",
+    "strict": true,
+    "target": "es2017",
+    "noEmit": true,
+    "removeComments": true,
+  },
+  "exclude": [ "dist", "src/test", "tests" ]
+}
