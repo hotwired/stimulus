@@ -96,7 +96,7 @@ Then, in our `initialize()` method, we could read that attribute, convert it to 
 
 ```js
   initialize() {
-    this.index = parseInt(this.element.getAttribute("data-index"))
+    this.index = Number(this.element.dataset.index)
     this.showCurrentSlide()
   }
 ```
