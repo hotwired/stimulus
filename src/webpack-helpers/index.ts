@@ -1,4 +1,4 @@
-import { Definition } from "../core"
+import { Definition } from "../core/definition"
 
 export interface ECMAScriptModule {
   __esModule: boolean

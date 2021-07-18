@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "es2015", "scripthost"],
+    "noUnusedLocals": true,
+    "strict": true,
+    "target": "es5"
+  }
+}

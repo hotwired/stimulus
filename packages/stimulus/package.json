@@ -1,6 +1,6 @@
 {
   "name": "stimulus",
-  "version": "2.0.0",
+  "version": "3.0.0-beta.1",
   "description": "Stimulus JavaScript framework",
   "repository": "https://stimulus.hotwired.dev",
   "author": "Basecamp, LLC",
@@ -9,12 +9,11 @@
     "Javan Makhmali <javan@javan.us>",
     "Sam Stephenson <sstephenson@gmail.com>"
   ],
-  "main": "dist/stimulus.umd.js",
+  "main": "dist/stimulus.js",
   "module": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@stimulus/core": "^2.0.0",
-    "@stimulus/webpack-helpers": "^2.0.0"
+    "@hotwired/stimulus": "^3.0.0-beta.1"
   },
   "scripts": {
     "prepack": "cp ../../README.md . && cp ../../LICENSE.md .",
