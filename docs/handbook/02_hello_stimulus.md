@@ -50,7 +50,7 @@ Let's create our first controller by extending the framework's built-in `Control
 
 ```js
 // src/controllers/hello_controller.js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
 }
@@ -78,7 +78,7 @@ One way is to put a log statement in the `connect()` method, which Stimulus call
 Implement the `connect()` method in `hello_controller.js` as follows:
 ```js
 // src/controllers/hello_controller.js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   connect() {
@@ -97,7 +97,7 @@ Start by renaming `connect()` to `greet()`:
 
 ```js
 // src/controllers/hello_controller.js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   greet() {
@@ -147,7 +147,7 @@ Let's try it out. Open `hello_controller.js` and update it like so:
 
 ```js
 // src/controllers/hello_controller.js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = [ "name" ]
@@ -170,7 +170,7 @@ That means we have an arsenal of standard refactoring techniques at our disposal
 
 ```js
 // src/controllers/hello_controller.js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = [ "name" ]

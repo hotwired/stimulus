@@ -9,7 +9,7 @@ order: 00
 A _controller_ is the basic organizational unit of a Stimulus application.
 
 ```js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   // …
@@ -132,7 +132,7 @@ application.register("reference", ReferenceController)
 You can also register a controller class inline instead of importing it from a module:
 
 ```js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 application.register("reference", class extends Controller {
   // …

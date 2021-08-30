@@ -35,7 +35,7 @@ Next, create `src/controllers/clipboard_controller.js` and add an empty method `
 
 ```js
 // src/controllers/clipboard_controller.js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   copy() {

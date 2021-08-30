@@ -19,7 +19,7 @@ _Actions_ are how you handle DOM events in your controllers.
 
 ```js
 // controllers/gallery_controller.js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   next(event) {

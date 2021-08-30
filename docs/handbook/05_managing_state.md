@@ -34,7 +34,7 @@ Let's draft our controller. Create a new file, `src/controllers/slideshow_contro
 
 ```js
 // src/controllers/slideshow_controller.js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = [ "slide" ]
@@ -143,7 +143,7 @@ Reload the page and verify that the console shows `1` and `Number`.
 Now let's update `initialize()` and the other methods in the controller to use `this.indexValue` instead of `this.index`. Here's how the controller should look when we're done:
 
 ```js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = [ "slide" ]
@@ -182,7 +182,7 @@ We can define a Stimulus value change callback to clean up the repetition and sp
 First, remove the `initialize()` method and define a new method, `indexValueChanged()`. Then remove the calls to `this.showCurrentSlide()` from `next()` and `previous()`:
 
 ```js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = [ "slide" ]

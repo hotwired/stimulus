@@ -18,7 +18,7 @@ Call webpack's [`require.context`](https://webpack.js.org/api/module-methods/#re
 
 ```js
 // src/application.js
-import { Application } from "stimulus"
+import { Application } from "@hotwired/stimulus"
 import { definitionsFromContext } from "stimulus/webpack-helpers"
 
 window.Stimulus = Application.start()
@@ -51,7 +51,7 @@ Stimulus works with other build systems, too, but without support for controller
 
 ```js
 // src/application.js
-import { Application } from "stimulus"
+import { Application } from "@hotwired/stimulus"
 
 import HelloController from "./controllers/hello_controller"
 import ClipboardController from "./controllers/clipboard_controller"
@@ -124,7 +124,7 @@ If your application needs to support older browsers like Internet Explorer 11, i
 ```js
 // src/application.js
 import "@stimulus/polyfills"
-import { Application } from "stimulus"
+import { Application } from "@hotwired/stimulus"
 
 window.Stimulus = Application.start()
 // …
@@ -140,7 +140,7 @@ You can override how Stimulus handles errors by defining `Application#handleErro
 
 ```js
 // src/application.js
-import { Application } from "stimulus"
+import { Application } from "@hotwired/stimulus"
 window.Stimulus = Application.start()
 
 Stimulus.handleError = (error, message, detail) => {

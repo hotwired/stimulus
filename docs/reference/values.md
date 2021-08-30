@@ -21,7 +21,7 @@ You can read and write [HTML data attributes](https://developer.mozilla.org/en-U
 
 ```js
 // controllers/loader_controller.js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { url: String }

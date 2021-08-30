@@ -38,7 +38,7 @@ Define target names in your controller class using the `static targets` array:
 
 ```js
 // controllers/search_controller.js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = [ "query", "errorMessage", "results" ]
