@@ -1,6 +1,5 @@
 import "@stimulus/polyfills"
-import { Application } from "@stimulus/core"
-import { definitionsFromContext } from "@stimulus/webpack-helpers"
+import { Application, definitionsFromContext } from "stimulus"
 import Turbolinks from "turbolinks"
 
 Turbolinks.start()

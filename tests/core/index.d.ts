@@ -1,1 +1,0 @@
-import "@stimulus/polyfills";

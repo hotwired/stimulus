@@ -12,10 +12,10 @@
   "homepage": "https://stimulus.hotwired.dev",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hotwired/turbo.git"
+    "url": "git+https://github.com/hotwired/stimulus.git"
   },
   "bugs": {
-    "url": "https://github.com/hotwired/turbo/issues"
+    "url": "https://github.com/hotwired/stimulus/issues"
   },
   "publishConfig": {
     "access": "public"
@@ -30,16 +30,30 @@
   ],
   "scripts": {
     "clean": "rm -fr dist",
-    "build": "tsc --noEmit false --declaration true --emitDeclarationOnly true --outDir dist/types && rollup -c",
+    "types": "tsc --noEmit false --declaration true --emitDeclarationOnly true --outDir dist/types",
+    "build": "yarn types && tsc -b tsconfig.json && rollup -c",
     "watch": "rollup -wc",
     "prerelease": "yarn build && git --no-pager diff && echo && npm pack --dry-run",
-    "release": "npm publish"
+    "release": "npm publish",
+    "start": "node examples/server.js",
+    "test": "yarn build && karma start karma.conf.cjs",
+    "test:watch": "yarn test --auto-watch --no-single-run"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-typescript": "^8.2.1",
+    "@types/qunit": "^2.9.0",
     "@types/webpack-env": "^1.14.0",
+    "karma": "^5.2.3",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-qunit": "^4.0.0",
+    "karma-sauce-launcher": "4.3.4",
+    "karma-webpack": "^4.0.2",
+    "qunit": "^2.9.2",
+    "rimraf": "^3.0.2",
     "rollup": "^2.53",
+    "rollup-plugin-terser": "^7.0.2",
+    "ts-loader": "^6.0.4",
     "tslib": "^2.3.0",
     "typescript": "^4.3.5",
     "webpack": "^4.39.1"
