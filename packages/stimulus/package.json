@@ -10,17 +10,21 @@
     "Sam Stephenson <sstephenson@gmail.com>"
   ],
   "main": "dist/stimulus.js",
-  "module": "index.js",
+  "module": "dist/stimulus.esm.js",
   "license": "MIT",
   "dependencies": {
-    "@hotwired/stimulus": "^3.0.0-beta.1"
+    "@hotwired/stimulus": "file:.yalc/@hotwired/stimulus"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-typescript": "^8.2.1",
+    "rollup": "^2.53"
   },
   "scripts": {
-    "prepack": "cp ../../README.md . && cp ../../LICENSE.md .",
-    "prepublishOnly": "yarn run build",
-    "clean": "rimraf dist",
+    "clean": "rm -rf dist",
     "build": "rollup --config rollup.config.js",
-    "watch": "rollup --config rollup.config.js --watch"
+    "prerelease": "yarn build && git --no-pager diff && echo && npm pack --dry-run",
+    "release": "npm publish"
   },
   "publishConfig": {
     "access": "public"
