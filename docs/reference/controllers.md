@@ -45,6 +45,15 @@ For example, this element has a controller which is an instance of the class def
 <div data-controller="reference"></div>
 ```
 
+The following is an example of how Stimulus will generate identifiers for controllers in it's require context:
+
+If your controller file is named… | its identifier will be…
+--------------------------------- | -----------------------
+clipboard_controller.js           | clipboard
+date_picker_controller.js         | date-picker
+users/list_item_controller.js     | users\-\-list-item
+local-time-controller.js          | local-time
+
 ## Scopes
 
 When Stimulus connects a controller to an element, that element and all of its children make up the controller's _scope_.
