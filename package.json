@@ -20,8 +20,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "type": "module",
-  "main": "dist/stimulus.js",
+  "module": "dist/stimulus.js",
+  "main": "dist/stimulus.umd.js",
   "types": "dist/types/index.d.ts",
   "files": [
     "dist/*.js",
