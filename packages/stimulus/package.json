@@ -13,7 +13,7 @@
   "module": "dist/stimulus.esm.js",
   "license": "MIT",
   "dependencies": {
-    "@hotwired/stimulus": "file:.yalc/@hotwired/stimulus"
+    "@hotwired/stimulus": "^3.0.0-beta.1"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.0",
