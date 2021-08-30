@@ -11,6 +11,11 @@
   ],
   "main": "dist/stimulus.js",
   "module": "dist/stimulus.esm.js",
+  "files": [
+    "dist/stimulus.js",
+    "dist/stimulus.umd.js",
+    "README.md"
+  ],
   "license": "MIT",
   "dependencies": {
     "@hotwired/stimulus": "^3.0.0-beta.1"
