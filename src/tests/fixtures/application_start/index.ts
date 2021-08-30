@@ -1,4 +1,3 @@
-import "@stimulus/polyfills"
 import { startApplication } from "./helpers"
 
 startApplication()
