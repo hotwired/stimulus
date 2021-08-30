@@ -90,6 +90,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
     const type = prefix ? `${prefix}:${eventName}` : eventName
     const event = new CustomEvent(type, { detail, bubbles, cancelable })
     target.dispatchEvent(event)
+    this.logDebugEvent(type, detail)
     return event
   }
 
@@ -113,6 +114,12 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
     const { identifier, controller, element } = this
     detail = Object.assign({ identifier, controller, element }, detail)
     this.application.logDebugActivity(this.identifier, functionName, detail)
+  }
+
+  logDebugEvent = (eventName: string, detail: object = {}): void => {
+    const { identifier, controller, element } = this
+    detail = Object.assign({ identifier, controller, element }, detail)
+    this.application.logDebugEvent(this.identifier, eventName, detail)
   }
 
   // Target observer delegate
