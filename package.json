@@ -24,8 +24,8 @@
   "main": "dist/stimulus.umd.js",
   "types": "dist/types/index.d.ts",
   "files": [
-    "dist/*.js",
-    "dist/*.js.map",
+    "dist/stimulus.js",
+    "dist/stimulus.umd.js",
     "dist/types/**/*"
   ],
   "scripts": {
