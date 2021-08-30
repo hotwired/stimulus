@@ -1,5 +1,5 @@
 import { Application } from "../../core/application";
-import { DOMTestCase } from "../helpers";
+import { DOMTestCase } from "./dom_test_case";
 import { Schema, defaultSchema } from "../../core/schema";
 
 class TestApplication extends Application {

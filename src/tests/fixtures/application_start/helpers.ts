@@ -1,4 +1,4 @@
-import { Application, Controller } from "../../../../core"
+import { Application, Controller } from "../../../core"
 
 export function startApplication() {
   const startState = document.readyState

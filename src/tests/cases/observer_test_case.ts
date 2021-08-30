@@ -1,4 +1,4 @@
-import { DOMTestCase } from "../helpers"
+import { DOMTestCase } from "./dom_test_case"
 
 export interface Observer {
   start(): void
