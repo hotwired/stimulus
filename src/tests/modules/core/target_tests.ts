@@ -1,4 +1,4 @@
-import { ControllerTestCase } from "../../helpers/controller_test_case"
+import { ControllerTestCase } from "../../cases/controller_test_case"
 import { TargetController } from "../../controllers/target_controller"
 
 export default class TargetTests extends ControllerTestCase(TargetController) {

@@ -1,4 +1,4 @@
-import { TestCase } from "../../helpers"
+import { TestCase } from "../../cases"
 import { identifierForContextKey } from "../../../webpack-helpers/index"
 
 (class WebpackHelperTests extends TestCase {

@@ -1,6 +1,6 @@
 import { Controller } from "../../../core/controller"
 import { Application } from "../../../core/application"
-import { ControllerTestCase } from "../../helpers/controller_test_case"
+import { ControllerTestCase } from "../../cases/controller_test_case"
 
 class MockLogger {
   errors: any[] = []

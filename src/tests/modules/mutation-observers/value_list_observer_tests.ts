@@ -1,5 +1,5 @@
 import { Token, ValueListObserver, ValueListObserverDelegate } from "../../../mutation-observers"
-import { ObserverTestCase } from "../../helpers/observer_test_case"
+import { ObserverTestCase } from "../../cases/observer_test_case"
 
 export interface Value {
   id: number

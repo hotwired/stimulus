@@ -1,5 +1,5 @@
 import { Token, TokenListObserver, TokenListObserverDelegate } from "../../../mutation-observers/token_list_observer"
-import { ObserverTestCase } from "../../helpers/observer_test_case"
+import { ObserverTestCase } from "../../cases/observer_test_case"
 
 export default class TokenListObserverTests extends ObserverTestCase implements TokenListObserverDelegate {
   attributeName = "data-test"

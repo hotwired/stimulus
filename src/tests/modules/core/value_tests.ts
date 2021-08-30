@@ -1,4 +1,4 @@
-import { ControllerTestCase } from "../../helpers/controller_test_case"
+import { ControllerTestCase } from "../../cases/controller_test_case"
 import { ValueController } from "../../controllers/value_controller"
 
 export default class ValueTests extends ControllerTestCase(ValueController) {

@@ -1,5 +1,5 @@
 import { AttributeObserver, AttributeObserverDelegate } from "../../../mutation-observers/attribute_observer"
-import { ObserverTestCase } from "../../helpers/observer_test_case"
+import { ObserverTestCase } from "../../cases/observer_test_case"
 
 export default class AttributeObserverTests extends ObserverTestCase implements AttributeObserverDelegate {
   attributeName = "data-test"

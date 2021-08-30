@@ -1,5 +1,5 @@
 import { Controller } from "../../../core/controller"
-import { ControllerTestCase } from "../../helpers/controller_test_case"
+import { ControllerTestCase } from "../../cases/controller_test_case"
 
 class ActionTimingController extends Controller {
   static targets = [ "button" ]

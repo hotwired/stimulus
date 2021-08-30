@@ -1,4 +1,4 @@
-import { LogControllerTestCase } from "../../helpers/log_controller_test_case"
+import { LogControllerTestCase } from "../../cases/log_controller_test_case"
 
 export default class EventOptionsTests extends LogControllerTestCase {
   identifier = ["c", "d"]

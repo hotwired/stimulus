@@ -1,4 +1,4 @@
-import { ControllerTestCase } from "../../helpers/controller_test_case"
+import { ControllerTestCase } from "../../cases/controller_test_case"
 
 export default class DataTests extends ControllerTestCase() {
   fixtureHTML = `

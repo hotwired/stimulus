@@ -1,4 +1,4 @@
-import { ApplicationTestCase } from "../../helpers/application_test_case"
+import { ApplicationTestCase } from "../../cases/application_test_case"
 import { LogController } from "../../controllers/log_controller"
 
 class AController extends LogController {}

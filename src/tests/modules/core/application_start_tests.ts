@@ -1,4 +1,4 @@
-import { DOMTestCase } from "../../helpers"
+import { DOMTestCase } from "../../cases"
 
 export default class ApplicationStartTests extends DOMTestCase {
   iframe!: HTMLIFrameElement
