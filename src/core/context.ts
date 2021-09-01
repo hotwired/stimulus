@@ -86,13 +86,6 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
     return this.element.parentElement
   }
 
-  dispatch(eventName: string, { target = this.element, detail = {}, prefix = this.identifier, bubbles = true, cancelable = true } = {}) {
-    const type = prefix ? `${prefix}:${eventName}` : eventName
-    const event = new CustomEvent(type, { detail, bubbles, cancelable })
-    target.dispatchEvent(event)
-    return event
-  }
-
   // Error handling
 
   handleError(error: Error, message: string, detail: object = {}) {
