@@ -56,4 +56,11 @@ export class Controller {
   disconnect() {
     // Override in your subclass to respond when the controller is disconnected from the DOM
   }
+
+  dispatch(eventName: string, { target = this.element, detail = {}, prefix = this.identifier, bubbles = true, cancelable = true } = {}) {
+    const type = prefix ? `${prefix}:${eventName}` : eventName
+    const event = new CustomEvent(type, { detail, bubbles, cancelable })
+    target.dispatchEvent(event)
+    return event
+  }
 }
