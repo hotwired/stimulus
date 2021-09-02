@@ -1,7 +1,7 @@
 import { TestCase } from "../../cases"
 import { identifierForContextKey } from "../../../webpack-helpers/index"
 
-(class WebpackHelperTests extends TestCase {
+export default class WebpackHelperTests extends TestCase {
   "test filenames require an extension"() {
     this.assertContextKeyMapsToIdentifier("./hello_controller", undefined)
     this.assertContextKeyMapsToIdentifier("./hello_controller.js", "hello")
@@ -29,4 +29,4 @@ import { identifierForContextKey } from "../../../webpack-helpers/index"
     const actualIdentifier = identifierForContextKey(contextKey)
     this.assert.equal(actualIdentifier, expectedIdentifier)
   }
-}).defineModule()
+}
