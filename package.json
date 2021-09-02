@@ -31,12 +31,13 @@
   "scripts": {
     "clean": "rm -fr dist",
     "types": "tsc --noEmit false --declaration true --emitDeclarationOnly true --outDir dist/types",
-    "build": "yarn types && tsc -b tsconfig.json && rollup -c",
+    "build": "yarn types && rollup -c",
+    "build:test": "tsc -b tsconfig.test.json",
     "watch": "rollup -wc",
     "prerelease": "yarn build && git --no-pager diff && echo && npm pack --dry-run",
     "release": "npm publish",
     "start": "node examples/server.js",
-    "test": "yarn build && karma start karma.conf.cjs",
+    "test": "yarn build:test && karma start karma.conf.cjs",
     "test:watch": "yarn test --auto-watch --no-single-run"
   },
   "devDependencies": {

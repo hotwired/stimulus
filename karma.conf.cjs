@@ -5,6 +5,8 @@ const config = {
 
   frameworks: ["qunit"],
 
+  plugins: ["karma-webpack", "karma-qunit", "karma-chrome-launcher"],
+
   reporters: ["progress"],
 
   singleRun: true,
@@ -13,11 +15,12 @@ const config = {
 
   files: [
     "dist/tests/index.js",
-    { pattern: "dist/tests/fixtures/**/*", included: false },
+    { pattern: "src/tests/fixtures/**/*", watched: true, served: true, included: false },
+    { pattern: "dist/tests/fixtures/**/*", watched: true, served: true, included: false },
   ],
 
   preprocessors: {
-    "dist/tests/**/*.js": ["webpack"]
+    "dist/tests/**/*.js": ["webpack"],
   },
 
   webpack: {

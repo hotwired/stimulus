@@ -5,7 +5,7 @@ export default class ApplicationStartTests extends DOMTestCase {
 
   async setup() {
     this.iframe = document.createElement("iframe")
-    this.iframe.src = "/base/@stimulus/core/src/tests/fixtures/application_start/index.html"
+    this.iframe.src = "/base/src/tests/fixtures/application_start/index.html"
     this.fixtureElement.appendChild(this.iframe)
   }
 
