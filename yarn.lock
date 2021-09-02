@@ -2881,14 +2881,13 @@ karma-qunit@^4.0.0:
   resolved "https://registry.yarnpkg.com/karma-qunit/-/karma-qunit-4.1.2.tgz#fa27697470e749fb4bd63b1b5e487b6165ec9ec8"
   integrity sha512-taTPqBeHCOlkeKTSzQgIKzAUb79vw3rfbCph+xwwh63tyGjNtljwx91VArhIM9DzIIR3gB9G214wQg+oXI9ycw==
 
-karma-sauce-launcher@4.3.4:
-  version "4.3.4"
-  resolved "https://registry.yarnpkg.com/karma-sauce-launcher/-/karma-sauce-launcher-4.3.4.tgz#3033b6cb9610db4b67de074baef58c652d5a11b8"
-  integrity sha512-sXka3l3Z9x+UhGMsg0fU+i+Jq82j7tfApMrAupM8JxO8ZskmSCozUM4cffLTwuzJPYjf0ffFNu3Up5Pzr26N/g==
+karma-sauce-launcher@^4.3.6:
+  version "4.3.6"
+  resolved "https://registry.yarnpkg.com/karma-sauce-launcher/-/karma-sauce-launcher-4.3.6.tgz#274f999ce5a3bc76577a438839cb0dbbf2746a48"
+  integrity sha512-Ej62q4mUPFktyAm8g0g8J5qhwEkXwdHrwtiV4pZjKNHNnSs+4qgDyzs3VkpOy3AmNTsTqQXUN/lpiy0tZpDJZQ==
   dependencies:
-    fs-extra "^9.0.1"
     global-agent "^2.1.12"
-    saucelabs "^4.5.1"
+    saucelabs "^4.6.3"
     webdriverio "^6.7.0"
 
 karma-webpack@^4.0.2:
@@ -4175,7 +4174,7 @@ safe-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-saucelabs@^4.5.1:
+saucelabs@^4.6.3:
   version "4.7.8"
   resolved "https://registry.yarnpkg.com/saucelabs/-/saucelabs-4.7.8.tgz#099a7ddacee297b34420acd5ddc155eb1ad0efde"
   integrity sha512-K2qaRUixc7+8JiAwpTvEsIQVzzUkYwa0mAfs0akGagRlWXUR1JrsmgJRyz28qkwpERW1KDuByn3Ju96BuW1V7Q==

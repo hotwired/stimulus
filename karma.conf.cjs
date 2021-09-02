@@ -5,8 +5,6 @@ const config = {
 
   frameworks: ["qunit"],
 
-  plugins: ["karma-webpack", "karma-qunit", "karma-chrome-launcher"],
-
   reporters: ["progress"],
 
   singleRun: true,
