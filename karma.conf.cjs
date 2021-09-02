@@ -15,7 +15,8 @@ const config = {
 
   files: [
     "dist/tests/index.js",
-    { pattern: "dist/tests/fixtures/**/*", included: false },
+    { pattern: "src/tests/fixtures/**/*", watched: true, served: true, included: false },
+    { pattern: "dist/tests/fixtures/**/*", watched: true, served: true, included: false },
   ],
 
   preprocessors: {
