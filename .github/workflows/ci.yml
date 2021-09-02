@@ -23,7 +23,3 @@ jobs:
 
     - name: Test
       run: yarn test
-
-    - name: Publish dev build
-      run: .github/scripts/publish-dev-build '${{ secrets.DEV_BUILD_GITHUB_TOKEN }}'
-      if: ${{ github.event_name == 'push' }}
