@@ -5,8 +5,6 @@ const config = {
 
   frameworks: ["qunit"],
 
-  plugins: ["karma-webpack", "karma-qunit", "karma-chrome-launcher"],
-
   reporters: ["progress"],
 
   singleRun: true,
@@ -60,51 +58,45 @@ if (process.env.CI) {
         args: ["--lang=tr"]
       }
     },
-    sl_firefox_43: {
+    sl_firefox_65: {
       base: "SauceLabs",
       browserName: "firefox",
-      version: "43"
+      version: "65.0"
     },
     sl_firefox_latest: {
       base: "SauceLabs",
       browserName: "firefox",
       version: "latest"
     },
-    sl_safari_9: {
-      base: "SauceLabs",
-      browserName: "safari",
-      platform: "OS X 10.11",
-      version: "9"
-    },
-    sl_safari_10_1: {
-      base: "SauceLabs",
-      browserName: "safari",
-      platform: "macOS 10.12",
-      version: "10.1"
-    },
-    sl_safari_latest: {
+    sl_safari_12_1: {
       base: "SauceLabs",
       browserName: "safari",
       platform: "macOS 10.13",
+      version: "12.1"
+    },
+    sl_safari_latest_catalina: {
+      base: "SauceLabs",
+      browserName: "safari",
+      platform: "macOS 10.15",
       version: "latest"
     },
-    sl_edge_17: {
+    sl_safari_latest_big_sur: {
+      base: "SauceLabs",
+      browserName: "safari",
+      platform: "macOS 11",
+      version: "latest"
+    },
+    sl_edge_79: {
       base: "SauceLabs",
       browserName: "microsoftedge",
       platform: "Windows 10",
-      version: "17.17134"
+      version: "79.0"
     },
     sl_edge_latest: {
       base: "SauceLabs",
       browserName: "microsoftedge",
       platform: "Windows 10",
-      version: "18.17763"
-    },
-    sl_ie_11: {
-      base: "SauceLabs",
-      browserName: "internet explorer",
-      platform: "Windows 8.1",
-      version: "11"
+      version: "latest"
     },
     sl_ios_latest: {
       base: "SauceLabs",
