@@ -10,7 +10,7 @@ Special methods called _lifecycle callbacks_ allow you to respond whenever a con
 <meta data-controller="callout" data-callout-text-value="connect()">
 
 ```js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   connect() {

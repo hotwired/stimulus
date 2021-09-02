@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "lib": [ "dom", "dom.iterable", "es2015", "scripthost" ],
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "rootDir": "src",
+    "strict": true,
+    "target": "es2017",
+    "removeComments": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "noEmit": false,
+    "declaration": false
+  },
+  "exclude": [
+    "dist"
+  ],
+  "include": [
+    "src/**/*"
+  ]
+}

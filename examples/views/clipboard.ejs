@@ -1,0 +1,19 @@
+<% include layout/head %>
+
+<p data-controller="clipboard" data-clipboard-supported-class="clipboard--supported">
+  <input data-clipboard-target="source" class="clipboard-source" type="text" value="https://stimulus.hotwired.dev" readonly>
+  <button data-action="clipboard#copy" class="clipboard-button">Copy</button>
+</p>
+
+<p data-controller="clipboard" data-clipboard-supported-class="clipboard--supported">
+  <input data-clipboard-target="source" class="clipboard-source" type="text" value="https://basecamp.com" readonly>
+  <button data-action="clipboard#copy" class="clipboard-button">Copy</button>
+</p>
+
+<br>
+
+<p>
+  <textarea class="clipboard-paste" placeholder="Paste here…"></textarea>
+</p>
+
+<% include layout/tail %>

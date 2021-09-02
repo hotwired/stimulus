@@ -1,1 +1,1 @@
-export * from "@stimulus/core"
+export * from "@hotwired/stimulus"

@@ -36,7 +36,7 @@ Now we can implement our controller:
 
 ```js
 // src/controllers/content_loader_controller.js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { url: String }
@@ -139,7 +139,7 @@ Let's take a look at our final controller class:
 
 ```js
 // src/controllers/content_loader_controller.js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { url: String, refreshInterval: Number }

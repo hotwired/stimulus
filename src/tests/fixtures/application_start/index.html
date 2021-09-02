@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="/base/dist/tests/fixtures/application_start/index.js"></script>
+</head>
+<body>
+  <div data-controller="a">
+    <span data-a-target="item"></span>
+    <span data-a-target="item"></span>
+    <script>
+      // If "a" controller is loaded while the document is loading,
+      // synchronously accessing `this.itemTargets` will only return
+      // the first two target elements. The third hasn't been parsed
+      // yet because the browser's still working through this script.
+      // See: https://github.com/hotwired/stimulus/issues/97
+      1 + 1
+    </script>
+    <span data-a-target="item"></span>
+  </div>
+</body>
+</html>

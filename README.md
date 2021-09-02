@@ -20,7 +20,7 @@ Then write a compatible controller. Stimulus brings it to life automatically:
 
 ```js
 // hello_controller.js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = [ "name", "output" ]
@@ -64,4 +64,4 @@ Continuous integration VMs generously provided by [Sauce Labs](https://saucelabs
 
 ---
 
-© 2020 Basecamp, LLC.
+© 2021 Basecamp, LLC.
