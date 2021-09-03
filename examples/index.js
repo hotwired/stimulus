@@ -1,4 +1,3 @@
-import "@stimulus/polyfills"
 import { Application, definitionsFromContext } from "@hotwired/stimulus"
 import Turbolinks from "turbolinks"
 

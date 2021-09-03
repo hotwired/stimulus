@@ -36,7 +36,8 @@
     "watch": "rollup -wc",
     "prerelease": "yarn build && git --no-pager diff && echo && npm pack --dry-run",
     "release": "npm publish",
-    "start": "node examples/server.js",
+    "start": "concurrently \"npm:watch\" \"npm:start:examples\"",
+    "start:examples": "cd examples && yarn install && node server.js",
     "test": "yarn build:test && karma start karma.conf.cjs",
     "test:watch": "yarn test --auto-watch --no-single-run"
   },
@@ -45,6 +46,7 @@
     "@rollup/plugin-typescript": "^8.2.1",
     "@types/qunit": "^2.9.0",
     "@types/webpack-env": "^1.14.0",
+    "concurrently": "^6.2.1",
     "karma": "^5.2.3",
     "karma-chrome-launcher": "^3.1.0",
     "karma-qunit": "^4.0.0",
