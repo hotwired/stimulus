@@ -11,5 +11,5 @@ export function dasherize(value: string) {
 }
 
 export function tokenize(value: string) {
-  return value.trim().split(/\s+/).filter(content => content.length)
+  return value.match(/[^\s]+/g) || []
 }
