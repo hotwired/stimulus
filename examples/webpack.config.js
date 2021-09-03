@@ -34,6 +34,9 @@ module.exports = {
 
   resolve: {
     extensions: [".ts", ".js"],
-    modules: ["src", "node_modules"]
+    modules: ["src", "node_modules"],
+    alias: {
+      "@hotwired/stimulus": path.resolve(__dirname, "../dist/stimulus.js"),
+    }
   }
 }
