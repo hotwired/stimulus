@@ -2,6 +2,19 @@ import { ActionDescriptor, parseActionDescriptorString, stringifyEventTarget } f
 import { Token } from "../mutation-observers"
 import { camelize } from "./string_helpers"
 
+const keyMappings: { [key: string]: string } = {
+  "enter":  "Enter",
+  "tab":    "Tab",
+  "esc":    "Escape",
+  "space":  " ",
+  "up":     "ArrowUp",
+  "down":   "ArrowDown",
+  "left":   "ArrowLeft",
+  "right":  "ArrowRight",
+  "home":   "Home",
+  "end":    "End"
+}
+
 export class Action {
   readonly element: Element
   readonly index: number
@@ -10,6 +23,7 @@ export class Action {
   readonly eventOptions: AddEventListenerOptions
   readonly identifier: string
   readonly methodName: string
+  readonly keyFilter: string
 
   static forToken(token: Token) {
     return new this(token.element, token.index, parseActionDescriptorString(token.content))
@@ -23,11 +37,18 @@ export class Action {
     this.eventOptions = descriptor.eventOptions || {}
     this.identifier   = descriptor.identifier || error("missing identifier")
     this.methodName   = descriptor.methodName || error("missing method name")
+    this.keyFilter    = descriptor.keyFilter || ''
   }
 
   toString() {
     const eventNameSuffix = this.eventTargetName ? `@${this.eventTargetName}` : ""
-    return `${this.eventName}${eventNameSuffix}->${this.identifier}#${this.methodName}`
+    const eventFilter = this.keyFilter ? `.${this.keyFilter}` : ""
+    return `${this.eventName}${eventNameSuffix}${eventFilter}->${this.identifier}#${this.methodName}`
+  }
+
+  isFilterTarget(key: string): boolean {
+    if (!this.keyFilter) { return false; }
+    return keyMappings[this.keyFilter] !== key
   }
 
   get params(): object {
