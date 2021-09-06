@@ -47,7 +47,10 @@ export class Action {
   }
 
   isFilterTarget(key: string): boolean {
-    if (!this.keyFilter) { return false; }
+    if (!(this.keyFilter && keyMappings[this.keyFilter])) {
+      return false;
+    }
+
     return keyMappings[this.keyFilter] !== key
   }
 
