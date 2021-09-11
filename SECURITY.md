@@ -9,7 +9,7 @@ A: Ensure that none of the methods on any of your controllers perform sensitive 
 Refer to the MDN [Content Security Policy documentation](https://content-security-policy.com) for a general overview of cross-site scripting attacks and how to defend against them.
 
 ### Q: Will Stimulus only instantiate and invoke methods on classes marked as controllers?
-A: Yes. All controller classes must be registered with corresponding identifiers, either implicitly by way of the `@stimulus/webpack-helpers` package or explicitly through a call to `Application#register()`.
+A: Yes. All controller classes must be registered with corresponding identifiers, either implicitly by way of an autoloader like in used in stimulus-rails with import maps or explicitly through a call to `Application#register()`.
 
 ### Q: Does Stimulus use `eval()`?
 A: No. There is no use of `eval()` in Stimulus. The action system _does_ use dynamic dispatch to invoke controller methods, which corresponds to a runtime property lookup on the controller instance. See the implementation of [`Binding#method`](packages/@stimulus/core/src/binding.ts) for details.
