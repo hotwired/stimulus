@@ -40,9 +40,7 @@ You can read more about why we created this new framework in [The Origin of Stim
 
 ## Installing Stimulus
 
-Stimulus integrates with the [webpack](https://webpack.js.org/) asset packager to automatically load controller files from a folder in your app.
-
-You can use Stimulus with other asset packaging systems, too. And if you prefer no build step at all, just drop a `<script>` tag on the page and get right down to business.
+You can use Stimulus with any asset packaging systems. And if you prefer no build step at all, just drop a `<script>` tag on the page and get right down to business.
 
 See the [Installation Guide](https://stimulus.hotwired.dev/handbook/installing) for detailed instructions.
 

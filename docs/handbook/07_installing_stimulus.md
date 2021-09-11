@@ -5,28 +5,14 @@ permalink: /handbook/installing
 # Installing Stimulus in Your Application
 {:.no_toc}
 
-To install Stimulus in your application, add the [`stimulus` npm package](https://www.npmjs.com/package/stimulus) to your JavaScript bundle. Or, load [`stimulus.umd.js`](https://unpkg.com/stimulus/dist/stimulus.umd.js) in a `<script>` tag.
+To install Stimulus in your application, add the [`@hotwired/stimulus` npm package](https://www.npmjs.com/package/@hotwired/stimulus) to your JavaScript bundle. Or, import [`stimulus.esm.js`](https://unpkg.com/@hotwired/stimulus/dist/stimulus.js) in a `<script type="module">` tag.
 
 * TOC
 {:toc}
 
-## Using webpack
+## Using stimulus-rails
 
-Stimulus integrates with the [webpack](https://webpack.js.org/) asset packager to automatically load controller files from a folder in your app.
-
-Call webpack's [`require.context`](https://webpack.js.org/api/module-methods/#require-context) helper with the path to the folder containing your Stimulus controllers. Then, pass the resulting context to the `Application#load` method using the `definitionsFromContext` helper:
-
-```js
-// src/application.js
-import { Application } from "@hotwired/stimulus"
-import { definitionsFromContext } from "stimulus/webpack-helpers"
-
-window.Stimulus = Application.start()
-const context = require.context("./controllers", true, /\.js$/)
-Stimulus.load(definitionsFromContext(context))
-```
-
-Assigning the application instance to `window.Stimulus` lets you to debug instantiated controllers via `Stimulus.controllers` and turn on debug logging with `Stimulus.debug = true`. If you don't want to use a global instance, you can also assign it to a local const, like `application`, instead.
+Stimulus integrates with the [stimulus-rails](https://github.com/hotwired/stimulus-rails) to automatically load controller files from a folder in your app, if you're using it together with import maps.
 
 ### Controller Filenames Map to Identifiers
 
@@ -61,49 +47,26 @@ Stimulus.register("hello", HelloController)
 Stimulus.register("clipboard", ClipboardController)
 ```
 
-## Using Babel
-
-If you're using [Babel](https://babeljs.io/) with your build system, you'll need to add the [@babel/plugin-proposal-class-properties](https://babeljs.io/docs/en/babel-plugin-proposal-class-properties) plugin to your configuration:
-
-```json
-{
-  "presets": ["@babel/preset-env"],
-  "plugins": ["@babel/plugin-proposal-class-properties"]
-}
-```
-
-Or, by enabling the [`shippedProposals`](https://babeljs.io/docs/en/babel-preset-env#shippedproposals) option with [Babel `^7.10.0`](https://babeljs.io/blog/2020/05/25/7.10.0):
-
-```json
-{
-  "presets": [["@babel/preset-env", { "shippedProposals": true }]]
-}
-```
-
 ## Using Without a Build System
 
-If you prefer not to use a build system, you can load Stimulus in a `<script>` tag and it will be globally available through the `window.Stimulus` object.
-
-Define targets using `static get targets()` methods instead of `static targets = […]` class properties, which aren't supported natively [yet](https://github.com/tc39/proposal-static-class-features/).
+If you prefer not to use a build system, you can load Stimulus in a `<script type="module">` tag:
 
 ```html
 <!doctype html>
 <html>
 <head>
   <meta charset="utf-8">
-  <script src="https://unpkg.com/stimulus/dist/stimulus.umd.js"></script>
-  <script>
-    (() => {
-      const application = Stimulus.Application.start()
+  <script type="module" src=""></script>
+  <script type="module">
+    import { Application, Controller } from "@hotwired/stimulus"
+    window.Stimulus = Application.start()
 
-      application.register("hello", class extends Stimulus.Controller {
-        static get targets() {
-          return [ "name" ]
-        }
+    Stimulus.register("hello", class extends Controller {
+      static targets = [ "name" ]
 
-        // …
-      })
-    })()
+      connect() {
+      }
+    })
   </script>
 </head>
 <body>
@@ -117,18 +80,8 @@ Define targets using `static get targets()` methods instead of `static targets =
 
 ## Browser Support
 
-Stimulus supports all evergreen, self-updating desktop and mobile browsers out of the box.
+Stimulus supports all evergreen, self-updating desktop and mobile browsers out of the box. Stimulus 3+ does not support Internet Explorer 11 (but you can use Stimulus 2 with the @stimulus/polyfills for that).
 
-If your application needs to support older browsers like Internet Explorer 11, include the [`@stimulus/polyfills`](https://www.npmjs.com/package/@stimulus/polyfills) package before loading Stimulus.
-
-```js
-// src/application.js
-import "@stimulus/polyfills"
-import { Application } from "@hotwired/stimulus"
-
-window.Stimulus = Application.start()
-// …
-```
 
 ## Error handling
 
