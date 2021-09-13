@@ -2,17 +2,17 @@ import { ActionDescriptor, parseActionDescriptorString, stringifyEventTarget } f
 import { Token } from "../mutation-observers"
 import { camelize } from "./string_helpers"
 
-const keyMappings: { [key: string]: string[] } = {
-  "enter":  ["Enter"],
-  "tab":    ["Tab"],
-  "esc":    ["Escape", "Esc"],
-  "space":  [" ", "Spacebar"],
-  "up":     ["ArrowUp", "Up"],
-  "down":   ["ArrowDown", "Down"],
-  "left":   ["ArrowLeft", "Left"],
-  "right":  ["ArrowRight", "Right"],
-  "home":   ["Home"],
-  "end":    ["End"]
+const keyMappings: { [key: string]: string } = {
+  "enter": "Enter",
+  "tab":   "Tab",
+  "esc":   "Escape",
+  "space": " ",
+  "up":    "ArrowUp",
+  "down":  "ArrowDown",
+  "left":  "ArrowLeft",
+  "right": "ArrowRight",
+  "home":  "Home",
+  "end":   "End"
 }
 
 export class Action {
@@ -51,7 +51,7 @@ export class Action {
       return false;
     }
 
-    return !keyMappings[this.keyFilter].includes(key)
+    return keyMappings[this.keyFilter] !== key
   }
 
   get params(): object {

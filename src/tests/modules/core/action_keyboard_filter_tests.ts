@@ -34,16 +34,6 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
     )
   }
 
-  async "test ignore event handlers associated with modifiers other than Space on ie"() {
-    const button = this.findElement("#button1")
-    await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'Spacebar'})
-    this.assertActions(
-      {name: "log2", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
-    )
-  }
-
   async "test ignore event handlers associated with modifiers other than Tab"() {
     const button = this.findElement("#button2")
     await this.nextFrame
@@ -58,16 +48,6 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
     const button = this.findElement("#button2")
     await this.nextFrame
     await this.triggerKeyboardEvent(button, "keydown", {key: 'Escape'})
-    this.assertActions(
-      {name: "log2", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
-    )
-  }
-
-  async "test ignore event handlers associated with modifiers other than Escape on ie"() {
-    const button = this.findElement("#button2")
-    await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'Esc'})
     this.assertActions(
       {name: "log2", identifier: "a", eventType: 'keydown', currentTarget: button},
       {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
@@ -94,26 +74,6 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
     )
   }
 
-  async "test ignore event handlers associated with modifiers other than ArrowUp on ie"() {
-    const button = this.findElement("#button3")
-    await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'Up'})
-    this.assertActions(
-      {name: "log", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
-    )
-  }
-
-  async "test ignore event handlers associated with modifiers other than ArrowDown on ie"() {
-    const button = this.findElement("#button3")
-    await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'Down'})
-    this.assertActions(
-      {name: "log2", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
-    )
-  }
-
   async "test ignore event handlers associated with modifiers other than ArrowLeft"() {
     const button = this.findElement("#button4")
     await this.nextFrame
@@ -128,26 +88,6 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
     const button = this.findElement("#button4")
     await this.nextFrame
     await this.triggerKeyboardEvent(button, "keydown", {key: 'ArrowRight'})
-    this.assertActions(
-      {name: "log2", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
-    )
-  }
-
-  async "test ignore event handlers associated with modifiers other than ArrowLeft on ie"() {
-    const button = this.findElement("#button4")
-    await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'Left'})
-    this.assertActions(
-      {name: "log", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
-    )
-  }
-
-  async "test ignore event handlers associated with modifiers other than ArrowRight on ie"() {
-    const button = this.findElement("#button4")
-    await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'Right'})
     this.assertActions(
       {name: "log2", identifier: "a", eventType: 'keydown', currentTarget: button},
       {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
