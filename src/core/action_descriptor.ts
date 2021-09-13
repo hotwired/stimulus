@@ -7,19 +7,19 @@ export interface ActionDescriptor {
   keyFilter: string
 }
 
-// capture nos.:            12   23 4               43 5  6   65   1 7   78 9      981011 1110
-const descriptorPattern = /^((.+?)(@(window|document))?(\.(.+?))?->)?(.+?)(#([^:]+?))(:(.+))?$/
+// capture nos.:               1   1     2   2      3               3      4   4    5      5     6  6
+const descriptorPattern = /^(?:(.+?)(?:\.(.+?))?(?:@(window|document))?->)?(.+?)(?:#([^:]+?))(?::(.+))?$/
 
 export function parseActionDescriptorString(descriptorString: string): Partial<ActionDescriptor> {
   const source = descriptorString.trim()
   const matches = source.match(descriptorPattern) || []
   return {
-    eventTarget:  parseEventTarget(matches[4]),
-    eventName:    matches[2],
-    eventOptions: matches[11] ? parseEventOptions(matches[11]) : {},
-    identifier:   matches[7],
-    methodName:   matches[9],
-    keyFilter: matches[6]
+    eventTarget:  parseEventTarget(matches[3]),
+    eventName:    matches[1],
+    eventOptions: matches[6] ? parseEventOptions(matches[6]) : {},
+    identifier:   matches[4],
+    methodName:   matches[5],
+    keyFilter: matches[2]
   }
 }
 

@@ -3,13 +3,14 @@ import { LogControllerTestCase } from "../../cases/log_controller_test_case"
 export default class ActionKeyboardFilterTests extends LogControllerTestCase {
   identifier = ["a"]
   fixtureHTML = `
-    <div data-controller="a">
+    <div data-controller="a" data-action="keydown.esc@document->a#log">
       <button id="button1" data-action="keydown.enter->a#log keydown.space->a#log2 keydown->a#log3"></button>
       <button id="button2" data-action="keydown.tab->a#log   keydown.esc->a#log2   keydown->a#log3"></button>
       <button id="button3" data-action="keydown.up->a#log    keydown.down->a#log2  keydown->a#log3"></button>
       <button id="button4" data-action="keydown.left->a#log  keydown.right->a#log2 keydown->a#log3"></button>
       <button id="button5" data-action="keydown.home->a#log  keydown.end->a#log2   keydown->a#log3"></button>
       <button id="button6" data-action="keyup.end->a#log     keyup->a#log3"></button>
+      <button id="button7"></button>
     </div>
   `
 
@@ -180,6 +181,15 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
     this.assertActions(
       {name: "log", identifier: "a", eventType: 'keyup', currentTarget: button},
       {name: "log3", identifier: "a", eventType: 'keyup', currentTarget: button}
+    )
+  }
+
+  async "test global event"() {
+    const button = this.findElement("#button7")
+    await this.nextFrame
+    await this.triggerKeyboardEvent(button, "keydown", {key: 'Escape', bubbles: true})
+    this.assertActions(
+      {name: "log", identifier: "a", eventType: 'keydown', currentTarget: document},
     )
   }
 }
