@@ -64,11 +64,40 @@ input type=submit | click
 select            | change
 textarea          | input
 
+## KeyboardEvent Filter
+
+You may have Actions that you wish to run only when certain keystrokes are received.
+
+You can install an event listener that responds only to the `Escape` key by adding `.esc` to the event name of the action descriptor, as in the following example.
+
+```html
+<div data-controller="modal"
+     data-action="keydown.esc->modal#close" tabindex="0">
+</div>
+```
+
+This will only work if the event being fired is a keyboard event.
+
+The correspondence between these filter modifier and keys is shown below.
+
+Modifier | Key Name
+-------- | --------
+enter    | Enter
+tab      | Tab
+esc      | Escape
+space:   | " "
+up       | ArrowUp
+down     | ArrowDown
+left     | ArrowLeft
+right    | ArrowRight
+home     | Home
+end      | End
+
 ### Global Events
 
 Sometimes a controller needs to listen for events dispatched on the global `window` or `document` objects.
 
-You can append `@window` or `@document` to the event name in an action descriptor to install the event listener on `window` or `document`, respectively, as in the following example:
+You can append `@window` or `@document` to the event name (contains filter modifer) in an action descriptor to install the event listener on `window` or `document`, respectively, as in the following example:
 
 <meta data-controller="callout" data-callout-text-value="resize@window">
 
