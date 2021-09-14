@@ -41,9 +41,9 @@ export class Action {
   }
 
   toString() {
-    const eventNameSuffix = this.eventTargetName ? `@${this.eventTargetName}` : ""
     const eventFilter = this.keyFilter ? `.${this.keyFilter}` : ""
-    return `${this.eventName}${eventNameSuffix}${eventFilter}->${this.identifier}#${this.methodName}`
+    const eventTarget = this.eventTargetName ? `@${this.eventTargetName}` : ""
+    return `${this.eventName}${eventFilter}${eventTarget}->${this.identifier}#${this.methodName}`
   }
 
   isFilterTarget(key: string): boolean {
