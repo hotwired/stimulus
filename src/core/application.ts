@@ -44,7 +44,7 @@ export class Application implements ErrorHandler {
   }
 
   register(identifier: string, controllerConstructor: ControllerConstructor) {
-    if (controllerConstructor.shouldLoad) {
+    if ((controllerConstructor as any).shouldLoad) {
       this.load({ identifier, controllerConstructor })
     }
   }
