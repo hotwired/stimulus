@@ -11,6 +11,10 @@ export class Controller {
   static targets: string[] = []
   static values: ValueDefinitionMap = {}
 
+  static get shouldLoad() {
+    return true
+  }
+
   readonly context: Context
 
   constructor(context: Context) {
