@@ -10,14 +10,6 @@ export function TargetPropertiesBlessing<T>(constructor: Constructor<T>) {
   }, {} as PropertyDescriptorMap)
 }
 
-export type TargetDescriptor = {
-  identifier: string | null
-  target: string | null
-  attribute: string
-  legacy: Boolean
-  element: Element
-}
-
 function propertiesForTargetDefinition(name: string) {
   return {
     [`${name}Target`]: {
