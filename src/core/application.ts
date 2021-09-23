@@ -99,11 +99,9 @@ export class Application implements ErrorHandler {
   }
 
   private logFormattedMessage(identifier: string, functionName: string, detail: object = {}) {
-    const darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-    const color = darkMode ? "#ffe000" : "#5D2F85"
     detail = Object.assign({ application: this }, detail)
 
-    this.logger.groupCollapsed(`%c${identifier}%c #${functionName}`, `color: ${color}`, 'color: unset')
+    this.logger.groupCollapsed(`${identifier} #${functionName}`)
     this.logger.log("details:", { ...detail })
     this.logger.groupEnd()
   }
