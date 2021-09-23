@@ -18,7 +18,8 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@hotwired/stimulus": "^3.0.0-rc.1"
+    "@hotwired/stimulus": "^3.0.0-rc.1",
+    "@hotwired/stimulus-webpack-helpers": "^1.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.0",
