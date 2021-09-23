@@ -39,7 +39,9 @@ Now we can implement our controller:
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { url: String }
+  static values = {
+    url: String
+  }
 
   connect() {
     this.load()
@@ -75,7 +77,10 @@ Add a `static values` definition to the controller, and define a new method `sta
 
 ```js
 export default class extends Controller {
-  static values = { url: String, refreshInterval: Number }
+  static values = {
+    url: String,
+    refreshInterval: Number
+  }
 
   startRefreshing() {
     setInterval(() => {
@@ -142,7 +147,10 @@ Let's take a look at our final controller class:
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { url: String, refreshInterval: Number }
+  static values = {
+    url: String,
+    refreshInterval: Number
+  }
 
   connect() {
     this.load()

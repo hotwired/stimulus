@@ -95,10 +95,10 @@ One way might be to load the initial index with an HTML `data` attribute. For ex
 Then, in our `initialize()` method, we could read that attribute, convert it to an integer, and pass it to `showCurrentSlide()`:
 
 ```js
-  initialize() {
-    this.index = Number(this.element.dataset.index)
-    this.showCurrentSlide()
-  }
+initialize() {
+  this.index = Number(this.element.dataset.index)
+  this.showCurrentSlide()
+}
 ```
 
 This might get the job done, but it's clunky, requires us to make a decision about what to name the attribute, and doesn't help us if we want to access the index again or increment it and persist the result in the DOM.
@@ -108,7 +108,9 @@ This might get the job done, but it's clunky, requires us to make a decision abo
 Stimulus controllers support typed value properties which automatically map to data attributes. When we add a value definition to the top of our controller class:
 
 ```js
-  static values = { index: Number }
+static values = {
+  index: Number
+}
 ```
 
 Stimulus will create a `this.indexValue` controller property associated with a `data-slideshow-index-value` attribute, and handle the numeric conversion for us.
@@ -123,7 +125,9 @@ Then add a `static values` definition to the controller and change the `initiali
 
 ```js
 export default class extends Controller {
-  static values = { index: Number }
+  static values = {
+    index: Number
+  }
 
   initialize() {
     console.log(this.indexValue)
@@ -147,7 +151,9 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = [ "slide" ]
-  static values = { index: Number }
+  static values = {
+    index: Number
+  }
 
   initialize() {
     this.showCurrentSlide()
@@ -186,7 +192,9 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = [ "slide" ]
-  static values = { index: Number }
+  static values = {
+    index: Number
+  }
 
   next() {
     this.indexValue++
@@ -217,13 +225,24 @@ Stimulus calls the `indexValueChanged()` method at initialization and in respons
 It's also possible to set a default values as part of the static definition. This is done like so:
 
 ```js
-  static values = { index: { type: Number, default: 2 } }
+static values = {
+  index: {
+    type: Number,
+    default: 2
+  }
+}
 ```
 
 That would start the index at 2, if no `data-slideshow-index-value` attribute was defined on the controller element. If you had other values, you can mix and match what needs a default and what doesn't:
 
 ```js
-  static values = { index: Number, effect: { type: String, default: "kenburns" } }
+static values = {
+  index: Number,
+  effect: {
+    type: String,
+    default: 'kenburns'
+  }
+}
 ```
 
 ## Wrap-Up and Next Steps

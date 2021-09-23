@@ -3,7 +3,9 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [ "slide" ]
   static classes = [ "currentSlide" ]
-  static values = { index: Number }
+  static values = {
+    index: Number
+  }
 
   next() {
     if (this.indexValue < this.lastIndex) {

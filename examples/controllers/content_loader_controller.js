@@ -2,7 +2,10 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["item"]
-  static values = { url: String, refreshInterval: Number }
+  static values = {
+    url: String,
+    refreshInterval: Number
+  }
 
   connect() {
     this.load()

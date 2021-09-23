@@ -24,7 +24,9 @@ You can read and write [HTML data attributes](https://developer.mozilla.org/en-U
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { url: String }
+  static values = {
+    url: String
+  }
 
   connect() {
     fetch(this.urlValue).then(/* … */)
@@ -104,7 +106,9 @@ Stimulus invokes each change callback after the controller is initialized and ag
 
 ```js
 export default class extends Controller {
-  static values = { url: String }
+  static values = {
+    url: String
+  }
 
   urlValueChanged() {
     fetch(this.urlValue).then(/* … */)
@@ -118,7 +122,9 @@ You can access the previous value of a `[name]ValueChanged` callback by defining
 
 ```js
 export default class extends Controller {
-  static values = { url: String }
+  static values = {
+    url: String
+  }
 
   urlValueChanged(value, previousValue) {
     /* … */
