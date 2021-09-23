@@ -59,7 +59,6 @@ export class Router implements ScopeObserverDelegate {
 
   unloadIdentifier(identifier: string) {
     const module = this.modulesByIdentifier.get(identifier)
-
     if (module) {
       this.disconnectModule(module)
     }
@@ -85,17 +84,10 @@ export class Router implements ScopeObserverDelegate {
   }
 
   scopeConnected(scope: Scope) {
-    const { identifier, element } = scope
-    this.scopesByIdentifier.add(identifier, scope)
-    const module = this.modulesByIdentifier.get(identifier)
+    this.scopesByIdentifier.add(scope.identifier, scope)
+    const module = this.modulesByIdentifier.get(scope.identifier)
     if (module) {
       module.connectContextForScope(scope)
-    } else {
-      this.application.handleWarning(
-        `Element references undefined controller "${identifier}"`,
-        `Warning connecting controller "${identifier}"`,
-        { identifier, element }
-      )
     }
   }
 
