@@ -1,6 +1,5 @@
 ---
 permalink: /handbook/introduction.html
-redirect_from: /handbook/
 ---
 
 # Introduction

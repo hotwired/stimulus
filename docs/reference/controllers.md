@@ -1,6 +1,5 @@
 ---
-permalink: /reference/controllers
-redirect_from: /reference/
+permalink: /reference/controllers.html
 order: 00
 ---
 

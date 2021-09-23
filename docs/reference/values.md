@@ -1,6 +1,5 @@
 ---
-permalink: /reference/values
-redirect_from: /reference/data-maps
+permalink: /reference/values.html
 order: 04
 ---
 

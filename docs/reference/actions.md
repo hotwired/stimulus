@@ -1,5 +1,5 @@
 ---
-permalink: /reference/actions
+permalink: /reference/actions.html
 order: 02
 ---
 
