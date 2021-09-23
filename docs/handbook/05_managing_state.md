@@ -1,5 +1,5 @@
 ---
-permalink: /handbook/managing-state
+permalink: /handbook/managing-state.html
 ---
 
 # Managing State

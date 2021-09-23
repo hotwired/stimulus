@@ -1,5 +1,5 @@
 ---
-permalink: /handbook/working-with-external-resources
+permalink: /handbook/working-with-external-resources.html
 ---
 
 # Working With External Resources

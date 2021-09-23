@@ -1,5 +1,5 @@
 ---
-permalink: /handbook/introduction
+permalink: /handbook/introduction.html
 redirect_from: /handbook/
 ---
 

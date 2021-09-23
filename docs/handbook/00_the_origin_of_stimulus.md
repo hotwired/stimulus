@@ -1,5 +1,5 @@
 ---
-permalink: /handbook/origin
+permalink: /handbook/origin.html
 nav_prefix: Preface
 ---
 

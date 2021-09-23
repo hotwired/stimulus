@@ -1,5 +1,5 @@
 ---
-permalink: /handbook/installing
+permalink: /handbook/installing.html
 ---
 
 # Installing Stimulus in Your Application

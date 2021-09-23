@@ -1,5 +1,5 @@
 ---
-permalink: /handbook/building-something-real
+permalink: /handbook/building-something-real.html
 ---
 
 # Building Something Real

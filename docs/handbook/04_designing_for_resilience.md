@@ -1,5 +1,5 @@
 ---
-permalink: /handbook/designing-for-resilience
+permalink: /handbook/designing-for-resilience.html
 ---
 
 # Designing For Resilience
