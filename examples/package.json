@@ -1,5 +1,5 @@
 {
-  "name": "@stimulus/examples",
+  "name": "@hotwired/stimulus-examples",
   "version": "3.0.0",
   "private": true,
   "dependencies": {
