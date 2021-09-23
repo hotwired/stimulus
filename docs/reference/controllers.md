@@ -15,7 +15,7 @@ export default class extends Controller {
 }
 ```
 
-Controllers are instances of JavaScript classes that you define in your application. Each controller class inherits from the `Controller` base class exported by the `stimulus` module.
+Controllers are instances of JavaScript classes that you define in your application. Each controller class inherits from the `Controller` base class exported by the `@hotwired/stimulus` module.
 
 ## Properties
 
@@ -123,9 +123,9 @@ In filenames, separate multiple words using either underscores or dashes (snake_
 
 ## Registration
 
-If you use Stimulus with the `@stimulus/webpack-helpers` package, your application will automatically load and register controller classes following the conventions above.
+If you use Stimulus for Rails with an import map or Webpack together with the `@hotwired/stimulus-webpack-helpers` package, your application will automatically load and register controller classes following the conventions above.
 
-If you don't use the webpack helpers, your application must manually load and register each controller class.
+If not, your application must manually load and register each controller class.
 
 ### Registering Controllers Manually
 
@@ -145,4 +145,54 @@ import { Controller } from "@hotwired/stimulus"
 application.register("reference", class extends Controller {
   // …
 })
+```
+
+### Preventing Registration Based On Environmental Factors
+
+If you only want a controller registered and loaded if certain environmental factors are met – such a given user agent – you can overwrite the static `shouldLoad` method:
+
+```js
+class UnloadableController extends ApplicationController {
+  static get shouldLoad() {
+    return false
+  }
+}
+
+// This controller will not be loaded
+application.register("unloadable", UnloadableController)
+```
+
+## Cross-Controller Coordination With Events
+
+If you need controllers to communicate with each other, you should use events. The `Controller` class has a convenience method called `dispatch` that makes this easier. It takes an `eventName` as the first argument, which is then automatically prefixed with the name of the controller. The payload is held in `details`. It works like this:
+
+```js
+class ClipboardController extends Controller {
+  static targets = [ "source" ]
+
+  copy() {
+    this.dispatch("copy", details: { content: this.sourceTarget.value })
+    this.sourceTarget.select()
+    document.execCommand("copy")
+  }
+}
+```
+
+And this event can then be routed to an action on another controller:
+
+```html
+<div data-controller="clipboard effects" data-action="clipboard:copy->effects#flash">
+  PIN: <input data-clipboard-target="source" type="text" value="1234" readonly>
+  <button data-action="clipboard#copy">Copy to Clipboard</button>
+</div>
+```
+
+So when the `Clipboard#copy` action is invoked, the `Effects#flash` action will be too:
+
+```js
+class EffectsController extends Controller {
+  flash({ details: content }) {
+    console.log(content) // 1234
+  }
+}
 ```

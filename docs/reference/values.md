@@ -127,6 +127,22 @@ export default class extends Controller {
 
 The two arguments can be named as you like. You could also use `urlValueChanged(current, old)`.
 
+## Default Values
+
+Values that have not been specified on the controller element can be set by defaults specified in the controller definition:
+
+```js
+export default class extends Controller {
+  static values = {
+    url: { type: String, default: '/bill' },
+    interval: { type: Number, default: 5 },
+    clicked: Boolean
+  }
+}
+```
+
+When a default is used, the expanded form of `{ type, default }` is used. This form can be mixed with the regular form that does not use a default.
+
 ## Naming Conventions
 
 Write value names as camelCase in JavaScript and kebab-case in HTML. For example, a value named `contentType` in the `loader` controller will have the associated data attribute `data-loader-content-type-value`.

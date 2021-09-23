@@ -5,7 +5,7 @@ order: 01
 
 # Lifecycle Callbacks
 
-Special methods called _lifecycle callbacks_ allow you to respond whenever a controller connects to and disconnects from the document.
+Special methods called _lifecycle callbacks_ allow you to respond whenever a controller or certain targets connects to and disconnects from the document.
 
 <meta data-controller="callout" data-callout-text-value="connect()">
 
