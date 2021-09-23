@@ -5,7 +5,7 @@ class AController extends LogController {}
 class BController extends LogController {}
 
 export default class ApplicationTests extends ApplicationTestCase {
-  fixtureHTML = `<div data-controller="a"><div data-controller="b"><div data-controller="d">`
+  fixtureHTML = `<div data-controller="a"><div data-controller="b">`
   private definitions = [
     { controllerConstructor: AController, identifier: "a" },
     { controllerConstructor: BController, identifier: "b" }
