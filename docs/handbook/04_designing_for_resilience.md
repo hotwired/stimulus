@@ -21,7 +21,7 @@ We'll start by hiding the Copy button in CSS. Then we'll _feature-test_ support 
 Start by adding `class="clipboard-button"` to the button element:
 
 ```html
-  <button data-action="clipboard#copy" class="clipboard-button">Copy to Clipboard</button>
+  <button data-action="clipboard#copy" class="clipboard-button" data-clipboard-supported-class="clipboard--supported">Copy to Clipboard</button>
 ```
 
 Then add the following styles to `public/main.css`:
@@ -36,12 +36,20 @@ Then add the following styles to `public/main.css`:
 }
 ```
 
+First we'll add the `data-clipboard-supported-class` attribute inside the controller as a static class:
+
+```js
+  static classes = [ "supported" ]
+```
+
+This will let us control the specific CSS class in the HTML, so our controller becomes even more easily adaptable to different CSS approaches. The specific class added like this can be accessed via `this.supportedClass`.
+
 Now add a `connect()` method to the controller which will add a class name to the controller's element when the API is supported:
 
 ```js
   connect() {
     if (document.queryCommandSupported("copy")) {
-      this.element.classList.add("clipboard--supported")
+      this.element.classList.add(this.supportedClass)
     }
   }
 ```
