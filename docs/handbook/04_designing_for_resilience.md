@@ -1,5 +1,6 @@
 ---
 permalink: /handbook/designing-for-resilience.html
+order: 04
 ---
 
 # Designing For Resilience

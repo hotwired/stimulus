@@ -1,5 +1,6 @@
 ---
 permalink: /handbook/managing-state.html
+order: 05
 ---
 
 # Managing State

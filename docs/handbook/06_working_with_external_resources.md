@@ -1,5 +1,6 @@
 ---
 permalink: /handbook/working-with-external-resources.html
+order: 06
 ---
 
 # Working With External Resources

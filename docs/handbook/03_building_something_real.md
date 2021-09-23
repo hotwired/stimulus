@@ -1,5 +1,6 @@
 ---
 permalink: /handbook/building-something-real.html
+order: 03
 ---
 
 # Building Something Real

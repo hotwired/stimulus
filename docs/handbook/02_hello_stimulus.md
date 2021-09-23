@@ -1,5 +1,6 @@
 ---
 permalink: /handbook/hello-stimulus.html
+order: 02
 ---
 
 # Hello, Stimulus
