@@ -11,7 +11,7 @@ class DController extends LogController {
 }
 
 export default class ApplicationTests extends ApplicationTestCase {
-  fixtureHTML = `<div data-controller="a"><div data-controller="b">`
+  fixtureHTML = `<div data-controller="a"><div data-controller="b"><div data-controller="d">`
   private definitions = [
     { controllerConstructor: AController, identifier: "a" },
     { controllerConstructor: BController, identifier: "b" }
