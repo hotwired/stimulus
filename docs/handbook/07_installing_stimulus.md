@@ -4,12 +4,8 @@ order: 07
 ---
 
 # Installing Stimulus in Your Application
-{:.no_toc}
 
 To install Stimulus in your application, add the [`@hotwired/stimulus` npm package](https://www.npmjs.com/package/@hotwired/stimulus) to your JavaScript bundle. Or, import [`stimulus.js`](https://unpkg.com/@hotwired/stimulus/dist/stimulus.js) in a `<script type="module">` tag.
-
-* TOC
-{:toc}
 
 ## Using Stimulus for Rails
 
