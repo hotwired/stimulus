@@ -171,11 +171,7 @@ class ClipboardController extends Controller {
   static targets = [ "source" ]
 
   copy() {
-    this.dispatch("copy", { 
-      detail: { 
-        content: this.sourceTarget.value 
-      }
-    })
+    this.dispatch("copy", { detail: { content: this.sourceTarget.value } })
     this.sourceTarget.select()
     document.execCommand("copy")
   }
