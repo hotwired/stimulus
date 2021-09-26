@@ -164,14 +164,14 @@ application.register("unloadable", UnloadableController)
 
 ## Cross-Controller Coordination With Events
 
-If you need controllers to communicate with each other, you should use events. The `Controller` class has a convenience method called `dispatch` that makes this easier. It takes an `eventName` as the first argument, which is then automatically prefixed with the name of the controller. The payload is held in `details`. It works like this:
+If you need controllers to communicate with each other, you should use events. The `Controller` class has a convenience method called `dispatch` that makes this easier. It takes an `eventName` as the first argument, which is then automatically prefixed with the name of the controller seperated by a colon. The payload is held in `detail`. It works like this:
 
 ```js
 class ClipboardController extends Controller {
   static targets = [ "source" ]
 
   copy() {
-    this.dispatch("copy", details: { content: this.sourceTarget.value })
+    this.dispatch("copy", { detail: { content: this.sourceTarget.value } })
     this.sourceTarget.select()
     document.execCommand("copy")
   }
@@ -191,7 +191,7 @@ So when the `Clipboard#copy` action is invoked, the `Effects#flash` action will 
 
 ```js
 class EffectsController extends Controller {
-  flash({ details: content }) {
+  flash({ detail: content }) {
     console.log(content) // 1234
   }
 }
