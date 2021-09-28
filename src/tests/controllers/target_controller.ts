@@ -10,8 +10,8 @@ class BaseTargetController extends Controller {
 
 export class TargetController extends BaseTargetController {
   static classes = [ "connected", "disconnected" ]
-  static targets = [ "beta", "input" ]
-  static values = { inputTargetConnectedCallCount: Number, inputTargetDisconnectedCallCount: Number }
+  static targets = [ "beta", "input", "recursive" ]
+  static values = { inputTargetConnectedCallCount: Number, inputTargetDisconnectedCallCount: Number, recursiveTargetConnectedCallCount: Number, recursiveTargetDisconnectedCallCount: Number }
 
   betaTarget!: Element | null
   betaTargets!: Element[]
@@ -28,6 +28,8 @@ export class TargetController extends BaseTargetController {
 
   inputTargetConnectedCallCountValue = 0
   inputTargetDisconnectedCallCountValue = 0
+  recursiveTargetConnectedCallCountValue = 0
+  recursiveTargetDisconnectedCallCountValue = 0
 
   inputTargetConnected(element: Element) {
     if (this.hasConnectedClass) element.classList.add(this.connectedClass)
@@ -37,5 +39,16 @@ export class TargetController extends BaseTargetController {
   inputTargetDisconnected(element: Element) {
     if (this.hasDisconnectedClass) element.classList.add(this.disconnectedClass)
     this.inputTargetDisconnectedCallCountValue++
+  }
+
+  recursiveTargetConnected(element: Element) {
+    element.remove()
+
+    this.recursiveTargetConnectedCallCountValue++
+    this.element.append(element)
+  }
+
+  recursiveTargetDisconnected(element: Element) {
+    this.recursiveTargetDisconnectedCallCountValue++
   }
 }

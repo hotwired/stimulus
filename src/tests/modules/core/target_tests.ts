@@ -164,4 +164,15 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
     this.assert.ok(element.classList.contains("disconnected"), `expected "${element.className}" to contain "disconnected"`)
     this.assert.ok(element.isConnected, "element is still present in document")
   }
+
+  async "test [target]Connected() and [target]Disconnected() do not loop infinitely"() {
+    this.controller.element.insertAdjacentHTML("beforeend", `
+      <div data-${this.identifier}-target="recursive" id="recursive2"></div>
+    `)
+    await this.nextFrame
+
+    this.assert.ok(!!this.fixtureElement.querySelector("#recursive2"))
+    this.assert.equal(this.controller.recursiveTargetConnectedCallCountValue, 1)
+    this.assert.equal(this.controller.recursiveTargetDisconnectedCallCountValue, 0)
+  }
 }

@@ -51,14 +51,14 @@ export class TargetObserver implements TokenListObserverDelegate {
   connectTarget(element: Element, name: string) {
     if (!this.targetsByName.has(name, element)) {
       this.targetsByName.add(name, element)
-      this.delegate.targetConnected(element, name)
+      this.tokenListObserver?.pause(() => this.delegate.targetConnected(element, name))
     }
   }
 
   disconnectTarget(element: Element, name: string) {
     if (this.targetsByName.has(name, element)) {
       this.targetsByName.delete(name, element)
-      this.delegate.targetDisconnected(element, name)
+      this.tokenListObserver?.pause(() => this.delegate.targetDisconnected(element, name))
     }
   }
 
