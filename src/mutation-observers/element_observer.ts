@@ -4,7 +4,7 @@ export interface ElementObserverDelegate {
 
   elementMatched?(element: Element): void
   elementUnmatched?(element: Element): void
-  elementAttributeChanged?(element: Element, attributeName: string): void
+  elementAttributeChanged?(element: Element, attributeName: string, mutationRecord: MutationRecord): void
 }
 
 export class ElementObserver {
@@ -14,15 +14,16 @@ export class ElementObserver {
 
   private elements: Set<Element>
   private mutationObserver: MutationObserver
-  private mutationObserverInit = { attributes: true, childList: true, subtree: true }
+  private mutationObserverInit: MutationObserverInit
 
-  constructor(element: Element, delegate: ElementObserverDelegate) {
+  constructor(element: Element, delegate: ElementObserverDelegate, mutationObserverInit: Partial<MutationObserverInit> = {}) {
     this.element = element
     this.started = false
     this.delegate = delegate
 
     this.elements = new Set
     this.mutationObserver = new MutationObserver((mutations) => this.processMutations(mutations))
+    this.mutationObserverInit = {  attributes: true, childList: true, subtree: true , ...mutationObserverInit }
   }
 
   start() {
@@ -83,18 +84,18 @@ export class ElementObserver {
 
   private processMutation(mutation: MutationRecord) {
     if (mutation.type == "attributes") {
-      this.processAttributeChange(mutation.target, mutation.attributeName!)
+      this.processAttributeChange(mutation.target, mutation.attributeName!, mutation)
     } else if (mutation.type == "childList") {
       this.processRemovedNodes(mutation.removedNodes)
       this.processAddedNodes(mutation.addedNodes)
     }
   }
 
-  private processAttributeChange(node: Node, attributeName: string) {
+  private processAttributeChange(node: Node, attributeName: string, mutationRecord: MutationRecord) {
     const element = node as Element
     if (this.elements.has(element)) {
       if (this.delegate.elementAttributeChanged && this.matchElement(element)) {
-        this.delegate.elementAttributeChanged(element, attributeName)
+        this.delegate.elementAttributeChanged(element, attributeName, mutationRecord)
       } else {
         this.removeElement(element)
       }

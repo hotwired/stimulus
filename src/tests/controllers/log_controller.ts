@@ -12,11 +12,21 @@ export type ActionLogEntry = {
   passive: boolean
 }
 
+export type MutationLogEntry = {
+  attributeName: string,
+  controller: Controller
+  identifier: string
+  newValue: string | null,
+  oldValue: string | null,
+}
+
 export class LogController extends Controller {
   static actionLog: ActionLogEntry[] = []
   initializeCount = 0
   connectCount = 0
   disconnectCount = 0
+  attributeChangedCount = 0
+  mutationLog: MutationLogEntry[] = []
 
   initialize() {
     this.initializeCount++
@@ -28,6 +38,10 @@ export class LogController extends Controller {
 
   disconnect() {
     this.disconnectCount++
+  }
+
+  attributeChanged(attributeName: string, oldValue: string | null, newValue: string | null) {
+    this.recordMutation(attributeName, oldValue, newValue)
   }
 
   log(event: ActionEvent) {
@@ -70,6 +84,17 @@ export class LogController extends Controller {
       params: event.params,
       defaultPrevented: event.defaultPrevented,
       passive: passive || false
+    })
+  }
+
+  private recordMutation(attributeName: string, oldValue: string | null, newValue: string | null) {
+    this.attributeChangedCount++
+    this.mutationLog.push({
+      attributeName,
+      oldValue,
+      newValue,
+      controller: this,
+      identifier: this.identifier,
     })
   }
 }

@@ -8,14 +8,16 @@ import { Schema } from "./schema"
 import { Scope } from "./scope"
 import { ValueObserver } from "./value_observer"
 import { TargetObserver, TargetObserverDelegate } from "./target_observer"
+import { ElementObserver, ElementObserverDelegate } from "../mutation-observers/element_observer"
 
-export class Context implements ErrorHandler, TargetObserverDelegate {
+export class Context implements ErrorHandler, TargetObserverDelegate, ElementObserverDelegate {
   readonly module: Module
   readonly scope: Scope
   readonly controller: Controller
   private bindingObserver: BindingObserver
   private valueObserver: ValueObserver
   private targetObserver: TargetObserver
+  private elementObserver: ElementObserver
 
   constructor(module: Module, scope: Scope) {
     this.module = module
@@ -24,6 +26,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
     this.bindingObserver = new BindingObserver(this, this.dispatcher)
     this.valueObserver = new ValueObserver(this, this.controller)
     this.targetObserver = new TargetObserver(this, this)
+    this.elementObserver = new ElementObserver(this.element, this, { subtree: false, childList: false, attributeOldValue: true })
 
     try {
       this.controller.initialize()
@@ -37,6 +40,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
     this.bindingObserver.start()
     this.valueObserver.start()
     this.targetObserver.start()
+    this.elementObserver.start()
 
     try {
       this.controller.connect()
@@ -54,6 +58,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
       this.handleError(error, "disconnecting controller")
     }
 
+    this.elementObserver.stop()
     this.targetObserver.stop()
     this.valueObserver.stop()
     this.bindingObserver.stop()
@@ -107,6 +112,27 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
 
   targetDisconnected(element: Element, name: string) {
     this.invokeControllerMethod(`${name}TargetDisconnected`, element)
+  }
+
+  targetAttributeChanged(element: Element, name: string, attributeName: string, oldValue: string | null, newValue: string | null) {
+    this.invokeControllerMethod(`${name}TargetAttributeChanged`, element, attributeName, oldValue, newValue)
+  }
+
+  // Element observer delegate
+
+  matchElement(element: Element) {
+    return element === this.element
+  }
+
+  matchElementsInTree(tree: Element) {
+    return this.matchElement(tree) ? [tree] : []
+  }
+
+  elementAttributeChanged(element: Element, attributeName: string, mutation: MutationRecord) {
+    const oldValue = mutation.oldValue
+    const newValue = element.getAttribute(attributeName)
+
+    this.elementObserver?.pause(() => this.invokeControllerMethod("attributeChanged", attributeName, oldValue, newValue))
   }
 
   // Private

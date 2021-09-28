@@ -9,9 +9,9 @@ class BaseTargetController extends Controller {
 }
 
 export class TargetController extends BaseTargetController {
-  static classes = [ "connected", "disconnected" ]
+  static classes = [ "connected", "disconnected", "attributeChanged" ]
   static targets = [ "beta", "input", "recursive" ]
-  static values = { inputTargetConnectedCallCount: Number, inputTargetDisconnectedCallCount: Number, recursiveTargetConnectedCallCount: Number, recursiveTargetDisconnectedCallCount: Number }
+  static values = { inputTargetConnectedCallCount: Number, inputTargetDisconnectedCallCount: Number, recursiveTargetConnectedCallCount: Number, recursiveTargetDisconnectedCallCount: Number, betaTargetAttributeChangedCallCountValue: Number }
 
   betaTarget!: Element | null
   betaTargets!: Element[]
@@ -23,22 +23,31 @@ export class TargetController extends BaseTargetController {
 
   hasConnectedClass!: boolean
   hasDisconnectedClass!: boolean
+  hasAttributeChangedClass!: boolean
   connectedClass!: string
   disconnectedClass!: string
+  attributeChangedClass!: string
 
   inputTargetConnectedCallCountValue = 0
   inputTargetDisconnectedCallCountValue = 0
+  betaTargetAttributeChangedCallCountValue = 0
   recursiveTargetConnectedCallCountValue = 0
   recursiveTargetDisconnectedCallCountValue = 0
 
-  inputTargetConnected(element: Element) {
-    if (this.hasConnectedClass) element.classList.add(this.connectedClass)
+  inputTargetConnected(target: Element) {
+    if (this.hasConnectedClass) target.classList.add(this.connectedClass)
     this.inputTargetConnectedCallCountValue++
   }
 
-  inputTargetDisconnected(element: Element) {
-    if (this.hasDisconnectedClass) element.classList.add(this.disconnectedClass)
+  inputTargetDisconnected(target: Element) {
+    if (this.hasDisconnectedClass) target.classList.add(this.disconnectedClass)
     this.inputTargetDisconnectedCallCountValue++
+  }
+
+  betaTargetAttributeChanged(target: Element, attributeName: string, ...args: any[]) {
+    if (this.hasAttributeChangedClass) target.classList.add(this.attributeChangedClass)
+    this.betaTargetAttributeChangedCallCountValue++
+    target.setAttribute(attributeName, args.join(","))
   }
 
   recursiveTargetConnected(element: Element) {

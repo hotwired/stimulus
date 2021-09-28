@@ -28,6 +28,9 @@ Method       | Invoked by Stimulus…
 initialize() | Once, when the controller is first instantiated
 [name]TargetConnected(target: Element) | Anytime a target is connected to the DOM
 connect()    | Anytime the controller is connected to the DOM
+attributeChanged(attributeName: string, oldValue: string | null, newValue: string | null) | Anytime the controller element's attributes change
+[name]TargetAttributeChanged(target: Element, attributeName: string, oldValue: string | null, newValue: string | null) | Anytime a target element's attributes change
+disconnect() | Anytime the controller is disconnected from the DOM
 [name]TargetDisconnected(target: Element) | Anytime a target is disconnected from the DOM
 disconnect() | Anytime the controller is disconnected from the DOM
 

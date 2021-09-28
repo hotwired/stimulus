@@ -1,17 +1,19 @@
 import { Multimap } from "../multimap"
-import { Token, TokenListObserver, TokenListObserverDelegate } from "../mutation-observers"
+import { ElementObserver, ElementObserverDelegate, Token, TokenListObserver, TokenListObserverDelegate } from "../mutation-observers"
 import { Context } from "./context"
 
 export interface TargetObserverDelegate {
   targetConnected(element: Element, name: string): void
   targetDisconnected(element: Element, name: string): void
+  targetAttributeChanged(element: Element, name: string, attributeName: string, oldValue: string | null, newValue: string | null): void
 }
 
-export class TargetObserver implements TokenListObserverDelegate {
+export class TargetObserver implements ElementObserverDelegate, TokenListObserverDelegate {
   readonly context: Context
   readonly delegate: TargetObserverDelegate
   readonly targetsByName: Multimap<string, Element>
   private tokenListObserver?: TokenListObserver
+  private elementObserver?: ElementObserver
 
   constructor(context: Context, delegate: TargetObserverDelegate) {
     this.context = context
@@ -24,6 +26,10 @@ export class TargetObserver implements TokenListObserverDelegate {
       this.tokenListObserver = new TokenListObserver(this.element, this.attributeName, this)
       this.tokenListObserver.start()
     }
+    if (!this.elementObserver) {
+      this.elementObserver = new ElementObserver(this.element, this, { attributeOldValue: true })
+      this.elementObserver.start()
+    }
   }
 
   stop() {
@@ -31,6 +37,10 @@ export class TargetObserver implements TokenListObserverDelegate {
       this.disconnectAllTargets()
       this.tokenListObserver.stop()
       delete this.tokenListObserver
+    }
+    if (this.elementObserver) {
+      this.elementObserver.stop()
+      delete this.elementObserver
     }
   }
 
@@ -44,6 +54,22 @@ export class TargetObserver implements TokenListObserverDelegate {
 
   tokenUnmatched({ element, content: name }: Token) {
     this.disconnectTarget(element, name)
+  }
+
+  // Element observer delegate
+
+  matchElement(element: Element) {
+    return this.targetsByName.hasValue(element)
+  }
+
+  matchElementsInTree(tree: Element) {
+    return this.targetsByName.values
+  }
+
+  elementAttributeChanged(element: Element, attributeName: string, mutationRecord: MutationRecord) {
+    for (const name of this.targetsByName.getKeysForValue(element)) {
+      this.mutateTarget(element, name, attributeName, mutationRecord)
+    }
   }
 
   // Target management
@@ -68,6 +94,14 @@ export class TargetObserver implements TokenListObserverDelegate {
         this.disconnectTarget(element, name)
       }
     }
+  }
+
+  mutateTarget(element: Element, name: string, attributeName: string, { oldValue }: MutationRecord) {
+    const newValue = element.getAttribute(attributeName)
+
+    this.elementObserver?.pause(() => {
+      this.delegate.targetAttributeChanged(element, name, attributeName, oldValue, newValue)
+    })
   }
 
   // Private
