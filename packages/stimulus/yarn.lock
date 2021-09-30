@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@hotwired/stimulus-webpack-helpers/-/stimulus-webpack-helpers-1.0.0.tgz#6bd7906a4a2b6e1cd8732203b60264f987bd1084"
   integrity sha512-6oKDmJDSsV+zdlHnF485nneuekY/Zbl669wei4HIiwxUWHhVSU1XIVji4aj+Ws9AXghjTYBS8H5ralB97BVMDw==
 
-"@hotwired/stimulus@^3.0.0-rc.1":
-  version "3.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.0.0-rc.1.tgz#0642e95d3b6a289132fafa2bc5f2106d65b7bb2b"
-  integrity sha512-PIoNcZaGYn6ECTIPOf0nnvH7iSyD9QHY99pWvrYhqOymx+z3vmSPsZAeh3DXqxGe0FOgdtDrRfN339F4E7DL9g==
+"@hotwired/stimulus@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.0.0.tgz#45171e61417af60f0e546665c52fae5b67295cee"
+  integrity sha512-UFIuuf7GjKJoIYromuTmqfzT8gZ8eu5zIB5m2QoEsopymGeN7rfDSTRPyRfwHIqP0x+0vWo4O1LFozw+/sWXxg==
 
 "@rollup/plugin-node-resolve@^13.0.0":
   version "13.0.5"
