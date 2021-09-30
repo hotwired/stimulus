@@ -11,6 +11,7 @@
   ],
   "main": "./dist/stimulus.js",
   "module": "./dist/stimulus.js",
+  "browser": "./dist/stimulus.js",
   "umd:main": "./dist/stimulus.umd.js",
   "types": "./index.d.ts",
   "exports": {
@@ -31,6 +32,7 @@
     "index.d.ts",
     "dist/stimulus.js",
     "dist/stimulus.umd.js",
+    "webpack-helpers.js",
     "webpack-helpers.d.ts",
     "dist/webpack-helpers.js",
     "dist/webpack-helpers.umd.js",
