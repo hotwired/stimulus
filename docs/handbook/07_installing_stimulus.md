@@ -1,24 +1,21 @@
 ---
-permalink: /handbook/installing
+permalink: /handbook/installing.html
+order: 07
 ---
 
 # Installing Stimulus in Your Application
-{:.no_toc}
 
-To install Stimulus in your application, add the [`@hotwired/stimulus` npm package](https://www.npmjs.com/package/@hotwired/stimulus) to your JavaScript bundle. Or, import [`stimulus.esm.js`](https://unpkg.com/@hotwired/stimulus/dist/stimulus.js) in a `<script type="module">` tag.
+To install Stimulus in your application, add the [`@hotwired/stimulus` npm package](https://www.npmjs.com/package/@hotwired/stimulus) to your JavaScript bundle. Or, import [`stimulus.js`](https://unpkg.com/@hotwired/stimulus/dist/stimulus.js) in a `<script type="module">` tag.
 
-* TOC
-{:toc}
+## Using Stimulus for Rails
 
-## Using stimulus-rails
-
-Stimulus integrates with the [stimulus-rails](https://github.com/hotwired/stimulus-rails) to automatically load controller files from a folder in your app, if you're using it together with import maps.
+If you're using [Stimulus for Rails](https://github.com/hotwired/stimulus-rails/) together with an [import map](https://github.com/rails/importmap-rails), the integration will automatically load all controller files from `app/javascript/controllers`.
 
 ### Controller Filenames Map to Identifiers
 
 Name your controller files `[identifier]_controller.js`, where `identifier` corresponds to each controller's `data-controller` identifier in your HTML.
 
-Stimulus conventionally separates multiple words in filenames using underscores. Each underscore in a controller's filename translates to a dash in its identifier.
+Stimulus for Rails conventionally separates multiple words in filenames using underscores. Each underscore in a controller's filename translates to a dash in its identifier.
 
 You may also namespace your controllers using subfolders. Each forward slash in a namespaced controller file's path becomes two dashes in its identifier.
 
@@ -31,9 +28,22 @@ date_picker_controller.js         | date-picker
 users/list_item_controller.js     | users\-\-list-item
 local-time-controller.js          | local-time
 
+## Using Webpack Helpers
+
+If you're using Webpack as your JavaScript bundler, you can use the [@hotwired/stimulus-webpack-helpers](https://www.npmjs.com/package/@hotwired/stimulus-webpack-helpers) package to get the same form of autoloading behavior as Stimulus for Rails. First add the package, then use it like this:
+
+```js
+import { Application } from "@hotwired/stimulus"
+import { definitionsFromContext } from "@hotwired/stimulus-webpack-helpers"
+
+window.Stimulus = Application.start()
+const context = require.context("./controllers", true, /\.js$/)
+Stimulus.load(definitionsFromContext(context))
+```
+
 ## Using Other Build Systems
 
-Stimulus works with other build systems, too, but without support for controller autoloading. Instead, you must explicitly load and register controller files with your application instance:
+Stimulus works with other build systems too, but without support for controller autoloading. Instead, you must explicitly load and register controller files with your application instance:
 
 ```js
 // src/application.js
@@ -47,6 +57,8 @@ Stimulus.register("hello", HelloController)
 Stimulus.register("clipboard", ClipboardController)
 ```
 
+If you're using stimulus-rails with a builder like esbuild, you can use the `stimulus:manifest:update` Rake task and `./bin/rails generate stimulus [controller]` generator to keep a controller index file located at `app/javascript/controllers/index.js` automatically updated.
+
 ## Using Without a Build System
 
 If you prefer not to use a build system, you can load Stimulus in a `<script type="module">` tag:
@@ -56,9 +68,8 @@ If you prefer not to use a build system, you can load Stimulus in a `<script typ
 <html>
 <head>
   <meta charset="utf-8">
-  <script type="module" src=""></script>
   <script type="module">
-    import { Application, Controller } from "@hotwired/stimulus"
+    import { Application, Controller } from "https://unpkg.com/@hotwired/stimulus/dist/stimulus.js"
     window.Stimulus = Application.start()
 
     Stimulus.register("hello", class extends Controller {
@@ -78,11 +89,6 @@ If you prefer not to use a build system, you can load Stimulus in a `<script typ
 </html>
 ```
 
-## Browser Support
-
-Stimulus supports all evergreen, self-updating desktop and mobile browsers out of the box. Stimulus 3+ does not support Internet Explorer 11 (but you can use Stimulus 2 with the @stimulus/polyfills for that).
-
-
 ## Error handling
 
 All calls from Stimulus to your application's code are wrapped in a `try ... catch` block.
@@ -101,3 +107,12 @@ Stimulus.handleError = (error, message, detail) => {
   ErrorTrackingSystem.captureException(error)
 }
 ```
+
+## Debugging
+
+If you've assigned your Stimulus application to `window.Stimulus`, you can turn on [debugging mode](https://github.com/hotwired/stimulus/pull/354) from the console with `Stimulus.debug = true`. You can also set this flag when you're configuring your application instance in the source code.
+
+
+## Browser Support
+
+Stimulus supports all evergreen, self-updating desktop and mobile browsers out of the box. Stimulus 3+ does not support Internet Explorer 11 (but you can use Stimulus 2 with the @stimulus/polyfills for that).
