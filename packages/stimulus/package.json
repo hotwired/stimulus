@@ -10,7 +10,7 @@
     "Sam Stephenson <sstephenson@gmail.com>"
   ],
   "main": "dist/stimulus.js",
-  "module": "dist/stimulus.esm.js",
+  "module": "dist/stimulus.umd.js",
   "files": [
     "dist/stimulus.js",
     "dist/stimulus.umd.js",
