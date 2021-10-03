@@ -98,6 +98,7 @@ We want a click on the button to invoke the `copy()` method in our controller, s
 > ----------------- | -------------
 > a                 | click
 > button            | click
+> details           | toggle
 > form              | submit
 > input             | input
 > input type=submit | click
