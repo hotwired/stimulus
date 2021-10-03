@@ -58,6 +58,7 @@ Element           | Default Event
 ----------------- | -------------
 a                 | click
 button            | click
+details           | toggle
 form              | submit
 input             | input
 input type=submit | click

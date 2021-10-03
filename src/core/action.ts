@@ -62,6 +62,7 @@ const defaultEventNames: { [tagName: string]: (element: Element) => string } = {
   "a":        e => "click",
   "button":   e => "click",
   "form":     e => "submit",
+  "details":  e => "toggle",
   "input":    e => e.getAttribute("type") == "submit" ? "click" : "input",
   "select":   e => "change",
   "textarea": e => "input"
