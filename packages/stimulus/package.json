@@ -9,21 +9,15 @@
     "Javan Makhmali <javan@javan.us>",
     "Sam Stephenson <sstephenson@gmail.com>"
   ],
-  "main": "./dist/stimulus.js",
   "module": "./dist/stimulus.js",
-  "browser": "./dist/stimulus.js",
-  "umd:main": "./dist/stimulus.umd.js",
+  "main": "./dist/stimulus.umd.js",
   "types": "./index.d.ts",
   "exports": {
-    ".": {
-      "browser": "./dist/stimulus.js",
-      "import": "./dist/stimulus.js",
-      "umd": "./dist/stimulus.umd.js",
-      "types": "./index.d.ts"
-    },
     "./webpack-helpers": {
+      "main": "./dist/webpack-helpers.umd.js",
       "browser": "./dist/webpack-helpers.js",
       "import": "./dist/webpack-helpers.js",
+      "module": "./dist/webpack-helpers.js",
       "umd": "./dist/webpack-helpers.umd.js",
       "types": "./webpack-helpers.d.ts"
     }
