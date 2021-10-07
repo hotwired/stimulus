@@ -9,16 +9,39 @@
     "Javan Makhmali <javan@javan.us>",
     "Sam Stephenson <sstephenson@gmail.com>"
   ],
-  "main": "dist/stimulus.js",
-  "module": "dist/stimulus.esm.js",
+  "main": "./dist/stimulus.js",
+  "module": "./dist/stimulus.js",
+  "browser": "./dist/stimulus.js",
+  "umd:main": "./dist/stimulus.umd.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "browser": "./dist/stimulus.js",
+      "import": "./dist/stimulus.js",
+      "umd": "./dist/stimulus.umd.js",
+      "types": "./index.d.ts"
+    },
+    "./webpack-helpers": {
+      "browser": "./dist/webpack-helpers.js",
+      "import": "./dist/webpack-helpers.js",
+      "umd": "./dist/webpack-helpers.umd.js",
+      "types": "./webpack-helpers.d.ts"
+    }
+  },
   "files": [
+    "index.d.ts",
     "dist/stimulus.js",
     "dist/stimulus.umd.js",
+    "webpack-helpers.js",
+    "webpack-helpers.d.ts",
+    "dist/webpack-helpers.js",
+    "dist/webpack-helpers.umd.js",
     "README.md"
   ],
   "license": "MIT",
   "dependencies": {
-    "@hotwired/stimulus": "^3.0.0"
+    "@hotwired/stimulus": "^3.0.0",
+    "@hotwired/stimulus-webpack-helpers": "^1.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.0",
