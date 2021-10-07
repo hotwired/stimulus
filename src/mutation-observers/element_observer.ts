@@ -14,6 +14,7 @@ export class ElementObserver {
 
   private elements: Set<Element>
   private mutationObserver: MutationObserver
+  private mutationObserverInit = { attributes: true, childList: true, subtree: true }
 
   constructor(element: Element, delegate: ElementObserverDelegate) {
     this.element = element
@@ -27,8 +28,22 @@ export class ElementObserver {
   start() {
     if (!this.started) {
       this.started = true
-      this.mutationObserver.observe(this.element, { attributes: true, childList: true, subtree: true })
+      this.mutationObserver.observe(this.element, this.mutationObserverInit)
       this.refresh()
+    }
+  }
+
+  pause(callback: () => void) {
+    if (this.started) {
+      this.mutationObserver.disconnect()
+      this.started = false
+    }
+
+    callback()
+
+    if (!this.started) {
+      this.mutationObserver.observe(this.element, this.mutationObserverInit)
+      this.started = true
     }
   }
 

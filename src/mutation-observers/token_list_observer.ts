@@ -32,6 +32,10 @@ export class TokenListObserver implements AttributeObserverDelegate {
     this.attributeObserver.start()
   }
 
+  pause(callback: () => void) {
+    this.attributeObserver.pause(callback)
+  }
+
   stop() {
     this.attributeObserver.stop()
   }

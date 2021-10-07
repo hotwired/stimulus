@@ -31,6 +31,10 @@ export class AttributeObserver implements ElementObserverDelegate {
     this.elementObserver.start()
   }
 
+  pause(callback: () => void) {
+    this.elementObserver.pause(callback)
+  }
+
   stop() {
     this.elementObserver.stop()
   }
