@@ -187,7 +187,7 @@ Data attribute                                  | Param                | Type
 `data-item-id-param="12345"`                    | `123`                | Number
 `data-item-url-param="/votes"`                  | `"/votes"`           | String
 `data-item-payload-param='{"value":"1234567"}'` | `{ value: 1234567 }` | Object
-`data-item-active-param="true"'`                | `true`               | Boolean
+`data-item-active-param="true"`                 | `true`               | Boolean
 
 
 <br>Consider this setup:
