@@ -175,7 +175,7 @@ const readers: { [type: string]: Reader } = {
   },
 
   boolean(value: string): boolean {
-    return !(value == "0" || value == "false")
+    return !(value == "0" || String(value).toLowerCase() == "false")
   },
 
   number(value: string): number {
