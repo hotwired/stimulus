@@ -89,6 +89,27 @@ If you prefer not to use a build system, you can load Stimulus in a `<script typ
 </html>
 ```
 
+## Overriding Attribute Defaults
+In case Stimulus `data-*` attributes conflict with another library in your project, they can be overridden when creating the Stimulus `Application`.
+
+- `data-controller`
+- `data-action`
+- `data-target`
+
+These core Stimulus attributes can be overridden (see: [schema.ts](../../src/core/schema.ts)):
+
+```js
+// src/application.js
+import { Application, defaultSchema } from "@hotwired/stimulus"
+
+const customSchema = {
+  ...defaultSchema,
+  actionAttribute: 'data-stimulus-action'
+}
+
+window.Stimulus = Application.start(document.documentElement, customSchema);
+```
+
 ## Error handling
 
 All calls from Stimulus to your application's code are wrapped in a `try ... catch` block.
