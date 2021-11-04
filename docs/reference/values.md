@@ -23,7 +23,9 @@ You can read and write [HTML data attributes](https://developer.mozilla.org/en-U
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { url: String }
+  static values = {
+    url: String
+  }
 
   connect() {
     fetch(this.urlValue).then(/* … */)
