@@ -96,7 +96,7 @@ In case Stimulus `data-*` attributes conflict with another library in your proje
 - `data-action`
 - `data-target`
 
-These core Stimulus attributes can be overridden (see: [schema.ts](../../src/core/schema.ts)):
+These core Stimulus attributes can be overridden (see: [schema.ts](https://github.com/hotwired/stimulus/blob/main/src/core/schema.ts)):
 
 ```js
 // src/application.js
