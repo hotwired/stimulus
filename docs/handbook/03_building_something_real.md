@@ -62,7 +62,7 @@ Now add a target definition to the controller so we can access the text field el
 
 ```js
 export default class extends Controller {
-  static targets = ["source"]
+  static targets = [ "source" ]
 
   // ...
 }
