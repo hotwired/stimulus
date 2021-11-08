@@ -25,7 +25,7 @@ Open `public/index.html` and replace the contents of `<body>` with a rough sketc
 
 ```html
 <div>
-  PIN: <input type="text" value="1234" readonly />
+  PIN: <input type="text" value="1234" readonly>
   <button>Copy to Clipboard</button>
 </div>
 ```
@@ -36,17 +36,18 @@ Next, create `src/controllers/clipboard_controller.js` and add an empty method `
 
 ```js
 // src/controllers/clipboard_controller.js
-import { Controller } from "@hotwired/stimulus";
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  copy() {}
+  copy() {
+  }
 }
 ```
 
 Then add `data-controller="clipboard"` to the outer `<div>`. Any time this attribute appears on an element, Stimulus will connect an instance of our controller:
 
 ```html
-<div data-controller="clipboard"></div>
+<div data-controller="clipboard">
 ```
 
 ## Defining the Target
@@ -54,14 +55,14 @@ Then add `data-controller="clipboard"` to the outer `<div>`. Any time this attri
 We'll need a reference to the text field so we can select its contents before invoking the clipboard API. Add `data-clipboard-target="source"` to the text field:
 
 ```html
-PIN: <input data-clipboard-target="source" type="text" value="1234" readonly />
+PIN: <input data-clipboard-target="source" type="text" value="1234" readonly>
 ```
 
 Now add a target definition to the controller so we can access the text field element as `this.sourceTarget`:
 
 ```js
 export default class extends Controller {
-  static targets = ["source"];
+  static targets = ["source"]
 
   // ...
 }
@@ -71,9 +72,9 @@ export default class extends Controller {
 >
 > When Stimulus loads your controller class, it looks for target name strings in a static array called `targets`. For each target name in the array, Stimulus adds three new properties to your controller. Here, our `"source"` target name becomes the following properties:
 >
-> - `this.sourceTarget` evaluates to the first `source` target in your controller's scope. If there is no `source` target, accessing the property throws an error.
-> - `this.sourceTargets` evaluates to an array of all `source` targets in the controller's scope.
-> - `this.hasSourceTarget` evaluates to `true` if there is a `source` target or `false` if not.
+> * `this.sourceTarget` evaluates to the first `source` target in your controller's scope. If there is no `source` target, accessing the property throws an error.
+> * `this.sourceTargets` evaluates to an array of all `source` targets in the controller's scope.
+> * `this.hasSourceTarget` evaluates to `true` if there is a `source` target or `false` if not.
 >
 > You can read more about targets in the [reference documentation](/reference/targets).
 
@@ -84,7 +85,7 @@ Now we're ready to hook up the Copy button.
 We want a click on the button to invoke the `copy()` method in our controller, so we'll add `data-action="clipboard#copy"`:
 
 ```html
-<button data-action="clipboard#copy">Copy to Clipboard</button>
+  <button data-action="clipboard#copy">Copy to Clipboard</button>
 ```
 
 > ### Common Events Have a Shorthand Action Notation
@@ -116,7 +117,7 @@ Finally, in our `copy()` method, we can select the input field's contents and ca
 
 ```js
   copy() {
-    navigator.clipboard.writeText(this.source);
+    navigator.clipboard.writeText(this.source)
   }
 ```
 
@@ -134,8 +135,7 @@ Let's go ahead and add another PIN to the page. Copy and paste the `<div>` so th
 
 ```html
 <div data-controller="clipboard">
-  PIN:
-  <input data-clipboard-target="source" type="text" value="3737" readonly />
+  PIN: <input data-clipboard-target="source" type="text" value="3737" readonly>
   <button data-action="clipboard#copy" class="clipboard-button">
     Copy to Clipboard
   </button>
@@ -173,7 +173,7 @@ Note that in this case, clicking the link will also cause the browser to follow 
 Similarly, our `source` target need not be an `<input type="text">`. The controller only expects it to have a `value` property and a `select()` method. That means we can use a `<textarea>` instead:
 
 ```html
-PIN: <textarea data-clipboard-target="source" readonly>3737</textarea>
+  PIN: <textarea data-clipboard-target="source" readonly>3737</textarea>
 ```
 
 ## Wrap-Up and Next Steps
