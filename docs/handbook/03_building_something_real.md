@@ -55,7 +55,7 @@ Then add `data-controller="clipboard"` to the outer `<div>`. Any time this attri
 We'll need a reference to the text field so we can select its contents before invoking the clipboard API. Add `data-clipboard-target="source"` to the text field:
 
 ```html
-PIN: <input data-clipboard-target="source" type="text" value="1234" readonly>
+  PIN: <input data-clipboard-target="source" type="text" value="1234" readonly>
 ```
 
 Now add a target definition to the controller so we can access the text field element as `this.sourceTarget`:
@@ -136,9 +136,7 @@ Let's go ahead and add another PIN to the page. Copy and paste the `<div>` so th
 ```html
 <div data-controller="clipboard">
   PIN: <input data-clipboard-target="source" type="text" value="3737" readonly>
-  <button data-action="clipboard#copy" class="clipboard-button">
-    Copy to Clipboard
-  </button>
+  <button data-action="clipboard#copy" class="clipboard-button">Copy to Clipboard</button>
 </div>
 ```
 
@@ -150,11 +148,8 @@ Now let's add one more PIN field. This time we'll use a Copy _link_ instead of a
 
 ```html
 <div data-controller="clipboard">
-  PIN:
-  <input data-clipboard-target="source" type="text" value="3737" readonly />
-  <a href="#" data-action="clipboard#copy" class="clipboard-button"
-    >Copy to Clipboard</a
-  >
+  PIN: <input data-clipboard-target="source" type="text" value="3737" readonly>
+  <a href="#" data-action="clipboard#copy" class="clipboard-button">Copy to Clipboard</a>
 </div>
 ```
 
