@@ -22,13 +22,18 @@ We'll start by hiding the Copy button in CSS. Then we'll _feature-test_ support 
 We start off by adding `data-clipboard-supported-class="clipboard--supported"` to the `div` element that has the `data-controller` attribute:
 
 ```html
-  <div data-controller="clipboard" data-clipboard-supported-class="clipboard--supported">
+<div
+  data-controller="clipboard"
+  data-clipboard-supported-class="clipboard--supported"
+></div>
 ```
 
 Then add `class="clipboard-button"` to the button element:
 
 ```html
-  <button data-action="clipboard#copy" class="clipboard-button">Copy to Clipboard</button>
+<button data-action="clipboard#copy" class="clipboard-button">
+  Copy to Clipboard
+</button>
 ```
 
 Then add the following styles to `public/main.css`:
@@ -55,9 +60,11 @@ Now add a `connect()` method to the controller which will add a class name to th
 
 ```js
   connect() {
-    if (document.queryCommandSupported("copy")) {
-      this.element.classList.add(this.supportedClass)
-    }
+    navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
+      if (result.state === "granted") {
+        this.element.classList.add(this.supportedClass);
+      }
+    });
   }
 ```
 
