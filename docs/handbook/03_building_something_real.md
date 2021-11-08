@@ -105,19 +105,11 @@ We want a click on the button to invoke the `copy()` method in our controller, s
 > | select            | change        |
 > | textarea          | input         |
 
-We can set a `get` method for our source target so we can easily reference the value:
-
-```js
-  get source() {
-    return this.sourceTarget.value
-  }
-```
-
 Finally, in our `copy()` method, we can select the input field's contents and call the clipboard API:
 
 ```js
   copy() {
-    navigator.clipboard.writeText(this.source)
+    navigator.clipboard.writeText(this.sourceTarget.value)
   }
 ```
 
