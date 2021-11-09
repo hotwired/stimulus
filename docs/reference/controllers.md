@@ -191,7 +191,7 @@ So when the `Clipboard#copy` action is invoked, the `Effects#flash` action will 
 
 ```js
 class EffectsController extends Controller {
-  flash({ detail: content }) {
+  flash({ detail: { content } }) {
     console.log(content) // 1234
   }
 }
