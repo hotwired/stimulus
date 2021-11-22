@@ -43,16 +43,18 @@ export class Application implements ErrorHandler {
   }
 
   register(identifier: string, controllerConstructor: ControllerConstructor) {
-    if ((controllerConstructor as any).shouldLoad) {
-      this.load({ identifier, controllerConstructor })
-    }
+    this.load({ identifier, controllerConstructor })
   }
 
   load(...definitions: Definition[]): void
   load(definitions: Definition[]): void
   load(head: Definition | Definition[], ...rest: Definition[]) {
     const definitions = Array.isArray(head) ? head : [head, ...rest]
-    definitions.forEach(definition => this.router.loadDefinition(definition))
+    definitions.forEach(definition => {
+      if ((definition.controllerConstructor as any).shouldLoad) {
+        this.router.loadDefinition(definition)
+      }
+    })
   }
 
   unload(...identifiers: string[]): void
