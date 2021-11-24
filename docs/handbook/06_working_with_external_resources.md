@@ -205,7 +205,7 @@ export default class extends Controller {
 We could even destruct the params to just get the URL parameter:
 
 ```js
-  load({ params: url }) {
+  load({ params: { url } }) {
     fetch(url)
       .then(response => response.text())
       .then(html => this.element.innerHTML = html)
