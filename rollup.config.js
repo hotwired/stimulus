@@ -33,7 +33,8 @@ export default [
     output: {
       file: "dist/stimulus.min.js",
       format: "es",
-      banner
+      banner,
+      sourcemap: true
     },
     context: "window",
     plugins: [
