@@ -197,10 +197,9 @@ class EffectsController extends Controller {
 }
 ```
 
-## Communicating between Controllers
+## Directly Invoking Other Controllers
 
-If you need to communicate or call a method of another controller you can use the
-`getControllerForElementAndIdentifier` method from the application.
+If for some reason it is not possible to use events to communicate between controllers, you can reach a controller instance via the `getControllerForElementAndIdentifier` method from the application. This should only be used if you have a unique problem that cannot be solved through the more general way of using events, but if you must, this is how:
 
 ```js
 class MyController extends Controller {
