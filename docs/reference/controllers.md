@@ -196,3 +196,19 @@ class EffectsController extends Controller {
   }
 }
 ```
+
+## Communicating between Controllers
+
+If you need to communicate or call a method of another controller you can use the
+`getControllerForElementAndIdentifier` method from the application.
+
+```js
+class MyController extends Controller {
+  static targets = [ "other" ]
+
+  copy() {
+    const otherController = this.application.getControllerForElementAndIdentifier(this.otherTarget, 'other')
+    otherController.otherMethod()
+  }
+}
+```
