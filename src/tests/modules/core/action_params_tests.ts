@@ -16,6 +16,7 @@ export default class ActionParamsTests extends LogControllerTestCase {
         <div id="nested"></div>
       </button>
     </div>
+    <div id="outside"></div>
   `
   expectedParamsForC = {
     id: 123,
@@ -32,6 +33,16 @@ export default class ActionParamsTests extends LogControllerTestCase {
     this.actionValue = "click->c#log"
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { identifier: "c", params: this.expectedParamsForC },
+    )
+  }
+
+  async "test global event return element params where the action is defined"() {
+    this.actionValue = "keydown@window->c#log"
+    await this.nextFrame
+    await this.triggerEvent("#outside", "keydown")
 
     this.assertActions(
       { identifier: "c", params: this.expectedParamsForC },
