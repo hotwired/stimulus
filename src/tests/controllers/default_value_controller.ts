@@ -66,4 +66,17 @@ export class DefaultValueController extends Controller {
   hasDefaultObjectPersonValue!: boolean
   defaultObjectOverrideValue!: object
   hasDefaultObjectOverrideValue!: boolean
+  lifecycleCallbacks: string[] = []
+
+  initialize() {
+    this.lifecycleCallbacks.push("initialize")
+  }
+
+  connect() {
+    this.lifecycleCallbacks.push("connect")
+  }
+
+  defaultBooleanValueChanged() {
+    this.lifecycleCallbacks.push("defaultBooleanValueChanged")
+  }
 }
