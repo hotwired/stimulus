@@ -202,7 +202,7 @@ Data attribute                                  | Param                | Type
 </div>
 ```
 
-It will call both `SpinnerController#start` and `ItemController#upvote`, but only the latter will have any parameters passed to it:
+It will call both `ItemController#upvote` and `SpinnerController#start`, but only the former will have any parameters passed to it:
 
 ```js
 // ItemController
