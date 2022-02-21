@@ -23,6 +23,7 @@ Every controller belongs to a Stimulus `Application` instance and is associated 
 
 * application, via the `this.application` property
 * HTML element, via the `this.element` property
+* identifier, via the `this.identifier` property
 
 ## Modules
 
