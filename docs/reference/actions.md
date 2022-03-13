@@ -145,7 +145,7 @@ It's common for any given element to have many actions. For example, the followi
 
 When an element has more than one action for the same event, Stimulus invokes the actions from left to right in the order that their descriptors appear.
 
-The action chain can be stopped at any point by calling `Event#stopImmediatePropagation()` within an action. Any addtional actions to the right will be ignored:
+The action chain can be stopped at any point by calling `Event#stopImmediatePropagation()` within an action. Any additional actions to the right will be ignored:
 
 ```javascript
 highlight: function(event) {
