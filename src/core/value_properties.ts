@@ -112,7 +112,7 @@ function parseValueTypeObject(token: string, typeObject: ValueTypeObject) {
     const defaultValueType = parseValueTypeDefault(typeObject.default)
 
     if (typeFromObject !== defaultValueType) {
-      throw new Error(`Type "${typeFromObject}" for "${token}" property, must match the type of the default value. Given default value: "${typeObject.default}" as "${defaultValueType}"`)
+      throw new Error(`Type "${typeFromObject}" for "${token}" value, must match the type of the default value. Given default value: "${typeObject.default}" as "${defaultValueType}"`)
     }
 
     return typeFromObject
@@ -127,7 +127,7 @@ function parseValueTypeDefinition(token: string, typeDefinition: ValueTypeDefini
   const type = typeFromObject || typeFromDefaultValue || typeFromConstant
   if (type) return type
 
-  throw new Error(`Unknown value type "${typeDefinition}" for "${token}" property`)
+  throw new Error(`Unknown value type "${typeDefinition}" for "${token}" value`)
 }
 
 function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): ValueTypeDefault {
