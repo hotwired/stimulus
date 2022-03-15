@@ -105,29 +105,29 @@ function parseValueTypeDefault(defaultValue: ValueTypeDefault) {
   if (Object.prototype.toString.call(defaultValue) === "[object Object]") return "object"
 }
 
-function parseValueTypeObject(typeObject: ValueTypeObject) {
+function parseValueTypeObject(token: string, typeObject: ValueTypeObject) {
   const typeFromObject = parseValueTypeConstant(typeObject.type)
 
   if (typeFromObject) {
     const defaultValueType = parseValueTypeDefault(typeObject.default)
 
     if (typeFromObject !== defaultValueType) {
-      throw new Error(`Type "${typeFromObject}" must match the type of the default value. Given default value: "${typeObject.default}" as "${defaultValueType}"`)
+      throw new Error(`Type "${typeFromObject}" for "${token}" property, must match the type of the default value. Given default value: "${typeObject.default}" as "${defaultValueType}"`)
     }
 
     return typeFromObject
   }
 }
 
-function parseValueTypeDefinition(typeDefinition: ValueTypeDefinition): ValueType {
-  const typeFromObject = parseValueTypeObject(typeDefinition as ValueTypeObject)
+function parseValueTypeDefinition(token: string, typeDefinition: ValueTypeDefinition): ValueType {
+  const typeFromObject = parseValueTypeObject(token, typeDefinition as ValueTypeObject)
   const typeFromDefaultValue = parseValueTypeDefault(typeDefinition as ValueTypeDefault)
   const typeFromConstant = parseValueTypeConstant(typeDefinition as ValueTypeConstant)
 
   const type = typeFromObject || typeFromDefaultValue || typeFromConstant
   if (type) return type
 
-  throw new Error(`Unknown value type "${typeDefinition}"`)
+  throw new Error(`Unknown value type "${typeDefinition}" for "${token}" property`)
 }
 
 function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): ValueTypeDefault {
@@ -143,7 +143,7 @@ function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): ValueTy
 
 function valueDescriptorForTokenAndTypeDefinition(token: string, typeDefinition: ValueTypeDefinition) {
   const key = `${dasherize(token)}-value`
-  const type = parseValueTypeDefinition(typeDefinition)
+  const type = parseValueTypeDefinition(token, typeDefinition)
   return {
     type,
     key,
