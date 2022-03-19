@@ -6,7 +6,7 @@ import { ValuePropertiesBlessing, ValueDefinitionMap } from "./value_properties"
 
 export type ControllerConstructor = Constructor<Controller>
 
-export class Controller {
+export class Controller<ElementType extends Element = Element> {
   static blessings = [ ClassPropertiesBlessing, TargetPropertiesBlessing, ValuePropertiesBlessing ]
   static targets: string[] = []
   static values: ValueDefinitionMap = {}
@@ -30,7 +30,7 @@ export class Controller {
   }
 
   get element() {
-    return this.scope.element
+    return this.scope.element as ElementType
   }
 
   get identifier() {
