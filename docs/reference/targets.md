@@ -1,5 +1,5 @@
 ---
-permalink: /reference/targets
+permalink: /reference/targets.html
 order: 03
 ---
 
@@ -113,6 +113,11 @@ export default class extends Controller {
   sortElements(itemTargets) { /* ... */ }
 }
 ```
+
+**Note** During the execution of `[name]TargetConnected` and
+`[name]TargetDisconnected` callbacks, the `MutationObserver` instances behind
+the scenes are paused. This means that if a callback add or removes a target
+with a matching name, the corresponding callback _will not_ be invoked again.
 
 ## Naming Conventions
 

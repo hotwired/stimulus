@@ -1,5 +1,6 @@
 ---
-permalink: /handbook/working-with-external-resources
+permalink: /handbook/working-with-external-resources.html
+order: 06
 ---
 
 # Working With External Resources
@@ -174,6 +175,41 @@ export default class extends Controller {
     }
   }
 }
+```
+
+## Using action parameters
+
+If we wanted to make the loader work with multiple different sources, we could do it using action parameters. Take this HTML:
+
+```html
+<div data-controller="content-loader">
+  <a href="#" data-content-loader-url-param="/messages.html" data-action="content-loader#load">Messages</a>
+  <a href="#" data-content-loader-url-param="/comments.html" data-action="content-loader#load">Comments</a>
+</div>
+```
+
+Then we can use those parameters through the `load` action:
+
+```js
+import { Controller } from "@hotwired/stimulus"
+
+export default class extends Controller {
+  load({ params }) {
+    fetch(params.url)
+      .then(response => response.text())
+      .then(html => this.element.innerHTML = html)
+  }
+}
+```
+
+We could even destruct the params to just get the URL parameter:
+
+```js
+  load({ params: { url } }) {
+    fetch(url)
+      .then(response => response.text())
+      .then(html => this.element.innerHTML = html)
+  }
 ```
 
 ## Wrap-Up and Next Steps

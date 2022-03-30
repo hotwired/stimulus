@@ -1,5 +1,5 @@
 ---
-permalink: /reference/actions
+permalink: /reference/actions.html
 order: 02
 ---
 
@@ -58,6 +58,7 @@ Element           | Default Event
 ----------------- | -------------
 a                 | click
 button            | click
+details           | toggle
 form              | submit
 input             | input
 input type=submit | click
@@ -154,6 +155,7 @@ The first argument to an action method is the DOM _event object_. You may want a
 * to read the key code from a keyboard event
 * to read the coordinates of a mouse event
 * to read data from an input event
+* to read params from the action submitter element
 * to prevent the browser's default behavior for an event
 * to find out which element dispatched an event before it bubbled up to this action
 
@@ -164,6 +166,7 @@ Event Property      | Value
 event.type          | The name of the event (e.g. `"click"`)
 event.target        | The target that dispatched the event (i.e. the innermost element that was clicked)
 event.currentTarget | The target on which the event listener is installed (either the element with the `data-action` attribute, or `document` or `window`)
+event.params        | The action params passed by the action submitter element
 
 <br>The following event methods give you more control over how events are handled:
 
@@ -187,7 +190,7 @@ It's common for any given element to have many actions. For example, the followi
 
 When an element has more than one action for the same event, Stimulus invokes the actions from left to right in the order that their descriptors appear.
 
-The action chain can be stopped at any point by calling `Event#stopImmediatePropagation()` within an action. Any addtional actions to the right will be ignored:
+The action chain can be stopped at any point by calling `Event#stopImmediatePropagation()` within an action. Any additional actions to the right will be ignored:
 
 ```javascript
 highlight: function(event) {
@@ -217,3 +220,63 @@ Instead, name your action methods based on what will happen when they're called:
 ```
 
 This will help you reason about the behavior of a block of HTML without having to look at the controller source.
+
+## Action Parameters
+
+Actions can have parameters that are be passed from the submitter element. They follow the format of `data-[identifier]-[param-name]-param`. Parameters must be specified on the same element as the action they intend to be passed to is declared.
+
+All parameters are automatically typecast to either a `Number`, `String`, `Object`, or `Boolean`, inferred by their value:
+
+Data attribute                                  | Param                | Type
+----------------------------------------------- | -------------------- | --------
+`data-item-id-param="12345"`                    | `12345`              | Number
+`data-item-url-param="/votes"`                  | `"/votes"`           | String
+`data-item-payload-param='{"value":"1234567"}'` | `{ value: 1234567 }` | Object
+`data-item-active-param="true"`                 | `true`               | Boolean
+
+
+<br>Consider this setup:
+
+```html
+<div data-controller="item spinner">
+  <button data-action="item#upvote spinner#start" 
+    data-item-id-param="12345" 
+    data-item-url-param="/votes"
+    data-item-payload-param='{"value":"1234567"}' 
+    data-item-active-param="true">…</button>
+</div>
+```
+
+It will call both `ItemController#upvote` and `SpinnerController#start`, but only the former will have any parameters passed to it:
+
+```js
+// ItemController
+upvote(event) {
+  // { id: 12345, url: "/votes", active: true, payload: { value: 1234567 } }
+  console.log(event.params) 
+}
+
+// SpinnerController
+start(event) {
+  // {}
+  console.log(event.params) 
+}
+```
+
+If we don't need anything else from the event, we can destruct the params:
+
+```js
+upvote({ params }) {
+  // { id: 12345, url: "/votes", active: true, payload: { value: 1234567 } }
+  console.log(params) 
+}
+```
+
+Or destruct only the params we need, in case multiple actions on the same controller share the same submitter element:
+
+```js
+upvote({ params: { id, url } }) {
+  console.log(id) // 12345
+  console.log(url) // "/votes"
+}
+```

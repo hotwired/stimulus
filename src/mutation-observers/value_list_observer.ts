@@ -4,7 +4,6 @@ export interface ValueListObserverDelegate<T> {
   parseValueForToken(token: Token): T | undefined
   elementMatchedValue(element: Element, value: T): void
   elementUnmatchedValue(element: Element, value: T): void
-  elementMatchedNoValue(token: Token): void
 }
 
 interface ParseResult<T> {
@@ -55,8 +54,6 @@ export class ValueListObserver<T> implements TokenListObserverDelegate {
     if (value) {
       this.fetchValuesByTokenForElement(element).set(token, value)
       this.delegate.elementMatchedValue(element, value)
-    } else {
-      this.delegate.elementMatchedNoValue(token)
     }
   }
 

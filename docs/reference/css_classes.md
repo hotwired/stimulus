@@ -1,5 +1,5 @@
 ---
-permalink: /reference/css-classes
+permalink: /reference/css-classes.html
 order: 05
 ---
 

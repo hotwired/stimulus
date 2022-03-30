@@ -13,7 +13,6 @@ export class Application implements ErrorHandler {
   readonly router: Router
   logger: Logger = console
   debug: boolean = false
-  warnings: boolean = true
 
   static start(element?: Element, schema?: Schema): Application {
     const application = new Application(element, schema)
@@ -51,7 +50,11 @@ export class Application implements ErrorHandler {
   load(definitions: Definition[]): void
   load(head: Definition | Definition[], ...rest: Definition[]) {
     const definitions = Array.isArray(head) ? head : [head, ...rest]
-    definitions.forEach(definition => this.router.loadDefinition(definition))
+    definitions.forEach(definition => {
+      if ((definition.controllerConstructor as any).shouldLoad) {
+        this.router.loadDefinition(definition)
+      }
+    })
   }
 
   unload(...identifiers: string[]): void
@@ -72,14 +75,6 @@ export class Application implements ErrorHandler {
     return context ? context.controller : null
   }
 
-  // Warning handling
-
-  handleWarning(warning: string, message: string, detail: object) {
-    if (this.warnings) {
-      this.logger.warn(`%s\n\n%s\n\n%o`, message, warning, detail)
-    }
-  }
-
   // Error handling
 
   handleError(error: Error, message: string, detail: object) {
@@ -97,11 +92,9 @@ export class Application implements ErrorHandler {
   }
 
   private logFormattedMessage(identifier: string, functionName: string, detail: object = {}) {
-    const darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-    const color = darkMode ? "#ffe000" : "#5D2F85"
     detail = Object.assign({ application: this }, detail)
 
-    this.logger.groupCollapsed(`%c${identifier}%c #${functionName}`, `color: ${color}`, 'color: unset')
+    this.logger.groupCollapsed(`${identifier} #${functionName}`)
     this.logger.log("details:", { ...detail })
     this.logger.groupEnd()
   }

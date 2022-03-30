@@ -66,6 +66,10 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.controller.shadowedBooleanValue = 1 as any
     this.assert.deepEqual(this.controller.shadowedBooleanValue, true)
     this.assert.deepEqual(this.get("shadowed-boolean-value"), "1")
+
+    this.controller.shadowedBooleanValue = "False" as any
+    this.assert.deepEqual(this.controller.shadowedBooleanValue, false)
+    this.assert.deepEqual(this.get("shadowed-boolean-value"), "False")
   }
 
   "test array values"() {

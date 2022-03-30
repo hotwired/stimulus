@@ -3,7 +3,6 @@ import { LogController } from "../../controllers/log_controller"
 
 class AController extends LogController {}
 class BController extends LogController {}
-class CController extends LogController {}
 
 export default class ApplicationTests extends ApplicationTestCase {
   fixtureHTML = `<div data-controller="a"><div data-controller="b">`
@@ -44,20 +43,6 @@ export default class ApplicationTests extends ApplicationTestCase {
 
     this.assert.equal(this.controllers.length, 1)
     this.assert.ok(this.controllers[0] instanceof BController)
-  }
-
-  "test reloading an already-loaded module"() {
-    this.application.load(this.definitions)
-    const originalControllers = this.controllers
-
-    this.application.load({ controllerConstructor: CController, identifier: "a" })
-    this.assert.equal(this.controllers.length, 2)
-    this.assert.equal(originalControllers[0].disconnectCount, 1)
-
-    this.assert.notEqual(originalControllers[0], this.controllers[1])
-    this.assert.ok(this.controllers[1] instanceof CController)
-    this.assert.equal(this.controllers[1].initializeCount, 1)
-    this.assert.equal(this.controllers[1].connectCount, 1)
   }
 
   get controllers() {

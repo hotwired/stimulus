@@ -1,5 +1,6 @@
 ---
-permalink: /handbook/building-something-real
+permalink: /handbook/building-something-real.html
+order: 03
 ---
 
 # Building Something Real
@@ -93,22 +94,22 @@ We want a click on the button to invoke the `copy()` method in our controller, s
 >
 > Certain other elements have default events, too. Here's the full list:
 >
-> Element           | Default Event
-> ----------------- | -------------
-> a                 | click
-> button            | click
-> form              | submit
-> input             | input
-> input type=submit | click
-> select            | change
-> textarea          | input
+> | Element           | Default Event |
+> | ----------------- | ------------- |
+> | a                 | click         |
+> | button            | click         |
+> | details           | toggle        |
+> | form              | submit        |
+> | input             | input         |
+> | input type=submit | click         |
+> | select            | change        |
+> | textarea          | input         |
 
 Finally, in our `copy()` method, we can select the input field's contents and call the clipboard API:
 
 ```js
   copy() {
-    this.sourceTarget.select()
-    document.execCommand("copy")
+    navigator.clipboard.writeText(this.sourceTarget.value)
   }
 ```
 
@@ -127,7 +128,7 @@ Let's go ahead and add another PIN to the page. Copy and paste the `<div>` so th
 ```html
 <div data-controller="clipboard">
   PIN: <input data-clipboard-target="source" type="text" value="3737" readonly>
-  <button data-action="clipboard#copy" class="clipboard-button">Copy to Clipboard</button>
+  <button data-action="clipboard#copy">Copy to Clipboard</button>
 </div>
 ```
 
@@ -140,7 +141,7 @@ Now let's add one more PIN field. This time we'll use a Copy _link_ instead of a
 ```html
 <div data-controller="clipboard">
   PIN: <input data-clipboard-target="source" type="text" value="3737" readonly>
-  <a href="#" data-action="clipboard#copy" class="clipboard-button">Copy to Clipboard</a>
+  <a href="#" data-action="clipboard#copy">Copy to Clipboard</a>
 </div>
 ```
 

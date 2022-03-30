@@ -1,6 +1,6 @@
 {
   "name": "stimulus",
-  "version": "3.0.0-beta.1",
+  "version": "3.0.1",
   "description": "Stimulus JavaScript framework",
   "repository": "https://stimulus.hotwired.dev",
   "author": "Basecamp, LLC",
@@ -9,16 +9,33 @@
     "Javan Makhmali <javan@javan.us>",
     "Sam Stephenson <sstephenson@gmail.com>"
   ],
-  "main": "dist/stimulus.js",
-  "module": "dist/stimulus.esm.js",
+  "module": "./dist/stimulus.js",
+  "main": "./dist/stimulus.umd.js",
+  "types": "./index.d.ts",
+  "exports": {
+    "./webpack-helpers": {
+      "main": "./dist/webpack-helpers.umd.js",
+      "browser": "./dist/webpack-helpers.js",
+      "import": "./dist/webpack-helpers.js",
+      "module": "./dist/webpack-helpers.js",
+      "umd": "./dist/webpack-helpers.umd.js",
+      "types": "./webpack-helpers.d.ts"
+    }
+  },
   "files": [
+    "index.d.ts",
     "dist/stimulus.js",
     "dist/stimulus.umd.js",
+    "webpack-helpers.js",
+    "webpack-helpers.d.ts",
+    "dist/webpack-helpers.js",
+    "dist/webpack-helpers.umd.js",
     "README.md"
   ],
   "license": "MIT",
   "dependencies": {
-    "@hotwired/stimulus": "^3.0.0-beta.1"
+    "@hotwired/stimulus": "^3.0.1",
+    "@hotwired/stimulus-webpack-helpers": "^1.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.0",

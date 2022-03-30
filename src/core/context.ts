@@ -6,7 +6,6 @@ import { ErrorHandler } from "./error_handler"
 import { Module } from "./module"
 import { Schema } from "./schema"
 import { Scope } from "./scope"
-import { TargetGuide } from "./target_guide"
 import { ValueObserver } from "./value_observer"
 import { TargetObserver, TargetObserverDelegate } from "./target_observer"
 
@@ -14,7 +13,6 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
   readonly module: Module
   readonly scope: Scope
   readonly controller: Controller
-  readonly targetGuide: TargetGuide
   private bindingObserver: BindingObserver
   private valueObserver: ValueObserver
   private targetObserver: TargetObserver
@@ -23,7 +21,6 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
     this.module = module
     this.scope = scope
     this.controller = new module.controllerConstructor(this)
-    this.targetGuide = new TargetGuide(this.scope, this.controller)
     this.bindingObserver = new BindingObserver(this, this.dispatcher)
     this.valueObserver = new ValueObserver(this, this.controller)
     this.targetObserver = new TargetObserver(this, this)
@@ -94,13 +91,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
     this.application.handleError(error, `Error ${message}`, detail)
   }
 
-  // Logging
-
-  handleWarning(warning: string, message: string, detail: object = {}) {
-    const { identifier, controller, element } = this
-    detail = Object.assign({ identifier, controller, element }, detail)
-    this.application.handleWarning(warning, `Warning ${message}`, detail)
-  }
+  // Debug logging
 
   logDebugActivity = (functionName: string, detail: object = {}): void => {
     const { identifier, controller, element } = this
