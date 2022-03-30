@@ -171,6 +171,10 @@ export default class DefaultValueTests extends ControllerTestCase(DefaultValueCo
     this.assert.ok(this.controller.hasDefaultObjectOverrideValue)
   }
 
+  "test [name]ValueChanged callbacks fire after initialize and before connect"() {
+    this.assert.deepEqual(this.controller.lifecycleCallbacks, ["initialize", "defaultBooleanValueChanged", "connect"])
+  }
+
   has(name: string) {
     return this.element.hasAttribute(this.attr(name))
   }

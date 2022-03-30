@@ -1,6 +1,5 @@
 ---
-permalink: /reference/values
-redirect_from: /reference/data-maps
+permalink: /reference/values.html
 order: 04
 ---
 
@@ -24,7 +23,9 @@ You can read and write [HTML data attributes](https://developer.mozilla.org/en-U
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { url: String }
+  static values = {
+    url: String
+  }
 
   connect() {
     fetch(this.urlValue).then(/* … */)
@@ -127,6 +128,22 @@ export default class extends Controller {
 ```
 
 The two arguments can be named as you like. You could also use `urlValueChanged(current, old)`.
+
+## Default Values
+
+Values that have not been specified on the controller element can be set by defaults specified in the controller definition:
+
+```js
+export default class extends Controller {
+  static values = {
+    url: { type: String, default: '/bill' },
+    interval: { type: Number, default: 5 },
+    clicked: Boolean
+  }
+}
+```
+
+When a default is used, the expanded form of `{ type, default }` is used. This form can be mixed with the regular form that does not use a default.
 
 ## Naming Conventions
 

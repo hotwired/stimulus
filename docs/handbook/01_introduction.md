@@ -1,6 +1,6 @@
 ---
-permalink: /handbook/introduction
-redirect_from: /handbook/
+permalink: /handbook/introduction.html
+order: 01
 ---
 
 # Introduction

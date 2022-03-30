@@ -44,26 +44,17 @@ export class Action {
     return this.keyMappings[this.keyFilter] !== key
   }
 
-  get params(): object {
-    if (this.eventTarget instanceof Element) {
-      return this.getParamsFromEventTargetAttributes(this.eventTarget)
-    } else {
-      return {}
-    }
-  }
-
-  private getParamsFromEventTargetAttributes(eventTarget: Element): {[key: string]: any} {
-    const params = {}
+  get params() {
+    const params:{ [key: string]: any } = {}
     const pattern = new RegExp(`^data-${this.identifier}-(.+)-param$`)
-    const attributes = Array.from(eventTarget.attributes)
 
-    attributes.forEach(({ name, value }: { name: string, value: string }) => {
+    for (const { name, value } of Array.from(this.element.attributes)) {
       const match = name.match(pattern)
       const key = match && match[1]
       if (key) {
-        Object.assign(params, { [camelize(key)]: typecast(value) })
+        params[camelize(key)]= typecast(value)
       }
-    })
+    }
     return params
   }
 
@@ -80,6 +71,7 @@ const defaultEventNames: { [tagName: string]: (element: Element) => string } = {
   "a":        e => "click",
   "button":   e => "click",
   "form":     e => "submit",
+  "details":  e => "toggle",
   "input":    e => e.getAttribute("type") == "submit" ? "click" : "input",
   "select":   e => "change",
   "textarea": e => "input"

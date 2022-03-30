@@ -59,18 +59,8 @@ export class BindingObserver implements ValueListObserverDelegate<Action> {
 
   private connectAction(action: Action) {
     const binding = new Binding(this.context, action)
-    const { controller } = binding.context
-    const method = (controller as any)[action.methodName]
-
     this.bindingsByAction.set(action, binding)
     this.delegate.bindingConnected(binding)
-
-    if (typeof method != "function") {
-      this.context.handleWarning(
-        `Action "${action.toString()}" references undefined method "${action.methodName}" on controller "${action.identifier}"`,
-        `connecting action "${action.toString()}"`
-      )
-    }
   }
 
   private disconnectAction(action: Action) {

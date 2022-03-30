@@ -14,11 +14,11 @@ export class ValueObserver implements StringMapObserverDelegate {
     this.receiver = receiver
     this.stringMapObserver = new StringMapObserver(this.element, this)
     this.valueDescriptorMap = (this.controller as any).valueDescriptorMap
-    this.invokeChangedCallbacksForDefaultValues()
   }
 
   start() {
     this.stringMapObserver.start()
+    this.invokeChangedCallbacksForDefaultValues()
   }
 
   stop() {

@@ -1,5 +1,6 @@
 ---
-permalink: /handbook/designing-for-resilience
+permalink: /handbook/designing-for-resilience.html
+order: 04
 ---
 
 # Designing For Resilience
@@ -18,7 +19,13 @@ Let's look at how we can progressively enhance our PIN field so that the Copy bu
 
 We'll start by hiding the Copy button in CSS. Then we'll _feature-test_ support for the Clipboard API in our Stimulus controller. If the API is supported, we'll add a class name to the controller element to reveal the button.
 
-Start by adding `class="clipboard-button"` to the button element:
+We start off by adding `data-clipboard-supported-class="clipboard--supported"` to the `div` element that has the `data-controller` attribute:
+
+```html
+  <div data-controller="clipboard" data-clipboard-supported-class="clipboard--supported">
+```
+
+Then add `class="clipboard-button"` to the button element:
 
 ```html
   <button data-action="clipboard#copy" class="clipboard-button">Copy to Clipboard</button>
@@ -36,13 +43,23 @@ Then add the following styles to `public/main.css`:
 }
 ```
 
-Now add a `connect()` method to the controller which will add a class name to the controller's element when the API is supported:
+First we'll add the `data-clipboard-supported-class` attribute inside the controller as a static class:
+
+```js
+  static classes = [ "supported" ]
+```
+
+This will let us control the specific CSS class in the HTML, so our controller becomes even more easily adaptable to different CSS approaches. The specific class added like this can be accessed via `this.supportedClass`.
+
+Now add a `connect()` method to the controller which will add a class name to the controller's element when the user agent has permission to write to the clipboard:
 
 ```js
   connect() {
-    if (document.queryCommandSupported("copy")) {
-      this.element.classList.add("clipboard--supported")
-    }
+    navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
+      if (result.state === "granted") {
+        this.element.classList.add(this.supportedClass);
+      }
+    });
   }
 ```
 
