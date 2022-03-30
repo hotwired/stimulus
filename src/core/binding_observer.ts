@@ -89,7 +89,7 @@ export class BindingObserver implements ValueListObserverDelegate<Action> {
   // Value observer delegate
 
   parseValueForToken(token: Token): Action | undefined {
-    const action = Action.forToken(token)
+    const action = Action.forToken(token, this.schema)
     if (action.identifier == this.identifier) {
       return action
     }
@@ -104,7 +104,7 @@ export class BindingObserver implements ValueListObserverDelegate<Action> {
   }
 
   elementMatchedNoValue(token: Token) {
-    const action = Action.forToken(token)
+    const action = Action.forToken(token, this.schema)
     this.context.handleWarning(
       `Action "${token.content}" references undefined controller "${action.identifier}"`,
       `connecting action "${token.content}"`

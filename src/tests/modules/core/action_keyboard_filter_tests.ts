@@ -1,6 +1,14 @@
+import { TestApplication } from "../../cases/application_test_case"
 import { LogControllerTestCase } from "../../cases/log_controller_test_case"
+import { Schema, defaultSchema } from "../../../core/schema";
+import { Application } from "../../../core/application";
+
+const customSchema = {...defaultSchema, keyMappings: {...defaultSchema.keyMappings, a: "a", b: "b"}};
 
 export default class ActionKeyboardFilterTests extends LogControllerTestCase {
+  schema: Schema = customSchema
+  application: Application = new TestApplication(this.fixtureElement, this.schema)
+
   identifier = ["a"]
   fixtureHTML = `
     <div data-controller="a" data-action="keydown.esc@document->a#log">
@@ -11,6 +19,7 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
       <button id="button5" data-action="keydown.home->a#log  keydown.end->a#log2   keydown->a#log3"></button>
       <button id="button6" data-action="keyup.end->a#log     keyup->a#log3"></button>
       <button id="button7"></button>
+      <button id="button8" data-action="keydown.a->a#log keydown.b->a#log2"></button>
     </div>
   `
 
@@ -131,5 +140,30 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
     this.assertActions(
       {name: "log", identifier: "a", eventType: 'keydown', currentTarget: document},
     )
+  }
+
+  async "test custom keymapping: a"() {
+    const button = this.findElement("#button8")
+    await this.nextFrame
+    await this.triggerKeyboardEvent(button, "keydown", {key: 'a'})
+    this.assertActions(
+      {name: "log", identifier: "a", eventType: 'keydown', currentTarget: button},
+    )
+  }
+
+  async "test custom keymapping: b"() {
+    const button = this.findElement("#button8")
+    await this.nextFrame
+    await this.triggerKeyboardEvent(button, "keydown", {key: 'b'})
+    this.assertActions(
+      {name: "log2", identifier: "a", eventType: 'keydown', currentTarget: button},
+    )
+  }
+
+  async "test custom keymapping: unknown c"() {
+    const button = this.findElement("#button8")
+    await this.nextFrame
+    await this.triggerKeyboardEvent(button, "keydown", {key: 'c'})
+    this.assertActions()
   }
 }
