@@ -64,6 +64,8 @@ input type=submit | click
 select            | change
 textarea          | input
 
+
+
 ## KeyboardEvent Filter
 
 You may have Actions that you wish to run only when certain keystrokes are received.
@@ -85,13 +87,27 @@ Modifier | Key Name
 enter    | Enter
 tab      | Tab
 esc      | Escape
-space:   | " "
+space    | " "
 up       | ArrowUp
 down     | ArrowDown
 left     | ArrowLeft
 right    | ArrowRight
 home     | Home
 end      | End
+
+If you need to support other keys, you can customize the modifier using custom schema.
+
+```javascript
+import { Application, defaultSchema } from "@hotwired/stimulus"
+
+const customSchema = {
+  ...defaultSchema,
+  keyMappings: {...defaultSchema.keyMappings, a: "a", w: "w", s: "s", d: "d" },
+}
+
+const app = Application.start(document.documentElement, customSchema);
+```
+
 
 ### Global Events
 
