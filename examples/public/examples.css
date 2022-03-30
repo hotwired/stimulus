@@ -94,3 +94,13 @@ main {
   min-width: 16em;
 }
 
+.tabpanel {
+  border: 1px solid #dedede;
+  display: none;
+  margin-top: .4rem;
+  padding: 0.8rem;
+  font-size: 6rem;
+}
+.tabpanel--current {
+  display: block;
+}

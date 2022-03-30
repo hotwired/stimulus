@@ -1,0 +1,42 @@
+<% include layout/head %>
+
+<div data-controller="tabs" data-tabs-current-class="tabpanel--current" aria-label="example">
+  <p>This tabbed interface is operated by focusing on a button and pressing the left and right keys.</p>
+  <div role="tablist">
+    <button
+      id="tab1"
+      role="tab"
+      tabindex="0"
+      data-action="keydown.left->tabs#previous keydown.right->tabs#next click->tabs#open"
+      data-tabs-target="tab"
+      aria-controls="panel1"
+    >tab1</button>
+    <button
+      id="tab2"
+      role="tab"
+      tabindex="0"
+      data-action="keydown.left->tabs#previous keydown.right->tabs#next click->tabs#open"
+      data-tabs-target="tab"
+      aria-controls="panel2"
+    >tab2</button>
+  </div>
+
+  <div
+    id="panel1"
+    role="tabpanel"
+    tabindex="0"
+    data-tabs-target="tabpanel"
+    class="tabpanel tabpanel--current"
+    aria-labelledby="tab1"
+  >🐵</div>
+  <div
+    id="panel2"
+    role="tabpanel"
+    tabindex="0"
+    data-tabs-target="tabpanel"
+    class="tabpanel"
+    aria-labelledby="tab2"
+  >🙈</div>
+</div>
+
+<% include layout/tail %>
