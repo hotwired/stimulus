@@ -16,3 +16,6 @@ application.register("hello", HelloController)
 
 import SlideshowController from "./controllers/slideshow_controller"
 application.register("slideshow", SlideshowController)
+
+import TabsController from "./controllers/tabs_controller"
+application.register("tabs", TabsController)

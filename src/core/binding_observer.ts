@@ -92,12 +92,4 @@ export class BindingObserver implements ValueListObserverDelegate<Action> {
   elementUnmatchedValue(element: Element, action: Action) {
     this.disconnectAction(action)
   }
-
-  elementMatchedNoValue(token: Token) {
-    const action = Action.forToken(token, this.schema)
-    this.context.handleWarning(
-      `Action "${token.content}" references undefined controller "${action.identifier}"`,
-      `connecting action "${token.content}"`
-    )
-  }
 }
