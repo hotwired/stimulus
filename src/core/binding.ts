@@ -3,6 +3,7 @@ import { ActionEvent } from "./action_event"
 import { Context } from "./context"
 import { Controller } from "./controller"
 import { Scope } from "./scope"
+import { ExtendedAddEventListenerOptions } from "../extensions"
 
 export class Binding {
   readonly context: Context
@@ -21,7 +22,7 @@ export class Binding {
     return this.action.eventTarget
   }
 
-  get eventOptions(): AddEventListenerOptions {
+  get eventOptions(): ExtendedAddEventListenerOptions {
     return this.action.eventOptions
   }
 
@@ -31,6 +32,10 @@ export class Binding {
 
   handleEvent(event: Event) {
     if (this.willBeInvokedByEvent(event)) {
+      if (this.action.eventOptions.stop) {
+        event.stopPropagation();
+      }
+
       this.invokeWithEvent(event)
     }
   }

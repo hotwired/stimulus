@@ -1,6 +1,8 @@
+import { ExtendedAddEventListenerOptions } from "../extensions"
+
 export interface ActionDescriptor {
   eventTarget: EventTarget
-  eventOptions: AddEventListenerOptions
+  eventOptions: ExtendedAddEventListenerOptions
   eventName: string
   identifier: string
   methodName: string
@@ -29,7 +31,7 @@ function parseEventTarget(eventTargetName: string): EventTarget | undefined {
   }
 }
 
-function parseEventOptions(eventOptions: string): AddEventListenerOptions {
+function parseEventOptions(eventOptions: string): ExtendedAddEventListenerOptions {
   return eventOptions.split(":").reduce((options, token) =>
     Object.assign(options, { [token.replace(/^!/, "")]: !/^!/.test(token) })
   , {})
