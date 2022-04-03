@@ -131,7 +131,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     )
   }
 
-  async "test stop option with default event"() {
+  async "test stop option with implicit event"() {
     this.elementActionValue = "click->c#logPropagationContinued"
     this.actionValue = "c#log:stop"
     await this.nextFrame
@@ -143,7 +143,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     )
   }
 
-  async "test stop option with specified event"() {
+  async "test stop option with explicit event"() {
     this.elementActionValue = "keydown->c#logPropagationContinued"
     this.actionValue = "keydown->c#log:stop"
     await this.nextFrame
