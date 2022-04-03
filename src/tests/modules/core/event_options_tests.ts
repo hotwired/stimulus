@@ -143,6 +143,18 @@ export default class EventOptionsTests extends LogControllerTestCase {
     )
   }
 
+  async "test stop option with specified event"() {
+    this.elementActionValue = "keydown->c#logPropagationContinued"
+    this.actionValue = "keydown->c#log:stop"
+    await this.nextFrame
+
+    await this.triggerEvent(this.buttonElement, "keydown")
+
+    this.assertActions(
+      { name: "log", eventType: "keydown" }
+    )
+  }
+
   set actionValue(value: string) {
     this.buttonElement.setAttribute("data-action", value)
   }
