@@ -37,7 +37,7 @@ function slice(object: any, keys: string[]): any {
 function deepEqual(obj1: any, obj2: any): boolean {
   if (obj1 === obj2) {
     return true
-  } else {
+  } else if (typeof obj1 === "object" && typeof obj2 === "object") {
     if (Object.keys(obj1).length !== Object.keys(obj2).length) { return false }
     for (var prop in obj1) {
       if (!deepEqual(obj1[prop], obj2[prop])) {
@@ -45,5 +45,7 @@ function deepEqual(obj1: any, obj2: any): boolean {
       }
     }
     return true
+  } else {
+    return false
   }
 }
