@@ -198,6 +198,41 @@ class EffectsController extends Controller {
 }
 ```
 
+`dispatch` accepts additional options as the second parameter as follows:
+
+option       | default            | notes
+-------------|--------------------|----------------------------------------------------------------------------------------------
+`detail`     | `{}` empty object  | See [CustomEvent.detail](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/detail)
+`target`     | `this.element`     | See [Event.target](https://developer.mozilla.org/en-US/docs/Web/API/Event/target)
+`prefix`     | `this.identifier`  | If the prefix is falsey (e.g. `null` or `false`), only the `eventName` will be used. If you provide a string value the `eventName` will be prepended with the provided string and a colon. 
+`bubbles`    | `true`             | See [Event.bubbles](https://developer.mozilla.org/en-US/docs/Web/API/Event/bubbles)
+`cancelable` | `true`             | See [Event.cancelable](https://developer.mozilla.org/en-US/docs/Web/API/Event/cancelable)
+
+`dispatch` will return the generated [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent), you can use this to provide a way for the event to be cancelled by any other listeners as follows:
+
+```js
+class ClipboardController extends Controller {
+  static targets = [ "source" ]
+
+  copy() {
+    const event = this.dispatch("copy", { cancelable: true })
+    if (event.defaultPrevented) return
+
+    this.sourceTarget.select()
+    document.execCommand("copy")
+  }
+}
+```
+
+```js
+class EffectsController extends Controller {
+  flash(event) {
+    // this will prevent the default behaviour as determined by the dispatched event
+    event.preventDefault()
+  }
+}
+```
+
 ## Directly Invoking Other Controllers
 
 If for some reason it is not possible to use events to communicate between controllers, you can reach a controller instance via the `getControllerForElementAndIdentifier` method from the application. This should only be used if you have a unique problem that cannot be solved through the more general way of using events, but if you must, this is how:
