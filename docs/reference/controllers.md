@@ -205,7 +205,7 @@ option       | default            | notes
 `target`     | `this.element`     | See [Event.target](https://developer.mozilla.org/en-US/docs/Web/API/Event/target)
 `prefix`     | `this.identifier`  | If prefix is falsey (e.g. `null`), only the `eventName` will be used
 `bubbles`    | `true`             | See [Event.bubbles](https://developer.mozilla.org/en-US/docs/Web/API/Event/bubbles)
-`cancelable` | `true`             | see [Event.cancelable](https://developer.mozilla.org/en-US/docs/Web/API/Event/cancelable)
+`cancelable` | `true`             | See [Event.cancelable](https://developer.mozilla.org/en-US/docs/Web/API/Event/cancelable)
 
 `dispatch` will return the generated [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent), you can use this to provide a way for the event to be cancelled by any other listeners as follows:
 
