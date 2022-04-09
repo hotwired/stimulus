@@ -203,7 +203,7 @@ option       | default            | notes
 -------------|--------------------|----------------------------------------------------------------------------------------------
 `detail`     | `{}` empty object  | See [CustomEvent.detail](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/detail)
 `target`     | `this.element`     | See [Event.target](https://developer.mozilla.org/en-US/docs/Web/API/Event/target)
-`prefix`     | `this.identifier`  | If prefix is falsey (e.g. `null`), only the `eventName` will be used
+`prefix`     | `this.identifier`  | If the prefix is falsey (e.g. `null` or `false`), only the `eventName` will be used. If you provide a string value the `eventName` will be prepended with the provided string and a colon. 
 `bubbles`    | `true`             | See [Event.bubbles](https://developer.mozilla.org/en-US/docs/Web/API/Event/bubbles)
 `cancelable` | `true`             | See [Event.cancelable](https://developer.mozilla.org/en-US/docs/Web/API/Event/cancelable)
 
