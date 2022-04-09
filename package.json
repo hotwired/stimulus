@@ -47,7 +47,7 @@
     "@types/qunit": "^2.9.0",
     "@types/webpack-env": "^1.14.0",
     "concurrently": "^6.2.1",
-    "karma": "^5.2.3",
+    "karma": "^6.3.16",
     "karma-chrome-launcher": "^3.1.0",
     "karma-qunit": "^4.0.0",
     "karma-sauce-launcher": "^4.3.6",
