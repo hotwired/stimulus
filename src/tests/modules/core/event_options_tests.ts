@@ -132,39 +132,39 @@ export default class EventOptionsTests extends LogControllerTestCase {
   }
 
   async "test stop option with implicit event"() {
-    this.elementActionValue = "click->c#logPropagationContinued"
-    this.actionValue = "c#log:stop"
+    this.elementActionValue = "click->c#log"
+    this.actionValue = "c#log2:stop"
     await this.nextFrame
 
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
-      { name: "log", eventType: "click" }
+      { name: "log2", eventType: "click" }
     )
   }
 
   async "test stop option with explicit event"() {
-    this.elementActionValue = "keydown->c#logPropagationContinued"
-    this.actionValue = "keydown->c#log:stop"
+    this.elementActionValue = "keydown->c#log"
+    this.actionValue = "keydown->c#log2:stop"
     await this.nextFrame
 
     await this.triggerEvent(this.buttonElement, "keydown")
 
     this.assertActions(
-      { name: "log", eventType: "keydown" }
+      { name: "log2", eventType: "keydown" }
     )
   }
 
   async "test event propagation without stop option"() {
-    this.elementActionValue = "click->c#logPropagationContinued"
-    this.actionValue = "c#log"
+    this.elementActionValue = "click->c#log"
+    this.actionValue = "c#log2"
     await this.nextFrame
 
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
-      { name: "log", eventType: "click" },
-      { name: "logPropagationContinued", eventType: "click" }
+      { name: "log2", eventType: "click" },
+      { name: "log", eventType: "click" }
     )
   }
 

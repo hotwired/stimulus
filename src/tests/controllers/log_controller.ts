@@ -51,10 +51,6 @@ export class LogController extends Controller {
     }
   }
 
-  logPropagationContinued(event: ActionEvent) {
-    this.recordAction("logPropagationContinued", event)
-  }
-
   stop(event: ActionEvent) {
     this.recordAction("stop", event)
     event.stopImmediatePropagation()
