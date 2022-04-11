@@ -3,13 +3,13 @@ import { Controller } from "./controller"
 import { readInheritableStaticObjectPairs } from "./inheritable_statics"
 import { camelize, capitalize, dasherize } from "./string_helpers"
 
-export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
+export function ValuePropertiesBlessing<T>(this: Controller, constructor: Constructor<T>) {
   const valueDefinitionPairs = readInheritableStaticObjectPairs<T, ValueTypeDefinition>(constructor, "values")
   const propertyDescriptorMap: PropertyDescriptorMap = {
     valueDescriptorMap: {
       get(this: Controller) {
         return valueDefinitionPairs.reduce((result, valueDefinitionPair) => {
-          const valueDescriptor = parseValueDefinitionPair(valueDefinitionPair)
+          const valueDescriptor = parseValueDefinitionPair(valueDefinitionPair, this.identifier)
           const attributeName = this.data.getAttributeNameForKey(valueDescriptor.key)
           return Object.assign(result, { [attributeName]: valueDescriptor })
         }, {} as ValueDescriptorMap)
@@ -18,12 +18,12 @@ export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
   }
 
   return valueDefinitionPairs.reduce((properties, valueDefinitionPair) => {
-    return Object.assign(properties, propertiesForValueDefinitionPair(valueDefinitionPair))
+    return Object.assign(properties, propertiesForValueDefinitionPair(valueDefinitionPair, this.identifier))
   }, propertyDescriptorMap)
 }
 
-export function propertiesForValueDefinitionPair<T>(valueDefinitionPair: ValueDefinitionPair): PropertyDescriptorMap {
-  const definition = parseValueDefinitionPair(valueDefinitionPair)
+export function propertiesForValueDefinitionPair<T>(valueDefinitionPair: ValueDefinitionPair, controller: string): PropertyDescriptorMap {
+  const definition = parseValueDefinitionPair(valueDefinitionPair, controller)
   const { key, name, reader: read, writer: write } = definition
 
   return {
@@ -80,8 +80,12 @@ export type ValueTypeDefinition = ValueTypeConstant | ValueTypeDefault | ValueTy
 
 export type ValueType = "array" | "boolean" | "number" | "object" | "string"
 
-function parseValueDefinitionPair([token, typeDefinition]: ValueDefinitionPair): ValueDescriptor {
-  return valueDescriptorForTokenAndTypeDefinition(token, typeDefinition)
+function parseValueDefinitionPair([token, typeDefinition]: ValueDefinitionPair, controller: string): ValueDescriptor {
+  return valueDescriptorForTokenAndTypeDefinition({
+    controller,
+    token, 
+    typeDefinition,
+  })
 }
 
 function parseValueTypeConstant(constant: ValueTypeConstant) {
@@ -105,29 +109,33 @@ function parseValueTypeDefault(defaultValue: ValueTypeDefault) {
   if (Object.prototype.toString.call(defaultValue) === "[object Object]") return "object"
 }
 
-function parseValueTypeObject(token: string, typeObject: ValueTypeObject) {
-  const typeFromObject = parseValueTypeConstant(typeObject.type)
+function parseValueTypeObject(payload: { controller: string, token: string, typeObject: ValueTypeObject }) {
+  const typeFromObject = parseValueTypeConstant(payload.typeObject.type)
 
   if (typeFromObject) {
-    const defaultValueType = parseValueTypeDefault(typeObject.default)
+    const defaultValueType = parseValueTypeDefault(payload.typeObject.default)
 
     if (typeFromObject !== defaultValueType) {
-      throw new Error(`Type "${typeFromObject}" for "${token}" value, must match the type of the default value. Given default value: "${typeObject.default}" as "${defaultValueType}"`)
+      throw new Error(`Type "${typeFromObject}" for "${payload.controller}.${payload.token}" value, must match the type of the default value. Given default value: "${payload.typeObject.default}" as "${defaultValueType}"`)
     }
 
     return typeFromObject
   }
 }
 
-function parseValueTypeDefinition(token: string, typeDefinition: ValueTypeDefinition): ValueType {
-  const typeFromObject = parseValueTypeObject(token, typeDefinition as ValueTypeObject)
-  const typeFromDefaultValue = parseValueTypeDefault(typeDefinition as ValueTypeDefault)
-  const typeFromConstant = parseValueTypeConstant(typeDefinition as ValueTypeConstant)
+function parseValueTypeDefinition(payload: { controller: string, token: string, typeDefinition: ValueTypeDefinition }): ValueType {
+  const typeFromObject = parseValueTypeObject({
+    controller: payload.controller,
+    token: payload.token, 
+    typeObject: payload.typeDefinition as ValueTypeObject
+  })
+  const typeFromDefaultValue = parseValueTypeDefault(payload.typeDefinition as ValueTypeDefault)
+  const typeFromConstant = parseValueTypeConstant(payload.typeDefinition as ValueTypeConstant)
 
   const type = typeFromObject || typeFromDefaultValue || typeFromConstant
   if (type) return type
 
-  throw new Error(`Unknown value type "${typeDefinition}" for "${token}" value`)
+  throw new Error(`Unknown value type ""${payload.controller}".${payload.typeDefinition}" for "${payload.token}" value`)
 }
 
 function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): ValueTypeDefault {
@@ -141,15 +149,15 @@ function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): ValueTy
   return typeDefinition
 }
 
-function valueDescriptorForTokenAndTypeDefinition(token: string, typeDefinition: ValueTypeDefinition) {
-  const key = `${dasherize(token)}-value`
-  const type = parseValueTypeDefinition(token, typeDefinition)
+function valueDescriptorForTokenAndTypeDefinition(payload: { token: string, typeDefinition: ValueTypeDefinition, controller: string }) {
+  const key = `${dasherize(payload.token)}-value`
+  const type = parseValueTypeDefinition(payload)
   return {
     type,
     key,
     name: camelize(key),
-    get defaultValue() { return defaultValueForDefinition(typeDefinition) },
-    get hasCustomDefaultValue() { return parseValueTypeDefault(typeDefinition) !== undefined },
+    get defaultValue() { return defaultValueForDefinition(payload.typeDefinition) },
+    get hasCustomDefaultValue() { return parseValueTypeDefault(payload.typeDefinition) !== undefined },
     reader: readers[type],
     writer: writers[type] || writers.default
   }
