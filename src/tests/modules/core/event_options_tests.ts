@@ -168,6 +168,17 @@ export default class EventOptionsTests extends LogControllerTestCase {
     )
   }
 
+  async "test prevent option with implicit event"() {
+    this.actionValue = "c#log:prevent"
+    await this.nextFrame
+
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { name: "log", eventType: "click", defaultPrevented: true }
+    )
+  }
+
   set actionValue(value: string) {
     this.buttonElement.setAttribute("data-action", value)
   }

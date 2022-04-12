@@ -36,6 +36,10 @@ export class Binding {
         event.stopPropagation();
       }
 
+      if (this.action.eventOptions.prevent) {
+        event.preventDefault();
+      }
+
       this.invokeWithEvent(event)
     }
   }
