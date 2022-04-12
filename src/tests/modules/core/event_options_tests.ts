@@ -179,6 +179,17 @@ export default class EventOptionsTests extends LogControllerTestCase {
     )
   }
 
+  async "test prevent option with explicit event"() {
+    this.actionValue = "keyup->c#log:prevent"
+    await this.nextFrame
+
+    await this.triggerEvent(this.buttonElement, "keyup")
+
+    this.assertActions(
+      { name: "log", eventType: "keyup", defaultPrevented: true }
+    )
+  }
+
   set actionValue(value: string) {
     this.buttonElement.setAttribute("data-action", value)
   }
