@@ -3,7 +3,7 @@ import { ActionEvent } from "./action_event"
 import { Context } from "./context"
 import { Controller } from "./controller"
 import { Scope } from "./scope"
-import { ExtendedAddEventListenerOptions } from "../extensions"
+import { EventModifiers } from "./event_modifiers"
 
 export class Binding {
   readonly context: Context
@@ -22,7 +22,7 @@ export class Binding {
     return this.action.eventTarget
   }
 
-  get eventOptions(): ExtendedAddEventListenerOptions {
+  get eventOptions(): EventModifiers {
     return this.action.eventOptions
   }
 

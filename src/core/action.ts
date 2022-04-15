@@ -1,14 +1,14 @@
 import { ActionDescriptor, parseActionDescriptorString, stringifyEventTarget } from "./action_descriptor"
 import { Token } from "../mutation-observers"
 import { camelize } from "./string_helpers"
-import { ExtendedAddEventListenerOptions } from "../extensions"
+import { EventModifiers } from "./event_modifiers"
 
 export class Action {
   readonly element: Element
   readonly index: number
   readonly eventTarget: EventTarget
   readonly eventName: string
-  readonly eventOptions: ExtendedAddEventListenerOptions
+  readonly eventOptions: EventModifiers
   readonly identifier: string
   readonly methodName: string
 
