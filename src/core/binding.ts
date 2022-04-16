@@ -79,13 +79,17 @@ export class Binding {
 
   private willBeInvokedByEvent(event: Event): boolean {
     const eventTarget = event.target
+
+    let isWithinScopeForExecution;
     if (this.element === eventTarget) {
-      return true
+      isWithinScopeForExecution = true
     } else if (eventTarget instanceof Element && this.element.contains(eventTarget)) {
-      return this.scope.containsElement(eventTarget)
+      isWithinScopeForExecution = this.scope.containsElement(eventTarget)
     } else {
-      return this.scope.containsElement(this.action.element)
+      isWithinScopeForExecution = this.scope.containsElement(this.action.element)
     }
+
+    return isWithinScopeForExecution && (this.action.eventOptions.self === false ? false : true)
   }
 
   private get controller(): Controller {
