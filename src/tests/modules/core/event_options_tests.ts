@@ -201,7 +201,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     )
   }
 
-  async "test self option presence"() {
+  async "test self option true"() {
     this.setAction(this.buttonElement, "click->c#log:self")
     await this.nextFrame
 
@@ -212,7 +212,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     )
   }
 
-  async "test not-self option presence"() {
+  async "test self option false"() {
     this.setAction(this.buttonElement, "click->c#log:!self")
     await this.nextFrame
 
