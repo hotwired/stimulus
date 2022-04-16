@@ -221,6 +221,37 @@ export default class EventOptionsTests extends LogControllerTestCase {
     this.assertNoActions()
   }
 
+  async "test self option absence on parent"() {
+    this.setAction(this.element, "click->c#log")
+    await this.nextFrame
+
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { name: "log", eventType: "click" }
+    )
+  }
+
+  async "test self option true on parent"() {
+    this.setAction(this.element, "click->c#log:self")
+    await this.nextFrame
+
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertNoActions()
+  }
+
+  async "test self option false on parent"() {
+    this.setAction(this.element, "click->c#log:!self")
+    await this.nextFrame
+
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { name: "log", eventType: "click" }
+    )
+  }
+
   setAction(element: Element, value: string) {
     element.setAttribute("data-action", value)
   }

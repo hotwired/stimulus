@@ -31,7 +31,7 @@ export class Binding {
   }
 
   handleEvent(event: Event) {
-    if (this.willBeInvokedByEvent(event)) {
+    if (this.willBeInvokedByEvent(event) && this.shouldBeInvokedPerSelf(event)) {
       this.processStopPropagation(event);
       this.processPreventDefault(event);
 
@@ -77,19 +77,25 @@ export class Binding {
     }
   }
 
+  private shouldBeInvokedPerSelf(event: Event): boolean {
+    if (this.action.eventOptions.self === true) {
+      return this.action.element === event.target
+    } else if (this.action.eventOptions.self === false) {
+      return this.action.element !== event.target
+    } else {
+      return true
+    }
+  }
+
   private willBeInvokedByEvent(event: Event): boolean {
     const eventTarget = event.target
-
-    let isWithinScopeForExecution;
     if (this.element === eventTarget) {
-      isWithinScopeForExecution = true
+      return true
     } else if (eventTarget instanceof Element && this.element.contains(eventTarget)) {
-      isWithinScopeForExecution = this.scope.containsElement(eventTarget)
+      return this.scope.containsElement(eventTarget)
     } else {
-      isWithinScopeForExecution = this.scope.containsElement(this.action.element)
+      return this.scope.containsElement(this.action.element)
     }
-
-    return isWithinScopeForExecution && (this.action.eventOptions.self === false ? false : true)
   }
 
   private get controller(): Controller {
