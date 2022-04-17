@@ -32,13 +32,8 @@ export class Binding {
 
   handleEvent(event: Event) {
     if (this.willBeInvokedByEvent(event)) {
-      if (this.eventOptions.stop) {
-        event.stopPropagation();
-      }
-
-      if (this.eventOptions.prevent) {
-        event.preventDefault();
-      }
+      this.processStopPropagation(event);
+      this.processPreventDefault(event);
 
       this.invokeWithEvent(event)
     }
@@ -54,6 +49,18 @@ export class Binding {
       return method
     }
     throw new Error(`Action "${this.action}" references undefined method "${this.methodName}"`)
+  }
+
+  private processStopPropagation(event: Event) {
+    if (this.eventOptions.stop) {
+      event.stopPropagation();
+    }
+  }
+
+  private processPreventDefault(event: Event) {
+    if (this.eventOptions.prevent) {
+      event.preventDefault();
+    }
   }
 
   private invokeWithEvent(event: Event) {
