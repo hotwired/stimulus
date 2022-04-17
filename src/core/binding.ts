@@ -32,11 +32,11 @@ export class Binding {
 
   handleEvent(event: Event) {
     if (this.willBeInvokedByEvent(event)) {
-      if (this.action.eventOptions.stop) {
+      if (this.eventOptions.stop) {
         event.stopPropagation();
       }
 
-      if (this.action.eventOptions.prevent) {
+      if (this.eventOptions.prevent) {
         event.preventDefault();
       }
 
