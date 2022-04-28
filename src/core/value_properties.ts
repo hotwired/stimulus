@@ -3,7 +3,7 @@ import { Controller } from "./controller"
 import { readInheritableStaticObjectPairs } from "./inheritable_statics"
 import { camelize, capitalize, dasherize } from "./string_helpers"
 
-export function ValuePropertiesBlessing<T>(this: Controller, constructor: Constructor<T>) {
+export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
   const valueDefinitionPairs = readInheritableStaticObjectPairs<T, ValueTypeDefinition>(constructor, "values")
   const propertyDescriptorMap: PropertyDescriptorMap = {
     valueDescriptorMap: {
@@ -18,11 +18,11 @@ export function ValuePropertiesBlessing<T>(this: Controller, constructor: Constr
   }
 
   return valueDefinitionPairs.reduce((properties, valueDefinitionPair) => {
-    return Object.assign(properties, propertiesForValueDefinitionPair(valueDefinitionPair, this.identifier))
+    return Object.assign(properties, propertiesForValueDefinitionPair(valueDefinitionPair))
   }, propertyDescriptorMap)
 }
 
-export function propertiesForValueDefinitionPair<T>(valueDefinitionPair: ValueDefinitionPair, controller: string): PropertyDescriptorMap {
+export function propertiesForValueDefinitionPair<T>(valueDefinitionPair: ValueDefinitionPair, controller?: string): PropertyDescriptorMap {
   const definition = parseValueDefinitionPair(valueDefinitionPair, controller)
   const { key, name, reader: read, writer: write } = definition
 
@@ -80,10 +80,10 @@ export type ValueTypeDefinition = ValueTypeConstant | ValueTypeDefault | ValueTy
 
 export type ValueType = "array" | "boolean" | "number" | "object" | "string"
 
-function parseValueDefinitionPair([token, typeDefinition]: ValueDefinitionPair, controller: string): ValueDescriptor {
+function parseValueDefinitionPair([token, typeDefinition]: ValueDefinitionPair, controller?: string): ValueDescriptor {
   return valueDescriptorForTokenAndTypeDefinition({
     controller,
-    token, 
+    token,
     typeDefinition,
   })
 }
@@ -109,33 +109,42 @@ function parseValueTypeDefault(defaultValue: ValueTypeDefault) {
   if (Object.prototype.toString.call(defaultValue) === "[object Object]") return "object"
 }
 
-function parseValueTypeObject(payload: { controller: string, token: string, typeObject: ValueTypeObject }) {
+function parseValueTypeObject(payload: { controller?: string, token: string, typeObject: ValueTypeObject }) {
   const typeFromObject = parseValueTypeConstant(payload.typeObject.type)
 
-  if (typeFromObject) {
-    const defaultValueType = parseValueTypeDefault(payload.typeObject.default)
+  if (!typeFromObject) return
 
-    if (typeFromObject !== defaultValueType) {
-      throw new Error(`Type "${typeFromObject}" for "${payload.controller}.${payload.token}" value, must match the type of the default value. Given default value: "${payload.typeObject.default}" as "${defaultValueType}"`)
-    }
+  const defaultValueType = parseValueTypeDefault(payload.typeObject.default)
 
-    return typeFromObject
+  if (typeFromObject !== defaultValueType) {
+    const propertyPath = payload.controller ? `${payload.controller}.${payload.token}` : payload.token
+
+    throw new Error(`Type "${typeFromObject}" for "${propertyPath}" value, must match the type of the default value. Given default value: "${payload.typeObject.default}" as "${defaultValueType}"`)
   }
+
+  return typeFromObject
 }
 
-function parseValueTypeDefinition(payload: { controller: string, token: string, typeDefinition: ValueTypeDefinition }): ValueType {
+function parseValueTypeDefinition(payload: { controller?: string, token: string, typeDefinition: ValueTypeDefinition }): ValueType {
   const typeFromObject = parseValueTypeObject({
     controller: payload.controller,
-    token: payload.token, 
+    token: payload.token,
     typeObject: payload.typeDefinition as ValueTypeObject
   })
   const typeFromDefaultValue = parseValueTypeDefault(payload.typeDefinition as ValueTypeDefault)
   const typeFromConstant = parseValueTypeConstant(payload.typeDefinition as ValueTypeConstant)
 
   const type = typeFromObject || typeFromDefaultValue || typeFromConstant
+
   if (type) return type
 
-  throw new Error(`Unknown value type ""${payload.controller}".${payload.typeDefinition}" for "${payload.token}" value`)
+  const propertyPath = payload.controller ? `${payload.controller}.${payload.typeDefinition}` : payload.token
+
+  if (payload.controller) {
+    throw new Error(`Unknown value type "${propertyPath}" for "${payload.token}" value`)
+  }
+
+  throw new Error(`Unknown value type "${propertyPath}" for "${payload.token}" value`)
 }
 
 function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): ValueTypeDefault {
@@ -149,7 +158,7 @@ function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): ValueTy
   return typeDefinition
 }
 
-function valueDescriptorForTokenAndTypeDefinition(payload: { token: string, typeDefinition: ValueTypeDefinition, controller: string }) {
+function valueDescriptorForTokenAndTypeDefinition(payload: { token: string, typeDefinition: ValueTypeDefinition, controller?: string }) {
   const key = `${dasherize(payload.token)}-value`
   const type = parseValueTypeDefinition(payload)
   return {
