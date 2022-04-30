@@ -3,6 +3,7 @@ import { ActionEvent } from "./action_event"
 import { Context } from "./context"
 import { Controller } from "./controller"
 import { Scope } from "./scope"
+import { EventModifiers } from "./event_modifiers"
 
 export class Binding {
   readonly context: Context
@@ -21,7 +22,7 @@ export class Binding {
     return this.action.eventTarget
   }
 
-  get eventOptions(): AddEventListenerOptions {
+  get eventOptions(): EventModifiers {
     return this.action.eventOptions
   }
 
@@ -31,6 +32,9 @@ export class Binding {
 
   handleEvent(event: Event) {
     if (this.willBeInvokedByEvent(event)) {
+      this.processStopPropagation(event);
+      this.processPreventDefault(event);
+
       this.invokeWithEvent(event)
     }
   }
@@ -45,6 +49,18 @@ export class Binding {
       return method
     }
     throw new Error(`Action "${this.action}" references undefined method "${this.methodName}"`)
+  }
+
+  private processStopPropagation(event: Event) {
+    if (this.eventOptions.stop) {
+      event.stopPropagation();
+    }
+  }
+
+  private processPreventDefault(event: Event) {
+    if (this.eventOptions.prevent) {
+      event.preventDefault();
+    }
   }
 
   private invokeWithEvent(event: Event) {

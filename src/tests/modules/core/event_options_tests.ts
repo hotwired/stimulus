@@ -131,8 +131,71 @@ export default class EventOptionsTests extends LogControllerTestCase {
     )
   }
 
+  async "test stop option with implicit event"() {
+    this.elementActionValue = "click->c#log"
+    this.actionValue = "c#log2:stop"
+    await this.nextFrame
+
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { name: "log2", eventType: "click" }
+    )
+  }
+
+  async "test stop option with explicit event"() {
+    this.elementActionValue = "keydown->c#log"
+    this.actionValue = "keydown->c#log2:stop"
+    await this.nextFrame
+
+    await this.triggerEvent(this.buttonElement, "keydown")
+
+    this.assertActions(
+      { name: "log2", eventType: "keydown" }
+    )
+  }
+
+  async "test event propagation without stop option"() {
+    this.elementActionValue = "click->c#log"
+    this.actionValue = "c#log2"
+    await this.nextFrame
+
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { name: "log2", eventType: "click" },
+      { name: "log", eventType: "click" }
+    )
+  }
+
+  async "test prevent option with implicit event"() {
+    this.actionValue = "c#log:prevent"
+    await this.nextFrame
+
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { name: "log", eventType: "click", defaultPrevented: true }
+    )
+  }
+
+  async "test prevent option with explicit event"() {
+    this.actionValue = "keyup->c#log:prevent"
+    await this.nextFrame
+
+    await this.triggerEvent(this.buttonElement, "keyup")
+
+    this.assertActions(
+      { name: "log", eventType: "keyup", defaultPrevented: true }
+    )
+  }
+
   set actionValue(value: string) {
     this.buttonElement.setAttribute("data-action", value)
+  }
+
+  set elementActionValue(value: string) {
+    this.element.setAttribute("data-action", value)
   }
 
   get element() {

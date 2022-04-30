@@ -101,6 +101,13 @@ Action option | DOM event listener option
 `:passive`    | `{ passive: true }`
 `:!passive`   | `{ passive: false }`
 
+On top of that, Stimulus also supports the following action options which are not natively supported by the DOM event listener options:
+
+Custom action option | Description
+-------------------- | -----------
+`:stop`              | calls `.stopPropagation()` on the event before invoking the method
+`:prevent`           | calls `.preventDefault()` on the event before invoking the method
+
 ## Event Objects
 
 An _action method_ is the method in a controller which serves as an action's event listener.
