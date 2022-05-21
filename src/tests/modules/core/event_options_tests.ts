@@ -9,7 +9,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     <div id="outside"></div>
   `
   async "test different syntaxes for once action"() {
-    this.actionValue = "click->c#log:once d#log2:once c#log3:once"
+    this.setAction(this.buttonElement, "click->c#log:once d#log2:once c#log3:once")
 
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
@@ -23,7 +23,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
   }
 
   async "test mix once and standard actions"() {
-    this.actionValue = "c#log:once d#log2 c#log3"
+    this.setAction(this.buttonElement, "c#log:once d#log2 c#log3")
 
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
@@ -39,7 +39,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
   }
 
   async "test stop propagation with once"() {
-    this.actionValue = "c#stop:once c#log"
+    this.setAction(this.buttonElement, "c#stop:once c#log")
 
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
@@ -57,7 +57,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
   }
 
   async "test global once actions"() {
-    this.actionValue = "keydown@window->c#log:once"
+    this.setAction(this.buttonElement, "keydown@window->c#log:once")
 
     await this.nextFrame
     await this.triggerEvent("#outside", "keydown")
@@ -67,13 +67,13 @@ export default class EventOptionsTests extends LogControllerTestCase {
   }
 
   async "test edge case when updating action list with setAttribute preserves once history"() {
-    this.actionValue = "c#log:once"
+    this.setAction(this.buttonElement, "c#log:once")
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
     await this.triggerEvent(this.buttonElement, "click")
 
     //modify with a setAttribute and c#log should not be called anyhow
-    this.actionValue = "c#log2 c#log:once d#log"
+    this.setAction(this.buttonElement, "c#log2 c#log:once d#log")
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
 
@@ -85,7 +85,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
   }
 
   async "test default passive action"() {
-    this.actionValue = "scroll->c#logPassive:passive"
+    this.setAction(this.buttonElement, "scroll->c#logPassive:passive")
     await this.nextFrame
 
     await this.triggerEvent(this.buttonElement, "scroll", { setDefaultPrevented: false })
@@ -93,7 +93,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
   }
 
   async "test global passive actions"() {
-    this.actionValue = "mouseup@window->c#logPassive:passive"
+    this.setAction(this.buttonElement, "mouseup@window->c#logPassive:passive")
     await this.nextFrame
 
     await this.triggerEvent("#outside", "mouseup", { setDefaultPrevented: false })
@@ -102,7 +102,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
 
   async "test passive false actions"() {
     // by default touchmove is true in chrome
-    this.actionValue = "touchmove@window->c#logPassive:!passive"
+    this.setAction(this.buttonElement, "touchmove@window->c#logPassive:!passive")
     await this.nextFrame
 
     await this.triggerEvent("#outside", "touchmove", { setDefaultPrevented: false })
@@ -111,7 +111,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
 
   async "test multiple options"() {
     // by default touchmove is true in chrome
-    this.actionValue = "touchmove@window->c#logPassive:once:!passive"
+    this.setAction(this.buttonElement, "touchmove@window->c#logPassive:once:!passive")
     await this.nextFrame
 
     await this.triggerEvent("#outside", "touchmove", { setDefaultPrevented: false })
@@ -120,7 +120,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
   }
 
   async "test wrong options are silently ignored"() {
-    this.actionValue = "c#log:wrong:verywrong"
+    this.setAction(this.buttonElement, "c#log:wrong:verywrong")
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
     await this.triggerEvent(this.buttonElement, "click")
@@ -132,8 +132,8 @@ export default class EventOptionsTests extends LogControllerTestCase {
   }
 
   async "test stop option with implicit event"() {
-    this.elementActionValue = "click->c#log"
-    this.actionValue = "c#log2:stop"
+    this.setAction(this.element, "click->c#log")
+    this.setAction(this.buttonElement, "c#log2:stop")
     await this.nextFrame
 
     await this.triggerEvent(this.buttonElement, "click")
@@ -144,8 +144,8 @@ export default class EventOptionsTests extends LogControllerTestCase {
   }
 
   async "test stop option with explicit event"() {
-    this.elementActionValue = "keydown->c#log"
-    this.actionValue = "keydown->c#log2:stop"
+    this.setAction(this.element, "keydown->c#log")
+    this.setAction(this.buttonElement, "keydown->c#log2:stop")
     await this.nextFrame
 
     await this.triggerEvent(this.buttonElement, "keydown")
@@ -156,8 +156,8 @@ export default class EventOptionsTests extends LogControllerTestCase {
   }
 
   async "test event propagation without stop option"() {
-    this.elementActionValue = "click->c#log"
-    this.actionValue = "c#log2"
+    this.setAction(this.element, "click->c#log")
+    this.setAction(this.buttonElement, "c#log2")
     await this.nextFrame
 
     await this.triggerEvent(this.buttonElement, "click")
@@ -169,7 +169,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
   }
 
   async "test prevent option with implicit event"() {
-    this.actionValue = "c#log:prevent"
+    this.setAction(this.buttonElement, "c#log:prevent")
     await this.nextFrame
 
     await this.triggerEvent(this.buttonElement, "click")
@@ -180,7 +180,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
   }
 
   async "test prevent option with explicit event"() {
-    this.actionValue = "keyup->c#log:prevent"
+    this.setAction(this.buttonElement, "keyup->c#log:prevent")
     await this.nextFrame
 
     await this.triggerEvent(this.buttonElement, "keyup")
@@ -190,12 +190,8 @@ export default class EventOptionsTests extends LogControllerTestCase {
     )
   }
 
-  set actionValue(value: string) {
-    this.buttonElement.setAttribute("data-action", value)
-  }
-
-  set elementActionValue(value: string) {
-    this.element.setAttribute("data-action", value)
+  setAction(element: Element, value: string) {
+    element.setAttribute("data-action", value)
   }
 
   get element() {
