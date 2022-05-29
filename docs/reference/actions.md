@@ -107,6 +107,8 @@ Custom action option | Description
 -------------------- | -----------
 `:stop`              | calls `.stopPropagation()` on the event before invoking the method
 `:prevent`           | calls `.preventDefault()` on the event before invoking the method
+`:self`              | only invokes the method if the event was fired by the element itself
+`:!self`             | only invokes the method if the event was fired by any of its descendants but not by the element
 
 ## Event Objects
 
