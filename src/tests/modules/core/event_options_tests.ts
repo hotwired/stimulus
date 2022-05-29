@@ -190,17 +190,6 @@ export default class EventOptionsTests extends LogControllerTestCase {
     )
   }
 
-  async "test self option absence"() {
-    this.setAction(this.buttonElement, "click->c#log")
-    await this.nextFrame
-
-    await this.triggerEvent(this.buttonElement, "click")
-
-    this.assertActions(
-      { name: "log", eventType: "click" }
-    )
-  }
-
   async "test self option true"() {
     this.setAction(this.buttonElement, "click->c#log:self")
     await this.nextFrame
@@ -219,17 +208,6 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertNoActions()
-  }
-
-  async "test self option absence on parent"() {
-    this.setAction(this.element, "click->c#log")
-    await this.nextFrame
-
-    await this.triggerEvent(this.buttonElement, "click")
-
-    this.assertActions(
-      { name: "log", eventType: "click" }
-    )
   }
 
   async "test self option true on parent"() {
