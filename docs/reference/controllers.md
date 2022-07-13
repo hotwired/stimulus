@@ -217,9 +217,7 @@ class ClipboardController extends Controller {
   copy() {
     const event = this.dispatch("copy", { cancelable: true })
     if (event.defaultPrevented) return
-
-    this.sourceTarget.select()
-    document.execCommand("copy")
+    navigator.clipboard.writeText(this.sourceTarget.value)
   }
 }
 ```
