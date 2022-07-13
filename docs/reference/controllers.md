@@ -173,8 +173,7 @@ class ClipboardController extends Controller {
 
   copy() {
     this.dispatch("copy", { detail: { content: this.sourceTarget.value } })
-    this.sourceTarget.select()
-    document.execCommand("copy")
+    navigator.clipboard.writeText(this.sourceTarget.value)
   }
 }
 ```
