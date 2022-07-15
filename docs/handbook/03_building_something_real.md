@@ -152,8 +152,7 @@ Note that in this case, clicking the link will also cause the browser to follow 
 ```js
   copy(event) {
     event.preventDefault()
-    this.sourceTarget.select()
-    document.execCommand("copy")
+    navigator.clipboard.writeText(this.sourceTarget.value)
   }
 ```
 
