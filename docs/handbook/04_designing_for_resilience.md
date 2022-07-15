@@ -51,15 +51,13 @@ First we'll add the `data-clipboard-supported-class` attribute inside the contro
 
 This will let us control the specific CSS class in the HTML, so our controller becomes even more easily adaptable to different CSS approaches. The specific class added like this can be accessed via `this.supportedClass`.
 
-Now add a `connect()` method to the controller which will add a class name to the controller's element when the user agent has permission to write to the clipboard:
+Now add a `connect()` method to the controller which will test to see if the clipboard API is supported and add a class name to the controller's element:
 
 ```js
   connect() {
-    navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
-      if (result.state === "granted") {
-        this.element.classList.add(this.supportedClass);
-      }
-    });
+    if ("clipboard" in navigator) {
+      this.element.classList.add(this.supportedClass);
+    }
   }
 ```
 
