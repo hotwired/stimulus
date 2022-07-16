@@ -182,7 +182,7 @@ const readers: { [type: string]: Reader } = {
   array(value: string): any[] {
     const array = JSON.parse(value)
     if (!Array.isArray(array)) {
-      throw new TypeError("Expected array")
+      throw new TypeError(`expected value of type "array" but instead got value "${value}" of type "${parseValueTypeDefault(array)}"`)
     }
     return array
   },
@@ -198,7 +198,7 @@ const readers: { [type: string]: Reader } = {
   object(value: string): object {
     const object = JSON.parse(value)
     if (object === null || typeof object != "object" || Array.isArray(object)) {
-      throw new TypeError("Expected object")
+      throw new TypeError(`expected value of type "object" but instead got value "${value}" of type "${parseValueTypeDefault(object)}"`)
     }
     return object
   },
