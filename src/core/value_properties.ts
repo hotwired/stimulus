@@ -140,10 +140,6 @@ function parseValueTypeDefinition(payload: { controller?: string, token: string,
 
   const propertyPath = payload.controller ? `${payload.controller}.${payload.typeDefinition}` : payload.token
 
-  if (payload.controller) {
-    throw new Error(`Unknown value type "${propertyPath}" for "${payload.token}" value`)
-  }
-
   throw new Error(`Unknown value type "${propertyPath}" for "${payload.token}" value`)
 }
 
