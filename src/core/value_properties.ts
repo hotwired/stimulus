@@ -9,7 +9,7 @@ export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
     valueDescriptorMap: {
       get(this: Controller) {
         return valueDefinitionPairs.reduce((result, valueDefinitionPair) => {
-          const valueDescriptor = parseValueDefinitionPair(valueDefinitionPair)
+          const valueDescriptor = parseValueDefinitionPair(valueDefinitionPair, this.identifier)
           const attributeName = this.data.getAttributeNameForKey(valueDescriptor.key)
           return Object.assign(result, { [attributeName]: valueDescriptor })
         }, {} as ValueDescriptorMap)
@@ -22,8 +22,8 @@ export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
   }, propertyDescriptorMap)
 }
 
-export function propertiesForValueDefinitionPair<T>(valueDefinitionPair: ValueDefinitionPair): PropertyDescriptorMap {
-  const definition = parseValueDefinitionPair(valueDefinitionPair)
+export function propertiesForValueDefinitionPair<T>(valueDefinitionPair: ValueDefinitionPair, controller?: string): PropertyDescriptorMap {
+  const definition = parseValueDefinitionPair(valueDefinitionPair, controller)
   const { key, name, reader: read, writer: write } = definition
 
   return {
@@ -80,8 +80,12 @@ export type ValueTypeDefinition = ValueTypeConstant | ValueTypeDefault | ValueTy
 
 export type ValueType = "array" | "boolean" | "number" | "object" | "string"
 
-function parseValueDefinitionPair([token, typeDefinition]: ValueDefinitionPair): ValueDescriptor {
-  return valueDescriptorForTokenAndTypeDefinition(token, typeDefinition)
+function parseValueDefinitionPair([token, typeDefinition]: ValueDefinitionPair, controller?: string): ValueDescriptor {
+  return valueDescriptorForTokenAndTypeDefinition({
+    controller,
+    token,
+    typeDefinition,
+  })
 }
 
 function parseValueTypeConstant(constant: ValueTypeConstant) {
@@ -105,29 +109,38 @@ function parseValueTypeDefault(defaultValue: ValueTypeDefault) {
   if (Object.prototype.toString.call(defaultValue) === "[object Object]") return "object"
 }
 
-function parseValueTypeObject(typeObject: ValueTypeObject) {
-  const typeFromObject = parseValueTypeConstant(typeObject.type)
+function parseValueTypeObject(payload: { controller?: string, token: string, typeObject: ValueTypeObject }) {
+  const typeFromObject = parseValueTypeConstant(payload.typeObject.type)
 
-  if (typeFromObject) {
-    const defaultValueType = parseValueTypeDefault(typeObject.default)
+  if (!typeFromObject) return
 
-    if (typeFromObject !== defaultValueType) {
-      throw new Error(`Type "${typeFromObject}" must match the type of the default value. Given default value: "${typeObject.default}" as "${defaultValueType}"`)
-    }
+  const defaultValueType = parseValueTypeDefault(payload.typeObject.default)
 
-    return typeFromObject
+  if (typeFromObject !== defaultValueType) {
+    const propertyPath = payload.controller ? `${payload.controller}.${payload.token}` : payload.token
+
+    throw new Error(`The specified default value for the Stimulus Value "${propertyPath}" must match the defined type "${typeFromObject}". The provided default value of "${payload.typeObject.default}" is of type "${defaultValueType}".`)
   }
+
+  return typeFromObject
 }
 
-function parseValueTypeDefinition(typeDefinition: ValueTypeDefinition): ValueType {
-  const typeFromObject = parseValueTypeObject(typeDefinition as ValueTypeObject)
-  const typeFromDefaultValue = parseValueTypeDefault(typeDefinition as ValueTypeDefault)
-  const typeFromConstant = parseValueTypeConstant(typeDefinition as ValueTypeConstant)
+function parseValueTypeDefinition(payload: { controller?: string, token: string, typeDefinition: ValueTypeDefinition }): ValueType {
+  const typeFromObject = parseValueTypeObject({
+    controller: payload.controller,
+    token: payload.token,
+    typeObject: payload.typeDefinition as ValueTypeObject
+  })
+  const typeFromDefaultValue = parseValueTypeDefault(payload.typeDefinition as ValueTypeDefault)
+  const typeFromConstant = parseValueTypeConstant(payload.typeDefinition as ValueTypeConstant)
 
   const type = typeFromObject || typeFromDefaultValue || typeFromConstant
+
   if (type) return type
 
-  throw new Error(`Unknown value type "${typeDefinition}"`)
+  const propertyPath = payload.controller ? `${payload.controller}.${payload.typeDefinition}` : payload.token
+
+  throw new Error(`Unknown value type "${propertyPath}" for "${payload.token}" value`)
 }
 
 function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): ValueTypeDefault {
@@ -141,15 +154,15 @@ function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): ValueTy
   return typeDefinition
 }
 
-function valueDescriptorForTokenAndTypeDefinition(token: string, typeDefinition: ValueTypeDefinition) {
-  const key = `${dasherize(token)}-value`
-  const type = parseValueTypeDefinition(typeDefinition)
+function valueDescriptorForTokenAndTypeDefinition(payload: { token: string, typeDefinition: ValueTypeDefinition, controller?: string }) {
+  const key = `${dasherize(payload.token)}-value`
+  const type = parseValueTypeDefinition(payload)
   return {
     type,
     key,
     name: camelize(key),
-    get defaultValue() { return defaultValueForDefinition(typeDefinition) },
-    get hasCustomDefaultValue() { return parseValueTypeDefault(typeDefinition) !== undefined },
+    get defaultValue() { return defaultValueForDefinition(payload.typeDefinition) },
+    get hasCustomDefaultValue() { return parseValueTypeDefault(payload.typeDefinition) !== undefined },
     reader: readers[type],
     writer: writers[type] || writers.default
   }
@@ -169,7 +182,7 @@ const readers: { [type: string]: Reader } = {
   array(value: string): any[] {
     const array = JSON.parse(value)
     if (!Array.isArray(array)) {
-      throw new TypeError("Expected array")
+      throw new TypeError(`expected value of type "array" but instead got value "${value}" of type "${parseValueTypeDefault(array)}"`)
     }
     return array
   },
@@ -185,7 +198,7 @@ const readers: { [type: string]: Reader } = {
   object(value: string): object {
     const object = JSON.parse(value)
     if (object === null || typeof object != "object" || Array.isArray(object)) {
-      throw new TypeError("Expected object")
+      throw new TypeError(`expected value of type "object" but instead got value "${value}" of type "${parseValueTypeDefault(object)}"`)
     }
     return object
   },

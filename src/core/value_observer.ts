@@ -85,14 +85,21 @@ export class ValueObserver implements StringMapObserverDelegate {
 
     if (typeof changedMethod == "function") {
       const descriptor = this.valueDescriptorNameMap[name]
-      const value = descriptor.reader(rawValue)
-      let oldValue = rawOldValue
 
-      if (rawOldValue) {
-        oldValue = descriptor.reader(rawOldValue)
+      try {
+        const value = descriptor.reader(rawValue)
+        let oldValue = rawOldValue
+
+        if (rawOldValue) {
+          oldValue = descriptor.reader(rawOldValue)
+        }
+
+        changedMethod.call(this.receiver, value, oldValue)
+      } catch (error) {
+        if (!(error instanceof TypeError)) throw error
+
+        throw new TypeError(`Stimulus Value "${this.context.identifier}.${descriptor.name}" - ${error.message}`)
       }
-
-      changedMethod.call(this.receiver, value, oldValue)
     }
   }
 
