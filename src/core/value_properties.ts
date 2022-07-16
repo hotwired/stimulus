@@ -119,7 +119,7 @@ function parseValueTypeObject(payload: { controller?: string, token: string, typ
   if (typeFromObject !== defaultValueType) {
     const propertyPath = payload.controller ? `${payload.controller}.${payload.token}` : payload.token
 
-    throw new Error(`Type "${typeFromObject}" for "${propertyPath}" value, must match the type of the default value. Given default value: "${payload.typeObject.default}" as "${defaultValueType}"`)
+    throw new Error(`The specified default value for the Stimulus Value "${propertyPath}" must match the defined type "${typeFromObject}". The provided default value of "${payload.typeObject.default}" is of type "${defaultValueType}".`)
   }
 
   return typeFromObject
