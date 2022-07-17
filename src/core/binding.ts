@@ -80,8 +80,6 @@ export class Binding {
   private shouldBeInvokedPerSelf(event: Event): boolean {
     if (this.action.eventOptions.self === true) {
       return this.action.element === event.target
-    } else if (this.action.eventOptions.self === false) {
-      return this.action.element !== event.target
     } else {
       return true
     }
