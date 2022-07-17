@@ -31,7 +31,7 @@ export class Binding {
   }
 
   handleEvent(event: Event) {
-    if (this.willBeInvokedByEvent(event)) {
+    if (this.willBeInvokedByEvent(event) && this.shouldBeInvokedPerSelf(event)) {
       this.processStopPropagation(event);
       this.processPreventDefault(event);
 
@@ -74,6 +74,14 @@ export class Binding {
       const { identifier, controller, element, index } = this
       const detail = { identifier, controller, element, index, event }
       this.context.handleError(error, `invoking action "${this.action}"`, detail)
+    }
+  }
+
+  private shouldBeInvokedPerSelf(event: Event): boolean {
+    if (this.action.eventOptions.self === true) {
+      return this.action.element === event.target
+    } else {
+      return true
     }
   }
 
