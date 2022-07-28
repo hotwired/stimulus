@@ -1,11 +1,40 @@
-import { EventModifiers } from "./event_modifiers"
-
 export interface ActionDescriptor {
   eventTarget: EventTarget
-  eventOptions: EventModifiers
+  eventOptions: AddEventListenerOptions
   eventName: string
   identifier: string
   methodName: string
+}
+
+export type ActionDescriptorFilters = Record<string, ActionDescriptorFilter>
+export type ActionDescriptorFilter = (options: ActionDescriptorFilterOptions) => boolean
+type ActionDescriptorFilterOptions = {
+  name: string
+  value: boolean
+  event: Event
+  element: Element
+}
+
+export const defaultActionDescriptorFilters: ActionDescriptorFilters = {
+  stop({ event, value }) {
+    if (value) event.stopPropagation()
+
+    return true
+  },
+
+  prevent({ event, value }) {
+    if (value) event.preventDefault()
+
+    return true
+  },
+
+  self({ event, value, element }) {
+    if (value) {
+      return element === event.target
+    } else {
+      return true
+    }
+  }
 }
 
 // capture nos.:            12   23 4               43   1 5   56 7      768 9  98
@@ -31,7 +60,7 @@ function parseEventTarget(eventTargetName: string): EventTarget | undefined {
   }
 }
 
-function parseEventOptions(eventOptions: string): EventModifiers {
+function parseEventOptions(eventOptions: string): AddEventListenerOptions {
   return eventOptions.split(":").reduce((options, token) =>
     Object.assign(options, { [token.replace(/^!/, "")]: !/^!/.test(token) })
   , {})
