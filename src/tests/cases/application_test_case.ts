@@ -10,10 +10,11 @@ class TestApplication extends Application {
 
 export class ApplicationTestCase extends DOMTestCase {
   schema: Schema = defaultSchema
-  application: Application = new TestApplication(this.fixtureElement, this.schema)
+  application!: Application
 
   async runTest(testName: string) {
     try {
+      this.application = new TestApplication(this.fixtureElement, this.schema)
       this.setupApplication()
       this.application.start()
       await super.runTest(testName)

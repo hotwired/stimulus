@@ -5,12 +5,14 @@ import { ErrorHandler } from "./error_handler"
 import { Logger } from "./logger"
 import { Router } from "./router"
 import { Schema, defaultSchema } from "./schema"
+import { ActionDescriptorFilter, ActionDescriptorFilters, defaultActionDescriptorFilters } from "./action_descriptor"
 
 export class Application implements ErrorHandler {
   readonly element: Element
   readonly schema: Schema
   readonly dispatcher: Dispatcher
   readonly router: Router
+  readonly actionDescriptorFilters: ActionDescriptorFilters
   logger: Logger = console
   debug: boolean = false
 
@@ -25,6 +27,7 @@ export class Application implements ErrorHandler {
     this.schema = schema
     this.dispatcher = new Dispatcher(this)
     this.router = new Router(this)
+    this.actionDescriptorFilters = { ...defaultActionDescriptorFilters }
   }
 
   async start() {
@@ -44,6 +47,10 @@ export class Application implements ErrorHandler {
 
   register(identifier: string, controllerConstructor: ControllerConstructor) {
     this.load({ identifier, controllerConstructor })
+  }
+
+  registerActionOption(name: string, filter: ActionDescriptorFilter) {
+    this.actionDescriptorFilters[name] = filter
   }
 
   load(...definitions: Definition[]): void

@@ -1,14 +1,12 @@
 import { ActionDescriptor, parseActionDescriptorString, stringifyEventTarget } from "./action_descriptor"
 import { Token } from "../mutation-observers"
 import { camelize } from "./string_helpers"
-import { EventModifiers } from "./event_modifiers"
-
 export class Action {
   readonly element: Element
   readonly index: number
   readonly eventTarget: EventTarget
   readonly eventName: string
-  readonly eventOptions: EventModifiers
+  readonly eventOptions: AddEventListenerOptions
   readonly identifier: string
   readonly methodName: string
 
@@ -78,4 +76,3 @@ function typecast(value: any): any {
     return value
   }
 }
-

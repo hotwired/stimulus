@@ -5,6 +5,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
   fixtureHTML = `
     <div data-controller="c d">
       <button></button>
+      <details></details>
     </div>
     <div id="outside"></div>
   `
@@ -210,8 +211,47 @@ export default class EventOptionsTests extends LogControllerTestCase {
     this.assertNoActions()
   }
 
+  async "test custom option"() {
+    this.application.registerActionOption("open", ({ value, event: { type, target } }) => {
+      switch (type) {
+        case "toggle": return target instanceof HTMLDetailsElement && target.open == value
+        default: return true
+      }
+    })
+    this.setAction(this.detailsElement, "toggle->c#log:open")
+
+    await this.nextFrame
+    await this.toggleElement(this.detailsElement)
+    await this.toggleElement(this.detailsElement)
+    await this.toggleElement(this.detailsElement)
+
+    this.assertActions({ name: "log", eventType: "toggle" }, { name: "log", eventType: "toggle" })
+  }
+
+  async "test inverted custom option"() {
+    this.application.registerActionOption("open", ({ value, event: { type, target } }) => {
+      switch (type) {
+        case "toggle": return target instanceof HTMLDetailsElement && target.open == value
+        default: return true
+      }
+    })
+    this.setAction(this.detailsElement, "toggle->c#log:!open")
+
+    await this.nextFrame
+    await this.toggleElement(this.detailsElement)
+    await this.toggleElement(this.detailsElement)
+    await this.toggleElement(this.detailsElement)
+
+    this.assertActions({ name: "log", eventType: "toggle" })
+  }
+
   setAction(element: Element, value: string) {
     element.setAttribute("data-action", value)
+  }
+
+  toggleElement(details: Element) {
+    details.toggleAttribute("open")
+    return this.nextFrame
   }
 
   get element() {
@@ -220,5 +260,9 @@ export default class EventOptionsTests extends LogControllerTestCase {
 
   get buttonElement() {
     return this.findElement("button")
+  }
+
+  get detailsElement() {
+    return this.findElement("details")
   }
 }
