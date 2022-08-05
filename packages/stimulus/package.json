@@ -13,6 +13,14 @@
   "main": "./dist/stimulus.umd.js",
   "types": "./index.d.ts",
   "exports": {
+    ".": {
+      "main": "./dist/stimulus.umd.js",
+      "browser": "./dist/stimulus.js",
+      "import": "./dist/stimulus.js",
+      "module": "./dist/stimulus.js",
+      "umd": "./dist/stimulus.umd.js",
+      "types": "./index.d.ts"
+    },
     "./webpack-helpers": {
       "main": "./dist/webpack-helpers.umd.js",
       "browser": "./dist/webpack-helpers.js",
