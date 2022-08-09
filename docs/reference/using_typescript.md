@@ -2,14 +2,12 @@
 
 Stimulus itself is written [TypeScript](https://www.typescriptlang.org/)
 and provides types directly over its package.
-The following documentation should make it clear how to define types for
-stimulus properties.
+The following documentation shows how to define types for
+Stimulus properties.
 
 ## Define Controller Element Type
 
-By default, the `element` of the controller is from type `Element`.  
-If the element expected type is as example `HTMLFormElement` it can
-be defined this way:
+By default, the `element` of the controller is from type `Element`. You can override this in your `extends` statement. For example, if the element type is expected to be a `HTMLFormElement`:
 
 ```ts
 import { Controller } from '@hotwired/stimulus';
@@ -23,8 +21,8 @@ export default class MyController extends Controller<HTMLFormElement> {
 
 ## Define Controller Value Type
 
-To define the type of configured values is possible
-over the declare feature of TypeScript:
+You can define the type of configured values 
+using the `declare` feature of TypeScript:
 
 ```ts
 import { Controller } from '@hotwired/stimulus';
@@ -38,12 +36,12 @@ export default class MyController extends Controller {
 }
 ```
 
-> The `declare` avoids override of the exist stimulus property and just define the type for TypeScript.
+> The `declare` avoids overriding the exist Stimulus property, and just defines the type for TypeScript.
 
 ## Define Controller Target Type
 
-To define the type of configured targets is possible
-over the declare feature of TypeScript:
+You can define the type of configured targets 
+using the `declare` feature of TypeScript:
 
 ```ts
 import { Controller } from '@hotwired/stimulus';
@@ -57,11 +55,11 @@ export default class MyController extends Controller {
 }
 ```
 
-> The `declare` avoids override of the exist stimulus property and just define the type for TypeScript.
+> The `declare` avoids overriding the exist Stimulus property, and just defines the type for TypeScript.
 
 ## Custom properties amd methods
 
-Other custom properties is possible to define the TypeScript way
+Other custom properties can be defined the TypeScript way
 on the controller class:
 
 ```ts
@@ -72,4 +70,4 @@ export default class MyController extends Controller {
 }
 ```
 
-Read more about it in the [TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/intro.html).
+Read more in the [TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/intro.html).
