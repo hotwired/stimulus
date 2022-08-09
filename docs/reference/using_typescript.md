@@ -1,13 +1,13 @@
 # Using Typescript
 
-Stimulus itself is written [TypeScript](https://www.typescriptlang.org/)
+Stimulus itself is written in [TypeScript](https://www.typescriptlang.org/)
 and provides types directly over its package.
 The following documentation shows how to define types for
 Stimulus properties.
 
 ## Define Controller Element Type
 
-By default, the `element` of the controller is from type `Element`. You can override this in your `extends` statement. For example, if the element type is expected to be a `HTMLFormElement`:
+By default, the `element` of the controller is of type `Element`. You can override this in your `extends` statement. For example, if the element type is expected to be a `HTMLFormElement`:
 
 ```ts
 import { Controller } from '@hotwired/stimulus';
@@ -36,7 +36,7 @@ export default class MyController extends Controller {
 }
 ```
 
-> The `declare` avoids overriding the exist Stimulus property, and just defines the type for TypeScript.
+> The `declare` keyword avoids overriding the existing Stimulus property, and just defines the type for TypeScript.
 
 ## Define Controller Target Type
 
@@ -55,7 +55,7 @@ export default class MyController extends Controller {
 }
 ```
 
-> The `declare` avoids overriding the exist Stimulus property, and just defines the type for TypeScript.
+> The `declare` keyword avoids overriding the existing Stimulus property, and just defines the type for TypeScript.
 
 ## Custom properties amd methods
 
