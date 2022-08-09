@@ -13,9 +13,9 @@ By default, the `element` of the controller is of type `Element`. You can overri
 import { Controller } from '@hotwired/stimulus';
 
 export default class MyController extends Controller<HTMLFormElement> {
-    submit() {
-        new FormData(this.element)
-    }
+  submit() {
+    new FormData(this.element)
+  }
 }
 ```
 
@@ -28,11 +28,11 @@ using the `declare` feature of TypeScript:
 import { Controller } from '@hotwired/stimulus';
 
 export default class MyController extends Controller {
-    static values = {
-        code: String,
-    };
+  static values = {
+    code: String,
+  };
 
-    declare readonly codeValue: string;
+  declare readonly codeValue: string;
 }
 ```
 
@@ -47,11 +47,11 @@ using the `declare` feature of TypeScript:
 import { Controller } from '@hotwired/stimulus';
 
 export default class MyController extends Controller {
-    static targets = [
-        'input'
-    ];
+  static targets = [
+    'input'
+  ];
 
-    declare readonly inputTarget: HTMLInputElement;
+  declare readonly inputTarget: HTMLInputElement;
 }
 ```
 
@@ -66,7 +66,7 @@ on the controller class:
 import { Controller } from '@hotwired/stimulus';
 
 export default class MyController extends Controller {
-    container: HTMLElement;
+  container: HTMLElement;
 }
 ```
 
