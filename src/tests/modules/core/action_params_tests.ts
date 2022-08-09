@@ -69,10 +69,10 @@ export default class ActionParamsTests extends LogControllerTestCase {
       { identifier: "c", params: this.expectedParamsForC },
     )
 
-    await this.buttonElement.setAttribute("data-c-id-param", "234")
-    await this.buttonElement.setAttribute("data-c-new-param", "new")
-    await this.buttonElement.removeAttribute("data-c-payload-param")
-    await this.triggerEvent(this.buttonElement, "click")
+    this.buttonElement.setAttribute("data-c-id-param", "234")
+    this.buttonElement.setAttribute("data-c-new-param", "new")
+    this.buttonElement.removeAttribute("data-c-payload-param")
+    this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(
       { identifier: "c", params: this.expectedParamsForC },

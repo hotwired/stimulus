@@ -31,7 +31,7 @@ export class Action {
 
   get params() {
     const params:{ [key: string]: any } = {}
-    const pattern = new RegExp(`^data-${this.identifier}-(.+)-param$`)
+    const pattern = new RegExp(`^data-${this.identifier}-(.+)-param$`, "i")
 
     for (const { name, value } of Array.from(this.element.attributes)) {
       const match = name.match(pattern)
