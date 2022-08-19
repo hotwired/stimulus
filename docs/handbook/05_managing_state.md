@@ -57,7 +57,7 @@ export default class extends Controller {
 
   showCurrentSlide() {
     this.slideTargets.forEach((element, index) => {
-      element.hidden = index != this.index
+      element.hidden = index !== this.index
     })
   }
 }
@@ -166,7 +166,7 @@ export default class extends Controller {
 
   showCurrentSlide() {
     this.slideTargets.forEach((element, index) => {
-      element.hidden = index != this.indexValue
+      element.hidden = index !== this.indexValue
     })
   }
 }
@@ -203,7 +203,7 @@ export default class extends Controller {
 
   showCurrentSlide() {
     this.slideTargets.forEach((element, index) => {
-      element.hidden = index != this.indexValue
+      element.hidden = index !== this.indexValue
     })
   }
 }
