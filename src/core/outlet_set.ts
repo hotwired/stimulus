@@ -39,6 +39,11 @@ export class OutletSet {
     ], [] as Element[])
   }
 
+  getSelectorForOutletName(outletName: string) {
+    const attributeName = this.schema.outletAttributeForScope(this.identifier, outletName)
+    return this.controllerElement.getAttribute(attributeName)
+  }
+
   private findOutlet(outletName: string) {
     const selector = this.getSelectorForOutletName(outletName)
     if (selector) return this.findElement(selector)
@@ -60,10 +65,5 @@ export class OutletSet {
       ...this.element.matches(selector) ? [this.element] : [],
       ...this.scope.queryElements(selector)
     ]
-  }
-
-  private getSelectorForOutletName(outletName: string) {
-    const attributeName = this.schema.outletAttributeForScope(this.identifier, outletName)
-    return this.controllerElement.getAttribute(attributeName)
   }
 }
