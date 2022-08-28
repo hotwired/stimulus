@@ -46,24 +46,26 @@ export class OutletSet {
 
   private findOutlet(outletName: string) {
     const selector = this.getSelectorForOutletName(outletName)
-    if (selector) return this.findElement(selector)
+    if (selector) return this.findElement(selector, outletName)
   }
 
   private findAllOutlets(outletName: string) {
     const selector = this.getSelectorForOutletName(outletName)
-    return selector ? this.findAllElements(selector) : []
+    return selector ? this.findAllElements(selector, outletName) : []
   }
 
-  private findElement(selector: string): Element | undefined {
-    return this.element.matches(selector)
-      ? this.element
-      : this.scope.queryElements(selector)[0]
+  private findElement(selector: string, outletName: string): Element | undefined {
+    const elements = this.scope.queryElements(selector)
+    return elements.filter(element => this.matchesElement(element, selector, outletName))[0]
   }
 
-  private findAllElements(selector: string): Element[] {
-    return [
-      ...this.element.matches(selector) ? [this.element] : [],
-      ...this.scope.queryElements(selector)
-    ]
+  private findAllElements(selector: string, outletName: string): Element[] {
+    const elements = this.scope.queryElements(selector)
+    return elements.filter(element => this.matchesElement(element, selector, outletName))
+  }
+
+  private matchesElement(element: Element, selector: string, outletName: string): boolean {
+    const controllerAttribute = element.getAttribute(this.scope.schema.controllerAttribute) || ""
+    return element.matches(selector) && controllerAttribute.split(" ").includes(outletName)
   }
 }

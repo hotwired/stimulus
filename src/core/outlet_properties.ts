@@ -18,7 +18,11 @@ function propertiesForOutletDefinition(name: string) {
 
         if (outlet) {
           const outletController = this.application.getControllerForElementAndIdentifier(outlet, name)
-          if (outletController) return outletController
+          if (outletController) {
+            return outletController
+          } else {
+            throw new Error(`Missing "data-controller=${name}" attribute on outlet element for "${this.identifier}" controller`)
+          }
         }
 
         throw new Error(`Missing outlet element "${name}" for "${this.identifier}" controller`)
@@ -30,7 +34,7 @@ function propertiesForOutletDefinition(name: string) {
         const outlets = this.outlets.findAll(name)
 
         if (outlets.length > 0) {
-          const outletControllers = outlets.map((outlet: Element) => {
+          return outlets.map((outlet: Element) => {
             const controller = this.application.getControllerForElementAndIdentifier(outlet, name)
             if (controller) {
               return controller
@@ -38,11 +42,9 @@ function propertiesForOutletDefinition(name: string) {
               console.warn(`The provided outlet element is missing the outlet controller "${name}" for "${this.identifier}"`, outlet)
             }
           }).filter(controller => controller) as Controller[]
-
-          if (outletControllers.length > 0) return outletControllers
         }
 
-        throw new Error(`Missing outlet element "${name}" for "${this.identifier}" controller`)
+        return []
       }
     },
 

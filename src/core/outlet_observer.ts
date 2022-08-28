@@ -26,7 +26,7 @@ export class OutletObserver implements TokenListObserverDelegate {
     if (!this.tokenListObserver) {
       this.tokenListObserver = new TokenListObserver(document.body, this.attributeName, this)
       this.tokenListObserver.start()
-      // this.invokeConnectCallbacksForAlreadyConnectedOutlets()
+      this.invokeConnectCallbacksForAlreadyConnectedOutlets()
     }
   }
 
@@ -86,19 +86,19 @@ export class OutletObserver implements TokenListObserverDelegate {
     return this.context.application.getControllerForElementAndIdentifier(element, name)
   }
 
-  // private invokeConnectCallbacksForAlreadyConnectedOutlets() {
-  //   for (const name of this.outletDefinitions) {
-  //     const elements = this.context.scope.outlets.findAll(name)
-  //
-  //     elements.forEach(element => {
-  //       const outlet = this.getOutlet(element, name)
-  //
-  //       if (outlet) {
-  //         this.connectOutlet(outlet, element, name)
-  //       }
-  //     })
-  //   }
-  // }
+  private invokeConnectCallbacksForAlreadyConnectedOutlets() {
+    for (const name of this.outletDefinitions) {
+      const elements = this.context.scope.outlets.findAll(name)
+
+      elements.forEach(element => {
+        const outlet = this.getOutlet(element, name)
+
+        if (outlet) {
+          this.connectOutlet(outlet, element, name)
+        }
+      })
+    }
+  }
 
   private matches(element: Element, outletName: string) {
     const selector = this.selector(outletName)
@@ -113,7 +113,7 @@ export class OutletObserver implements TokenListObserverDelegate {
   }
 
   private get attributeName() {
-    return `data-controller`
+    return this.scope.schema.controllerAttribute
   }
 
   private selector(outletName: string) {
