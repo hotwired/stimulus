@@ -27,6 +27,8 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       >
         <div data-controller="gamma" class="gamma" id="gamma2"></div>
       </div>
+
+      <div class="beta" id="beta5"></div>
     </div>
   `
   get identifiers() {
@@ -162,6 +164,32 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     this.assert.ok(element.isConnected, "element is still present in document")
   }
 
+  async "test outlet connected callback when present element already has connected controller and adds matching outlet selector attribute"() {
+    const element = this.findElement("#beta4")
+
+    this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 2)
+
+    element.classList.add("beta")
+    await this.nextFrame
+
+    this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 3)
+    this.assert.ok(element.classList.contains("connected"), `expected "${element.className}" to contain "connected"`)
+    this.assert.ok(element.isConnected, "element is still present in document")
+  }
+
+  async "test outlet connect callback when an outlet present in the document adds a matching data-controller attribute"() {
+    const element = this.findElement("#beta5")
+
+    this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 2)
+
+    element.setAttribute(`data-controller`, 'beta')
+    await this.nextFrame
+
+    this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 3)
+    this.assert.ok(element.classList.contains("connected"), `expected "${element.className}" to contain "connected"`)
+    this.assert.ok(element.isConnected, "element is still present in document")
+  }
+
   async "test outlet disconnected callback fires when calling disconnect() on the controller"() {
     this.assert.equal(this.controller.alphaOutletElements.filter(outlet => outlet.classList.contains("disconnected")).length, 0)
     this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 0)
@@ -185,6 +213,20 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 1)
     this.assert.ok(disconnectedAlpha.classList.contains("disconnected"), `expected "${disconnectedAlpha.className}" to contain "disconnected"`)
     this.assert.notOk(disconnectedAlpha.isConnected, "element is not present in document")
+  }
+
+  async "test outlet disconnected callback when an outlet present in the document removes the selector attribute"() {
+    const element = this.findElement("#alpha1")
+
+    this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 0)
+    this.assert.notOk(element.classList.contains("disconnected"), `expected "${element.className}" not to contain "disconnected"`)
+
+    element.removeAttribute(`id`)
+    await this.nextFrame
+
+    this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 1)
+    this.assert.ok(element.classList.contains("disconnected"), `expected "${element.className}" to contain "disconnected"`)
+    this.assert.ok(element.isConnected, "element is still present in document")
   }
 
   async "test outlet disconnected callback when an outlet present in the document removes the data-controller attribute"() {

@@ -1,65 +1,75 @@
 import { Multimap } from "../multimap"
-import { Token, TokenListObserver, TokenListObserverDelegate } from "../mutation-observers"
+import { SelectorObserver, SelectorObserverDelegate } from "../mutation-observers"
 import { Context } from "./context"
 import { Controller } from "./controller"
 
 import { readInheritableStaticArrayValues } from "./inheritable_statics"
+
+type SelectorObserverDetails = { outletName: string }
 
 export interface OutletObserverDelegate {
   outletConnected(outlet: Controller, element: Element, name: string): void
   outletDisconnected(outlet: Controller, element: Element, name: string): void
 }
 
-export class OutletObserver implements TokenListObserverDelegate {
+export class OutletObserver implements SelectorObserverDelegate {
   readonly context: Context
   readonly delegate: OutletObserverDelegate
   readonly outletsByName: Multimap<string, Controller>
   readonly outletElementsByName: Multimap<string, Element>
-  private tokenListObserver?: TokenListObserver
+  private selectorObserverMap: Map<string, SelectorObserver>
 
   constructor(context: Context, delegate: OutletObserverDelegate) {
     this.context = context
     this.delegate = delegate
     this.outletsByName = new Multimap()
     this.outletElementsByName = new Multimap()
+    this.selectorObserverMap = new Map()
   }
 
   start() {
-    if (!this.tokenListObserver) {
-      this.tokenListObserver = new TokenListObserver(document.body, this.attributeName, this)
-      this.tokenListObserver.start()
-      this.invokeConnectCallbacksForAlreadyConnectedOutlets()
+    if (this.selectorObserverMap.size === 0) {
+      this.outletDefinitions.forEach(outletName => {
+        const selector = this.selector(outletName)
+        const details: SelectorObserverDetails = { outletName }
+
+        if (selector) {
+          this.selectorObserverMap.set(outletName, new SelectorObserver(document.body, selector, this, details))
+        }
+      })
+
+      this.selectorObserverMap.forEach(observer => observer.start())
     }
   }
 
   stop() {
-    if (this.tokenListObserver) {
+    if (this.selectorObserverMap.size > 0) {
       this.disconnectAllOutlets()
-      this.tokenListObserver.stop()
-      delete this.tokenListObserver
+      this.selectorObserverMap.forEach(observer => observer.stop())
+      this.selectorObserverMap.clear()
     }
   }
 
-  // Token list observer delegate
+  // Selector observer delegate
 
-  tokenMatched({ element, content: name }: Token) {
-    if (this.outletDefinitions.includes(name) && this.matches(element, name)) {
-      const outlet = this.getOutlet(element, name)
+  selectorMatched(element: Element, _selector: string, { outletName }: SelectorObserverDetails) {
+    const outlet = this.context.application.getControllerForElementAndIdentifier(element, outletName)
 
-      if (outlet) {
-        this.connectOutlet(outlet, element, name)
-      }
+    if (outlet) {
+      this.connectOutlet(outlet, element, outletName)
     }
   }
 
-  tokenUnmatched({ element, content: name }: Token) {
-    if (this.outletDefinitions.includes(name) && this.matches(element, name)) {
-      const outlet = this.outletsByName.getValuesForKey(name).find(outlet => outlet.element === element)
+  selectorUnmatched(element: Element, _selector: string, { outletName }: SelectorObserverDetails) {
+    const outlet = this.outletsByName.getValuesForKey(outletName).find(outlet => outlet.element === element)
 
-      if (outlet) {
-        this.disconnectOutlet(outlet, element, name)
-      }
+    if (outlet) {
+      this.disconnectOutlet(outlet, element, outletName)
     }
+  }
+
+  selectorMatchElement(element: Element, { outletName }: SelectorObserverDetails) {
+    return element.matches(`[${this.context.application.schema.controllerAttribute}~=${outletName}]`)
   }
 
   // Outlet management
@@ -68,7 +78,7 @@ export class OutletObserver implements TokenListObserverDelegate {
     if (!this.outletElementsByName.has(name, element)) {
       this.outletsByName.add(name, outlet)
       this.outletElementsByName.add(name, element)
-      this.tokenListObserver?.pause(() => this.delegate.outletConnected(outlet, element, name))
+      this.selectorObserverMap.get(name)?.pause(() => this.delegate.outletConnected(outlet, element, name))
     }
   }
 
@@ -76,7 +86,7 @@ export class OutletObserver implements TokenListObserverDelegate {
     if (this.outletElementsByName.has(name, element)) {
       this.outletsByName.delete(name, outlet)
       this.outletElementsByName.delete(name, element)
-      this.tokenListObserver?.pause(() => this.delegate.outletDisconnected(outlet, element, name))
+      this.selectorObserverMap.get(name)?.pause(() => this.delegate.outletDisconnected(outlet, element, name))
     }
   }
 
@@ -92,42 +102,12 @@ export class OutletObserver implements TokenListObserverDelegate {
 
   // Private
 
-  private getOutlet(element: Element, name: string) {
-    return this.context.application.getControllerForElementAndIdentifier(element, name)
-  }
-
-  private invokeConnectCallbacksForAlreadyConnectedOutlets() {
-    for (const name of this.outletDefinitions) {
-      const elements = this.context.scope.outlets.findAll(name)
-
-      elements.forEach(element => {
-        const outlet = this.getOutlet(element, name)
-
-        if (outlet) {
-          this.connectOutlet(outlet, element, name)
-        }
-      })
-    }
-  }
-
-  private matches(element: Element, outletName: string) {
-    const selector = this.selector(outletName)
-
-    if (!selector) return false
-
-    return element.matches(selector)
+  private selector(outletName: string) {
+    return this.scope.outlets.getSelectorForOutletName(outletName)
   }
 
   private get outletDefinitions() {
     return readInheritableStaticArrayValues(this.context.controller.constructor as any, "outlets")
-  }
-
-  private get attributeName() {
-    return this.scope.schema.controllerAttribute
-  }
-
-  private selector(outletName: string) {
-    return this.scope.outlets.getSelectorForOutletName(outletName)
   }
 
   private get scope() {
