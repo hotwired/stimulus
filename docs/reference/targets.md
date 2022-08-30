@@ -121,4 +121,15 @@ with a matching name, the corresponding callback _will not_ be invoked again.
 
 ## Naming Conventions
 
-Always use camelCase to specify target names, since they map directly to properties on your controller.
+Always use camelCase to specify target names, since they map directly to properties on your controller:
+
+```html
+<span data-search-target="camelCase" /> 
+<span data-search-target="do-not-do-this" />
+```
+
+```js
+export default class extends Controller {
+  static targets = [ "camelCase" ]  
+}
+```
