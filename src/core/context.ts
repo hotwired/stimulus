@@ -120,8 +120,8 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
     this.invokeControllerMethod(`${name}OutletConnected`, outlet, element)
   }
 
-  outletDisconnected(element: Element, name: string) {
-    this.invokeControllerMethod(`${name}OutletDisconnected`, element)
+  outletDisconnected(outlet: Controller, element: Element, name: string) {
+    this.invokeControllerMethod(`${name}OutletDisconnected`, outlet, element)
   }
 
   // Private

@@ -48,7 +48,7 @@ export class OutletController extends BaseOutletController {
     this.alphaOutletConnectedCallCountValue++
   }
 
-  alphaOutletDisconnected(element: Element) {
+  alphaOutletDisconnected(_outlet: Controller, element: Element) {
     if (this.hasDisconnectedClass) element.classList.add(this.disconnectedClass)
     this.alphaOutletDisconnectedCallCountValue++
   }
@@ -58,7 +58,7 @@ export class OutletController extends BaseOutletController {
     this.betaOutletConnectedCallCountValue++
   }
 
-  betaOutletDisconnected(element: Element) {
+  betaOutletDisconnected(_outlet: Controller, element: Element) {
     if (this.hasDisconnectedClass) element.classList.add(this.disconnectedClass)
     this.betaOutletDisconnectedCallCountValue++
   }

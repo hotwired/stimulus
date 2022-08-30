@@ -7,19 +7,21 @@ import { readInheritableStaticArrayValues } from "./inheritable_statics"
 
 export interface OutletObserverDelegate {
   outletConnected(outlet: Controller, element: Element, name: string): void
-  outletDisconnected(element: Element, name: string): void
+  outletDisconnected(outlet: Controller, element: Element, name: string): void
 }
 
 export class OutletObserver implements TokenListObserverDelegate {
   readonly context: Context
   readonly delegate: OutletObserverDelegate
-  readonly outletsByName: Multimap<string, Element>
+  readonly outletsByName: Multimap<string, Controller>
+  readonly outletElementsByName: Multimap<string, Element>
   private tokenListObserver?: TokenListObserver
 
   constructor(context: Context, delegate: OutletObserverDelegate) {
     this.context = context
     this.delegate = delegate
     this.outletsByName = new Multimap()
+    this.outletElementsByName = new Multimap()
   }
 
   start() {
@@ -52,30 +54,38 @@ export class OutletObserver implements TokenListObserverDelegate {
 
   tokenUnmatched({ element, content: name }: Token) {
     if (this.outletDefinitions.includes(name) && this.matches(element, name)) {
-      this.disconnectOutlet(element, name)
+      const outlet = this.outletsByName.getValuesForKey(name).find(outlet => outlet.element === element)
+
+      if (outlet) {
+        this.disconnectOutlet(outlet, element, name)
+      }
     }
   }
 
   // Outlet management
 
   connectOutlet(outlet: Controller, element: Element, name: string) {
-    if (!this.outletsByName.has(name, element)) {
-      this.outletsByName.add(name, element)
+    if (!this.outletElementsByName.has(name, element)) {
+      this.outletsByName.add(name, outlet)
+      this.outletElementsByName.add(name, element)
       this.tokenListObserver?.pause(() => this.delegate.outletConnected(outlet, element, name))
     }
   }
 
-  disconnectOutlet(element: Element, name: string) {
-    if (this.outletsByName.has(name, element)) {
-      this.outletsByName.delete(name, element)
-      this.tokenListObserver?.pause(() => this.delegate.outletDisconnected(element, name))
+  disconnectOutlet(outlet: Controller, element: Element, name: string) {
+    if (this.outletElementsByName.has(name, element)) {
+      this.outletsByName.delete(name, outlet)
+      this.outletElementsByName.delete(name, element)
+      this.tokenListObserver?.pause(() => this.delegate.outletDisconnected(outlet, element, name))
     }
   }
 
   disconnectAllOutlets() {
-    for (const name of this.outletsByName.keys) {
-      for (const element of this.outletsByName.getValuesForKey(name)) {
-        this.disconnectOutlet(element, name)
+    for (const name of this.outletElementsByName.keys) {
+      for (const element of this.outletElementsByName.getValuesForKey(name)) {
+        for (const outlet of this.outletsByName.getValuesForKey(name)) {
+          this.disconnectOutlet(outlet, element, name)
+        }
       }
     }
   }
