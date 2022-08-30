@@ -8,8 +8,8 @@ import { readInheritableStaticArrayValues } from "./inheritable_statics"
 type SelectorObserverDetails = { outletName: string }
 
 export interface OutletObserverDelegate {
-  outletConnected(outlet: Controller, element: Element, name: string): void
-  outletDisconnected(outlet: Controller, element: Element, name: string): void
+  outletConnected(outlet: Controller, element: Element, outletName: string): void
+  outletDisconnected(outlet: Controller, element: Element, outletName: string): void
 }
 
 export class OutletObserver implements SelectorObserverDelegate {
@@ -74,27 +74,27 @@ export class OutletObserver implements SelectorObserverDelegate {
 
   // Outlet management
 
-  connectOutlet(outlet: Controller, element: Element, name: string) {
-    if (!this.outletElementsByName.has(name, element)) {
-      this.outletsByName.add(name, outlet)
-      this.outletElementsByName.add(name, element)
-      this.selectorObserverMap.get(name)?.pause(() => this.delegate.outletConnected(outlet, element, name))
+  connectOutlet(outlet: Controller, element: Element, outletName: string) {
+    if (!this.outletElementsByName.has(outletName, element)) {
+      this.outletsByName.add(outletName, outlet)
+      this.outletElementsByName.add(outletName, element)
+      this.selectorObserverMap.get(outletName)?.pause(() => this.delegate.outletConnected(outlet, element, outletName))
     }
   }
 
-  disconnectOutlet(outlet: Controller, element: Element, name: string) {
-    if (this.outletElementsByName.has(name, element)) {
-      this.outletsByName.delete(name, outlet)
-      this.outletElementsByName.delete(name, element)
-      this.selectorObserverMap.get(name)?.pause(() => this.delegate.outletDisconnected(outlet, element, name))
+  disconnectOutlet(outlet: Controller, element: Element, outletName: string) {
+    if (this.outletElementsByName.has(outletName, element)) {
+      this.outletsByName.delete(outletName, outlet)
+      this.outletElementsByName.delete(outletName, element)
+      this.selectorObserverMap.get(outletName)?.pause(() => this.delegate.outletDisconnected(outlet, element, outletName))
     }
   }
 
   disconnectAllOutlets() {
-    for (const name of this.outletElementsByName.keys) {
-      for (const element of this.outletElementsByName.getValuesForKey(name)) {
-        for (const outlet of this.outletsByName.getValuesForKey(name)) {
-          this.disconnectOutlet(outlet, element, name)
+    for (const outletName of this.outletElementsByName.keys) {
+      for (const element of this.outletElementsByName.getValuesForKey(outletName)) {
+        for (const outlet of this.outletsByName.getValuesForKey(outletName)) {
+          this.disconnectOutlet(outlet, element, outletName)
         }
       }
     }
