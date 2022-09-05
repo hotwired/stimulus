@@ -1,7 +1,7 @@
 import { Constructor } from "./constructor"
 import { Controller } from "./controller"
 import { readInheritableStaticArrayValues } from "./inheritable_statics"
-import { capitalize } from "./string_helpers"
+import { capitalize, namespaceCamelize } from "./string_helpers"
 
 export function OutletPropertiesBlessing<T>(constructor: Constructor<T>) {
   const outlets = readInheritableStaticArrayValues(constructor, "outlets")
@@ -11,8 +11,10 @@ export function OutletPropertiesBlessing<T>(constructor: Constructor<T>) {
 }
 
 function propertiesForOutletDefinition(name: string) {
+  const camelizedName = namespaceCamelize(name)
+
   return {
-    [`${name}Outlet`]: {
+    [`${camelizedName}Outlet`]: {
       get(this: Controller) {
         const outlet = this.outlets.find(name)
 
@@ -29,7 +31,7 @@ function propertiesForOutletDefinition(name: string) {
       }
     },
 
-    [`${name}Outlets`]: {
+    [`${camelizedName}Outlets`]: {
       get(this: Controller) {
         const outlets = this.outlets.findAll(name)
 
@@ -48,7 +50,7 @@ function propertiesForOutletDefinition(name: string) {
       }
     },
 
-    [`${name}OutletElement`]: {
+    [`${camelizedName}OutletElement`]: {
       get(this: Controller) {
         const outlet = this.outlets.find(name)
         if (outlet) {
@@ -59,13 +61,13 @@ function propertiesForOutletDefinition(name: string) {
       }
     },
 
-    [`${name}OutletElements`]: {
+    [`${camelizedName}OutletElements`]: {
       get(this: Controller) {
         return this.outlets.findAll(name)
       }
     },
 
-    [`has${capitalize(name)}Outlet`]: {
+    [`has${capitalize(camelizedName)}Outlet`]: {
       get(this: Controller) {
         return this.outlets.has(name)
       }

@@ -17,6 +17,8 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
         <div data-controller="gamma" class="gamma" id="gamma1"></div>
       </div>
 
+      <div data-controller="namespaced--epsilon" class="epsilon" id="epsilon1"></div>
+
       <div
         data-controller="${this.identifier}"
         data-${this.identifier}-connected-class="connected"
@@ -24,6 +26,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
         data-${this.identifier}-alpha-outlet="#alpha1,#alpha2"
         data-${this.identifier}-beta-outlet=".beta"
         data-${this.identifier}-delta-outlet=".delta"
+        data-${this.identifier}-namespaced--epsilon-outlet=".epsilon"
       >
         <div data-controller="gamma" class="gamma" id="gamma2"></div>
       </div>
@@ -32,13 +35,14 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     </div>
   `
   get identifiers() {
-    return ["test", "alpha", "beta", "gamma", "delta", "omega"]
+    return ["test", "alpha", "beta", "gamma", "delta", "omega", "namespaced--epsilon"]
   }
 
   "test OutletSet#find"() {
     this.assert.equal(this.controller.outlets.find("alpha"), this.findElement("#alpha1"))
     this.assert.equal(this.controller.outlets.find("beta"), this.findElement("#beta1"))
     this.assert.equal(this.controller.outlets.find("delta"), this.findElement("#delta1"))
+    this.assert.equal(this.controller.outlets.find("namespaced--epsilon"), this.findElement("#epsilon1"))
   }
 
   "test OutletSet#findAll"() {
@@ -50,12 +54,16 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       this.controller.outlets.findAll("beta"),
       this.findElements("#beta1", "#beta2")
     )
+    this.assert.deepEqual(
+      this.controller.outlets.findAll("namespaced--epsilon"),
+      this.findElements("#epsilon1")
+    )
   }
 
   "test OutletSet#findAll with multiple arguments"() {
     this.assert.deepEqual(
-      this.controller.outlets.findAll("alpha", "beta"),
-      this.findElements("#alpha1", "#alpha2", "#beta1", "#beta2")
+      this.controller.outlets.findAll("alpha", "beta", "namespaced--epsilon"),
+      this.findElements("#alpha1", "#alpha2", "#beta1", "#beta2", "#epsilon1")
     )
   }
 
@@ -65,6 +73,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     this.assert.equal(this.controller.outlets.has("gamma"), false)
     this.assert.equal(this.controller.outlets.has("delta"), true)
     this.assert.equal(this.controller.outlets.has("omega"), false)
+    this.assert.equal(this.controller.outlets.has("namespaced--epsilon"), true)
   }
 
   "test OutletSet#has when attribute gets added later"() {
@@ -124,10 +133,16 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
   }
 
   "test outlet connected callback fires"() {
-    const alphaOutlets = this.controller.alphaOutletElements.filter(target => target.classList.contains("connected"))
+    const alphaOutlets = this.controller.alphaOutletElements.filter(outlet => outlet.classList.contains("connected"))
 
     this.assert.equal(alphaOutlets.length, 2)
     this.assert.equal(this.controller.alphaOutletConnectedCallCountValue, 2)
+  }
+
+  "test outlet connected callback fires for namespaced outlets"() {
+    const epsilonOutlets = this.controller.namespacedEpsilonOutletElements.filter(outlet => outlet.classList.contains("connected"))
+    this.assert.equal(epsilonOutlets.length, 1)
+    this.assert.equal(this.controller.namespacedEpsilonOutletConnectedCallCountValue, 1)
   }
 
   async "test outlet connected callback when element is inserted"() {
@@ -201,7 +216,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 2)
   }
 
-  async "test target disconnected callback when element is removed"() {
+  async "test outlet disconnected callback when element is removed"() {
     const disconnectedAlpha = this.findElement("#alpha1")
 
     this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 0)
@@ -213,6 +228,20 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 1)
     this.assert.ok(disconnectedAlpha.classList.contains("disconnected"), `expected "${disconnectedAlpha.className}" to contain "disconnected"`)
     this.assert.notOk(disconnectedAlpha.isConnected, "element is not present in document")
+  }
+
+  async "test outlet disconnected callback when element is removed with namespaced outlet"() {
+    const disconnectedEpsilon = this.findElement("#epsilon1")
+
+    this.assert.equal(this.controller.namespacedEpsilonOutletDisconnectedCallCountValue, 0)
+    this.assert.notOk(disconnectedEpsilon.classList.contains("disconnected"), `expected "${disconnectedEpsilon.className}" not to contain "disconnected"`)
+
+    disconnectedEpsilon.parentElement?.removeChild(disconnectedEpsilon)
+    await this.nextFrame
+
+    this.assert.equal(this.controller.namespacedEpsilonOutletDisconnectedCallCountValue, 1)
+    this.assert.ok(disconnectedEpsilon.classList.contains("disconnected"), `expected "${disconnectedEpsilon.className}" to contain "disconnected"`)
+    this.assert.notOk(disconnectedEpsilon.isConnected, "element is not present in document")
   }
 
   async "test outlet disconnected callback when an outlet present in the document removes the selector attribute"() {

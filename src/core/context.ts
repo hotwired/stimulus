@@ -9,6 +9,7 @@ import { Scope } from "./scope"
 import { ValueObserver } from "./value_observer"
 import { TargetObserver, TargetObserverDelegate } from "./target_observer"
 import { OutletObserver, OutletObserverDelegate } from "./outlet_observer"
+import { namespaceCamelize } from "./string_helpers"
 
 export class Context implements ErrorHandler, TargetObserverDelegate, OutletObserverDelegate {
   readonly module: Module
@@ -117,11 +118,11 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
   // Outlet observer delegate
 
   outletConnected(outlet: Controller, element: Element, name: string) {
-    this.invokeControllerMethod(`${name}OutletConnected`, outlet, element)
+    this.invokeControllerMethod(`${namespaceCamelize(name)}OutletConnected`, outlet, element)
   }
 
   outletDisconnected(outlet: Controller, element: Element, name: string) {
-    this.invokeControllerMethod(`${name}OutletDisconnected`, outlet, element)
+    this.invokeControllerMethod(`${namespaceCamelize(name)}OutletDisconnected`, outlet, element)
   }
 
   // Private
