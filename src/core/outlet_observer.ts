@@ -40,6 +40,8 @@ export class OutletObserver implements SelectorObserverDelegate {
 
       this.selectorObserverMap.forEach(observer => observer.start())
     }
+
+    this.dependentContexts.forEach(context => context.refresh())
   }
 
   stop() {
@@ -50,10 +52,14 @@ export class OutletObserver implements SelectorObserverDelegate {
     }
   }
 
+  refresh() {
+    this.selectorObserverMap.forEach(observer => observer.refresh())
+  }
+
   // Selector observer delegate
 
   selectorMatched(element: Element, _selector: string, { outletName }: SelectorObserverDetails) {
-    const outlet = this.context.application.getControllerForElementAndIdentifier(element, outletName)
+    const outlet = this.getOutlet(element, outletName)
 
     if (outlet) {
       this.connectOutlet(outlet, element, outletName)
@@ -61,7 +67,7 @@ export class OutletObserver implements SelectorObserverDelegate {
   }
 
   selectorUnmatched(element: Element, _selector: string, { outletName }: SelectorObserverDetails) {
-    const outlet = this.outletsByName.getValuesForKey(outletName).find(outlet => outlet.element === element)
+    const outlet = this.getOutletFromMap(element, outletName)
 
     if (outlet) {
       this.disconnectOutlet(outlet, element, outletName)
@@ -69,7 +75,7 @@ export class OutletObserver implements SelectorObserverDelegate {
   }
 
   selectorMatchElement(element: Element, { outletName }: SelectorObserverDetails) {
-    return element.matches(`[${this.context.application.schema.controllerAttribute}~=${outletName}]`)
+    return this.hasOutlet(element, outletName) && element.matches(`[${this.context.application.schema.controllerAttribute}~=${outletName}]`)
   }
 
   // Outlet management
@@ -106,11 +112,57 @@ export class OutletObserver implements SelectorObserverDelegate {
     return this.scope.outlets.getSelectorForOutletName(outletName)
   }
 
+  private get outletDependencies() {
+    const dependencies = new Multimap<string, string>()
+
+    this.router.modules.forEach(module => {
+      const constructor = module.definition.controllerConstructor
+      const outlets = readInheritableStaticArrayValues(constructor, "outlets")
+
+      outlets.forEach(outlet => dependencies.add(outlet, module.identifier))
+    })
+
+    return dependencies
+  }
+
   private get outletDefinitions() {
-    return readInheritableStaticArrayValues(this.context.controller.constructor as any, "outlets")
+    return this.outletDependencies.getKeysForValue(this.identifier)
+  }
+
+  private get dependentControllerIdentifiers() {
+    return this.outletDependencies.getValuesForKey(this.identifier)
+  }
+
+  private get dependentContexts() {
+    const identifiers = this.dependentControllerIdentifiers
+    return this.router.contexts.filter(context => identifiers.includes(context.identifier))
+  }
+
+  private hasOutlet(element: Element, outletName: string) {
+    return !!this.getOutlet(element, outletName) || !!this.getOutletFromMap(element, outletName)
+  }
+
+  private getOutlet(element: Element, outletName: string) {
+    return this.application.getControllerForElementAndIdentifier(element, outletName)
+  }
+
+  private getOutletFromMap(element: Element, outletName: string) {
+    return this.outletsByName.getValuesForKey(outletName).find(outlet => outlet.element === element)
   }
 
   private get scope() {
     return this.context.scope
+  }
+
+  private get identifier() {
+    return this.context.identifier
+  }
+
+  private get application() {
+    return this.context.application
+  }
+
+  private get router() {
+    return this.application.router
   }
 }

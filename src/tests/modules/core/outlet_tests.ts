@@ -13,12 +13,6 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
         <div data-controller="beta" id="beta4"></div>
       </div>
 
-      <div data-controller="delta gamma" class="delta gamma" id="delta1">
-        <div data-controller="gamma" class="gamma" id="gamma1"></div>
-      </div>
-
-      <div data-controller="namespaced--epsilon" class="epsilon" id="epsilon1"></div>
-
       <div
         data-controller="${this.identifier}"
         data-${this.identifier}-connected-class="connected"
@@ -30,6 +24,14 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       >
         <div data-controller="gamma" class="gamma" id="gamma2"></div>
       </div>
+
+      <div data-controller="delta gamma" class="delta gamma" id="delta1">
+        <div data-controller="gamma" class="gamma" id="gamma1"></div>
+      </div>
+
+      <div data-controller="namespaced--epsilon" class="epsilon" id="epsilon1"></div>
+
+      <div data-controller="namespaced--epsilon" class="epsilon" id="epsilon2"></div>
 
       <div class="beta" id="beta5"></div>
     </div>
@@ -56,14 +58,14 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     )
     this.assert.deepEqual(
       this.controller.outlets.findAll("namespaced--epsilon"),
-      this.findElements("#epsilon1")
+      this.findElements("#epsilon1", "#epsilon2")
     )
   }
 
   "test OutletSet#findAll with multiple arguments"() {
     this.assert.deepEqual(
       this.controller.outlets.findAll("alpha", "beta", "namespaced--epsilon"),
-      this.findElements("#alpha1", "#alpha2", "#beta1", "#beta2", "#epsilon1")
+      this.findElements("#alpha1", "#alpha2", "#beta1", "#beta2", "#epsilon1", "#epsilon2")
     )
   }
 
@@ -141,8 +143,8 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
 
   "test outlet connected callback fires for namespaced outlets"() {
     const epsilonOutlets = this.controller.namespacedEpsilonOutletElements.filter(outlet => outlet.classList.contains("connected"))
-    this.assert.equal(epsilonOutlets.length, 1)
-    this.assert.equal(this.controller.namespacedEpsilonOutletConnectedCallCountValue, 1)
+    this.assert.equal(epsilonOutlets.length, 2)
+    this.assert.equal(this.controller.namespacedEpsilonOutletConnectedCallCountValue, 2)
   }
 
   async "test outlet connected callback when element is inserted"() {

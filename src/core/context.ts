@@ -51,6 +51,10 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
     }
   }
 
+  refresh() {
+    this.outletObserver.refresh()
+  }
+
   disconnect() {
     try {
       this.controller.disconnect()
