@@ -22,9 +22,7 @@ export class Scope {
     this.element = element
     this.identifier = identifier
     this.guide = new Guide(logger)
-
-    const bodyScope = (element === document.body) ? this : new Scope(schema, document.body, identifier, logger)
-    this.outlets = new OutletSet(bodyScope, element)
+    this.outlets = new OutletSet(this.documentScope, element)
   }
 
   findElement(selector: string): Element | undefined {
@@ -50,5 +48,13 @@ export class Scope {
 
   private get controllerSelector(): string {
     return attributeValueContainsToken(this.schema.controllerAttribute, this.identifier)
+  }
+
+  private get isDocumentScope() {
+    return this.element === document.documentElement
+  }
+
+  private get documentScope(): Scope {
+    return this.isDocumentScope ? this : new Scope(this.schema, document.documentElement, this.identifier, this.guide.logger)
   }
 }
