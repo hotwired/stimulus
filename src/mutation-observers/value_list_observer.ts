@@ -88,7 +88,7 @@ export class ValueListObserver<T> implements TokenListObserverDelegate {
     try {
       const value = this.delegate.parseValueForToken(token)
       return { value }
-    } catch (error) {
+    } catch (error: any) {
       return { error }
     }
   }

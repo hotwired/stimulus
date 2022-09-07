@@ -28,7 +28,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
     try {
       this.controller.initialize()
       this.logDebugActivity("initialize")
-    } catch (error) {
+    } catch (error: any) {
       this.handleError(error, "initializing controller")
     }
   }
@@ -41,7 +41,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
     try {
       this.controller.connect()
       this.logDebugActivity("connect")
-    } catch (error) {
+    } catch (error: any) {
       this.handleError(error, "connecting controller")
     }
   }
@@ -50,7 +50,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
     try {
       this.controller.disconnect()
       this.logDebugActivity("disconnect")
-    } catch (error) {
+    } catch (error: any) {
       this.handleError(error, "disconnecting controller")
     }
 
