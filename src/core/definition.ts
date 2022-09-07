@@ -9,6 +9,6 @@ export interface Definition {
 export function blessDefinition(definition: Definition): Definition {
   return {
     identifier: definition.identifier,
-    controllerConstructor: bless(definition.controllerConstructor)
+    controllerConstructor: bless(definition.controllerConstructor),
   }
 }

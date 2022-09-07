@@ -7,9 +7,7 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
   observer = new AttributeObserver(this.fixtureElement, this.attributeName, this)
 
   async "test elementMatchedAttribute"() {
-    this.assert.deepEqual(this.calls, [
-      ["elementMatchedAttribute", this.outerElement, this.attributeName]
-    ])
+    this.assert.deepEqual(this.calls, [["elementMatchedAttribute", this.outerElement, this.attributeName]])
   }
 
   async "test elementAttributeValueChanged"() {
@@ -18,7 +16,7 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
 
     this.assert.deepEqual(this.calls, [
       ["elementMatchedAttribute", this.outerElement, this.attributeName],
-      ["elementAttributeValueChanged", this.outerElement, this.attributeName]
+      ["elementAttributeValueChanged", this.outerElement, this.attributeName],
     ])
   }
 
@@ -28,7 +26,7 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
 
     this.assert.deepEqual(this.calls, [
       ["elementMatchedAttribute", this.outerElement, this.attributeName],
-      ["elementUnmatchedAttribute", this.outerElement, this.attributeName]
+      ["elementUnmatchedAttribute", this.outerElement, this.attributeName],
     ])
   }
 
@@ -38,7 +36,7 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
 
     this.assert.deepEqual(this.calls, [
       ["elementMatchedAttribute", this.outerElement, this.attributeName],
-      ["elementMatchedAttribute", this.innerElement, this.attributeName]
+      ["elementMatchedAttribute", this.innerElement, this.attributeName],
     ])
   }
 
@@ -46,9 +44,7 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
     this.outerElement.setAttribute(this.attributeName + "-x", "hello")
     await this.nextFrame
 
-    this.assert.deepEqual(this.calls, [
-      ["elementMatchedAttribute", this.outerElement, this.attributeName]
-    ])
+    this.assert.deepEqual(this.calls, [["elementMatchedAttribute", this.outerElement, this.attributeName]])
   }
 
   async "test observes removal of nested matched element HTML"() {
@@ -64,7 +60,7 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
       ["elementMatchedAttribute", outerElement, this.attributeName],
       ["elementMatchedAttribute", innerElement, this.attributeName],
       ["elementUnmatchedAttribute", outerElement, this.attributeName],
-      ["elementUnmatchedAttribute", innerElement, this.attributeName]
+      ["elementUnmatchedAttribute", innerElement, this.attributeName],
     ])
   }
 
@@ -75,9 +71,7 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
     innerElement.setAttribute(this.attributeName, "")
     await this.nextFrame
 
-    this.assert.deepEqual(this.calls, [
-      ["elementMatchedAttribute", outerElement, this.attributeName]
-    ])
+    this.assert.deepEqual(this.calls, [["elementMatchedAttribute", outerElement, this.attributeName]])
   }
 
   async "test ignores synchronously moved elements"() {
@@ -87,9 +81,7 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
     innerElement.setAttribute(this.attributeName, "")
     await this.nextFrame
 
-    this.assert.deepEqual(this.calls, [
-      ["elementMatchedAttribute", outerElement, this.attributeName]
-    ])
+    this.assert.deepEqual(this.calls, [["elementMatchedAttribute", outerElement, this.attributeName]])
 
     document.body.removeChild(innerElement)
   }

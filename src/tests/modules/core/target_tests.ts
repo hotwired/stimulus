@@ -21,10 +21,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
   }
 
   "test TargetSet#findAll"() {
-    this.assert.deepEqual(
-      this.controller.targets.findAll("alpha"),
-      this.findElements("#alpha1", "#alpha2")
-    )
+    this.assert.deepEqual(this.controller.targets.findAll("alpha"), this.findElements("#alpha1", "#alpha2"))
   }
 
   "test TargetSet#findAll with multiple arguments"() {
@@ -64,7 +61,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
   }
 
   "test target connected callback fires after initialize() and when calling connect()"() {
-    const connectedInputs = this.controller.inputTargets.filter(target => target.classList.contains("connected"))
+    const connectedInputs = this.controller.inputTargets.filter((target) => target.classList.contains("connected"))
 
     this.assert.equal(connectedInputs.length, 1)
     this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 1)
@@ -80,7 +77,10 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
     await this.nextFrame
 
     this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 2)
-    this.assert.ok(connectedInput.classList.contains("connected"), `expected "${connectedInput.className}" to contain "connected"`)
+    this.assert.ok(
+      connectedInput.classList.contains("connected"),
+      `expected "${connectedInput.className}" to contain "connected"`
+    )
     this.assert.ok(connectedInput.isConnected, "element is present in document")
   }
 
@@ -111,13 +111,19 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
   }
 
   async "test target disconnected callback fires when calling disconnect() on the controller"() {
-    this.assert.equal(this.controller.inputTargets.filter(target => target.classList.contains("disconnected")).length, 0)
+    this.assert.equal(
+      this.controller.inputTargets.filter((target) => target.classList.contains("disconnected")).length,
+      0
+    )
     this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 0)
 
     this.controller.context.disconnect()
     await this.nextFrame
 
-    this.assert.equal(this.controller.inputTargets.filter(target => target.classList.contains("disconnected")).length, 1)
+    this.assert.equal(
+      this.controller.inputTargets.filter((target) => target.classList.contains("disconnected")).length,
+      1
+    )
     this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 1)
   }
 
@@ -125,13 +131,19 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
     const disconnectedInput = this.findElement("#input1")
 
     this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 0)
-    this.assert.notOk(disconnectedInput.classList.contains("disconnected"), `expected "${disconnectedInput.className}" not to contain "disconnected"`)
+    this.assert.notOk(
+      disconnectedInput.classList.contains("disconnected"),
+      `expected "${disconnectedInput.className}" not to contain "disconnected"`
+    )
 
     disconnectedInput.parentElement?.removeChild(disconnectedInput)
     await this.nextFrame
 
     this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 1)
-    this.assert.ok(disconnectedInput.classList.contains("disconnected"), `expected "${disconnectedInput.className}" to contain "disconnected"`)
+    this.assert.ok(
+      disconnectedInput.classList.contains("disconnected"),
+      `expected "${disconnectedInput.className}" to contain "disconnected"`
+    )
     this.assert.notOk(disconnectedInput.isConnected, "element is not present in document")
   }
 
@@ -139,13 +151,19 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
     const element = this.findElement("#input1")
 
     this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 0)
-    this.assert.notOk(element.classList.contains("disconnected"), `expected "${element.className}" not to contain "disconnected"`)
+    this.assert.notOk(
+      element.classList.contains("disconnected"),
+      `expected "${element.className}" not to contain "disconnected"`
+    )
 
     element.removeAttribute(`data-${this.controller.identifier}-target`)
     await this.nextFrame
 
     this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 1)
-    this.assert.ok(element.classList.contains("disconnected"), `expected "${element.className}" to contain "disconnected"`)
+    this.assert.ok(
+      element.classList.contains("disconnected"),
+      `expected "${element.className}" to contain "disconnected"`
+    )
     this.assert.ok(element.isConnected, "element is still present in document")
   }
 
@@ -154,21 +172,30 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
 
     this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 1)
     this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 0)
-    this.assert.notOk(element.classList.contains("disconnected"), `expected "${element.className}" not to contain "disconnected"`)
+    this.assert.notOk(
+      element.classList.contains("disconnected"),
+      `expected "${element.className}" not to contain "disconnected"`
+    )
 
     element.setAttribute(`data-${this.controller.identifier}-target`, "input")
     await this.nextFrame
 
     this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 2)
     this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 1)
-    this.assert.ok(element.classList.contains("disconnected"), `expected "${element.className}" to contain "disconnected"`)
+    this.assert.ok(
+      element.classList.contains("disconnected"),
+      `expected "${element.className}" to contain "disconnected"`
+    )
     this.assert.ok(element.isConnected, "element is still present in document")
   }
 
   async "test [target]Connected() and [target]Disconnected() do not loop infinitely"() {
-    this.controller.element.insertAdjacentHTML("beforeend", `
+    this.controller.element.insertAdjacentHTML(
+      "beforeend",
+      `
       <div data-${this.identifier}-target="recursive" id="recursive2"></div>
-    `)
+    `
+    )
     await this.nextFrame
 
     this.assert.ok(!!this.fixtureElement.querySelector("#recursive2"))

@@ -23,7 +23,7 @@ export class DefaultValueController extends Controller {
 
     defaultObject: {},
     defaultObjectPerson: { type: Object, default: { name: "David" } },
-    defaultObjectOverride: { override: "me" }
+    defaultObjectOverride: { override: "me" },
   }
 
   valueDescriptorMap!: ValueDescriptorMap

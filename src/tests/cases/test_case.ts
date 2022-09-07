@@ -2,7 +2,7 @@ export class TestCase {
   readonly assert: Assert
 
   static defineModule(moduleName: string = this.name, qUnit: QUnit = QUnit) {
-    qUnit.module(moduleName, hooks => {
+    qUnit.module(moduleName, (_hooks) => {
       this.manifest.forEach(([type, name]) => {
         type = this.shouldSkipTest(name) ? "skip" : type
         const method = (qUnit as any)[type] as Function
@@ -13,8 +13,7 @@ export class TestCase {
   }
 
   static getTest(testName: string) {
-    return async (assert: Assert) =>
-      this.runTest(testName, assert)
+    return async (assert: Assert) => this.runTest(testName, assert)
   }
 
   static runTest(testName: string, assert: Assert) {
@@ -22,20 +21,20 @@ export class TestCase {
     return testCase.runTest(testName)
   }
 
-  static shouldSkipTest(testName: string): boolean {
+  static shouldSkipTest(_testName: string): boolean {
     return false
   }
 
   static get manifest() {
-    return this.testPropertyNames.map(name => [name.slice(0, 4), name.slice(5)])
+    return this.testPropertyNames.map((name) => [name.slice(0, 4), name.slice(5)])
   }
 
   static get testNames(): string[] {
-    return this.manifest.map(([type, name]) => name)
+    return this.manifest.map(([_type, name]) => name)
   }
 
   static get testPropertyNames(): string[] {
-    return Object.keys(this.prototype).filter(name => name.match(/^(skip|test|todo) /))
+    return Object.keys(this.prototype).filter((name) => name.match(/^(skip|test|todo) /))
   }
 
   constructor(assert: Assert) {

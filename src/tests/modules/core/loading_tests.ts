@@ -2,12 +2,12 @@ import { ApplicationTestCase } from "../../cases/application_test_case"
 import { LogController } from "../../controllers/log_controller"
 
 class UnloadableController extends LogController {
-  static get shouldLoad(){
+  static get shouldLoad() {
     return false
   }
 }
 class LoadableController extends LogController {
-  static get shouldLoad(){
+  static get shouldLoad() {
     return true
   }
 }

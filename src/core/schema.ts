@@ -9,5 +9,5 @@ export const defaultSchema: Schema = {
   controllerAttribute: "data-controller",
   actionAttribute: "data-action",
   targetAttribute: "data-target",
-  targetAttributeForScope: identifier => `data-${identifier}-target`
+  targetAttributeForScope: (identifier) => `data-${identifier}-target`,
 }

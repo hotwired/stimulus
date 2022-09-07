@@ -7,7 +7,7 @@ import { ValuePropertiesBlessing, ValueDefinitionMap } from "./value_properties"
 export type ControllerConstructor = Constructor<Controller>
 
 export class Controller<ElementType extends Element = Element> {
-  static blessings = [ ClassPropertiesBlessing, TargetPropertiesBlessing, ValuePropertiesBlessing ]
+  static blessings = [ClassPropertiesBlessing, TargetPropertiesBlessing, ValuePropertiesBlessing]
   static targets: string[] = []
   static values: ValueDefinitionMap = {}
 
@@ -61,7 +61,10 @@ export class Controller<ElementType extends Element = Element> {
     // Override in your subclass to respond when the controller is disconnected from the DOM
   }
 
-  dispatch(eventName: string, { target = this.element, detail = {}, prefix = this.identifier, bubbles = true, cancelable = true } = {}) {
+  dispatch(
+    eventName: string,
+    { target = this.element, detail = {}, prefix = this.identifier, bubbles = true, cancelable = true } = {}
+  ) {
     const type = prefix ? `${prefix}:${eventName}` : eventName
     const event = new CustomEvent(type, { detail, bubbles, cancelable })
     target.dispatchEvent(event)

@@ -14,7 +14,7 @@ export class Application implements ErrorHandler {
   readonly router: Router
   readonly actionDescriptorFilters: ActionDescriptorFilters
   logger: Logger = console
-  debug: boolean = false
+  debug = false
 
   static start(element?: Element, schema?: Schema): Application {
     const application = new Application(element, schema)
@@ -57,7 +57,7 @@ export class Application implements ErrorHandler {
   load(definitions: Definition[]): void
   load(head: Definition | Definition[], ...rest: Definition[]) {
     const definitions = Array.isArray(head) ? head : [head, ...rest]
-    definitions.forEach(definition => {
+    definitions.forEach((definition) => {
       if ((definition.controllerConstructor as any).shouldLoad) {
         this.router.loadDefinition(definition)
       }
@@ -68,13 +68,13 @@ export class Application implements ErrorHandler {
   unload(identifiers: string[]): void
   unload(head: string | string[], ...rest: string[]) {
     const identifiers = Array.isArray(head) ? head : [head, ...rest]
-    identifiers.forEach(identifier => this.router.unloadIdentifier(identifier))
+    identifiers.forEach((identifier) => this.router.unloadIdentifier(identifier))
   }
 
   // Controllers
 
   get controllers(): Controller[] {
-    return this.router.contexts.map(context => context.controller)
+    return this.router.contexts.map((context) => context.controller)
   }
 
   getControllerForElementAndIdentifier(element: Element, identifier: string): Controller | null {
@@ -108,7 +108,7 @@ export class Application implements ErrorHandler {
 }
 
 function domReady() {
-  return new Promise<void>(resolve => {
+  return new Promise<void>((resolve) => {
     if (document.readyState == "loading") {
       document.addEventListener("DOMContentLoaded", () => resolve())
     } else {

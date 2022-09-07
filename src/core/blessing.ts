@@ -23,14 +23,14 @@ function getBlessedProperties<T>(constructor: Constructor<T>) {
   return blessings.reduce((blessedProperties, blessing) => {
     const properties = blessing(constructor)
     for (const key in properties) {
-      const descriptor = blessedProperties[key] || {} as PropertyDescriptor
+      const descriptor = blessedProperties[key] || ({} as PropertyDescriptor)
       blessedProperties[key] = Object.assign(descriptor, properties[key])
     }
     return blessedProperties
   }, {} as PropertyDescriptorMap)
 }
 
-function getShadowProperties<T>(prototype: any, properties: PropertyDescriptorMap) {
+function getShadowProperties(prototype: any, properties: PropertyDescriptorMap) {
   return getOwnKeys(properties).reduce((shadowProperties, key) => {
     const descriptor = getShadowedDescriptor(prototype, properties, key)
     if (descriptor) {
@@ -55,10 +55,7 @@ function getShadowedDescriptor(prototype: any, properties: PropertyDescriptorMap
 
 const getOwnKeys = (() => {
   if (typeof Object.getOwnPropertySymbols == "function") {
-    return (object: any) => [
-      ...Object.getOwnPropertyNames(object),
-      ...Object.getOwnPropertySymbols(object)
-    ]
+    return (object: any) => [...Object.getOwnPropertyNames(object), ...Object.getOwnPropertySymbols(object)]
   } else {
     return Object.getOwnPropertyNames
   }
@@ -71,7 +68,7 @@ const extend = (() => {
     }
 
     extended.prototype = Object.create(constructor.prototype, {
-      constructor: { value: extended }
+      constructor: { value: extended },
     })
 
     Reflect.setPrototypeOf(extended, constructor)
@@ -79,10 +76,12 @@ const extend = (() => {
   }
 
   function testReflectExtension() {
-    const a = function(this: any) { this.a.call(this) } as any
+    const a = function (this: any) {
+      this.a.call(this)
+    } as any
     const b = extendWithReflect(a)
-    b.prototype.a = function() {}
-    return new b
+    b.prototype.a = function () {}
+    return new b()
   }
 
   try {

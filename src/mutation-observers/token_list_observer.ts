@@ -21,7 +21,7 @@ export class TokenListObserver implements AttributeObserverDelegate {
   constructor(element: Element, attributeName: string, delegate: TokenListObserverDelegate) {
     this.attributeObserver = new AttributeObserver(element, attributeName, this)
     this.delegate = delegate
-    this.tokensByElement = new Multimap
+    this.tokensByElement = new Multimap()
   }
 
   get started(): boolean {
@@ -69,11 +69,11 @@ export class TokenListObserver implements AttributeObserverDelegate {
   }
 
   private tokensMatched(tokens: Token[]) {
-    tokens.forEach(token => this.tokenMatched(token))
+    tokens.forEach((token) => this.tokenMatched(token))
   }
 
   private tokensUnmatched(tokens: Token[]) {
-    tokens.forEach(token => this.tokenUnmatched(token))
+    tokens.forEach((token) => this.tokenUnmatched(token))
   }
 
   private tokenMatched(token: Token) {
@@ -89,8 +89,9 @@ export class TokenListObserver implements AttributeObserverDelegate {
   private refreshTokensForElement(element: Element): [Token[], Token[]] {
     const previousTokens = this.tokensByElement.getValuesForKey(element)
     const currentTokens = this.readTokensForElement(element)
-    const firstDifferingIndex = zip(previousTokens, currentTokens)
-      .findIndex(([previousToken, currentToken]) => !tokensAreEqual(previousToken, currentToken))
+    const firstDifferingIndex = zip(previousTokens, currentTokens).findIndex(
+      ([previousToken, currentToken]) => !tokensAreEqual(previousToken, currentToken)
+    )
 
     if (firstDifferingIndex == -1) {
       return [[], []]
@@ -107,7 +108,10 @@ export class TokenListObserver implements AttributeObserverDelegate {
 }
 
 function parseTokenString(tokenString: string, element: Element, attributeName: string): Token[] {
-  return tokenString.trim().split(/\s+/).filter(content => content.length)
+  return tokenString
+    .trim()
+    .split(/\s+/)
+    .filter((content) => content.length)
     .map((content, index) => ({ element, attributeName, content, index }))
 }
 

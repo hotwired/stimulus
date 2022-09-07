@@ -1,7 +1,7 @@
-import { Controller } from "../../core/controller";
+import { Controller } from "../../core/controller"
 
 class BaseClassController extends Controller {
-  static classes = [ "active" ]
+  static classes = ["active"]
 
   readonly activeClass!: string
   readonly activeClasses!: string[]
@@ -9,7 +9,7 @@ class BaseClassController extends Controller {
 }
 
 export class ClassController extends BaseClassController {
-  static classes = [ "enabled", "loading", "success" ]
+  static classes = ["enabled", "loading", "success"]
 
   readonly hasEnabledClass!: boolean
   readonly enabledClass!: string

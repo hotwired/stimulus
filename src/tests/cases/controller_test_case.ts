@@ -8,7 +8,7 @@ export class ControllerTests<T extends Controller> extends ApplicationTestCase {
   fixtureHTML = `<div data-controller="${this.identifiers.join(" ")}">`
 
   setupApplication() {
-    this.identifiers.forEach(identifier => {
+    this.identifiers.forEach((identifier) => {
       this.application.register(identifier, this.controllerConstructor)
     })
   }
@@ -37,8 +37,10 @@ export class ControllerTests<T extends Controller> extends ApplicationTestCase {
 
 export function ControllerTestCase(): Constructor<ControllerTests<Controller>>
 export function ControllerTestCase<T extends Controller>(constructor: Constructor<T>): Constructor<ControllerTests<T>>
-export function ControllerTestCase<T extends Controller>(constructor?: Constructor<T>): Constructor<ControllerTests<T>> {
+export function ControllerTestCase<T extends Controller>(
+  constructor?: Constructor<T>
+): Constructor<ControllerTests<T>> {
   return class extends ControllerTests<T> {
-    controllerConstructor = constructor || Controller as any
+    controllerConstructor = constructor || (Controller as any)
   } as any
 }
