@@ -96,9 +96,11 @@ export class ValueObserver implements StringMapObserverDelegate {
 
         changedMethod.call(this.receiver, value, oldValue)
       } catch (error) {
-        if (!(error instanceof TypeError)) throw error
+        if (error instanceof TypeError) {
+          error.message = `Stimulus Value "${this.context.identifier}.${descriptor.name}" - ${error.message}`
+        }
 
-        throw new TypeError(`Stimulus Value "${this.context.identifier}.${descriptor.name}" - ${error.message}`)
+        throw error
       }
     }
   }
