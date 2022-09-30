@@ -45,7 +45,7 @@ For example, this element has a controller which is an instance of the class def
 <div data-controller="reference"></div>
 ```
 
-The following is an example of how Stimulus will generate identifiers for controllers in it's require context:
+The following is an example of how Stimulus will generate identifiers for controllers in its require context:
 
 If your controller file is named… | its identifier will be…
 --------------------------------- | -----------------------

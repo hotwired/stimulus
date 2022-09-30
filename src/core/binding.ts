@@ -72,7 +72,7 @@ export class Binding {
       const actionEvent: ActionEvent = Object.assign(event, { params })
       this.method.call(this.controller, actionEvent)
       this.context.logDebugActivity(this.methodName, { event, target, currentTarget, action: this.methodName })
-    } catch (error) {
+    } catch (error: any) {
       const { identifier, controller, element, index } = this
       const detail = { identifier, controller, element, index, event }
       this.context.handleError(error, `invoking action "${this.action}"`, detail)

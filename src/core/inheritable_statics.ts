@@ -19,7 +19,7 @@ export function readInheritableStaticObjectPairs<T, U>(constructor: Constructor<
 }
 
 function getAncestorsForConstructor<T>(constructor: Constructor<T>) {
-  const ancestors: Constructor<{}>[] = []
+  const ancestors: Constructor<any>[] = []
   while (constructor) {
     ancestors.push(constructor)
     constructor = Object.getPrototypeOf(constructor)
