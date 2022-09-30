@@ -64,9 +64,6 @@ export default class ActionTests extends LogControllerTestCase {
   async "test actions on svg elements"() {
     await this.triggerEvent("#svgRoot", "click")
     await this.triggerEvent("#svgChild", "mousedown")
-    this.assertActions(
-      { name: "log", eventType: "click" },
-      { name: "log", eventType: "mousedown" }
-    )
+    this.assertActions({ name: "log", eventType: "click" }, { name: "log", eventType: "mousedown" })
   }
 }

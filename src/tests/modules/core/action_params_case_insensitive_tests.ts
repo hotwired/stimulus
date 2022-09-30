@@ -9,7 +9,7 @@ export default class ActionParamsCaseInsensitiveTests extends ActionParamsTests 
               data-CamelCase-active-param="true"
               data-CamelCase-inactive-param="false"
               data-CamelCase-empty-param=""
-              data-CamelCase-payload-param='${JSON.stringify({value: 1})}'
+              data-CamelCase-payload-param='${JSON.stringify({ value: 1 })}'
               data-CamelCase-param-something="not-reported"
               data-Something-param="not-reported"
               data-AnotherOne-id-param="234">
@@ -22,11 +22,11 @@ export default class ActionParamsCaseInsensitiveTests extends ActionParamsTests 
     id: 123,
     multiWordExample: "/path",
     payload: {
-      value: 1
+      value: 1,
     },
     active: true,
     empty: "",
-    inactive: false
+    inactive: false,
   }
 
   async "test clicking on the element does return its params"() {
@@ -34,9 +34,7 @@ export default class ActionParamsCaseInsensitiveTests extends ActionParamsTests 
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
 
-    this.assertActions(
-      { identifier: "CamelCase", params: this.expectedParamsForCamelCase },
-    )
+    this.assertActions({ identifier: "CamelCase", params: this.expectedParamsForCamelCase })
   }
 
   async "test global event return element params where the action is defined"() {
@@ -44,9 +42,7 @@ export default class ActionParamsCaseInsensitiveTests extends ActionParamsTests 
     await this.nextFrame
     await this.triggerEvent("#outside", "keydown")
 
-    this.assertActions(
-      { identifier: "CamelCase", params: this.expectedParamsForCamelCase },
-    )
+    this.assertActions({ identifier: "CamelCase", params: this.expectedParamsForCamelCase })
   }
 
   async "test passing params to namespaced controller"() {
@@ -56,7 +52,7 @@ export default class ActionParamsCaseInsensitiveTests extends ActionParamsTests 
 
     this.assertActions(
       { identifier: "CamelCase", params: this.expectedParamsForCamelCase },
-      { identifier: "AnotherOne", params: { id: 234 } },
+      { identifier: "AnotherOne", params: { id: 234 } }
     )
   }
 }

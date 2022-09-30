@@ -23,15 +23,13 @@ export class Scope {
   }
 
   findElement(selector: string): Element | undefined {
-    return this.element.matches(selector)
-      ? this.element
-      : this.queryElements(selector).find(this.containsElement)
+    return this.element.matches(selector) ? this.element : this.queryElements(selector).find(this.containsElement)
   }
 
   findAllElements(selector: string): Element[] {
     return [
-      ...this.element.matches(selector) ? [this.element] : [],
-      ...this.queryElements(selector).filter(this.containsElement)
+      ...(this.element.matches(selector) ? [this.element] : []),
+      ...this.queryElements(selector).filter(this.containsElement),
     ]
   }
 

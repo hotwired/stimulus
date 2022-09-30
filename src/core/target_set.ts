@@ -25,19 +25,21 @@ export class TargetSet {
   }
 
   find(...targetNames: string[]) {
-    return targetNames.reduce((target, targetName) =>
-         target
-      || this.findTarget(targetName)
-      || this.findLegacyTarget(targetName)
-    , undefined as Element | undefined)
+    return targetNames.reduce(
+      (target, targetName) => target || this.findTarget(targetName) || this.findLegacyTarget(targetName),
+      undefined as Element | undefined
+    )
   }
 
   findAll(...targetNames: string[]) {
-    return targetNames.reduce((targets, targetName) => [
-      ...targets,
-      ...this.findAllTargets(targetName),
-      ...this.findAllLegacyTargets(targetName)
-    ], [] as Element[])
+    return targetNames.reduce(
+      (targets, targetName) => [
+        ...targets,
+        ...this.findAllTargets(targetName),
+        ...this.findAllLegacyTargets(targetName),
+      ],
+      [] as Element[]
+    )
   }
 
   private findTarget(targetName: string) {
@@ -62,7 +64,7 @@ export class TargetSet {
 
   private findAllLegacyTargets(targetName: string) {
     const selector = this.getLegacySelectorForTargetName(targetName)
-    return this.scope.findAllElements(selector).map(element => this.deprecate(element, targetName))
+    return this.scope.findAllElements(selector).map((element) => this.deprecate(element, targetName))
   }
 
   private getLegacySelectorForTargetName(targetName: string) {
@@ -75,9 +77,12 @@ export class TargetSet {
       const { identifier } = this
       const attributeName = this.schema.targetAttribute
       const revisedAttributeName = this.schema.targetAttributeForScope(identifier)
-      this.guide.warn(element, `target:${targetName}`,
+      this.guide.warn(
+        element,
+        `target:${targetName}`,
         `Please replace ${attributeName}="${identifier}.${targetName}" with ${revisedAttributeName}="${targetName}". ` +
-        `The ${attributeName} attribute is deprecated and will be removed in a future version of Stimulus.`)
+          `The ${attributeName} attribute is deprecated and will be removed in a future version of Stimulus.`
+      )
     }
     return element
   }

@@ -25,12 +25,11 @@ class MockLogger {
 
 class ErrorWhileConnectingController extends Controller {
   connect() {
-    throw new Error('bad!');
+    throw new Error("bad!")
   }
 }
 
-class TestApplicationWithDefaultErrorBehavior extends Application {
-}
+class TestApplicationWithDefaultErrorBehavior extends Application {}
 
 export default class ErrorHandlerTests extends ControllerTestCase(ErrorWhileConnectingController) {
   controllerConstructor = ErrorWhileConnectingController
@@ -41,11 +40,13 @@ export default class ErrorHandlerTests extends ControllerTestCase(ErrorWhileConn
     this.application = new TestApplicationWithDefaultErrorBehavior(this.fixtureElement, this.schema)
     this.application.logger = logger
 
-    window.onerror = function(message, source, lineno, colno, error) {
-      logger.log(`error from window.onerror. message = ${message}, source = ${source}, lineno = ${lineno}, colno = ${colno}`)
+    window.onerror = function (message, source, lineno, colno, _error) {
+      logger.log(
+        `error from window.onerror. message = ${message}, source = ${source}, lineno = ${lineno}, colno = ${colno}`
+      )
     }
 
-    await super.setupApplication()
+    super.setupApplication()
   }
 
   async "test errors in connect are thrown and handled by built in logger"() {
@@ -60,6 +61,9 @@ export default class ErrorHandlerTests extends ControllerTestCase(ErrorWhileConn
     const mockLogger: any = this.application.logger
 
     this.assert.equal(1, mockLogger.logs.length)
-    this.assert.equal('error from window.onerror. message = Error connecting controller, source = , lineno = 0, colno = 0', mockLogger.logs[0])
+    this.assert.equal(
+      "error from window.onerror. message = Error connecting controller, source = , lineno = 0, colno = 0",
+      mockLogger.logs[0]
+    )
   }
 }

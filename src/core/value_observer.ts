@@ -107,13 +107,13 @@ export class ValueObserver implements StringMapObserverDelegate {
 
   private get valueDescriptors() {
     const { valueDescriptorMap } = this
-    return Object.keys(valueDescriptorMap).map(key => valueDescriptorMap[key])
+    return Object.keys(valueDescriptorMap).map((key) => valueDescriptorMap[key])
   }
 
   private get valueDescriptorNameMap() {
-    const descriptors: { [type: string]: ValueDescriptor }  = {}
+    const descriptors: { [type: string]: ValueDescriptor } = {}
 
-    Object.keys(this.valueDescriptorMap).forEach(key => {
+    Object.keys(this.valueDescriptorMap).forEach((key) => {
       const descriptor = this.valueDescriptorMap[key]
       descriptors[descriptor.name] = descriptor
     })

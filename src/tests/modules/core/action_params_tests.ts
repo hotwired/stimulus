@@ -9,7 +9,7 @@ export default class ActionParamsTests extends LogControllerTestCase {
               data-c-active-param="true"
               data-c-inactive-param="false"
               data-c-empty-param=""
-              data-c-payload-param='${JSON.stringify({value: 1})}'
+              data-c-payload-param='${JSON.stringify({ value: 1 })}'
               data-c-param-something="not-reported"
               data-something-param="not-reported"
               data-d-id-param="234">
@@ -22,11 +22,11 @@ export default class ActionParamsTests extends LogControllerTestCase {
     id: 123,
     multiWordExample: "/path",
     payload: {
-      value: 1
+      value: 1,
     },
     active: true,
     empty: "",
-    inactive: false
+    inactive: false,
   }
 
   async "test clicking on the element does return its params"() {
@@ -34,9 +34,7 @@ export default class ActionParamsTests extends LogControllerTestCase {
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
 
-    this.assertActions(
-      { identifier: "c", params: this.expectedParamsForC },
-    )
+    this.assertActions({ identifier: "c", params: this.expectedParamsForC })
   }
 
   async "test global event return element params where the action is defined"() {
@@ -44,9 +42,7 @@ export default class ActionParamsTests extends LogControllerTestCase {
     await this.nextFrame
     await this.triggerEvent("#outside", "keydown")
 
-    this.assertActions(
-      { identifier: "c", params: this.expectedParamsForC },
-    )
+    this.assertActions({ identifier: "c", params: this.expectedParamsForC })
   }
 
   async "test passing params to namespaced controller"() {
@@ -54,10 +50,7 @@ export default class ActionParamsTests extends LogControllerTestCase {
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
 
-    this.assertActions(
-      { identifier: "c", params: this.expectedParamsForC },
-      { identifier: "d", params: { id: 234 } },
-    )
+    this.assertActions({ identifier: "c", params: this.expectedParamsForC }, { identifier: "d", params: { id: 234 } })
   }
 
   async "test updating manually the params values"() {
@@ -65,9 +58,7 @@ export default class ActionParamsTests extends LogControllerTestCase {
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
 
-    this.assertActions(
-      { identifier: "c", params: this.expectedParamsForC },
-    )
+    this.assertActions({ identifier: "c", params: this.expectedParamsForC })
 
     this.buttonElement.setAttribute("data-c-id-param", "234")
     this.buttonElement.setAttribute("data-c-new-param", "new")
@@ -77,12 +68,16 @@ export default class ActionParamsTests extends LogControllerTestCase {
     this.assertActions(
       { identifier: "c", params: this.expectedParamsForC },
       {
-        identifier: "c", params: {
-          id: 234, new: "new",
+        identifier: "c",
+        params: {
+          id: 234,
+          new: "new",
           multiWordExample: "/path",
           active: true,
           empty: "",
-          inactive: false} },
+          inactive: false,
+        },
+      }
     )
   }
 

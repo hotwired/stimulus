@@ -34,7 +34,7 @@ export const defaultActionDescriptorFilters: ActionDescriptorFilters = {
     } else {
       return true
     }
-  }
+  },
 }
 
 // capture nos.:            12   23 4               43   1 5   56 7      768 9  98
@@ -44,11 +44,11 @@ export function parseActionDescriptorString(descriptorString: string): Partial<A
   const source = descriptorString.trim()
   const matches = source.match(descriptorPattern) || []
   return {
-    eventTarget:  parseEventTarget(matches[4]),
-    eventName:    matches[2],
+    eventTarget: parseEventTarget(matches[4]),
+    eventName: matches[2],
     eventOptions: matches[9] ? parseEventOptions(matches[9]) : {},
-    identifier:   matches[5],
-    methodName:   matches[7]
+    identifier: matches[5],
+    methodName: matches[7],
   }
 }
 
@@ -61,9 +61,9 @@ function parseEventTarget(eventTargetName: string): EventTarget | undefined {
 }
 
 function parseEventOptions(eventOptions: string): AddEventListenerOptions {
-  return eventOptions.split(":").reduce((options, token) =>
-    Object.assign(options, { [token.replace(/^!/, "")]: !/^!/.test(token) })
-  , {})
+  return eventOptions
+    .split(":")
+    .reduce((options, token) => Object.assign(options, { [token.replace(/^!/, "")]: !/^!/.test(token) }), {})
 }
 
 export function stringifyEventTarget(eventTarget: EventTarget) {

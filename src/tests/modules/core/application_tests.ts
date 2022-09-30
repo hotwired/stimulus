@@ -8,7 +8,7 @@ export default class ApplicationTests extends ApplicationTestCase {
   fixtureHTML = `<div data-controller="a"><div data-controller="b">`
   private definitions = [
     { controllerConstructor: AController, identifier: "a" },
-    { controllerConstructor: BController, identifier: "b" }
+    { controllerConstructor: BController, identifier: "b" },
   ]
 
   async "test Application#register"() {

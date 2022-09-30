@@ -16,7 +16,7 @@ export class TargetObserver implements TokenListObserverDelegate {
   constructor(context: Context, delegate: TargetObserverDelegate) {
     this.context = context
     this.delegate = delegate
-    this.targetsByName = new Multimap
+    this.targetsByName = new Multimap()
   }
 
   start() {

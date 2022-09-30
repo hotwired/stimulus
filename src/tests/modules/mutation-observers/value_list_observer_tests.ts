@@ -13,18 +13,14 @@ export default class ValueListObserverTests extends ObserverTestCase implements 
   lastValueId = 0
 
   async "test elementMatchedValue"() {
-    this.assert.deepEqual(this.calls, [
-      ["elementMatchedValue", this.element, 1, "one"]
-    ])
+    this.assert.deepEqual(this.calls, [["elementMatchedValue", this.element, 1, "one"]])
   }
 
   async "test adding a token to the right"() {
     this.valueString = "one two"
     await this.nextFrame
 
-    this.assert.deepEqual(this.testCalls, [
-      ["elementMatchedValue", this.element, 2, "two"]
-    ])
+    this.assert.deepEqual(this.testCalls, [["elementMatchedValue", this.element, 2, "two"]])
   }
 
   async "test adding a token to the left"() {
@@ -34,7 +30,7 @@ export default class ValueListObserverTests extends ObserverTestCase implements 
     this.assert.deepEqual(this.testCalls, [
       ["elementUnmatchedValue", this.element, 1, "one"],
       ["elementMatchedValue", this.element, 2, "two"],
-      ["elementMatchedValue", this.element, 3, "one"]
+      ["elementMatchedValue", this.element, 3, "one"],
     ])
   }
 
@@ -46,7 +42,7 @@ export default class ValueListObserverTests extends ObserverTestCase implements 
 
     this.assert.deepEqual(this.testCalls, [
       ["elementMatchedValue", this.element, 2, "two"],
-      ["elementUnmatchedValue", this.element, 2, "two"]
+      ["elementUnmatchedValue", this.element, 2, "two"],
     ])
   }
 
@@ -60,7 +56,7 @@ export default class ValueListObserverTests extends ObserverTestCase implements 
       ["elementMatchedValue", this.element, 2, "two"],
       ["elementUnmatchedValue", this.element, 1, "one"],
       ["elementUnmatchedValue", this.element, 2, "two"],
-      ["elementMatchedValue", this.element, 3, "two"]
+      ["elementMatchedValue", this.element, 3, "two"],
     ])
   }
 
@@ -68,9 +64,7 @@ export default class ValueListObserverTests extends ObserverTestCase implements 
     this.valueString = ""
     await this.nextFrame
 
-    this.assert.deepEqual(this.testCalls, [
-      ["elementUnmatchedValue", this.element, 1, "one"]
-    ])
+    this.assert.deepEqual(this.testCalls, [["elementUnmatchedValue", this.element, 1, "one"]])
   }
 
   async "test removing and re-adding a token produces a new value"() {
@@ -81,7 +75,7 @@ export default class ValueListObserverTests extends ObserverTestCase implements 
 
     this.assert.deepEqual(this.testCalls, [
       ["elementUnmatchedValue", this.element, 1, "one"],
-      ["elementMatchedValue", this.element, 2, "one"]
+      ["elementMatchedValue", this.element, 2, "one"],
     ])
   }
 

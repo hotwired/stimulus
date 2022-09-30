@@ -21,7 +21,7 @@ export class ElementObserver {
     this.started = false
     this.delegate = delegate
 
-    this.elements = new Set
+    this.elements = new Set()
     this.mutationObserver = new MutationObserver((mutations) => this.processMutations(mutations))
   }
 

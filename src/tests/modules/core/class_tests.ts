@@ -32,6 +32,6 @@ export default class ClassTests extends ControllerTestCase(ClassController) {
   }
 
   "test accessing a class property returns first class if multiple classes are used"() {
-    this.assert.equal(this.controller.successClass, "bg-green-400");
+    this.assert.equal(this.controller.successClass, "bg-green-400")
   }
 }

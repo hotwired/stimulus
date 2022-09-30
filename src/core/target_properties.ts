@@ -20,19 +20,19 @@ function propertiesForTargetDefinition(name: string) {
         } else {
           throw new Error(`Missing target element "${name}" for "${this.identifier}" controller`)
         }
-      }
+      },
     },
 
     [`${name}Targets`]: {
       get(this: Controller) {
         return this.targets.findAll(name)
-      }
+      },
     },
 
     [`has${capitalize(name)}Target`]: {
       get(this: Controller) {
         return this.targets.has(name)
-      }
-    }
+      },
+    },
   }
 }

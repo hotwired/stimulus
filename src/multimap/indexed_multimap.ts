@@ -6,7 +6,7 @@ export class IndexedMultimap<K, V> extends Multimap<K, V> {
 
   constructor() {
     super()
-    this.keysByValue = new Map
+    this.keysByValue = new Map()
   }
 
   get values(): V[] {

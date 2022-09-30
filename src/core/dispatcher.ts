@@ -10,27 +10,29 @@ export class Dispatcher implements BindingObserverDelegate {
 
   constructor(application: Application) {
     this.application = application
-    this.eventListenerMaps = new Map
+    this.eventListenerMaps = new Map()
     this.started = false
   }
 
   start() {
     if (!this.started) {
       this.started = true
-      this.eventListeners.forEach(eventListener => eventListener.connect())
+      this.eventListeners.forEach((eventListener) => eventListener.connect())
     }
   }
 
   stop() {
     if (this.started) {
       this.started = false
-      this.eventListeners.forEach(eventListener => eventListener.disconnect())
+      this.eventListeners.forEach((eventListener) => eventListener.disconnect())
     }
   }
 
   get eventListeners(): EventListener[] {
-    return Array.from(this.eventListenerMaps.values())
-      .reduce((listeners, map) => listeners.concat(Array.from(map.values())), [] as EventListener[])
+    return Array.from(this.eventListenerMaps.values()).reduce(
+      (listeners, map) => listeners.concat(Array.from(map.values())),
+      [] as EventListener[]
+    )
   }
 
   // Binding observer delegate
@@ -54,7 +56,11 @@ export class Dispatcher implements BindingObserverDelegate {
     return this.fetchEventListener(eventTarget, eventName, eventOptions)
   }
 
-  private fetchEventListener(eventTarget: EventTarget, eventName: string, eventOptions: AddEventListenerOptions): EventListener {
+  private fetchEventListener(
+    eventTarget: EventTarget,
+    eventName: string,
+    eventOptions: AddEventListenerOptions
+  ): EventListener {
     const eventListenerMap = this.fetchEventListenerMapForEventTarget(eventTarget)
     const cacheKey = this.cacheKey(eventName, eventOptions)
     let eventListener = eventListenerMap.get(cacheKey)
@@ -65,7 +71,11 @@ export class Dispatcher implements BindingObserverDelegate {
     return eventListener
   }
 
-  private createEventListener(eventTarget: EventTarget, eventName: string, eventOptions: AddEventListenerOptions): EventListener {
+  private createEventListener(
+    eventTarget: EventTarget,
+    eventName: string,
+    eventOptions: AddEventListenerOptions
+  ): EventListener {
     const eventListener = new EventListener(eventTarget, eventName, eventOptions)
     if (this.started) {
       eventListener.connect()
@@ -76,17 +86,19 @@ export class Dispatcher implements BindingObserverDelegate {
   private fetchEventListenerMapForEventTarget(eventTarget: EventTarget): Map<string, EventListener> {
     let eventListenerMap = this.eventListenerMaps.get(eventTarget)
     if (!eventListenerMap) {
-      eventListenerMap = new Map
+      eventListenerMap = new Map()
       this.eventListenerMaps.set(eventTarget, eventListenerMap)
     }
     return eventListenerMap
   }
 
   private cacheKey(eventName: string, eventOptions: any): string {
-    const parts = [ eventName ]
-    Object.keys(eventOptions).sort().forEach(key => {
-      parts.push(`${eventOptions[key] ? "" : "!"}${key}`)
-    })
+    const parts = [eventName]
+    Object.keys(eventOptions)
+      .sort()
+      .forEach((key) => {
+        parts.push(`${eventOptions[key] ? "" : "!"}${key}`)
+      })
     return parts.join(":")
   }
 }
