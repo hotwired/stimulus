@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.0",
-    "@rollup/plugin-typescript": "^8.2.1",
+    "@rollup/plugin-typescript": "^8.5.0",
     "@types/qunit": "^2.9.0",
     "@types/webpack-env": "^1.14.0",
     "concurrently": "^6.2.1",
@@ -57,8 +57,8 @@
     "rollup": "^2.53",
     "rollup-plugin-terser": "^7.0.2",
     "ts-loader": "^6.0.4",
-    "tslib": "^2.3.0",
-    "typescript": "^4.3.5",
+    "tslib": "^2.4.0",
+    "typescript": "^4.8.2",
     "webpack": "^4.39.1"
   }
 }

@@ -65,7 +65,7 @@ const getOwnKeys = (() => {
 })()
 
 const extend = (() => {
-  function extendWithReflect<T extends Constructor<{}>>(constructor: T): T {
+  function extendWithReflect<T extends Constructor<any>>(constructor: T): T {
     function extended() {
       return Reflect.construct(constructor, arguments, new.target)
     }
@@ -88,7 +88,7 @@ const extend = (() => {
   try {
     testReflectExtension()
     return extendWithReflect
-  } catch (error) {
-    return <T extends Constructor<{}>>(constructor: T) => class extended extends constructor {}
+  } catch (error: any) {
+    return <T extends Constructor<any>>(constructor: T) => class extended extends constructor {}
   }
 })()
