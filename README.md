@@ -44,15 +44,26 @@ You can use Stimulus with any asset packaging systems. And if you prefer no buil
 
 See the [Installation Guide](https://stimulus.hotwired.dev/handbook/installing) for detailed instructions.
 
-## Getting Help & Contributing Back
+## Getting Help
 
 Looking for the docs? Once you've read through the Handbook, consult the [Stimulus Reference](https://stimulus.hotwired.dev/reference/controllers) for API details.
 
 Have a question about Stimulus? Connect with other Stimulus developers on the [Hotwire Discourse](https://discuss.hotwired.dev/) community forum.
 
+## Contributing Back
+
 Find a bug? Head over to our [issue tracker](https://github.com/hotwired/stimulus/issues) and we'll do our best to help. We love pull requests, too!
 
 We expect all Stimulus contributors to abide by the terms of our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+### Development
+
+- Fork the project locally
+- `yarn install`
+- `yarn start` - to run the local dev server with examples
+- `yarn test` - to run the unit tests
+- `yarn lint` - to run the linter with Eslint
+- `yarn format` - to format changes with Pettier
 
 ## Acknowledgments
 
