@@ -62,8 +62,8 @@ We expect all Stimulus contributors to abide by the terms of our [Code of Conduc
 - `yarn install`
 - `yarn start` - to run the local dev server with examples
 - `yarn test` - to run the unit tests
-- `yarn lint` - to run the linter with Eslint
-- `yarn format` - to format changes with Pettier
+- `yarn lint` - to run the linter with ESLint
+- `yarn format` - to format changes with Prettier
 
 ## Acknowledgments
 
