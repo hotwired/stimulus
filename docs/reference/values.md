@@ -71,7 +71,7 @@ Getter | `this.[name]Value` | Reads `data-[identifier]-[name]-value`
 Setter | `this.[name]Value=` | Writes `data-[identifier]-[name]-value`
 Existential | `this.has[Name]Value` | Tests for `data-[identifier]-[name]-value`
 
-### Getters
+### Getters and Default Values
 
 The getter for a value decodes the associated data attribute into an instance of the value's type.
 
