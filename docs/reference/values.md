@@ -56,9 +56,9 @@ A value's type is one of `Array`, `Boolean`, `Number`, `Object`, or `String`. Th
 Type | Encoded as… | Decoded as…
 ---- | ----------- | -----------
 Array | `JSON.stringify(array)` | `JSON.parse(value)`
+Object | `JSON.stringify(object)` | `JSON.parse(value)`
 Boolean | `boolean.toString()` | `!(value == "0" \|\| value == "false")`
 Number | `number.toString()` | `Number(value)`
-Object | `JSON.stringify(object)` | `JSON.parse(value)`
 String | Itself | Itself
 
 ## Properties and Attributes
