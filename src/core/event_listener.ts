@@ -43,6 +43,10 @@ export class EventListener implements EventListenerObject {
     }
   }
 
+  hasBindings() {
+    return this.unorderedBindings.size > 0
+  }
+
   get bindings(): Binding[] {
     return Array.from(this.unorderedBindings).sort((left, right) => {
       const leftIndex = left.index,
