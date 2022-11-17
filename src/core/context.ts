@@ -8,14 +8,17 @@ import { Schema } from "./schema"
 import { Scope } from "./scope"
 import { ValueObserver } from "./value_observer"
 import { TargetObserver, TargetObserverDelegate } from "./target_observer"
+import { OutletObserver, OutletObserverDelegate } from "./outlet_observer"
+import { namespaceCamelize } from "./string_helpers"
 
-export class Context implements ErrorHandler, TargetObserverDelegate {
+export class Context implements ErrorHandler, TargetObserverDelegate, OutletObserverDelegate {
   readonly module: Module
   readonly scope: Scope
   readonly controller: Controller
   private bindingObserver: BindingObserver
   private valueObserver: ValueObserver
   private targetObserver: TargetObserver
+  private outletObserver: OutletObserver
 
   constructor(module: Module, scope: Scope) {
     this.module = module
@@ -24,6 +27,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
     this.bindingObserver = new BindingObserver(this, this.dispatcher)
     this.valueObserver = new ValueObserver(this, this.controller)
     this.targetObserver = new TargetObserver(this, this)
+    this.outletObserver = new OutletObserver(this, this)
 
     try {
       this.controller.initialize()
@@ -37,6 +41,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
     this.bindingObserver.start()
     this.valueObserver.start()
     this.targetObserver.start()
+    this.outletObserver.start()
 
     try {
       this.controller.connect()
@@ -44,6 +49,10 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
     } catch (error: any) {
       this.handleError(error, "connecting controller")
     }
+  }
+
+  refresh() {
+    this.outletObserver.refresh()
   }
 
   disconnect() {
@@ -54,6 +63,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
       this.handleError(error, "disconnecting controller")
     }
 
+    this.outletObserver.stop()
     this.targetObserver.stop()
     this.valueObserver.stop()
     this.bindingObserver.stop()
@@ -107,6 +117,16 @@ export class Context implements ErrorHandler, TargetObserverDelegate {
 
   targetDisconnected(element: Element, name: string) {
     this.invokeControllerMethod(`${name}TargetDisconnected`, element)
+  }
+
+  // Outlet observer delegate
+
+  outletConnected(outlet: Controller, element: Element, name: string) {
+    this.invokeControllerMethod(`${namespaceCamelize(name)}OutletConnected`, outlet, element)
+  }
+
+  outletDisconnected(outlet: Controller, element: Element, name: string) {
+    this.invokeControllerMethod(`${namespaceCamelize(name)}OutletDisconnected`, outlet, element)
   }
 
   // Private

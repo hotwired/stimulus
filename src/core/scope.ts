@@ -5,12 +5,14 @@ import { Logger } from "./logger"
 import { Schema } from "./schema"
 import { attributeValueContainsToken } from "./selectors"
 import { TargetSet } from "./target_set"
+import { OutletSet } from "./outlet_set"
 
 export class Scope {
   readonly schema: Schema
   readonly element: Element
   readonly identifier: string
   readonly guide: Guide
+  readonly outlets: OutletSet
   readonly targets = new TargetSet(this)
   readonly classes = new ClassMap(this)
   readonly data = new DataMap(this)
@@ -20,6 +22,7 @@ export class Scope {
     this.element = element
     this.identifier = identifier
     this.guide = new Guide(logger)
+    this.outlets = new OutletSet(this.documentScope, element)
   }
 
   findElement(selector: string): Element | undefined {
@@ -37,11 +40,21 @@ export class Scope {
     return element.closest(this.controllerSelector) === this.element
   }
 
-  private queryElements(selector: string): Element[] {
+  queryElements(selector: string): Element[] {
     return Array.from(this.element.querySelectorAll(selector))
   }
 
   private get controllerSelector(): string {
     return attributeValueContainsToken(this.schema.controllerAttribute, this.identifier)
+  }
+
+  private get isDocumentScope() {
+    return this.element === document.documentElement
+  }
+
+  private get documentScope(): Scope {
+    return this.isDocumentScope
+      ? this
+      : new Scope(this.schema, document.documentElement, this.identifier, this.guide.logger)
   }
 }
