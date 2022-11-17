@@ -41,7 +41,7 @@ export class Dispatcher implements BindingObserverDelegate {
     this.fetchEventListenerForBinding(binding).bindingConnected(binding)
   }
 
-  bindingDisconnected(binding: Binding, clearEventListeners: boolean = false) {
+  bindingDisconnected(binding: Binding, clearEventListeners = false) {
     this.fetchEventListenerForBinding(binding).bindingDisconnected(binding)
     if (clearEventListeners) this.clearEventListenersForBinding(binding)
   }
