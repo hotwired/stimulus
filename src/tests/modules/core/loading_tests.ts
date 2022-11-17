@@ -2,13 +2,23 @@ import { ApplicationTestCase } from "../../cases/application_test_case"
 import { LogController } from "../../controllers/log_controller"
 
 class UnloadableController extends LogController {
-  static get shouldLoad(){
+  static get shouldLoad() {
     return false
   }
 }
 class LoadableController extends LogController {
-  static get shouldLoad(){
+  static get shouldLoad() {
     return true
+  }
+}
+
+class AfterLoadController extends LogController {
+  static afterLoad(identifier: string, application: any) {
+    const newElement = document.createElement("div")
+    newElement.classList.add("after-load-test")
+    newElement.setAttribute(application.schema.controllerAttribute, identifier)
+    application.element.append(newElement)
+    document.dispatchEvent(new CustomEvent("test", { detail: { identifier, application } }))
   }
 }
 
@@ -23,6 +33,26 @@ export default class ApplicationTests extends ApplicationTestCase {
   "test module with true shouldLoad should load when registering"() {
     this.application.register("loadable", LoadableController)
     this.assert.equal(this.controllers.length, 1)
+  }
+
+  "test module with afterLoad method should be triggered when registered"() {
+    // set up an event listener to track the params passed into the AfterLoadController
+    let data: { application?: any; identifier?: string } = {}
+    document.addEventListener("test", (({ detail }: CustomEvent) => {
+      data = detail
+    }) as EventListener)
+
+    this.assert.equal(data.identifier, undefined)
+    this.assert.equal(data.application, undefined)
+
+    this.application.register("after-load", AfterLoadController)
+
+    // check the DOM element has been added based on params provided
+    this.assert.equal(this.findElements('[data-controller="after-load"]').length, 1)
+
+    // check that static method was correctly called with the params
+    this.assert.equal(data.identifier, "after-load")
+    this.assert.equal(data.application, this.application)
   }
 
   get controllers() {

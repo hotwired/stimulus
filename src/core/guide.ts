@@ -2,7 +2,7 @@ import { Logger } from "./logger"
 
 export class Guide {
   readonly logger: Logger
-  readonly warnedKeysByObject: WeakMap<any, Set<string>> = new WeakMap
+  readonly warnedKeysByObject: WeakMap<any, Set<string>> = new WeakMap()
 
   constructor(logger: Logger) {
     this.logger = logger
@@ -12,7 +12,7 @@ export class Guide {
     let warnedKeys: Set<string> | undefined = this.warnedKeysByObject.get(object)
 
     if (!warnedKeys) {
-      warnedKeys = new Set
+      warnedKeys = new Set()
       this.warnedKeysByObject.set(object, warnedKeys)
     }
 

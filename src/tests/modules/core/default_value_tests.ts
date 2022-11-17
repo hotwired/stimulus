@@ -56,7 +56,6 @@ export default class DefaultValueTests extends ControllerTestCase(DefaultValueCo
     this.assert.deepEqual(this.controller.defaultStringHelloValue, "Hello")
     this.assert.ok(this.controller.hasDefaultStringHelloValue)
     this.assert.deepEqual(this.get("default-string-hello-value"), null)
-
   }
 
   "test should be able to set a new value for custom default string values"() {
@@ -160,13 +159,13 @@ export default class DefaultValueTests extends ControllerTestCase(DefaultValueCo
 
     this.controller.defaultObjectValue = { new: "value" }
 
-    this.assert.deepEqual(this.get("default-object-value"), "{\"new\":\"value\"}")
+    this.assert.deepEqual(this.get("default-object-value"), '{"new":"value"}')
     this.assert.deepEqual(this.controller.defaultObjectValue, { new: "value" })
     this.assert.ok(this.controller.hasDefaultObjectValue)
   }
 
   "test should override custom default object value with given data-attribute"() {
-    this.assert.deepEqual(this.get("default-object-override-value"), "{\"expected\":\"value\"}")
+    this.assert.deepEqual(this.get("default-object-override-value"), '{"expected":"value"}')
     this.assert.deepEqual(this.controller.defaultObjectOverrideValue, { expected: "value" })
     this.assert.ok(this.controller.hasDefaultObjectOverrideValue)
   }

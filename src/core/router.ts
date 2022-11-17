@@ -15,8 +15,8 @@ export class Router implements ScopeObserverDelegate {
   constructor(application: Application) {
     this.application = application
     this.scopeObserver = new ScopeObserver(this.element, this.schema, this)
-    this.scopesByIdentifier = new Multimap
-    this.modulesByIdentifier = new Map
+    this.scopesByIdentifier = new Multimap()
+    this.modulesByIdentifier = new Map()
   }
 
   get element() {
@@ -55,6 +55,10 @@ export class Router implements ScopeObserverDelegate {
     this.unloadIdentifier(definition.identifier)
     const module = new Module(this.application, definition)
     this.connectModule(module)
+    const afterLoad = (definition.controllerConstructor as any).afterLoad
+    if (afterLoad) {
+      afterLoad(definition.identifier, this.application)
+    }
   }
 
   unloadIdentifier(identifier: string) {
@@ -67,7 +71,7 @@ export class Router implements ScopeObserverDelegate {
   getContextForElementAndIdentifier(element: Element, identifier: string) {
     const module = this.modulesByIdentifier.get(identifier)
     if (module) {
-      return module.contexts.find(context => context.element == element)
+      return module.contexts.find((context) => context.element == element)
     }
   }
 
@@ -104,12 +108,12 @@ export class Router implements ScopeObserverDelegate {
   private connectModule(module: Module) {
     this.modulesByIdentifier.set(module.identifier, module)
     const scopes = this.scopesByIdentifier.getValuesForKey(module.identifier)
-    scopes.forEach(scope => module.connectContextForScope(scope))
+    scopes.forEach((scope) => module.connectContextForScope(scope))
   }
 
   private disconnectModule(module: Module) {
     this.modulesByIdentifier.delete(module.identifier)
     const scopes = this.scopesByIdentifier.getValuesForKey(module.identifier)
-    scopes.forEach(scope => module.disconnectContextForScope(scope))
+    scopes.forEach((scope) => module.disconnectContextForScope(scope))
   }
 }

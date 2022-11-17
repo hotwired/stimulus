@@ -1,3 +1,4 @@
+import { Application } from "./application"
 import { ClassPropertiesBlessing } from "./class_properties"
 import { Constructor } from "./constructor"
 import { Context } from "./context"
@@ -8,13 +9,22 @@ import { ValuePropertiesBlessing, ValueDefinitionMap } from "./value_properties"
 export type ControllerConstructor = Constructor<Controller>
 
 export class Controller<ElementType extends Element = Element> {
-  static blessings = [ ClassPropertiesBlessing, TargetPropertiesBlessing, ValuePropertiesBlessing, OutletPropertiesBlessing ]
+  static blessings = [
+    ClassPropertiesBlessing,
+    TargetPropertiesBlessing,
+    ValuePropertiesBlessing,
+    OutletPropertiesBlessing,
+  ]
   static targets: string[] = []
   static outlets: string[] = []
   static values: ValueDefinitionMap = {}
 
   static get shouldLoad() {
     return true
+  }
+
+  static afterLoad(_identifier: string, _application: Application) {
+    return
   }
 
   readonly context: Context
@@ -67,7 +77,10 @@ export class Controller<ElementType extends Element = Element> {
     // Override in your subclass to respond when the controller is disconnected from the DOM
   }
 
-  dispatch(eventName: string, { target = this.element, detail = {}, prefix = this.identifier, bubbles = true, cancelable = true } = {}) {
+  dispatch(
+    eventName: string,
+    { target = this.element, detail = {}, prefix = this.identifier, bubbles = true, cancelable = true } = {}
+  ) {
     const type = prefix ? `${prefix}:${eventName}` : eventName
     const event = new CustomEvent(type, { detail, bubbles, cancelable })
     target.dispatchEvent(event)

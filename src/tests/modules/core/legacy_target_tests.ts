@@ -19,11 +19,11 @@ export default class LegacyTargetTests extends ControllerTestCase(TargetControll
   warningCount = 0
 
   async setupApplication() {
-    await super.setupApplication()
+    super.setupApplication()
     this.application.logger = Object.create(console, {
       warn: {
-        value: (message: string, ...args: any[]) => this.warningCount++
-      }
+        value: () => this.warningCount++,
+      },
     })
   }
 
@@ -38,18 +38,12 @@ export default class LegacyTargetTests extends ControllerTestCase(TargetControll
   }
 
   "test TargetSet#findAll"() {
-    this.assert.deepEqual(
-      this.controller.targets.findAll("alpha"),
-      this.findElements("#alpha1", "#alpha2")
-    )
+    this.assert.deepEqual(this.controller.targets.findAll("alpha"), this.findElements("#alpha1", "#alpha2"))
     this.assert.equal(this.warningCount, 2)
   }
 
   "test TargetSet#findAll prioritizes scoped target attributes"() {
-    this.assert.deepEqual(
-      this.controller.targets.findAll("gamma"),
-      this.findElements("#beta1", "#gamma1")
-    )
+    this.assert.deepEqual(this.controller.targets.findAll("gamma"), this.findElements("#beta1", "#gamma1"))
     this.assert.equal(this.warningCount, 1)
   }
 

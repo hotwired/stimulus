@@ -26,17 +26,17 @@ export class OutletSet {
   }
 
   find(...outletNames: string[]) {
-    return outletNames.reduce((outlet, outletName) =>
-         outlet
-      || this.findOutlet(outletName)
-    , undefined as Element | undefined)
+    return outletNames.reduce(
+      (outlet, outletName) => outlet || this.findOutlet(outletName),
+      undefined as Element | undefined
+    )
   }
 
   findAll(...outletNames: string[]) {
-    return outletNames.reduce((outlets, outletName) => [
-      ...outlets,
-      ...this.findAllOutlets(outletName),
-    ], [] as Element[])
+    return outletNames.reduce(
+      (outlets, outletName) => [...outlets, ...this.findAllOutlets(outletName)],
+      [] as Element[]
+    )
   }
 
   getSelectorForOutletName(outletName: string) {
@@ -56,12 +56,12 @@ export class OutletSet {
 
   private findElement(selector: string, outletName: string): Element | undefined {
     const elements = this.scope.queryElements(selector)
-    return elements.filter(element => this.matchesElement(element, selector, outletName))[0]
+    return elements.filter((element) => this.matchesElement(element, selector, outletName))[0]
   }
 
   private findAllElements(selector: string, outletName: string): Element[] {
     const elements = this.scope.queryElements(selector)
-    return elements.filter(element => this.matchesElement(element, selector, outletName))
+    return elements.filter((element) => this.matchesElement(element, selector, outletName))
   }
 
   private matchesElement(element: Element, selector: string, outletName: string): boolean {

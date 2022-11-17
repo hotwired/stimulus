@@ -1,4 +1,4 @@
-<% include layout/head %>
+<%- include("layout/head") %>
 
 <div data-controller="slideshow" data-slideshow-current-slide-class="slide--current">
   <button data-action="slideshow#previous">←</button>
@@ -10,4 +10,4 @@
   <div data-slideshow-target="slide" class="slide">🙊</div>
 </div>
 
-<% include layout/tail %>
+<%- include("layout/tail") %>

@@ -5,7 +5,7 @@ class BaseValueController extends Controller {
   static values: ValueDefinitionMap = {
     shadowedBoolean: String,
     string: String,
-    numeric: Number
+    numeric: Number,
   }
 
   valueDescriptorMap!: ValueDescriptorMap
@@ -19,14 +19,14 @@ export class ValueController extends BaseValueController {
     missingString: String,
     ids: Array,
     options: Object,
-    "time-24hr": Boolean
+    "time-24hr": Boolean,
   }
 
   shadowedBooleanValue!: boolean
   missingStringValue!: string
   idsValue!: any[]
   optionsValue!: { [key: string]: any }
-  time24hrValue!: Boolean
+  time24hrValue!: boolean
 
   loggedNumericValues: number[] = []
   oldLoggedNumericValues: any[] = []

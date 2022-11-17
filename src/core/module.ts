@@ -13,8 +13,8 @@ export class Module {
   constructor(application: Application, definition: Definition) {
     this.application = application
     this.definition = blessDefinition(definition)
-    this.contextsByScope = new WeakMap
-    this.connectedContexts = new Set
+    this.contextsByScope = new WeakMap()
+    this.connectedContexts = new Set()
   }
 
   get identifier(): string {

@@ -55,9 +55,7 @@ export default class SelectorObserverTests extends ObserverTestCase implements S
 
     await this.nextFrame
 
-    this.assert.deepEqual(this.testCalls, [
-      ["selectorMatched", this.div1, this.selector, this.details]
-    ])
+    this.assert.deepEqual(this.testCalls, [["selectorMatched", this.div1, this.selector, this.details]])
   }
 
   async "test should unmatch when attribute gets updated but matching attribute value gets removed"() {
@@ -65,9 +63,7 @@ export default class SelectorObserverTests extends ObserverTestCase implements S
 
     await this.nextFrame
 
-    this.assert.deepEqual(this.testCalls, [
-      ["selectorUnmatched", this.div2, this.selector, this.details]
-    ])
+    this.assert.deepEqual(this.testCalls, [["selectorUnmatched", this.div2, this.selector, this.details]])
   }
 
   async "test should unmatch when attribute gets removed"() {
@@ -78,7 +74,7 @@ export default class SelectorObserverTests extends ObserverTestCase implements S
 
     this.assert.deepEqual(this.testCalls, [
       ["selectorUnmatched", this.element, this.selector, this.details],
-      ["selectorUnmatched", this.div2, this.selector, this.details]
+      ["selectorUnmatched", this.div2, this.selector, this.details],
     ])
   }
 
@@ -95,7 +91,7 @@ export default class SelectorObserverTests extends ObserverTestCase implements S
 
     this.assert.deepEqual(this.testCalls, [
       ["selectorUnmatched", element, this.selector, this.details],
-      ["selectorUnmatched", div2, this.selector, this.details]
+      ["selectorUnmatched", div2, this.selector, this.details],
     ])
   }
 

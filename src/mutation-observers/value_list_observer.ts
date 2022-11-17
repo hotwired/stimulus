@@ -20,8 +20,8 @@ export class ValueListObserver<T> implements TokenListObserverDelegate {
   constructor(element: Element, attributeName: string, delegate: ValueListObserverDelegate<T>) {
     this.tokenListObserver = new TokenListObserver(element, attributeName, this)
     this.delegate = delegate
-    this.parseResultsByToken = new WeakMap
-    this.valuesByTokenByElement = new WeakMap
+    this.parseResultsByToken = new WeakMap()
+    this.valuesByTokenByElement = new WeakMap()
   }
 
   get started(): boolean {
@@ -78,7 +78,7 @@ export class ValueListObserver<T> implements TokenListObserverDelegate {
   private fetchValuesByTokenForElement(element: Element) {
     let valuesByToken = this.valuesByTokenByElement.get(element)
     if (!valuesByToken) {
-      valuesByToken = new Map
+      valuesByToken = new Map()
       this.valuesByTokenByElement.set(element, valuesByToken)
     }
     return valuesByToken
@@ -88,7 +88,7 @@ export class ValueListObserver<T> implements TokenListObserverDelegate {
     try {
       const value = this.delegate.parseValueForToken(token)
       return { value }
-    } catch (error) {
+    } catch (error: any) {
       return { error }
     }
   }

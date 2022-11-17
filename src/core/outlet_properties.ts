@@ -23,12 +23,14 @@ function propertiesForOutletDefinition(name: string) {
           if (outletController) {
             return outletController
           } else {
-            throw new Error(`Missing "data-controller=${name}" attribute on outlet element for "${this.identifier}" controller`)
+            throw new Error(
+              `Missing "data-controller=${name}" attribute on outlet element for "${this.identifier}" controller`
+            )
           }
         }
 
         throw new Error(`Missing outlet element "${name}" for "${this.identifier}" controller`)
-      }
+      },
     },
 
     [`${camelizedName}Outlets`]: {
@@ -36,18 +38,23 @@ function propertiesForOutletDefinition(name: string) {
         const outlets = this.outlets.findAll(name)
 
         if (outlets.length > 0) {
-          return outlets.map((outlet: Element) => {
-            const controller = this.application.getControllerForElementAndIdentifier(outlet, name)
-            if (controller) {
-              return controller
-            } else {
-              console.warn(`The provided outlet element is missing the outlet controller "${name}" for "${this.identifier}"`, outlet)
-            }
-          }).filter(controller => controller) as Controller[]
+          return outlets
+            .map((outlet: Element) => {
+              const controller = this.application.getControllerForElementAndIdentifier(outlet, name)
+              if (controller) {
+                return controller
+              } else {
+                console.warn(
+                  `The provided outlet element is missing the outlet controller "${name}" for "${this.identifier}"`,
+                  outlet
+                )
+              }
+            })
+            .filter((controller) => controller) as Controller[]
         }
 
         return []
-      }
+      },
     },
 
     [`${camelizedName}OutletElement`]: {
@@ -58,19 +65,19 @@ function propertiesForOutletDefinition(name: string) {
         } else {
           throw new Error(`Missing outlet element "${name}" for "${this.identifier}" controller`)
         }
-      }
+      },
     },
 
     [`${camelizedName}OutletElements`]: {
       get(this: Controller) {
         return this.outlets.findAll(name)
-      }
+      },
     },
 
     [`has${capitalize(camelizedName)}Outlet`]: {
       get(this: Controller) {
         return this.outlets.has(name)
-      }
-    }
+      },
+    },
   }
 }

@@ -21,19 +21,19 @@ function propertiesForClassDefinition(key: string) {
           const attribute = classes.getAttributeName(key)
           throw new Error(`Missing attribute "${attribute}"`)
         }
-      }
+      },
     },
 
     [`${key}Classes`]: {
       get(this: Controller) {
         return this.classes.getAll(key)
-      }
+      },
     },
 
     [`has${capitalize(key)}Class`]: {
       get(this: Controller) {
         return this.classes.has(key)
-      }
-    }
+      },
+    },
   }
 }

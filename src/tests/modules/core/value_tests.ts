@@ -90,10 +90,10 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
   }
 
   "test object values"() {
-    this.assert.deepEqual(this.controller.optionsValue, { "one": [2, 3] })
+    this.assert.deepEqual(this.controller.optionsValue, { one: [2, 3] })
 
     this.controller.optionsValue["one"] = 0
-    this.assert.deepEqual(this.controller.optionsValue, { "one": [2, 3] })
+    this.assert.deepEqual(this.controller.optionsValue, { one: [2, 3] })
 
     this.controller.optionsValue = {}
     this.assert.deepEqual(this.controller.optionsValue, {})
@@ -161,15 +161,26 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.assert.deepEqual(this.controller.optionsValues, [{ one: [2, 3] }])
     this.assert.deepEqual(this.controller.oldOptionsValues, [{}])
 
-    this.controller.optionsValue = { person: { name: 'John', age: 42, active: true } }
+    this.controller.optionsValue = { person: { name: "John", age: 42, active: true } }
     await this.nextFrame
-    this.assert.deepEqual(this.controller.optionsValues, [{ one: [2, 3] }, { person: { name: 'John', age: 42, active: true } }])
+    this.assert.deepEqual(this.controller.optionsValues, [
+      { one: [2, 3] },
+      { person: { name: "John", age: 42, active: true } },
+    ])
     this.assert.deepEqual(this.controller.oldOptionsValues, [{}, { one: [2, 3] }])
 
     this.set("options-value", "{}")
     await this.nextFrame
-    this.assert.deepEqual(this.controller.optionsValues, [{ one: [2, 3] }, { person: { name: 'John', age: 42, active: true } }, {}])
-    this.assert.deepEqual(this.controller.oldOptionsValues, [{}, { one: [2, 3] }, { person: { name: 'John', age: 42, active: true } }])
+    this.assert.deepEqual(this.controller.optionsValues, [
+      { one: [2, 3] },
+      { person: { name: "John", age: 42, active: true } },
+      {},
+    ])
+    this.assert.deepEqual(this.controller.oldOptionsValues, [
+      {},
+      { one: [2, 3] },
+      { person: { name: "John", age: 42, active: true } },
+    ])
   }
 
   async "test default values trigger changed callbacks"() {

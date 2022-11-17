@@ -19,7 +19,7 @@ export class SelectorObserver implements ElementObserverDelegate {
     this.details = details
     this.elementObserver = new ElementObserver(element, this)
     this.delegate = delegate
-    this.matchesByElement = new Multimap
+    this.matchesByElement = new Multimap()
   }
 
   get started(): boolean {
@@ -60,7 +60,7 @@ export class SelectorObserver implements ElementObserverDelegate {
 
   matchElementsInTree(tree: Element): Element[] {
     const match = this.matchElement(tree) ? [tree] : []
-    const matches = Array.from(tree.querySelectorAll(this.selector)).filter(match => this.matchElement(match))
+    const matches = Array.from(tree.querySelectorAll(this.selector)).filter((match) => this.matchElement(match))
     return match.concat(matches)
   }
 

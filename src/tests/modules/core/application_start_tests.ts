@@ -28,7 +28,7 @@ export default class ApplicationStartTests extends DOMTestCase {
   }
 
   private messageFromStartState(startState: string): Promise<any> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const receiveMessage = (event: MessageEvent) => {
         if (event.source == this.iframe.contentWindow) {
           const message = JSON.parse(event.data)

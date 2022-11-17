@@ -18,7 +18,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     this.assertActions(
       { name: "log", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
       { name: "log2", identifier: "d", eventType: "click", currentTarget: this.buttonElement },
-      { name: "log3", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log3", identifier: "c", eventType: "click", currentTarget: this.buttonElement }
     )
   }
 
@@ -33,7 +33,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
       { name: "log2", identifier: "d", eventType: "click", currentTarget: this.buttonElement },
       { name: "log3", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
       { name: "log2", identifier: "d", eventType: "click", currentTarget: this.buttonElement },
-      { name: "log3", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log3", identifier: "c", eventType: "click", currentTarget: this.buttonElement }
     )
   }
 
@@ -42,15 +42,13 @@ export default class EventOptionsTests extends LogControllerTestCase {
 
     await this.triggerEvent(this.buttonElement, "click")
 
-    this.assertActions(
-      { name: "stop", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
-    )
+    this.assertActions({ name: "stop", identifier: "c", eventType: "click", currentTarget: this.buttonElement })
 
     await this.nextFrame
     await this.triggerEvent(this.buttonElement, "click")
     this.assertActions(
       { name: "stop", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
-      { name: "log", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log", identifier: "c", eventType: "click", currentTarget: this.buttonElement }
     )
   }
 
@@ -76,7 +74,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     this.assertActions(
       { name: "log", identifier: "c" },
       { name: "log2", identifier: "c" },
-      { name: "log", identifier: "d" },
+      { name: "log", identifier: "d" }
     )
   }
 
@@ -117,10 +115,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.triggerEvent(this.buttonElement, "click")
     await this.triggerEvent(this.buttonElement, "click")
 
-    this.assertActions(
-      { name: "log", identifier: "c" },
-      { name: "log", identifier: "c" }
-    )
+    this.assertActions({ name: "log", identifier: "c" }, { name: "log", identifier: "c" })
   }
 
   async "test stop option with implicit event"() {
@@ -129,9 +124,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
 
     await this.triggerEvent(this.buttonElement, "click")
 
-    this.assertActions(
-      { name: "log2", eventType: "click" }
-    )
+    this.assertActions({ name: "log2", eventType: "click" })
   }
 
   async "test stop option with explicit event"() {
@@ -140,9 +133,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
 
     await this.triggerEvent(this.buttonElement, "keydown")
 
-    this.assertActions(
-      { name: "log2", eventType: "keydown" }
-    )
+    this.assertActions({ name: "log2", eventType: "keydown" })
   }
 
   async "test event propagation without stop option"() {
@@ -151,10 +142,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
 
     await this.triggerEvent(this.buttonElement, "click")
 
-    this.assertActions(
-      { name: "log2", eventType: "click" },
-      { name: "log", eventType: "click" }
-    )
+    this.assertActions({ name: "log2", eventType: "click" }, { name: "log", eventType: "click" })
   }
 
   async "test prevent option with implicit event"() {
@@ -162,9 +150,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
 
     await this.triggerEvent(this.buttonElement, "click")
 
-    this.assertActions(
-      { name: "log", eventType: "click", defaultPrevented: true }
-    )
+    this.assertActions({ name: "log", eventType: "click", defaultPrevented: true })
   }
 
   async "test prevent option with explicit event"() {
@@ -172,9 +158,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
 
     await this.triggerEvent(this.buttonElement, "keyup")
 
-    this.assertActions(
-      { name: "log", eventType: "keyup", defaultPrevented: true }
-    )
+    this.assertActions({ name: "log", eventType: "keyup", defaultPrevented: true })
   }
 
   async "test self option"() {
@@ -182,9 +166,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
 
     await this.triggerEvent(this.buttonElement, "click")
 
-    this.assertActions(
-      { name: "log", eventType: "click" }
-    )
+    this.assertActions({ name: "log", eventType: "click" })
   }
 
   async "test self option on parent"() {
@@ -198,8 +180,10 @@ export default class EventOptionsTests extends LogControllerTestCase {
   async "test custom option"() {
     this.application.registerActionOption("open", ({ value, event: { type, target } }) => {
       switch (type) {
-        case "toggle": return target instanceof HTMLDetailsElement && target.open == value
-        default: return true
+        case "toggle":
+          return target instanceof HTMLDetailsElement && target.open == value
+        default:
+          return true
       }
     })
     await this.setAction(this.detailsElement, "toggle->c#log:open")
@@ -214,8 +198,10 @@ export default class EventOptionsTests extends LogControllerTestCase {
   async "test inverted custom option"() {
     this.application.registerActionOption("open", ({ value, event: { type, target } }) => {
       switch (type) {
-        case "toggle": return target instanceof HTMLDetailsElement && target.open == value
-        default: return true
+        case "toggle":
+          return target instanceof HTMLDetailsElement && target.open == value
+        default:
+          return true
       }
     })
     await this.setAction(this.detailsElement, "toggle->c#log:!open")

@@ -13,7 +13,7 @@ export class Multimap<K, V> {
 
   get values(): V[] {
     const sets = Array.from(this.valuesByKey.values())
-    return sets.reduce((values, set) => values.concat(Array.from(set)), <V[]> [])
+    return sets.reduce((values, set) => values.concat(Array.from(set)), <V[]>[])
   }
 
   get size(): number {
@@ -40,7 +40,7 @@ export class Multimap<K, V> {
 
   hasValue(value: V): boolean {
     const sets = Array.from(this.valuesByKey.values())
-    return sets.some(set => set.has(value))
+    return sets.some((set) => set.has(value))
   }
 
   getValuesForKey(key: K): V[] {
@@ -50,7 +50,7 @@ export class Multimap<K, V> {
 
   getKeysForValue(value: V): K[] {
     return Array.from(this.valuesByKey)
-      .filter(([key, values]) => values.has(value))
-      .map(([key, values]) => key)
+      .filter(([_key, values]) => values.has(value))
+      .map(([key, _values]) => key)
   }
 }

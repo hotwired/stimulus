@@ -1,5 +1,5 @@
 import { TestCase } from "../../cases/test_case"
-import * as helpers from '../../../core/string_helpers'
+import * as helpers from "../../../core/string_helpers"
 
 export default class StringHelpersTests extends TestCase {
   "test should camelize strings"() {
@@ -44,6 +44,12 @@ export default class StringHelpersTests extends TestCase {
     this.assert.deepEqual(helpers.tokenize(""), [])
     this.assert.deepEqual(helpers.tokenize("one"), ["one"])
     this.assert.deepEqual(helpers.tokenize("two words"), ["two", "words"])
-    this.assert.deepEqual(helpers.tokenize("a_lot of-words with special--chars mixed__in"), ["a_lot", "of-words", "with", "special--chars", "mixed__in"])
+    this.assert.deepEqual(helpers.tokenize("a_lot of-words with special--chars mixed__in"), [
+      "a_lot",
+      "of-words",
+      "with",
+      "special--chars",
+      "mixed__in",
+    ])
   }
 }

@@ -43,13 +43,17 @@ export class EventListener implements EventListenerObject {
     }
   }
 
+  hasBindings() {
+    return this.unorderedBindings.size > 0
+  }
+
   get bindings(): Binding[] {
     return Array.from(this.unorderedBindings).sort((left, right) => {
-      const leftIndex = left.index, rightIndex = right.index
+      const leftIndex = left.index,
+        rightIndex = right.index
       return leftIndex < rightIndex ? -1 : leftIndex > rightIndex ? 1 : 0
     })
   }
-
 }
 
 function extendEvent(event: Event) {
@@ -62,7 +66,7 @@ function extendEvent(event: Event) {
       stopImmediatePropagation() {
         this.immediatePropagationStopped = true
         stopImmediatePropagation.call(this)
-      }
+      },
     })
   }
 }

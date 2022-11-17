@@ -10,6 +10,6 @@ export const defaultSchema: Schema = {
   controllerAttribute: "data-controller",
   actionAttribute: "data-action",
   targetAttribute: "data-target",
-  targetAttributeForScope: identifier => `data-${identifier}-target`,
-  outletAttributeForScope: (identifier, outlet) => `data-${identifier}-${outlet}-outlet`
+  targetAttributeForScope: (identifier) => `data-${identifier}-target`,
+  outletAttributeForScope: (identifier, outlet) => `data-${identifier}-${outlet}-outlet`,
 }

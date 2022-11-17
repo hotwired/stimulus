@@ -1,7 +1,7 @@
 import { Controller } from "../../core/controller"
 
 class BaseOutletController extends Controller {
-  static outlets = [ "alpha" ]
+  static outlets = ["alpha"]
 
   alphaOutlet!: Controller | null
   alphaOutlets!: Controller[]
@@ -11,8 +11,8 @@ class BaseOutletController extends Controller {
 }
 
 export class OutletController extends BaseOutletController {
-  static classes = [ "connected", "disconnected" ]
-  static outlets = [ "beta", "gamma", "delta", "omega", "namespaced--epsilon" ]
+  static classes = ["connected", "disconnected"]
+  static outlets = ["beta", "gamma", "delta", "omega", "namespaced--epsilon"]
 
   static values = {
     alphaOutletConnectedCallCount: Number,
@@ -20,7 +20,7 @@ export class OutletController extends BaseOutletController {
     betaOutletConnectedCallCount: Number,
     betaOutletDisconnectedCallCount: Number,
     namespacedEpsilonOutletConnectedCallCount: Number,
-    namespacedEpsilonOutletDisconnectedCallCount: Number
+    namespacedEpsilonOutletDisconnectedCallCount: Number,
   }
 
   betaOutlet!: Controller | null
