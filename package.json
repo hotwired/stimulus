@@ -54,9 +54,9 @@
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "karma": "^5.2.3",
-    "karma-chrome-launcher": "^3.1.0",
-    "karma-qunit": "^4.0.0",
+    "karma": "^6.4.1",
+    "karma-chrome-launcher": "^3.1.1",
+    "karma-qunit": "^4.1.2",
     "karma-sauce-launcher": "^4.3.6",
     "karma-webpack": "^4.0.2",
     "prettier": "^2.7.1",
@@ -68,5 +68,8 @@
     "tslib": "^2.4.0",
     "typescript": "^4.8.2",
     "webpack": "^4.39.1"
+  },
+  "resolutions": {
+    "webdriverio": "^7.19.5"
   }
 }
