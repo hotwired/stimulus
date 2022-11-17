@@ -163,6 +163,38 @@ class UnloadableController extends ApplicationController {
 application.register("unloadable", UnloadableController)
 ```
 
+### Trigger Behaviour When A Controller Is Registered
+
+If you want to trigger some behaviour once a controller has been registered you can add a static `afterLoad` method:
+
+```js
+class SpinnerButton extends Controller {
+  static afterLoad(identifier, application) {
+    // use the application instance to read the configured 'data-controller' attribute
+    const { controllerAttribute } = application.schema
+
+    // update any legacy buttons with the controller's registered identifier
+    const updateLegacySpinners = () => {
+      document.querySelector(".legacy-spinner-button").forEach((element) => {
+        element.setAttribute(controllerAttribute, identifier)
+      })
+    }
+
+    // called as soon as registered so DOM many not have loaded yet
+    if (document.readyState == "loading") {
+      document.addEventListener("DOMContentLoaded", updateLegacySpinners)
+    } else {
+      updateLegacySpinners()
+    }
+  }
+}
+
+// This controller will update any legacy spinner buttons to use the controller
+application.register("spinner-button", SpinnerButton)
+```
+
+The `afterLoad` method will get called as soon as the controller has been registered, even if no controlled elements exist in the DOM. It gets called with the `identifier` that was used when registering the controller and the Stimulus application instance.
+
 ## Cross-Controller Coordination With Events
 
 If you need controllers to communicate with each other, you should use events. The `Controller` class has a convenience method called `dispatch` that makes this easier. It takes an `eventName` as the first argument, which is then automatically prefixed with the name of the controller separated by a colon. The payload is held in `detail`. It works like this:

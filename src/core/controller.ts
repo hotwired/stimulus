@@ -1,3 +1,4 @@
+import { Application } from "./application"
 import { ClassPropertiesBlessing } from "./class_properties"
 import { Constructor } from "./constructor"
 import { Context } from "./context"
@@ -13,6 +14,10 @@ export class Controller<ElementType extends Element = Element> {
 
   static get shouldLoad() {
     return true
+  }
+
+  static afterLoad(_identifier: string, _application: Application) {
+    return
   }
 
   readonly context: Context
