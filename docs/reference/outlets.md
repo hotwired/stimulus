@@ -7,7 +7,7 @@ order: 04
 
 _Outlets_ let you reference Stimulus _controller instances_ and their _controller element_ from within another Stimulus Controller by using CSS selectors.
 
-The use of outlets helps with cross-controller communication and coordination as an alternative to dispatching custom events on controller elements.
+The use of Outlets helps with cross-controller communication and coordination as an alternative to dispatching custom events on controller elements.
 
 They are conceptually similar to [Stimulus Targets](https://stimulus.hotwired.dev/reference/targets) but with the difference that they reference a Stimulus controller instance plus its associated controller element.
 
@@ -78,7 +78,7 @@ For each outlet defined in the `static outlets` array, Stimulus adds five proper
 | Singular | `[name]OutletElement` | `Element` | Returns the Controller `Element` of the first `[name]` outlet or throws an exception if none is present
 | Plural | `[name]OutletElements` | `Array<Element>` | Returns the Controller `Element`'s of all `[name]` outlets
 
-## Accessing controllers and elements
+## Accessing Controllers and Elements
 
 Since you get back a `Controller` instance from the `[name]Outlet` and `[name]Outlets` properties you are also able to access the Values, Classes, Targets and all of the other properties and functions that controller instance defines:
 
@@ -118,7 +118,7 @@ this.resultOutletElement.getAttribute("id")
 this.resultOutletElements.map(result => result.hasAttribute("selected"))
 ```
 
-## Outlet callbacks
+## Outlet Callbacks
 
 Outlet callbacks are specially named functions called by Stimulus to let you respond to whenever an outlet is added or removed from the page.
 
@@ -140,9 +140,9 @@ export default class extends Controller {
 }
 ```
 
-### Outlets are assumed to be present
+### Outlets are Assumed to be Present
 
-When you access an outlet property in a controller, you assert that at least one corresponding outlet is present. If the declaration is missing and no matching outlet is found Stimulus will throw an exception:
+When you access an Outlet property in a Controller, you assert that at least one corresponding Outlet is present. If the declaration is missing and no matching outlet is found Stimulus will throw an exception:
 
 ```html
 Missing outlet element "result" for "search" controller
@@ -150,7 +150,7 @@ Missing outlet element "result" for "search" controller
 
 ### Optional outlets
 
-If an outlet is optional or you want to assert that at least outlet is present, you must first check the presence of the outlet using the existential property:
+If an Outlet is optional or you want to assert that at least Outlet is present, you must first check the presence of the Outlet using the existential property:
 
 ```js
 if (this.hasResultOutlet) {
@@ -158,9 +158,9 @@ if (this.hasResultOutlet) {
 }
 ```
 
-### Referencing non-controller elements
+### Referencing Non-Controller Elements
 
-Stimulus will throw an exception if you try to declare an element as an outlet which doesn't have the corresponding `data-controller` and identifier on it:
+Stimulus will throw an exception if you try to declare an element as an outlet which doesn't have a corresponding `data-controller` and identifier on it:
 
 <meta data-controller="callout" data-callout-text-value='data-search-result-outlet="#result"'>
 <meta data-controller="callout" data-callout-text-value='id="result"'>
