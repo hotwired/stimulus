@@ -1,18 +1,30 @@
+import { Application } from "./application"
 import { ClassPropertiesBlessing } from "./class_properties"
 import { Constructor } from "./constructor"
 import { Context } from "./context"
+import { OutletPropertiesBlessing } from "./outlet_properties"
 import { TargetPropertiesBlessing } from "./target_properties"
 import { ValuePropertiesBlessing, ValueDefinitionMap } from "./value_properties"
 
 export type ControllerConstructor = Constructor<Controller>
 
-export class Controller {
-  static blessings = [ ClassPropertiesBlessing, TargetPropertiesBlessing, ValuePropertiesBlessing ]
+export class Controller<ElementType extends Element = Element> {
+  static blessings = [
+    ClassPropertiesBlessing,
+    TargetPropertiesBlessing,
+    ValuePropertiesBlessing,
+    OutletPropertiesBlessing,
+  ]
   static targets: string[] = []
+  static outlets: string[] = []
   static values: ValueDefinitionMap = {}
 
   static get shouldLoad() {
     return true
+  }
+
+  static afterLoad(_identifier: string, _application: Application) {
+    return
   }
 
   readonly context: Context
@@ -30,7 +42,7 @@ export class Controller {
   }
 
   get element() {
-    return this.scope.element
+    return this.scope.element as ElementType
   }
 
   get identifier() {
@@ -39,6 +51,10 @@ export class Controller {
 
   get targets() {
     return this.scope.targets
+  }
+
+  get outlets() {
+    return this.scope.outlets
   }
 
   get classes() {
@@ -61,7 +77,10 @@ export class Controller {
     // Override in your subclass to respond when the controller is disconnected from the DOM
   }
 
-  dispatch(eventName: string, { target = this.element, detail = {}, prefix = this.identifier, bubbles = true, cancelable = true } = {}) {
+  dispatch(
+    eventName: string,
+    { target = this.element, detail = {}, prefix = this.identifier, bubbles = true, cancelable = true } = {}
+  ) {
     const type = prefix ? `${prefix}:${eventName}` : eventName
     const event = new CustomEvent(type, { detail, bubbles, cancelable })
     target.dispatchEvent(event)

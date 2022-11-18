@@ -48,56 +48,62 @@ if (process.env.CI) {
     sl_chrome_latest: {
       base: "SauceLabs",
       browserName: "chrome",
-      version: "latest"
+      browserVersion: "latest"
     },
     sl_chrome_latest_i8n: {
       base: "SauceLabs",
       browserName: "chrome",
-      version: "latest",
-      chromeOptions: {
+      browserVersion: "latest",
+      "goog:chromeOptions": {
         args: ["--lang=tr"]
       }
     },
     sl_firefox_65: {
       base: "SauceLabs",
       browserName: "firefox",
-      version: "65.0"
+      browserVersion: "65.0"
     },
+
+    // Context:
+    // https://github.com/karma-runner/karma-sauce-launcher/issues/275
+    // https://saucelabs.com/blog/update-firefox-tests-before-oct-4-2022
     sl_firefox_latest: {
       base: "SauceLabs",
       browserName: "firefox",
-      version: "latest"
+      browserVersion: "latest",
+      "moz:debuggerAddress": true
     },
     sl_safari_12_1: {
       base: "SauceLabs",
       browserName: "safari",
-      platform: "macOS 10.13",
-      version: "12.1"
+      platformName: "macOS 10.13",
+      browserVersion: "12.1"
     },
     sl_safari_latest_catalina: {
       base: "SauceLabs",
       browserName: "safari",
-      platform: "macOS 10.15",
-      version: "latest"
+      platformName: "macOS 10.15",
+      browserVersion: "latest"
     },
     sl_safari_latest_big_sur: {
       base: "SauceLabs",
       browserName: "safari",
-      platform: "macOS 11",
-      version: "latest"
+      platformName: "macOS 11",
+      browserVersion: "latest"
     },
     sl_edge_79: {
       base: "SauceLabs",
       browserName: "microsoftedge",
-      platform: "Windows 10",
-      version: "79.0"
+      platformName: "Windows 10",
+      browserVersion: "79.0"
     },
     sl_edge_latest: {
       base: "SauceLabs",
       browserName: "microsoftedge",
-      platform: "Windows 10",
-      version: "latest"
+      platformName: "Windows 10",
+      browserVersion: "latest"
     },
+    // TODO: migrate to W3C capabilities
     sl_ios_latest: {
       base: "SauceLabs",
       browserName: "safari",
@@ -105,6 +111,7 @@ if (process.env.CI) {
       device: "iPhone X Simulator",
       version: "13.0"
     },
+    // TODO: migrate to W3C capabilities
     sl_android_latest: {
       base: "SauceLabs",
       browserName: "chrome",

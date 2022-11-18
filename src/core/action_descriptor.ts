@@ -1,3 +1,34 @@
+export type ActionDescriptorFilters = Record<string, ActionDescriptorFilter>
+export type ActionDescriptorFilter = (options: ActionDescriptorFilterOptions) => boolean
+type ActionDescriptorFilterOptions = {
+  name: string
+  value: boolean
+  event: Event
+  element: Element
+}
+
+export const defaultActionDescriptorFilters: ActionDescriptorFilters = {
+  stop({ event, value }) {
+    if (value) event.stopPropagation()
+
+    return true
+  },
+
+  prevent({ event, value }) {
+    if (value) event.preventDefault()
+
+    return true
+  },
+
+  self({ event, value, element }) {
+    if (value) {
+      return element === event.target
+    } else {
+      return true
+    }
+  },
+}
+
 export interface ActionDescriptor {
   eventTarget: EventTarget
   eventOptions: AddEventListenerOptions
@@ -7,6 +38,7 @@ export interface ActionDescriptor {
   keyFilter: string
 }
 
+
 // capture nos.:               1   1     2   2      3               3      4   4    5      5     6  6
 const descriptorPattern = /^(?:(.+?)(?:\.(.+?))?(?:@(window|document))?->)?(.+?)(?:#([^:]+?))(?::(.+))?$/
 
@@ -14,11 +46,11 @@ export function parseActionDescriptorString(descriptorString: string): Partial<A
   const source = descriptorString.trim()
   const matches = source.match(descriptorPattern) || []
   return {
-    eventTarget:  parseEventTarget(matches[3]),
-    eventName:    matches[1],
+    eventTarget: parseEventTarget(matches[3]),
+    eventName: matches[1],
     eventOptions: matches[6] ? parseEventOptions(matches[6]) : {},
-    identifier:   matches[4],
-    methodName:   matches[5],
+    identifier: matches[4],
+    methodName: matches[5],
     keyFilter: matches[2]
   }
 }
@@ -32,9 +64,9 @@ function parseEventTarget(eventTargetName: string): EventTarget | undefined {
 }
 
 function parseEventOptions(eventOptions: string): AddEventListenerOptions {
-  return eventOptions.split(":").reduce((options, token) =>
-    Object.assign(options, { [token.replace(/^!/, "")]: !/^!/.test(token) })
-  , {})
+  return eventOptions
+    .split(":")
+    .reduce((options, token) => Object.assign(options, { [token.replace(/^!/, "")]: !/^!/.test(token) }), {})
 }
 
 export function stringifyEventTarget(eventTarget: EventTarget) {

@@ -2,7 +2,6 @@ import { ActionDescriptor, parseActionDescriptorString, stringifyEventTarget } f
 import { Token } from "../mutation-observers"
 import { Schema } from "./schema"
 import { camelize } from "./string_helpers"
-
 export class Action {
   readonly element: Element
   readonly index: number
@@ -19,14 +18,14 @@ export class Action {
   }
 
   constructor(element: Element, index: number, descriptor: Partial<ActionDescriptor>, schema: Schema) {
-    this.element      = element
-    this.index        = index
-    this.eventTarget  = descriptor.eventTarget || element
-    this.eventName    = descriptor.eventName || getDefaultEventNameForElement(element) || error("missing event name")
+    this.element = element
+    this.index = index
+    this.eventTarget = descriptor.eventTarget || element
+    this.eventName = descriptor.eventName || getDefaultEventNameForElement(element) || error("missing event name")
     this.eventOptions = descriptor.eventOptions || {}
-    this.identifier   = descriptor.identifier || error("missing identifier")
-    this.methodName   = descriptor.methodName || error("missing method name")
-    this.keyFilter    = descriptor.keyFilter || ''
+    this.identifier = descriptor.identifier || error("missing identifier")
+    this.methodName = descriptor.methodName || error("missing method name")
+    this.keyFilter = descriptor.keyFilter || ''
     this.schema = schema
   }
 
@@ -45,14 +44,14 @@ export class Action {
   }
 
   get params() {
-    const params:{ [key: string]: any } = {}
-    const pattern = new RegExp(`^data-${this.identifier}-(.+)-param$`)
+    const params: { [key: string]: any } = {}
+    const pattern = new RegExp(`^data-${this.identifier}-(.+)-param$`, "i")
 
     for (const { name, value } of Array.from(this.element.attributes)) {
       const match = name.match(pattern)
       const key = match && match[1]
       if (key) {
-        params[camelize(key)]= typecast(value)
+        params[camelize(key)] = typecast(value)
       }
     }
     return params
@@ -68,13 +67,13 @@ export class Action {
 }
 
 const defaultEventNames: { [tagName: string]: (element: Element) => string } = {
-  "a":        e => "click",
-  "button":   e => "click",
-  "form":     e => "submit",
-  "details":  e => "toggle",
-  "input":    e => e.getAttribute("type") == "submit" ? "click" : "input",
-  "select":   e => "change",
-  "textarea": e => "input"
+  a: () => "click",
+  button: () => "click",
+  form: () => "submit",
+  details: () => "toggle",
+  input: (e) => (e.getAttribute("type") == "submit" ? "click" : "input"),
+  select: () => "change",
+  textarea: () => "input",
 }
 
 export function getDefaultEventNameForElement(element: Element): string | undefined {
@@ -95,4 +94,3 @@ function typecast(value: any): any {
     return value
   }
 }
-

@@ -1,6 +1,6 @@
 {
   "name": "stimulus",
-  "version": "3.0.1",
+  "version": "3.1.1",
   "description": "Stimulus JavaScript framework",
   "repository": "https://stimulus.hotwired.dev",
   "author": "Basecamp, LLC",
@@ -13,6 +13,14 @@
   "main": "./dist/stimulus.umd.js",
   "types": "./index.d.ts",
   "exports": {
+    ".": {
+      "main": "./dist/stimulus.umd.js",
+      "browser": "./dist/stimulus.js",
+      "import": "./dist/stimulus.js",
+      "module": "./dist/stimulus.js",
+      "umd": "./dist/stimulus.umd.js",
+      "types": "./index.d.ts"
+    },
     "./webpack-helpers": {
       "main": "./dist/webpack-helpers.umd.js",
       "browser": "./dist/webpack-helpers.js",
@@ -34,7 +42,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@hotwired/stimulus": "^3.0.1",
+    "@hotwired/stimulus": "^3.1.1",
     "@hotwired/stimulus-webpack-helpers": "^1.0.0"
   },
   "devDependencies": {

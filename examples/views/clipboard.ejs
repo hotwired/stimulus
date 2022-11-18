@@ -1,4 +1,4 @@
-<% include layout/head %>
+<%- include("layout/head") %>
 
 <p data-controller="clipboard" data-clipboard-supported-class="clipboard--supported">
   <input data-clipboard-target="source" class="clipboard-source" type="text" value="https://stimulus.hotwired.dev" readonly>
@@ -16,4 +16,4 @@
   <textarea class="clipboard-paste" placeholder="Paste here…"></textarea>
 </p>
 
-<% include layout/tail %>
+<%- include("layout/tail") %>

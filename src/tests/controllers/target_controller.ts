@@ -1,7 +1,7 @@
 import { Controller } from "../../core/controller"
 
 class BaseTargetController extends Controller {
-  static targets = [ "alpha" ]
+  static targets = ["alpha"]
 
   alphaTarget!: Element | null
   alphaTargets!: Element[]
@@ -9,9 +9,14 @@ class BaseTargetController extends Controller {
 }
 
 export class TargetController extends BaseTargetController {
-  static classes = [ "connected", "disconnected" ]
-  static targets = [ "beta", "input", "recursive" ]
-  static values = { inputTargetConnectedCallCount: Number, inputTargetDisconnectedCallCount: Number, recursiveTargetConnectedCallCount: Number, recursiveTargetDisconnectedCallCount: Number }
+  static classes = ["connected", "disconnected"]
+  static targets = ["beta", "input", "recursive"]
+  static values = {
+    inputTargetConnectedCallCount: Number,
+    inputTargetDisconnectedCallCount: Number,
+    recursiveTargetConnectedCallCount: Number,
+    recursiveTargetDisconnectedCallCount: Number,
+  }
 
   betaTarget!: Element | null
   betaTargets!: Element[]
@@ -48,7 +53,7 @@ export class TargetController extends BaseTargetController {
     this.element.append(element)
   }
 
-  recursiveTargetDisconnected(element: Element) {
+  recursiveTargetDisconnected(_element: Element) {
     this.recursiveTargetDisconnectedCallCountValue++
   }
 }

@@ -3,7 +3,6 @@ import { ActionEvent } from "./action_event"
 import { Context } from "./context"
 import { Controller } from "./controller"
 import { Scope } from "./scope"
-
 export class Binding {
   readonly context: Context
   readonly action: Action
@@ -30,7 +29,7 @@ export class Binding {
   }
 
   handleEvent(event: Event) {
-    if (this.willBeInvokedByEvent(event)) {
+    if (this.willBeInvokedByEvent(event) && this.applyEventModifiers(event)) {
       this.invokeWithEvent(event)
     }
   }
@@ -47,6 +46,25 @@ export class Binding {
     throw new Error(`Action "${this.action}" references undefined method "${this.methodName}"`)
   }
 
+  private applyEventModifiers(event: Event): boolean {
+    const { element } = this.action
+    const { actionDescriptorFilters } = this.context.application
+
+    let passes = true
+
+    for (const [name, value] of Object.entries(this.eventOptions)) {
+      if (name in actionDescriptorFilters) {
+        const filter = actionDescriptorFilters[name]
+
+        passes = passes && filter({ name, value, event, element })
+      } else {
+        continue
+      }
+    }
+
+    return passes
+  }
+
   private invokeWithEvent(event: Event) {
     const { target, currentTarget } = event
     try {
@@ -54,7 +72,7 @@ export class Binding {
       const actionEvent: ActionEvent = Object.assign(event, { params })
       this.method.call(this.controller, actionEvent)
       this.context.logDebugActivity(this.methodName, { event, target, currentTarget, action: this.methodName })
-    } catch (error) {
+    } catch (error: any) {
       const { identifier, controller, element, index } = this
       const detail = { identifier, controller, element, index, event }
       this.context.handleError(error, `invoking action "${this.action}"`, detail)

@@ -9,7 +9,7 @@ export default class TokenListObserverTests extends ObserverTestCase implements 
   async "test tokenMatched"() {
     this.assert.deepEqual(this.calls, [
       ["tokenMatched", this.element, this.attributeName, "one", 0],
-      ["tokenMatched", this.element, this.attributeName, "two", 1]
+      ["tokenMatched", this.element, this.attributeName, "two", 1],
     ])
   }
 
@@ -17,9 +17,7 @@ export default class TokenListObserverTests extends ObserverTestCase implements 
     this.tokenString = "one two three"
     await this.nextFrame
 
-    this.assert.deepEqual(this.testCalls, [
-      ["tokenMatched", this.element, this.attributeName, "three", 2]
-    ])
+    this.assert.deepEqual(this.testCalls, [["tokenMatched", this.element, this.attributeName, "three", 2]])
   }
 
   async "test inserting a token in the middle"() {
@@ -29,7 +27,7 @@ export default class TokenListObserverTests extends ObserverTestCase implements 
     this.assert.deepEqual(this.testCalls, [
       ["tokenUnmatched", this.element, this.attributeName, "two", 1],
       ["tokenMatched", this.element, this.attributeName, "three", 1],
-      ["tokenMatched", this.element, this.attributeName, "two", 2]
+      ["tokenMatched", this.element, this.attributeName, "two", 2],
     ])
   }
 
@@ -40,7 +38,7 @@ export default class TokenListObserverTests extends ObserverTestCase implements 
     this.assert.deepEqual(this.testCalls, [
       ["tokenUnmatched", this.element, this.attributeName, "one", 0],
       ["tokenUnmatched", this.element, this.attributeName, "two", 1],
-      ["tokenMatched", this.element, this.attributeName, "two", 0]
+      ["tokenMatched", this.element, this.attributeName, "two", 0],
     ])
   }
 
@@ -48,9 +46,7 @@ export default class TokenListObserverTests extends ObserverTestCase implements 
     this.tokenString = "one"
     await this.nextFrame
 
-    this.assert.deepEqual(this.testCalls, [
-      ["tokenUnmatched", this.element, this.attributeName, "two", 1]
-    ])
+    this.assert.deepEqual(this.testCalls, [["tokenUnmatched", this.element, this.attributeName, "two", 1]])
   }
 
   async "test removing the only token"() {
@@ -61,7 +57,7 @@ export default class TokenListObserverTests extends ObserverTestCase implements 
 
     this.assert.deepEqual(this.testCalls, [
       ["tokenUnmatched", this.element, this.attributeName, "two", 1],
-      ["tokenUnmatched", this.element, this.attributeName, "one", 0]
+      ["tokenUnmatched", this.element, this.attributeName, "one", 0],
     ])
   }
 

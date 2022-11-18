@@ -146,6 +146,69 @@ Action option | DOM event listener option
 `:passive`    | `{ passive: true }`
 `:!passive`   | `{ passive: false }`
 
+On top of that, Stimulus also supports the following action options which are not natively supported by the DOM event listener options:
+
+Custom action option | Description
+-------------------- | -----------
+`:stop`              | calls `.stopPropagation()` on the event before invoking the method
+`:prevent`           | calls `.preventDefault()` on the event before invoking the method
+`:self`              | only invokes the method if the event was fired by the element itself
+
+You can register your own action options with the `Application.registerActionOption` method.
+
+For example, consider that a `<details>` element will dispatch a [toggle][]
+event whenever it's toggled. A custom `:open` action option would help
+to route events whenever the element is toggled _open_:
+
+```javascript
+import { Application } from "@hotwired/stimulus"
+
+const application = Application.start()
+
+application.registerActionOption("open", ({ event }) => {
+  if (event.type == "toggle") {
+    return event.target.open == true
+  } else {
+    return true
+  }
+})
+```
+
+Similarly, a custom `:!open` action option could route events whenever the
+element is toggled _closed_. Declaring the action descriptor option with a `!`
+prefix will yield a `value` argument set to `false` in the callback:
+
+```javascript
+import { Application } from "@hotwired/stimulus"
+
+const application = Application.start()
+
+application.registerActionOption("open", ({ event, value }) => {
+  if (event.type == "toggle") {
+    return event.target.open == value
+  } else {
+    return true
+  }
+})
+```
+
+In order to prevent the event from being routed to the controller action, the
+`registerActionOption` callback function must return `false`. Otherwise, to
+route the event to the controller action, return `true`.
+
+The callback accepts a single object argument with the following keys:
+
+Name    | Description
+--------|------------
+name    | String: The option's name (`"open"` in the example above)
+value   | Boolean: The value of the option (`:open` would yield `true`, `:!open` would yield `false`)
+event   | [Event][]: The event instance
+element | [Element]: The element where the action descriptor is declared
+
+[toggle]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLDetailsElement/toggle_event
+[Event]: https://developer.mozilla.org/en-US/docs/web/api/event
+[Element]: https://developer.mozilla.org/en-US/docs/Web/API/element
+
 ## Event Objects
 
 An _action method_ is the method in a controller which serves as an action's event listener.

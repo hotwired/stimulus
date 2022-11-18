@@ -69,7 +69,7 @@ export class LogController extends Controller {
       currentTarget: event.currentTarget,
       params: event.params,
       defaultPrevented: event.defaultPrevented,
-      passive: passive || false
+      passive: passive || false,
     })
   }
 }

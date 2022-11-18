@@ -16,8 +16,8 @@ export class StringMapObserver {
     this.element = element
     this.delegate = delegate
     this.started = false
-    this.stringMap = new Map
-    this.mutationObserver = new MutationObserver(mutations => this.processMutations(mutations))
+    this.stringMap = new Map()
+    this.mutationObserver = new MutationObserver((mutations) => this.processMutations(mutations))
   }
 
   start() {
@@ -108,7 +108,7 @@ export class StringMapObserver {
   }
 
   private get currentAttributeNames() {
-    return Array.from(this.element.attributes).map(attribute => attribute.name)
+    return Array.from(this.element.attributes).map((attribute) => attribute.name)
   }
 
   private get recordedAttributeNames() {

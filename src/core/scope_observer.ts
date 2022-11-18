@@ -22,8 +22,8 @@ export class ScopeObserver implements ValueListObserverDelegate<Scope> {
     this.schema = schema
     this.delegate = delegate
     this.valueListObserver = new ValueListObserver(this.element, this.controllerAttribute, this)
-    this.scopesByIdentifierByElement = new WeakMap
-    this.scopeReferenceCounts = new WeakMap
+    this.scopesByIdentifierByElement = new WeakMap()
+    this.scopeReferenceCounts = new WeakMap()
   }
 
   start() {
@@ -74,7 +74,7 @@ export class ScopeObserver implements ValueListObserverDelegate<Scope> {
   private fetchScopesByIdentifierForElement(element: Element) {
     let scopesByIdentifier = this.scopesByIdentifierByElement.get(element)
     if (!scopesByIdentifier) {
-      scopesByIdentifier = new Map
+      scopesByIdentifier = new Map()
       this.scopesByIdentifierByElement.set(element, scopesByIdentifier)
     }
     return scopesByIdentifier

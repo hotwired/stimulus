@@ -16,7 +16,7 @@ export class LogControllerTestCase extends ControllerTestCase(LogController) {
     actions.forEach((expected, index) => {
       const keys = Object.keys(expected)
       const actual = slice(this.actionLog[index] || {}, keys)
-      const result = keys.every(key => deepEqual(expected[key], actual[key]))
+      const result = keys.every((key) => deepEqual(expected[key], actual[key]))
       this.assert.pushResult({ result, actual, expected, message: "" })
     })
   }
@@ -31,19 +31,23 @@ export class LogControllerTestCase extends ControllerTestCase(LogController) {
 }
 
 function slice(object: any, keys: string[]): any {
-  return keys.reduce((result: any, key: string) => (result[key] = object[key], result), {})
+  return keys.reduce((result: any, key: string) => ((result[key] = object[key]), result), {})
 }
 
 function deepEqual(obj1: any, obj2: any): boolean {
   if (obj1 === obj2) {
     return true
-  } else {
-    if (Object.keys(obj1).length !== Object.keys(obj2).length) { return false }
-    for (var prop in obj1) {
+  } else if (typeof obj1 === "object" && typeof obj2 === "object") {
+    if (Object.keys(obj1).length !== Object.keys(obj2).length) {
+      return false
+    }
+    for (const prop in obj1) {
       if (!deepEqual(obj1[prop], obj2[prop])) {
         return false
       }
     }
     return true
+  } else {
+    return false
   }
 }

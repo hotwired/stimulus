@@ -85,26 +85,35 @@ export class ValueObserver implements StringMapObserverDelegate {
 
     if (typeof changedMethod == "function") {
       const descriptor = this.valueDescriptorNameMap[name]
-      const value = descriptor.reader(rawValue)
-      let oldValue = rawOldValue
 
-      if (rawOldValue) {
-        oldValue = descriptor.reader(rawOldValue)
+      try {
+        const value = descriptor.reader(rawValue)
+        let oldValue = rawOldValue
+
+        if (rawOldValue) {
+          oldValue = descriptor.reader(rawOldValue)
+        }
+
+        changedMethod.call(this.receiver, value, oldValue)
+      } catch (error) {
+        if (error instanceof TypeError) {
+          error.message = `Stimulus Value "${this.context.identifier}.${descriptor.name}" - ${error.message}`
+        }
+
+        throw error
       }
-
-      changedMethod.call(this.receiver, value, oldValue)
     }
   }
 
   private get valueDescriptors() {
     const { valueDescriptorMap } = this
-    return Object.keys(valueDescriptorMap).map(key => valueDescriptorMap[key])
+    return Object.keys(valueDescriptorMap).map((key) => valueDescriptorMap[key])
   }
 
   private get valueDescriptorNameMap() {
-    const descriptors: { [type: string]: ValueDescriptor }  = {}
+    const descriptors: { [type: string]: ValueDescriptor } = {}
 
-    Object.keys(this.valueDescriptorMap).forEach(key => {
+    Object.keys(this.valueDescriptorMap).forEach((key) => {
       const descriptor = this.valueDescriptorMap[key]
       descriptors[descriptor.name] = descriptor
     })

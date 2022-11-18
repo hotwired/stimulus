@@ -2,7 +2,7 @@ import { LogController } from "../../controllers/log_controller"
 import { LogControllerTestCase } from "../../cases/log_controller_test_case"
 
 export default class ES6Tests extends LogControllerTestCase {
-  static shouldSkipTest(testName: string) {
+  static shouldSkipTest(_testName: string) {
     return !(supportsES6Classes() && supportsReflectConstruct())
   }
 
@@ -17,7 +17,7 @@ export default class ES6Tests extends LogControllerTestCase {
   `
 
   async renderFixture() {
-    (window as any)["_stimulus"] = { LogController, application: this.application }
+    ;(window as any)["_stimulus"] = { LogController, application: this.application }
     await super.renderFixture()
 
     const scriptElement = document.createElement("script")

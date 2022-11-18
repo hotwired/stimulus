@@ -8,18 +8,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '12.4.0'
-    - uses: actions/cache@v2
-      with:
-        path: |
-          node_modules
-          */*/node_modules
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
 
-    - run: yarn install
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
 
-    - name: Test
-      run: yarn test
+      - name: Test
+        run: yarn test
+
+      - name: Lint
+        run: yarn lint

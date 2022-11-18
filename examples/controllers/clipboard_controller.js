@@ -11,7 +11,6 @@ export default class extends Controller {
   }
 
   copy() {
-    this.sourceTarget.select()
-    document.execCommand("copy")
+    navigator.clipboard.writeText(this.sourceTarget.value)
   }
 }
