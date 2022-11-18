@@ -17,7 +17,7 @@ export class Application implements ErrorHandler {
   debug = false
 
   static start(element?: Element, schema?: Schema): Application {
-    const application = new Application(element, schema)
+    const application = new this(element, schema)
     application.start()
     return application
   }
