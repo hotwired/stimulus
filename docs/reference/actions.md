@@ -127,7 +127,7 @@ The list of supported modifier keys is shown below.
 
 Sometimes a controller needs to listen for events dispatched on the global `window` or `document` objects.
 
-You can append `@window` or `@document` to the event name (contains filter modifer) in an action descriptor to install the event listener on `window` or `document`, respectively, as in the following example:
+You can append `@window` or `@document` to the event name (along with any filter modifer) in an action descriptor to install the event listener on `window` or `document`, respectively, as in the following example:
 
 <meta data-controller="callout" data-callout-text-value="resize@window">
 
