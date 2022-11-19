@@ -68,7 +68,7 @@ textarea          | input
 
 ## KeyboardEvent Filter
 
-You may have Actions that you wish to run only when certain keystrokes are received.
+There may be cases where [KeyboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent) Actions should only call the Controller method when certain keystrokes are used.
 
 You can install an event listener that responds only to the `Escape` key by adding `.esc` to the event name of the action descriptor, as in the following example.
 
