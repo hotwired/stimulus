@@ -110,10 +110,10 @@ const customSchema = {
 const app = Application.start(document.documentElement, customSchema)
 ```
 
-If you want to subscribe to a compound filter using a modifier key, you can write it like `shift+a`.
+If you want to subscribe to a compound filter using a modifier key, you can write it like `ctrl+a`.
 
 ```html
-<div data-action="keydown.shift+a->listbox#selectAll" role="option" tabindex="0">...</div>
+<div data-action="keydown.ctrl+a->listbox#selectAll" role="option" tabindex="0">...</div>
 ```
 
 The list of supported modifier keys is shown below.
