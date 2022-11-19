@@ -81,9 +81,9 @@ You can install an event listener that responds only to the `Escape` key by addi
 
 This will only work if the event being fired is a keyboard event.
 
-The correspondence between these filter modifier and keys is shown below.
+The correspondence between these filter and keys is shown below.
 
-Modifier | Key Name
+Filter | Key Name
 -------- | --------
 enter    | Enter
 tab      | Tab
@@ -95,6 +95,8 @@ left     | ArrowLeft
 right    | ArrowRight
 home     | Home
 end      | End
+[a-z]    | [a-z]
+[0-9]    | [0-9]
 
 If you need to support other keys, you can customize the modifier using custom schema.
 
@@ -103,12 +105,24 @@ import { Application, defaultSchema } from "@hotwired/stimulus"
 
 const customSchema = {
   ...defaultSchema,
-  keyMappings: {...defaultSchema.keyMappings, a: "a", w: "w", s: "s", d: "d" },
+  keyMappings: {...defaultSchema.keyMappings, "@": "@" },
 }
 
 const app = Application.start(document.documentElement, customSchema);
 ```
 
+If you want to subscribe to a compound filter using a modifier key, you can write it like `shift+a`.
+
+```html
+<div data-action="keydown.shift+a->listbox#selectAll" role="option" tabindex="0">...</div>
+```
+
+The list of supported modifier keys is shown below.
+
+* meta
+* ctrl
+* alt
+* shift
 
 ### Global Events
 
