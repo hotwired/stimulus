@@ -97,7 +97,7 @@ end      | End
 [a-z]    | [a-z]
 [0-9]    | [0-9]
 
-If you need to support other keys, you can customize the modifier using custom schema.
+If you need to support other keys, you can customize the modifiers using a custom schema.
 
 ```javascript
 import { Application, defaultSchema } from "@hotwired/stimulus"
