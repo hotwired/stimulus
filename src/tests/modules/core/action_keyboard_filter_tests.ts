@@ -20,6 +20,7 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
       <button id="button6" data-action="keyup.end->a#log     keyup->a#log3"></button>
       <button id="button7"></button>
       <button id="button8" data-action="keydown.a->a#log keydown.b->a#log2"></button>
+      <button id="button9" data-action="keydown.shift+a->a#log keydown.a->a#log2 keydown.ctrl+shift+a->a#log3">
     </div>
   `
 
@@ -165,5 +166,32 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
     await this.nextFrame
     await this.triggerKeyboardEvent(button, "keydown", {key: 'c'})
     this.assertActions()
+  }
+
+  async "test ignore event handlers associated with modifiers other than shift+a"() {
+    const button = this.findElement("#button9")
+    await this.nextFrame
+    await this.triggerKeyboardEvent(button, "keydown", {key: 'A', shiftKey: true})
+    this.assertActions(
+      {name: "log", identifier: "a", eventType: 'keydown', currentTarget: button},
+    )
+  }
+
+  async "test ignore event handlers associated with modifiers other than a"() {
+    const button = this.findElement("#button9")
+    await this.nextFrame
+    await this.triggerKeyboardEvent(button, "keydown", {key: 'a'})
+    this.assertActions(
+      {name: "log2", identifier: "a", eventType: 'keydown', currentTarget: button},
+    )
+  }
+
+  async "test ignore event handlers associated with modifiers other than ctrol+shift+a"() {
+    const button = this.findElement("#button9")
+    await this.nextFrame
+    await this.triggerKeyboardEvent(button, "keydown", {key: 'A', ctrlKey: true, shiftKey: true})
+    this.assertActions(
+      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button},
+    )
   }
 }

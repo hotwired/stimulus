@@ -35,12 +35,27 @@ export class Action {
     return `${this.eventName}${eventFilter}${eventTarget}->${this.identifier}#${this.methodName}`
   }
 
-  isFilterTarget(key: string): boolean {
-    if (!(this.keyFilter && this.keyMappings[this.keyFilter])) {
-      return false;
+  isFilterTarget(event: KeyboardEvent): boolean {
+    if (!this.keyFilter) { return false }
+
+    const filteres = this.keyFilter.split("+")
+    const modifiers = ["meta", "ctrl", "alt", "shift"]
+    const [meta, ctrl, alt, shift] = modifiers.map(modifier => filteres.includes(modifier))
+
+    if (event.metaKey !== meta || event.ctrlKey !== ctrl || event.altKey !== alt || event.shiftKey !== shift) {
+      return true
     }
 
-    return this.keyMappings[this.keyFilter] !== key
+    const standardFilter = filteres.filter(key => !modifiers.includes(key))[0]
+    if (!standardFilter) { // missing non modifier key
+      return false
+    }
+
+    if (!this.keyMappings.hasOwnProperty(standardFilter)) {
+      error(`contains unkown key filter: ${this.keyFilter}`)
+    }
+
+    return this.keyMappings[standardFilter].toLowerCase() !== event.key.toLowerCase()
   }
 
   get params() {
@@ -62,7 +77,7 @@ export class Action {
   }
 
   private get keyMappings() {
-    return this.schema.keyMappings;
+    return this.schema.keyMappings
   }
 }
 
