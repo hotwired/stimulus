@@ -104,7 +104,7 @@ import { Application, defaultSchema } from "@hotwired/stimulus"
 
 const customSchema = {
   ...defaultSchema,
-  keyMappings: {...defaultSchema.keyMappings, "at": "@" },
+  keyMappings: { ...defaultSchema.keyMappings, at: "@" },
 }
 
 const app = Application.start(document.documentElement, customSchema);
