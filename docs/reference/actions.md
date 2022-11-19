@@ -118,10 +118,12 @@ If you want to subscribe to a compound filter using a modifier key, you can writ
 
 The list of supported modifier keys is shown below.
 
-* meta
-* ctrl
-* alt
-* shift
+| Modifier | Notes              |
+| -------- | ------------------ |
+| `alt`    | `option` on MacOS  |
+| `ctrl`   |                    |
+| `meta`   | `command` on MacOS |
+| `shift`  |                    |
 
 ### Global Events
 
