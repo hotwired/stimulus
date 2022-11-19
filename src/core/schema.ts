@@ -23,6 +23,14 @@ export const defaultSchema: Schema = {
     "left":  "ArrowLeft",
     "right": "ArrowRight",
     "home":  "Home",
-    "end":   "End"
+    "end":   "End",
+    // [a-z]
+    ...objectFromEntries("abcdefghijklmnopqrstuvwxyz".split("").map(c => [c, c])),
+    // [0-9]
+    ...objectFromEntries("0123456789".split("").map(n => [n, n]))
   }
+}
+
+function objectFromEntries(array: [string, any][]): object { // polyfill
+  return array.reduce((memo, [k, v]) => ({...memo, [k]: v}), {})
 }
