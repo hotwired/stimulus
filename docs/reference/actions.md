@@ -66,7 +66,6 @@ select            | change
 textarea          | input
 
 
-
 ## KeyboardEvent Filter
 
 You may have Actions that you wish to run only when certain keystrokes are received.
