@@ -107,7 +107,7 @@ const customSchema = {
   keyMappings: { ...defaultSchema.keyMappings, at: "@" },
 }
 
-const app = Application.start(document.documentElement, customSchema);
+const app = Application.start(document.documentElement, customSchema)
 ```
 If you want to subscribe to a compound filter using a modifier key, you can write it like `shift+a`.
 
