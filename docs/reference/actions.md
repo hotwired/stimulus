@@ -122,7 +122,7 @@ The list of supported modifier keys is shown below.
 | -------- | ------------------ |
 | `alt`    | `option` on MacOS  |
 | `ctrl`   |                    |
-| `meta`   | `command` on MacOS |
+| `meta`   | Command key on MacOS |
 | `shift`  |                    |
 
 ### Global Events
