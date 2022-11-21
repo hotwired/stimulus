@@ -83,7 +83,7 @@ export class Binding {
     const eventTarget = event.target
 
     if (event instanceof KeyboardEvent && this.action.isFilterTarget(event)) {
-      return false;
+      return false
     }
 
     if (this.element === eventTarget) {

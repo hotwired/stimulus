@@ -53,7 +53,7 @@ export class DOMTestCase extends TestCase {
 
   async triggerKeyboardEvent(selectorOrTarget: string | EventTarget, type: string, options: KeyboardEventInit = {}) {
     const eventTarget = typeof selectorOrTarget == "string" ? this.findElement(selectorOrTarget) : selectorOrTarget
-    const event = new KeyboardEvent(type, options);
+    const event = new KeyboardEvent(type, options)
 
     eventTarget.dispatchEvent(event)
     await this.nextFrame

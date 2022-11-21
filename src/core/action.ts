@@ -25,7 +25,7 @@ export class Action {
     this.eventOptions = descriptor.eventOptions || {}
     this.identifier = descriptor.identifier || error("missing identifier")
     this.methodName = descriptor.methodName || error("missing method name")
-    this.keyFilter = descriptor.keyFilter || ''
+    this.keyFilter = descriptor.keyFilter || ""
     this.schema = schema
   }
 
@@ -36,22 +36,25 @@ export class Action {
   }
 
   isFilterTarget(event: KeyboardEvent): boolean {
-    if (!this.keyFilter) { return false }
+    if (!this.keyFilter) {
+      return false
+    }
 
     const filteres = this.keyFilter.split("+")
     const modifiers = ["meta", "ctrl", "alt", "shift"]
-    const [meta, ctrl, alt, shift] = modifiers.map(modifier => filteres.includes(modifier))
+    const [meta, ctrl, alt, shift] = modifiers.map((modifier) => filteres.includes(modifier))
 
     if (event.metaKey !== meta || event.ctrlKey !== ctrl || event.altKey !== alt || event.shiftKey !== shift) {
       return true
     }
 
-    const standardFilter = filteres.filter(key => !modifiers.includes(key))[0]
-    if (!standardFilter) { // missing non modifier key
+    const standardFilter = filteres.filter((key) => !modifiers.includes(key))[0]
+    if (!standardFilter) {
+      // missing non modifier key
       return false
     }
 
-    if (!this.keyMappings.hasOwnProperty(standardFilter)) {
+    if (!Object.prototype.hasOwnProperty.call(this.keyMappings, standardFilter)) {
       error(`contains unkown key filter: ${this.keyFilter}`)
     }
 

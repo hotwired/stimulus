@@ -1,9 +1,9 @@
 import { TestApplication } from "../../cases/application_test_case"
 import { LogControllerTestCase } from "../../cases/log_controller_test_case"
-import { Schema, defaultSchema } from "../../../core/schema";
-import { Application } from "../../../core/application";
+import { Schema, defaultSchema } from "../../../core/schema"
+import { Application } from "../../../core/application"
 
-const customSchema = {...defaultSchema, keyMappings: {...defaultSchema.keyMappings, a: "a", b: "b"}};
+const customSchema = { ...defaultSchema, keyMappings: { ...defaultSchema.keyMappings, a: "a", b: "b" } }
 
 export default class ActionKeyboardFilterTests extends LogControllerTestCase {
   schema: Schema = customSchema
@@ -27,171 +27,159 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
   async "test ignore event handlers associated with modifiers other than Enter"() {
     const button = this.findElement("#button1")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'Enter'})
+    await this.triggerKeyboardEvent(button, "keydown", { key: "Enter" })
     this.assertActions(
-      {name: "log", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
+      { name: "log", identifier: "a", eventType: "keydown", currentTarget: button },
+      { name: "log3", identifier: "a", eventType: "keydown", currentTarget: button }
     )
   }
 
   async "test ignore event handlers associated with modifiers other than Space"() {
     const button = this.findElement("#button1")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: ' '})
+    await this.triggerKeyboardEvent(button, "keydown", { key: " " })
     this.assertActions(
-      {name: "log2", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
+      { name: "log2", identifier: "a", eventType: "keydown", currentTarget: button },
+      { name: "log3", identifier: "a", eventType: "keydown", currentTarget: button }
     )
   }
 
   async "test ignore event handlers associated with modifiers other than Tab"() {
     const button = this.findElement("#button2")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'Tab'})
+    await this.triggerKeyboardEvent(button, "keydown", { key: "Tab" })
     this.assertActions(
-      {name: "log", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
+      { name: "log", identifier: "a", eventType: "keydown", currentTarget: button },
+      { name: "log3", identifier: "a", eventType: "keydown", currentTarget: button }
     )
   }
 
   async "test ignore event handlers associated with modifiers other than Escape"() {
     const button = this.findElement("#button2")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'Escape'})
+    await this.triggerKeyboardEvent(button, "keydown", { key: "Escape" })
     this.assertActions(
-      {name: "log2", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
+      { name: "log2", identifier: "a", eventType: "keydown", currentTarget: button },
+      { name: "log3", identifier: "a", eventType: "keydown", currentTarget: button }
     )
   }
 
   async "test ignore event handlers associated with modifiers other than ArrowUp"() {
     const button = this.findElement("#button3")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'ArrowUp'})
+    await this.triggerKeyboardEvent(button, "keydown", { key: "ArrowUp" })
     this.assertActions(
-      {name: "log", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
+      { name: "log", identifier: "a", eventType: "keydown", currentTarget: button },
+      { name: "log3", identifier: "a", eventType: "keydown", currentTarget: button }
     )
   }
 
   async "test ignore event handlers associated with modifiers other than ArrowDown"() {
     const button = this.findElement("#button3")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'ArrowDown'})
+    await this.triggerKeyboardEvent(button, "keydown", { key: "ArrowDown" })
     this.assertActions(
-      {name: "log2", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
+      { name: "log2", identifier: "a", eventType: "keydown", currentTarget: button },
+      { name: "log3", identifier: "a", eventType: "keydown", currentTarget: button }
     )
   }
 
   async "test ignore event handlers associated with modifiers other than ArrowLeft"() {
     const button = this.findElement("#button4")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'ArrowLeft'})
+    await this.triggerKeyboardEvent(button, "keydown", { key: "ArrowLeft" })
     this.assertActions(
-      {name: "log", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
+      { name: "log", identifier: "a", eventType: "keydown", currentTarget: button },
+      { name: "log3", identifier: "a", eventType: "keydown", currentTarget: button }
     )
   }
 
   async "test ignore event handlers associated with modifiers other than ArrowRight"() {
     const button = this.findElement("#button4")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'ArrowRight'})
+    await this.triggerKeyboardEvent(button, "keydown", { key: "ArrowRight" })
     this.assertActions(
-      {name: "log2", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
+      { name: "log2", identifier: "a", eventType: "keydown", currentTarget: button },
+      { name: "log3", identifier: "a", eventType: "keydown", currentTarget: button }
     )
   }
 
   async "test ignore event handlers associated with modifiers other than Home"() {
     const button = this.findElement("#button5")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'Home'})
+    await this.triggerKeyboardEvent(button, "keydown", { key: "Home" })
     this.assertActions(
-      {name: "log", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
+      { name: "log", identifier: "a", eventType: "keydown", currentTarget: button },
+      { name: "log3", identifier: "a", eventType: "keydown", currentTarget: button }
     )
   }
 
   async "test ignore event handlers associated with modifiers other than End"() {
     const button = this.findElement("#button5")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'End'})
+    await this.triggerKeyboardEvent(button, "keydown", { key: "End" })
     this.assertActions(
-      {name: "log2", identifier: "a", eventType: 'keydown', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button}
+      { name: "log2", identifier: "a", eventType: "keydown", currentTarget: button },
+      { name: "log3", identifier: "a", eventType: "keydown", currentTarget: button }
     )
   }
 
   async "test keyup"() {
     const button = this.findElement("#button6")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keyup", {key: 'End'})
+    await this.triggerKeyboardEvent(button, "keyup", { key: "End" })
     this.assertActions(
-      {name: "log", identifier: "a", eventType: 'keyup', currentTarget: button},
-      {name: "log3", identifier: "a", eventType: 'keyup', currentTarget: button}
+      { name: "log", identifier: "a", eventType: "keyup", currentTarget: button },
+      { name: "log3", identifier: "a", eventType: "keyup", currentTarget: button }
     )
   }
 
   async "test global event"() {
     const button = this.findElement("#button7")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'Escape', bubbles: true})
-    this.assertActions(
-      {name: "log", identifier: "a", eventType: 'keydown', currentTarget: document},
-    )
+    await this.triggerKeyboardEvent(button, "keydown", { key: "Escape", bubbles: true })
+    this.assertActions({ name: "log", identifier: "a", eventType: "keydown", currentTarget: document })
   }
 
   async "test custom keymapping: a"() {
     const button = this.findElement("#button8")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'a'})
-    this.assertActions(
-      {name: "log", identifier: "a", eventType: 'keydown', currentTarget: button},
-    )
+    await this.triggerKeyboardEvent(button, "keydown", { key: "a" })
+    this.assertActions({ name: "log", identifier: "a", eventType: "keydown", currentTarget: button })
   }
 
   async "test custom keymapping: b"() {
     const button = this.findElement("#button8")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'b'})
-    this.assertActions(
-      {name: "log2", identifier: "a", eventType: 'keydown', currentTarget: button},
-    )
+    await this.triggerKeyboardEvent(button, "keydown", { key: "b" })
+    this.assertActions({ name: "log2", identifier: "a", eventType: "keydown", currentTarget: button })
   }
 
   async "test custom keymapping: unknown c"() {
     const button = this.findElement("#button8")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'c'})
+    await this.triggerKeyboardEvent(button, "keydown", { key: "c" })
     this.assertActions()
   }
 
   async "test ignore event handlers associated with modifiers other than shift+a"() {
     const button = this.findElement("#button9")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'A', shiftKey: true})
-    this.assertActions(
-      {name: "log", identifier: "a", eventType: 'keydown', currentTarget: button},
-    )
+    await this.triggerKeyboardEvent(button, "keydown", { key: "A", shiftKey: true })
+    this.assertActions({ name: "log", identifier: "a", eventType: "keydown", currentTarget: button })
   }
 
   async "test ignore event handlers associated with modifiers other than a"() {
     const button = this.findElement("#button9")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'a'})
-    this.assertActions(
-      {name: "log2", identifier: "a", eventType: 'keydown', currentTarget: button},
-    )
+    await this.triggerKeyboardEvent(button, "keydown", { key: "a" })
+    this.assertActions({ name: "log2", identifier: "a", eventType: "keydown", currentTarget: button })
   }
 
   async "test ignore event handlers associated with modifiers other than ctrol+shift+a"() {
     const button = this.findElement("#button9")
     await this.nextFrame
-    await this.triggerKeyboardEvent(button, "keydown", {key: 'A', ctrlKey: true, shiftKey: true})
-    this.assertActions(
-      {name: "log3", identifier: "a", eventType: 'keydown', currentTarget: button},
-    )
+    await this.triggerKeyboardEvent(button, "keydown", { key: "A", ctrlKey: true, shiftKey: true })
+    this.assertActions({ name: "log3", identifier: "a", eventType: "keydown", currentTarget: button })
   }
 }
