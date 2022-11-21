@@ -22,6 +22,7 @@ const pages = [
   { path: "/clipboard", title: "Clipboard" },
   { path: "/slideshow", title: "Slideshow" },
   { path: "/content-loader", title: "Content Loader" },
+  { path: "/tabs", title: "Tabs" },
 ]
 
 app.get("/", (req, res) => {

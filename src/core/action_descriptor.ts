@@ -1,11 +1,3 @@
-export interface ActionDescriptor {
-  eventTarget: EventTarget
-  eventOptions: AddEventListenerOptions
-  eventName: string
-  identifier: string
-  methodName: string
-}
-
 export type ActionDescriptorFilters = Record<string, ActionDescriptorFilter>
 export type ActionDescriptorFilter = (options: ActionDescriptorFilterOptions) => boolean
 type ActionDescriptorFilterOptions = {
@@ -37,18 +29,28 @@ export const defaultActionDescriptorFilters: ActionDescriptorFilters = {
   },
 }
 
-// capture nos.:            12   23 4               43   1 5   56 7      768 9  98
-const descriptorPattern = /^((.+?)(@(window|document))?->)?(.+?)(#([^:]+?))(:(.+))?$/
+export interface ActionDescriptor {
+  eventTarget: EventTarget
+  eventOptions: AddEventListenerOptions
+  eventName: string
+  identifier: string
+  methodName: string
+  keyFilter: string
+}
+
+// capture nos.:               1   1     2   2      3               3      4   4    5      5     6  6
+const descriptorPattern = /^(?:(.+?)(?:\.(.+?))?(?:@(window|document))?->)?(.+?)(?:#([^:]+?))(?::(.+))?$/
 
 export function parseActionDescriptorString(descriptorString: string): Partial<ActionDescriptor> {
   const source = descriptorString.trim()
   const matches = source.match(descriptorPattern) || []
   return {
-    eventTarget: parseEventTarget(matches[4]),
-    eventName: matches[2],
-    eventOptions: matches[9] ? parseEventOptions(matches[9]) : {},
-    identifier: matches[5],
-    methodName: matches[7],
+    eventTarget: parseEventTarget(matches[3]),
+    eventName: matches[1],
+    eventOptions: matches[6] ? parseEventOptions(matches[6]) : {},
+    identifier: matches[4],
+    methodName: matches[5],
+    keyFilter: matches[2],
   }
 }
 

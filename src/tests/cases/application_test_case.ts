@@ -2,7 +2,7 @@ import { Application } from "../../core/application"
 import { DOMTestCase } from "./dom_test_case"
 import { Schema, defaultSchema } from "../../core/schema"
 
-class TestApplication extends Application {
+export class TestApplication extends Application {
   handleError(error: Error, _message: string, _detail: object) {
     throw error
   }

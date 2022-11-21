@@ -81,6 +81,11 @@ export class Binding {
 
   private willBeInvokedByEvent(event: Event): boolean {
     const eventTarget = event.target
+
+    if (event instanceof KeyboardEvent && this.action.isFilterTarget(event)) {
+      return false
+    }
+
     if (this.element === eventTarget) {
       return true
     } else if (eventTarget instanceof Element && this.element.contains(eventTarget)) {

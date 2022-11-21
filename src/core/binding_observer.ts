@@ -79,7 +79,7 @@ export class BindingObserver implements ValueListObserverDelegate<Action> {
   // Value observer delegate
 
   parseValueForToken(token: Token): Action | undefined {
-    const action = Action.forToken(token)
+    const action = Action.forToken(token, this.schema)
     if (action.identifier == this.identifier) {
       return action
     }
