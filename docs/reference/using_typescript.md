@@ -1,3 +1,8 @@
+---
+permalink: /reference/using-typescript.html
+order: 07
+---
+
 # Using Typescript
 
 Stimulus itself is written in [TypeScript](https://www.typescriptlang.org/) and provides types directly over its package.

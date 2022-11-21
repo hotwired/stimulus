@@ -1,6 +1,6 @@
 ---
 permalink: /reference/values.html
-order: 04
+order: 05
 ---
 
 # Values

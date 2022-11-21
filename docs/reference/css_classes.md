@@ -1,6 +1,6 @@
 ---
 permalink: /reference/css-classes.html
-order: 05
+order: 06
 ---
 
 # CSS Classes
