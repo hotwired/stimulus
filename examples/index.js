@@ -1,7 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import Turbolinks from "turbolinks"
-
-Turbolinks.start()
+import "@hotwired/turbo"
 
 const application = Application.start()
 
