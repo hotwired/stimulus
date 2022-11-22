@@ -30,9 +30,11 @@ export class Module {
   }
 
   connectContextForScope(scope: Scope) {
-    const context = this.fetchContextForScope(scope)
-    this.connectedContexts.add(context)
-    context.connect()
+    if (!this.disengage) {
+      const context = this.fetchContextForScope(scope)
+      this.connectedContexts.add(context)
+      context.connect()
+    }
   }
 
   disconnectContextForScope(scope: Scope) {
@@ -50,5 +52,9 @@ export class Module {
       this.contextsByScope.set(scope, context)
     }
     return context
+  }
+
+  private get disengage(): boolean {
+    return (this.definition.controllerConstructor as any).disengage || this.application.disengage()
   }
 }

@@ -71,6 +71,10 @@ export class Application implements ErrorHandler {
     identifiers.forEach((identifier) => this.router.unloadIdentifier(identifier))
   }
 
+  disengage(): boolean {
+    return false
+  }
+
   // Controllers
 
   get controllers(): Controller[] {

@@ -27,6 +27,10 @@ export class Controller<ElementType extends Element = Element> {
     return
   }
 
+  static get disengage() {
+    return false
+  }
+
   readonly context: Context
 
   constructor(context: Context) {
