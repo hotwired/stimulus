@@ -180,7 +180,7 @@ class SpinnerButton extends Controller {
       })
     }
 
-    // called as soon as registered so DOM many not have loaded yet
+    // called as soon as registered so DOM may not have loaded yet
     if (document.readyState == "loading") {
       document.addEventListener("DOMContentLoaded", updateLegacySpinners)
     } else {
