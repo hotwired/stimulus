@@ -55,7 +55,7 @@ export class Action {
     }
 
     if (!Object.prototype.hasOwnProperty.call(this.keyMappings, standardFilter)) {
-      error(`contains unkown key filter: ${this.keyFilter}`)
+      error(`contains unknown key filter: ${this.keyFilter}`)
     }
 
     return this.keyMappings[standardFilter].toLowerCase() !== event.key.toLowerCase()
