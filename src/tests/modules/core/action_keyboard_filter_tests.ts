@@ -21,6 +21,7 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
       <button id="button7"></button>
       <button id="button8" data-action="keydown.a->a#log keydown.b->a#log2"></button>
       <button id="button9" data-action="keydown.shift+a->a#log keydown.a->a#log2 keydown.ctrl+shift+a->a#log3">
+      <button id="button10" data-action="jquery.custom.event->a#log jquery.a->a#log2">
     </div>
   `
 
@@ -181,5 +182,19 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
     await this.nextFrame
     await this.triggerKeyboardEvent(button, "keydown", { key: "A", ctrlKey: true, shiftKey: true })
     this.assertActions({ name: "log3", identifier: "a", eventType: "keydown", currentTarget: button })
+  }
+
+  async "test ignore filter syntax when not a keyboard event"() {
+    const button = this.findElement("#button10")
+    await this.nextFrame
+    await this.triggerEvent(button, "jquery.custom.event")
+    this.assertActions({ name: "log", identifier: "a", eventType: "jquery.custom.event", currentTarget: button })
+  }
+
+  async "test ignore filter syntax when not a keyboard event (case2)"() {
+    const button = this.findElement("#button10")
+    await this.nextFrame
+    await this.triggerEvent(button, "jquery.a")
+    this.assertActions({ name: "log2", identifier: "a", eventType: "jquery.a", currentTarget: button })
   }
 }
