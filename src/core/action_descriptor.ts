@@ -44,12 +44,12 @@ const descriptorPattern = /^(?:(.+?)(?:\.(.+?))?(?:@(window|document))?->)?(.+?)
 export function parseActionDescriptorString(descriptorString: string): Partial<ActionDescriptor> {
   const source = descriptorString.trim()
   const matches = source.match(descriptorPattern) || []
-  let eventName = matches[1];
-  let keyFilter = matches[2];
+  let eventName = matches[1]
+  let keyFilter = matches[2]
 
-  if (keyFilter && !['keydown', 'keyup', 'keypress'].includes(eventName)) {
-    eventName += `.${keyFilter}`;
-    keyFilter = '';
+  if (keyFilter && !["keydown", "keyup", "keypress"].includes(eventName)) {
+    eventName += `.${keyFilter}`
+    keyFilter = ""
   }
 
   return {
