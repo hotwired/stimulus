@@ -48,7 +48,7 @@ export function parseActionDescriptorString(descriptorString: string): Partial<A
   let keyFilter = matches[2];
 
   if (keyFilter && !['keydown', 'keyup', 'keypress'].includes(eventName)) {
-    eventName += keyFilter;
+    eventName += `.${keyFilter}`;
     keyFilter = '';
   }
 
