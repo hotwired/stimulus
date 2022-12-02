@@ -24,7 +24,7 @@ function propertiesForOutletDefinition(name: string) {
             return outletController
           } else {
             throw new Error(
-              `Missing "data-controller=${name}" attribute on outlet element for "${this.identifier}" controller`
+              `Missing "${this.application.schema.controllerAttribute}=${name}" attribute on outlet element for "${this.identifier}" controller`
             )
           }
         }
