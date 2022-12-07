@@ -1,5 +1,7 @@
 import { Controller } from "../../core/controller"
 
+type OutletClickEvents = { event: Event; identifier: string }
+
 class BaseOutletController extends Controller {
   static outlets = ["alpha"]
 
@@ -26,6 +28,7 @@ export class OutletController extends BaseOutletController {
     namespacedEpsilonOutletDisconnectedCallCount: Number,
   }
 
+  outletClickEvents: OutletClickEvents[] = []
   betaOutlet!: Controller | null
   betaOutlets!: Controller[]
   betaOutletElement!: Element | null
@@ -90,5 +93,11 @@ export class OutletController extends BaseOutletController {
   namespacedEpsilonOutletDisconnected(_outlet: Controller, element: Element) {
     if (this.hasDisconnectedClass) element.classList.add(this.disconnectedClass)
     this.namespacedEpsilonOutletDisconnectedCallCountValue++
+  }
+
+  outletClicked(event: Event) {
+    const { identifier } = this
+
+    this.outletClickEvents.push({ identifier, event })
   }
 }
