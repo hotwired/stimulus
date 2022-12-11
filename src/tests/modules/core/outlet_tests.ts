@@ -149,13 +149,12 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
 
   async "test outlet connected callback when element is inserted"() {
     const betaOutletElement = document.createElement("div")
-    betaOutletElement.setAttribute("class", "beta")
-    betaOutletElement.setAttribute("data-controller", "beta")
+    await this.setAttribute(betaOutletElement, "class", "beta")
+    await this.setAttribute(betaOutletElement, "data-controller", "beta")
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 2)
 
-    this.controller.element.appendChild(betaOutletElement)
-    await this.nextFrame
+    await this.appendChild(this.controller.element, betaOutletElement)
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 3)
     this.assert.ok(
@@ -164,8 +163,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     )
     this.assert.ok(betaOutletElement.isConnected, "element is present in document")
 
-    this.findElement("#container").appendChild(betaOutletElement.cloneNode(true))
-    await this.nextFrame
+    await this.appendChild("#container", betaOutletElement.cloneNode(true))
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 4)
   }
@@ -175,9 +173,8 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 2)
 
-    element.setAttribute("data-controller", "beta")
-    element.classList.add("beta")
-    await this.nextFrame
+    await this.setAttribute(element, "data-controller", "beta")
+    await this.setAttribute(element, "class", "beta")
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 3)
     this.assert.ok(element.classList.contains("connected"), `expected "${element.className}" to contain "connected"`)
@@ -189,8 +186,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 2)
 
-    element.classList.add("beta")
-    await this.nextFrame
+    await this.setAttribute(element, "class", "beta")
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 3)
     this.assert.ok(element.classList.contains("connected"), `expected "${element.className}" to contain "connected"`)
@@ -202,8 +198,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 2)
 
-    element.setAttribute(`data-controller`, "beta")
-    await this.nextFrame
+    await this.setAttribute(element, "data-controller", "beta")
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 3)
     this.assert.ok(element.classList.contains("connected"), `expected "${element.className}" to contain "connected"`)
@@ -236,8 +231,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       `expected "${disconnectedAlpha.className}" not to contain "disconnected"`
     )
 
-    disconnectedAlpha.parentElement?.removeChild(disconnectedAlpha)
-    await this.nextFrame
+    await this.remove(disconnectedAlpha)
 
     this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 1)
     this.assert.ok(
@@ -256,8 +250,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       `expected "${disconnectedEpsilon.className}" not to contain "disconnected"`
     )
 
-    disconnectedEpsilon.parentElement?.removeChild(disconnectedEpsilon)
-    await this.nextFrame
+    await this.remove(disconnectedEpsilon)
 
     this.assert.equal(this.controller.namespacedEpsilonOutletDisconnectedCallCountValue, 1)
     this.assert.ok(
@@ -276,8 +269,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       `expected "${element.className}" not to contain "disconnected"`
     )
 
-    element.removeAttribute(`id`)
-    await this.nextFrame
+    await this.removeAttribute(element, "id")
 
     this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 1)
     this.assert.ok(
@@ -296,8 +288,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       `expected "${element.className}" not to contain "disconnected"`
     )
 
-    element.removeAttribute(`data-controller`)
-    await this.nextFrame
+    await this.removeAttribute(element, "data-controller")
 
     this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 1)
     this.assert.ok(
