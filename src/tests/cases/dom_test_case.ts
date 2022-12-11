@@ -88,8 +88,8 @@ export class DOMTestCase extends TestCase {
     await this.nextFrame
   }
 
-  findElement<T extends Element>(selector: string) {
-    const element = this.fixtureElement.querySelector<T>(selector)
+  findElement(selector: string) {
+    const element = this.fixtureElement.querySelector(selector)
     if (element) {
       return element
     } else {

@@ -1,3 +1,4 @@
+import { AttributeObserver, AttributeObserverDelegate } from "./attribute_observer"
 import { ElementObserver, ElementObserverDelegate } from "./element_observer"
 import { Multimap } from "../multimap"
 
@@ -7,17 +8,25 @@ export interface SelectorObserverDelegate {
   selectorMatchElement?(element: Element, details: object): boolean
 }
 
-export class SelectorObserver implements ElementObserverDelegate {
-  private selector: string
-  private elementObserver: ElementObserver
-  private delegate: SelectorObserverDelegate
-  private matchesByElement: Multimap<string, Element>
-  private details: object
+export class SelectorObserver implements AttributeObserverDelegate, ElementObserverDelegate {
+  private readonly attributeObserver: AttributeObserver
+  private readonly elementObserver: ElementObserver
+  private readonly delegate: SelectorObserverDelegate
+  private readonly matchesByElement: Multimap<string, Element>
+  private readonly details: object
+  private selector: string | null
 
-  constructor(element: Element, selector: string, delegate: SelectorObserverDelegate, details: object = {}) {
-    this.selector = selector
+  constructor(
+    element: Element,
+    attributeName: string,
+    scope: Element,
+    delegate: SelectorObserverDelegate,
+    details: object
+  ) {
     this.details = details
-    this.elementObserver = new ElementObserver(element, this)
+    this.attributeObserver = new AttributeObserver(element, attributeName, this)
+    this.selector = element.getAttribute(this.attributeName)
+    this.elementObserver = new ElementObserver(scope, this)
     this.delegate = delegate
     this.matchesByElement = new Multimap()
   }
@@ -28,68 +37,119 @@ export class SelectorObserver implements ElementObserverDelegate {
 
   start() {
     this.elementObserver.start()
+    this.attributeObserver.start()
   }
 
   pause(callback: () => void) {
-    this.elementObserver.pause(callback)
+    this.elementObserver.pause(() => this.attributeObserver.pause(callback))
   }
 
   stop() {
+    this.attributeObserver.stop()
     this.elementObserver.stop()
   }
 
   refresh() {
+    this.attributeObserver.refresh()
     this.elementObserver.refresh()
   }
 
-  get element(): Element {
-    return this.elementObserver.element
+  // Attribute observer delegate
+
+  elementMatchedAttribute(controllerElement: Element) {
+    this.selector = controllerElement.getAttribute(this.attributeName)
+
+    this.elementObserver.refresh()
+  }
+
+  elementUnmatchedAttribute() {
+    if (this.selector) {
+      const matchedElements = this.matchesByElement.getValuesForKey(this.selector)
+
+      for (const matchedElement of matchedElements) {
+        this.selectorUnmatched(matchedElement, this.selector)
+      }
+    }
+
+    this.selector = null
+  }
+
+  elementAttributeValueChanged(controllerElement: Element) {
+    this.elementMatchedAttribute(controllerElement)
   }
 
   // Element observer delegate
 
   matchElement(element: Element): boolean {
-    const matches = element.matches(this.selector)
+    const { selector } = this
 
-    if (this.delegate.selectorMatchElement) {
-      return matches && this.delegate.selectorMatchElement(element, this.details)
+    if (selector) {
+      const matches = element.matches(selector)
+
+      if (this.delegate.selectorMatchElement) {
+        return matches && this.delegate.selectorMatchElement(element, this.details)
+      }
+
+      return matches
+    } else {
+      return false
     }
-
-    return matches
   }
 
   matchElementsInTree(tree: Element): Element[] {
-    const match = this.matchElement(tree) ? [tree] : []
-    const matches = Array.from(tree.querySelectorAll(this.selector)).filter((match) => this.matchElement(match))
-    return match.concat(matches)
+    const { selector } = this
+
+    if (selector) {
+      const match = this.matchElement(tree) ? [tree] : []
+      const matches = Array.from(tree.querySelectorAll(selector)).filter((match) => this.matchElement(match))
+      return match.concat(matches)
+    } else {
+      return []
+    }
   }
 
   elementMatched(element: Element) {
-    this.selectorMatched(element)
+    const { selector } = this
+
+    if (selector) {
+      this.selectorMatched(element, selector)
+    }
   }
 
   elementUnmatched(element: Element) {
-    this.selectorUnmatched(element)
+    const { selector } = this
+
+    if (selector) {
+      this.selectorUnmatched(element, selector)
+    }
   }
 
   elementAttributeChanged(element: Element, _attributeName: string) {
-    const matches = this.matchElement(element)
-    const matchedBefore = this.matchesByElement.has(this.selector, element)
+    const { selector } = this
 
-    if (!matches && matchedBefore) {
-      this.selectorUnmatched(element)
+    if (selector) {
+      const matches = this.matchElement(element)
+      const matchedBefore = this.matchesByElement.has(selector, element)
+
+      if (!matches && matchedBefore) {
+        this.selectorUnmatched(element, selector)
+      }
     }
   }
 
-  private selectorMatched(element: Element) {
+  private selectorMatched(element: Element, selector: string) {
     if (this.delegate.selectorMatched) {
-      this.delegate.selectorMatched(element, this.selector, this.details)
-      this.matchesByElement.add(this.selector, element)
+      this.delegate.selectorMatched(element, selector, this.details)
+      this.matchesByElement.add(selector, element)
     }
   }
 
-  private selectorUnmatched(element: Element) {
-    this.delegate.selectorUnmatched(element, this.selector, this.details)
-    this.matchesByElement.delete(this.selector, element)
+  private selectorUnmatched(element: Element, selector: string) {
+    this.delegate.selectorUnmatched(element, selector, this.details)
+    this.matchesByElement.delete(selector, element)
+  }
+
+  private get attributeName() {
+    return this.attributeObserver.attributeName
   }
 }

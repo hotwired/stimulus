@@ -19,6 +19,7 @@ export class OutletController extends BaseOutletController {
     alphaOutletDisconnectedCallCount: Number,
     betaOutletConnectedCallCount: Number,
     betaOutletDisconnectedCallCount: Number,
+    gammaOutletConnectedCallCount: Number,
     namespacedEpsilonOutletConnectedCallCount: Number,
     namespacedEpsilonOutletDisconnectedCallCount: Number,
   }
@@ -44,6 +45,7 @@ export class OutletController extends BaseOutletController {
   alphaOutletDisconnectedCallCountValue = 0
   betaOutletConnectedCallCountValue = 0
   betaOutletDisconnectedCallCountValue = 0
+  gammaOutletConnectedCallCountValue = 0
   namespacedEpsilonOutletConnectedCallCountValue = 0
   namespacedEpsilonOutletDisconnectedCallCountValue = 0
 
@@ -65,6 +67,11 @@ export class OutletController extends BaseOutletController {
   betaOutletDisconnected(_outlet: Controller, element: Element) {
     if (this.hasDisconnectedClass) element.classList.add(this.disconnectedClass)
     this.betaOutletDisconnectedCallCountValue++
+  }
+
+  gammaOutletConnected(_outlet: Controller, element: Element) {
+    if (this.hasConnectedClass) element.classList.add(this.connectedClass)
+    this.gammaOutletConnectedCallCountValue++
   }
 
   namespacedEpsilonOutletConnected(_outlet: Controller, element: Element) {

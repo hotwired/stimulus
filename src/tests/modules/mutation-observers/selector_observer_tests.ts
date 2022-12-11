@@ -2,6 +2,7 @@ import { SelectorObserver, SelectorObserverDelegate } from "../../../mutation-ob
 import { ObserverTestCase } from "../../cases/observer_test_case"
 
 export default class SelectorObserverTests extends ObserverTestCase implements SelectorObserverDelegate {
+  selectorAttribute = "data-selector"
   attributeName = "data-test"
   selector = "div[data-test~=two]"
   details = { some: "details" }
@@ -14,7 +15,13 @@ export default class SelectorObserverTests extends ObserverTestCase implements S
       <span id="span2" ${this.attributeName}="two"></span>
     </div>
   `
-  observer = new SelectorObserver(this.fixtureElement, this.selector, this, this.details)
+
+  observer = new SelectorObserver(this.fixtureElement, this.selectorAttribute, this.fixtureElement, this, this.details)
+
+  async setup() {
+    await this.setAttribute(this.fixtureElement, this.selectorAttribute, this.selector)
+    await super.setup()
+  }
 
   async "test should match when observer starts"() {
     this.assert.deepEqual(this.calls, [

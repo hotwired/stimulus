@@ -30,12 +30,12 @@ export class OutletObserver implements SelectorObserverDelegate {
   start() {
     if (this.selectorObserverMap.size === 0) {
       this.outletDefinitions.forEach((outletName) => {
-        const selector = this.selector(outletName)
+        const element = this.scope.element
+        const attributeName = this.outletAttributeFor(outletName)
         const details: SelectorObserverDetails = { outletName }
+        const selectorObserver = new SelectorObserver(element, attributeName, document.body, this, details)
 
-        if (selector) {
-          this.selectorObserverMap.set(outletName, new SelectorObserver(document.body, selector, this, details))
-        }
+        this.selectorObserverMap.set(outletName, selectorObserver)
       })
 
       this.selectorObserverMap.forEach((observer) => observer.start())
@@ -113,8 +113,8 @@ export class OutletObserver implements SelectorObserverDelegate {
 
   // Private
 
-  private selector(outletName: string) {
-    return this.scope.outlets.getSelectorForOutletName(outletName)
+  private outletAttributeFor(outletName: string) {
+    return this.context.schema.outletAttributeForScope(this.identifier, outletName)
   }
 
   private get outletDependencies() {
