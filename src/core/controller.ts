@@ -2,6 +2,7 @@ import { Application } from "./application"
 import { ClassPropertiesBlessing } from "./class_properties"
 import { Constructor } from "./constructor"
 import { Context } from "./context"
+import { AriaElementPropertiesBlessing } from "./aria_element_properties"
 import { OutletPropertiesBlessing } from "./outlet_properties"
 import { TargetPropertiesBlessing } from "./target_properties"
 import { ValuePropertiesBlessing, ValueDefinitionMap } from "./value_properties"
@@ -22,7 +23,9 @@ export class Controller<ElementType extends Element = Element> {
     TargetPropertiesBlessing,
     ValuePropertiesBlessing,
     OutletPropertiesBlessing,
+    AriaElementPropertiesBlessing,
   ]
+
   static targets: string[] = []
   static outlets: string[] = []
   static values: ValueDefinitionMap = {}
@@ -63,6 +66,10 @@ export class Controller<ElementType extends Element = Element> {
 
   get outlets() {
     return this.scope.outlets
+  }
+
+  get ariaElements() {
+    return this.scope.ariaElements
   }
 
   get classes() {
