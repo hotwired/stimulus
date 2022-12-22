@@ -19,14 +19,14 @@ export class SelectorObserver implements AttributeObserverDelegate, ElementObser
   constructor(
     element: Element,
     attributeName: string,
-    scope: Element,
+    controllerElement: Element,
     delegate: SelectorObserverDelegate,
     details: object
   ) {
     this.details = details
     this.attributeObserver = new AttributeObserver(element, attributeName, this)
     this.selector = element.getAttribute(this.attributeName)
-    this.elementObserver = new ElementObserver(scope, this)
+    this.elementObserver = new ElementObserver(controllerElement, this)
     this.delegate = delegate
     this.matchesByElement = new Multimap()
   }
