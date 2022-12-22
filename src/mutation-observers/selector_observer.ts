@@ -63,11 +63,13 @@ export class SelectorObserver implements AttributeObserverDelegate, ElementObser
   }
 
   elementUnmatchedAttribute() {
-    if (this.selector) {
-      const matchedElements = this.matchesByElement.getValuesForKey(this.selector)
+    const { selector } = this
+
+    if (selector) {
+      const matchedElements = this.matchesByElement.getValuesForKey(selector)
 
       for (const matchedElement of matchedElements) {
-        this.selectorUnmatched(matchedElement, this.selector)
+        this.selectorUnmatched(matchedElement, selector)
       }
     }
 
