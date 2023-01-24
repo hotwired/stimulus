@@ -8,6 +8,14 @@ import { ValuePropertiesBlessing, ValueDefinitionMap } from "./value_properties"
 
 export type ControllerConstructor = Constructor<Controller>
 
+type DispatchOptions = Partial<{
+  target: Element | Window | Document
+  detail: Object
+  prefix: string
+  bubbles: boolean
+  cancelable: boolean
+}>
+
 export class Controller<ElementType extends Element = Element> {
   static blessings = [
     ClassPropertiesBlessing,
@@ -79,7 +87,13 @@ export class Controller<ElementType extends Element = Element> {
 
   dispatch(
     eventName: string,
-    { target = this.element, detail = {}, prefix = this.identifier, bubbles = true, cancelable = true } = {}
+    {
+      target = this.element,
+      detail = {},
+      prefix = this.identifier,
+      bubbles = true,
+      cancelable = true,
+    }: DispatchOptions = {}
   ) {
     const type = prefix ? `${prefix}:${eventName}` : eventName
     const event = new CustomEvent(type, { detail, bubbles, cancelable })
