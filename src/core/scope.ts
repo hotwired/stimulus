@@ -44,7 +44,7 @@ export class Scope {
     return Array.from(this.element.querySelectorAll(selector))
   }
 
-  private get controllerSelector(): string {
+  get controllerSelector(): string {
     return attributeValueContainsToken(this.schema.controllerAttribute, this.identifier)
   }
 

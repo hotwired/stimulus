@@ -41,7 +41,11 @@ export class OutletSet {
 
   getSelectorForOutletName(outletName: string) {
     const attributeName = this.schema.outletAttributeForScope(this.identifier, outletName)
-    return this.controllerElement.getAttribute(attributeName)
+    const selector = this.controllerElement.getAttribute(attributeName)
+
+    if (selector) return selector
+
+    return this.scope.controllerSelector
   }
 
   private findOutlet(outletName: string) {
