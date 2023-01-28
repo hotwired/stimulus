@@ -20,6 +20,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
         data-${this.identifier}-alpha-outlet="#alpha1,#alpha2"
         data-${this.identifier}-beta-outlet=".beta"
         data-${this.identifier}-delta-outlet=".delta"
+        data-${this.identifier}-gamma-outlet="#gamma-doesnt-exist"
         data-${this.identifier}-namespaced--epsilon-outlet=".epsilon"
       >
         <div data-controller="gamma" class="gamma" id="gamma2"></div>

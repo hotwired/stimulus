@@ -31,6 +31,12 @@ export class OutletController extends BaseOutletController {
   betaOutletElements!: Element[]
   hasBetaOutlet!: boolean
 
+  gammaOutlet!: Controller | null
+  gammaOutlets!: Controller[]
+  gammaOutletElement!: Element | null
+  gammaOutletElements!: Element[]
+  hasGammaOutlet!: boolean
+
   namespacedEpsilonOutlet!: Controller | null
   namespacedEpsilonOutlets!: Controller[]
   namespacedEpsilonOutletElement!: Element | null
@@ -74,6 +80,11 @@ export class OutletController extends BaseOutletController {
   gammaOutletConnected(_outlet: Controller, element: Element) {
     if (this.hasConnectedClass) element.classList.add(this.connectedClass)
     this.gammaOutletConnectedCallCountValue++
+  }
+
+  gammaOutletDisconnected(_outlet: Controller, element: Element) {
+    if (this.hasDisconnectedClass) element.classList.add(this.disconnectedClass)
+    this.gammaOutletDisconnectedCallCountValue++
   }
 
   namespacedEpsilonOutletConnected(_outlet: Controller, element: Element) {
