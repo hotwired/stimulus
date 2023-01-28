@@ -39,11 +39,13 @@ function propertiesForOutletDefinition(name: string) {
           if (outletController) return outletController
 
           throw new Error(
-            `The provided outlet element is missing an outlet controller "${name}" instance for host controller "${this.identifier}"`,
+            `The provided outlet element is missing an outlet controller "${name}" instance for host controller "${this.identifier}"`
           )
         }
 
-        throw new Error(`Missing outlet element "${name}" for host controller "${this.identifier}". Stimulus couldn't find a matching outlet element using selector "${selector}".`)
+        throw new Error(
+          `Missing outlet element "${name}" for host controller "${this.identifier}". Stimulus couldn't find a matching outlet element using selector "${selector}".`
+        )
       },
     },
 
@@ -78,7 +80,9 @@ function propertiesForOutletDefinition(name: string) {
         if (outletElement) {
           return outletElement
         } else {
-          throw new Error(`Missing outlet element "${name}" for host controller "${this.identifier}". Stimulus couldn't find a matching outlet element using selector "${selector}".`)
+          throw new Error(
+            `Missing outlet element "${name}" for host controller "${this.identifier}". Stimulus couldn't find a matching outlet element using selector "${selector}".`
+          )
         }
       },
     },
