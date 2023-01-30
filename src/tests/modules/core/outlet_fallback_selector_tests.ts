@@ -113,4 +113,25 @@ export default class OutletFallbackSelectorTests extends ControllerTestCase(Outl
     this.assert.equal(gammaOutlets.length, 0)
     this.assert.equal(this.controller.gammaOutletDisconnectedCallCountValue, 0)
   }
+
+  async "test outlet disconnected callback shouldn't fire when selector is removed from controller element but fallback selector still covers the outlet"() {
+    const alpha1 = this.findElement("#alpha1")
+    const mixed = this.findElement("#mixed")
+
+    this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 0)
+
+    await this.removeAttribute(this.controller.element, `data-${this.identifier}-alpha-outlet`)
+
+    this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 0)
+    this.assert.ok(alpha1.isConnected, "#alpha1 is still present in document")
+    this.assert.ok(mixed.isConnected, "#mixed is still present in document")
+    this.assert.notOk(
+      alpha1.classList.contains("disconnected"),
+      `expected "${alpha1.className}" to contain "disconnected"`
+    )
+    this.assert.notOk(
+      mixed.classList.contains("disconnected"),
+      `expected "${mixed.className}" to contain "disconnected"`
+    )
+  }
 }
