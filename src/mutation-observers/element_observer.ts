@@ -14,7 +14,7 @@ export class ElementObserver {
 
   private elements: Set<Element>
   private mutationObserver: MutationObserver
-  private mutationObserverInit = { attributes: true, childList: true, subtree: true }
+  private mutationObserverInit: MutationObserverInit = { attributes: true, childList: true, subtree: true }
 
   constructor(element: Element, delegate: ElementObserverDelegate) {
     this.element = element
@@ -83,15 +83,14 @@ export class ElementObserver {
 
   private processMutation(mutation: MutationRecord) {
     if (mutation.type == "attributes") {
-      this.processAttributeChange(mutation.target, mutation.attributeName!)
+      this.processAttributeChange(mutation.target as Element, mutation.attributeName!)
     } else if (mutation.type == "childList") {
       this.processRemovedNodes(mutation.removedNodes)
       this.processAddedNodes(mutation.addedNodes)
     }
   }
 
-  private processAttributeChange(node: Node, attributeName: string) {
-    const element = node as Element
+  private processAttributeChange(element: Element, attributeName: string) {
     if (this.elements.has(element)) {
       if (this.delegate.elementAttributeChanged && this.matchElement(element)) {
         this.delegate.elementAttributeChanged(element, attributeName)
