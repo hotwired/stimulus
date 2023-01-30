@@ -20,6 +20,7 @@ export class OutletController extends BaseOutletController {
     betaOutletConnectedCallCount: Number,
     betaOutletDisconnectedCallCount: Number,
     gammaOutletConnectedCallCount: Number,
+    gammaOutletDisconnectedCallCount: Number,
     namespacedEpsilonOutletConnectedCallCount: Number,
     namespacedEpsilonOutletDisconnectedCallCount: Number,
   }
@@ -46,6 +47,7 @@ export class OutletController extends BaseOutletController {
   betaOutletConnectedCallCountValue = 0
   betaOutletDisconnectedCallCountValue = 0
   gammaOutletConnectedCallCountValue = 0
+  gammaOutletDisconnectedCallCountValue = 0
   namespacedEpsilonOutletConnectedCallCountValue = 0
   namespacedEpsilonOutletDisconnectedCallCountValue = 0
 

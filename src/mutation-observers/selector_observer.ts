@@ -1,4 +1,3 @@
-import { AttributeObserver, AttributeObserverDelegate } from "./attribute_observer"
 import { ElementObserver, ElementObserverDelegate } from "./element_observer"
 import { Multimap } from "../multimap"
 
@@ -8,25 +7,17 @@ export interface SelectorObserverDelegate {
   selectorMatchElement?(element: Element, details: object): boolean
 }
 
-export class SelectorObserver implements AttributeObserverDelegate, ElementObserverDelegate {
-  private readonly attributeObserver: AttributeObserver
+export class SelectorObserver implements ElementObserverDelegate {
   private readonly elementObserver: ElementObserver
   private readonly delegate: SelectorObserverDelegate
   private readonly matchesByElement: Multimap<string, Element>
   private readonly details: object
-  private selector: string | null
+  _selector: string | null
 
-  constructor(
-    element: Element,
-    attributeName: string,
-    controllerElement: Element,
-    delegate: SelectorObserverDelegate,
-    details: object
-  ) {
+  constructor(element: Element, selector: string, delegate: SelectorObserverDelegate, details: object) {
+    this._selector = selector
     this.details = details
-    this.attributeObserver = new AttributeObserver(element, attributeName, this)
-    this.selector = element.getAttribute(this.attributeName)
-    this.elementObserver = new ElementObserver(controllerElement, this)
+    this.elementObserver = new ElementObserver(element, this)
     this.delegate = delegate
     this.matchesByElement = new Multimap()
   }
@@ -35,49 +26,33 @@ export class SelectorObserver implements AttributeObserverDelegate, ElementObser
     return this.elementObserver.started
   }
 
+  get selector() {
+    return this._selector
+  }
+
+  set selector(selector: string | null) {
+    this._selector = selector
+    this.refresh()
+  }
+
   start() {
     this.elementObserver.start()
-    this.attributeObserver.start()
   }
 
   pause(callback: () => void) {
-    this.elementObserver.pause(() => this.attributeObserver.pause(callback))
+    this.elementObserver.pause(callback)
   }
 
   stop() {
-    this.attributeObserver.stop()
     this.elementObserver.stop()
   }
 
   refresh() {
-    this.attributeObserver.refresh()
     this.elementObserver.refresh()
   }
 
-  // Attribute observer delegate
-
-  elementMatchedAttribute(controllerElement: Element) {
-    this.selector = controllerElement.getAttribute(this.attributeName)
-
-    this.elementObserver.refresh()
-  }
-
-  elementUnmatchedAttribute() {
-    const { selector } = this
-
-    if (selector) {
-      const matchedElements = this.matchesByElement.getValuesForKey(selector)
-
-      for (const matchedElement of matchedElements) {
-        this.selectorUnmatched(matchedElement, selector)
-      }
-    }
-
-    this.selector = null
-  }
-
-  elementAttributeValueChanged(controllerElement: Element) {
-    this.elementMatchedAttribute(controllerElement)
+  get element(): Element {
+    return this.elementObserver.element
   }
 
   // Element observer delegate
@@ -119,9 +94,9 @@ export class SelectorObserver implements AttributeObserverDelegate, ElementObser
   }
 
   elementUnmatched(element: Element) {
-    const { selector } = this
+    const selectors = this.matchesByElement.getKeysForValue(element)
 
-    if (selector) {
+    for (const selector of selectors) {
       this.selectorUnmatched(element, selector)
     }
   }
@@ -133,25 +108,23 @@ export class SelectorObserver implements AttributeObserverDelegate, ElementObser
       const matches = this.matchElement(element)
       const matchedBefore = this.matchesByElement.has(selector, element)
 
-      if (!matches && matchedBefore) {
+      if (matches && !matchedBefore) {
+        this.selectorMatched(element, selector)
+      } else if (!matches && matchedBefore) {
         this.selectorUnmatched(element, selector)
       }
     }
   }
 
+  // Selector management
+
   private selectorMatched(element: Element, selector: string) {
-    if (this.delegate.selectorMatched) {
-      this.delegate.selectorMatched(element, selector, this.details)
-      this.matchesByElement.add(selector, element)
-    }
+    this.delegate.selectorMatched(element, selector, this.details)
+    this.matchesByElement.add(selector, element)
   }
 
   private selectorUnmatched(element: Element, selector: string) {
     this.delegate.selectorUnmatched(element, selector, this.details)
     this.matchesByElement.delete(selector, element)
-  }
-
-  private get attributeName() {
-    return this.attributeObserver.attributeName
   }
 }

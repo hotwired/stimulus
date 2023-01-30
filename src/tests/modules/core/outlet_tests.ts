@@ -132,7 +132,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     this.assert.throws(() => this.controller.alphaOutletElement)
   }
 
-  "test outlet connected callback fires"() {
+  async "test outlet connected callback fires"() {
     const alphaOutlets = this.controller.alphaOutletElements.filter((outlet) => outlet.classList.contains("connected"))
 
     this.assert.equal(alphaOutlets.length, 2)
@@ -306,6 +306,25 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     this.assert.equal(this.controller.gammaOutletConnectedCallCountValue, 1)
     this.assert.ok(gamma2.isConnected, "#gamma2 is still present in document")
     this.assert.ok(gamma2.classList.contains("connected"), `expected "${gamma2.className}" to contain "connected"`)
+  }
+
+  async "test outlet connect callback doesn't get trigged when any attribute gets added to the controller element"() {
+    this.assert.equal(this.controller.alphaOutletConnectedCallCountValue, 2)
+    this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 2)
+    this.assert.equal(this.controller.gammaOutletConnectedCallCountValue, 0)
+    this.assert.equal(this.controller.namespacedEpsilonOutletConnectedCallCountValue, 2)
+
+    await this.setAttribute(this.controller.element, "data-some-random-attribute", "#alpha1")
+
+    this.assert.equal(this.controller.alphaOutletConnectedCallCountValue, 2)
+    this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 2)
+    this.assert.equal(this.controller.gammaOutletConnectedCallCountValue, 0)
+    this.assert.equal(this.controller.namespacedEpsilonOutletConnectedCallCountValue, 2)
+
+    this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 0)
+    this.assert.equal(this.controller.betaOutletDisconnectedCallCountValue, 0)
+    this.assert.equal(this.controller.gammaOutletDisconnectedCallCountValue, 0)
+    this.assert.equal(this.controller.namespacedEpsilonOutletDisconnectedCallCountValue, 0)
   }
 
   async "test outlet connect callback when the controlled element's outlet attribute is changed"() {

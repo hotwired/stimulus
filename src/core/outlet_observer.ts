@@ -1,64 +1,79 @@
 import { Multimap } from "../multimap"
+import { AttributeObserver, AttributeObserverDelegate } from "../mutation-observers"
 import { SelectorObserver, SelectorObserverDelegate } from "../mutation-observers"
 import { Context } from "./context"
 import { Controller } from "./controller"
 
 import { readInheritableStaticArrayValues } from "./inheritable_statics"
 
-type SelectorObserverDetails = { outletName: string }
+type OutletObserverDetails = { outletName: string }
 
 export interface OutletObserverDelegate {
   outletConnected(outlet: Controller, element: Element, outletName: string): void
   outletDisconnected(outlet: Controller, element: Element, outletName: string): void
 }
 
-export class OutletObserver implements SelectorObserverDelegate {
+export class OutletObserver implements AttributeObserverDelegate, SelectorObserverDelegate {
+  started: boolean
   readonly context: Context
   readonly delegate: OutletObserverDelegate
   readonly outletsByName: Multimap<string, Controller>
   readonly outletElementsByName: Multimap<string, Element>
   private selectorObserverMap: Map<string, SelectorObserver>
+  private attributeObserverMap: Map<string, AttributeObserver>
 
   constructor(context: Context, delegate: OutletObserverDelegate) {
+    this.started = false
     this.context = context
     this.delegate = delegate
     this.outletsByName = new Multimap()
     this.outletElementsByName = new Multimap()
     this.selectorObserverMap = new Map()
+    this.attributeObserverMap = new Map()
   }
 
   start() {
-    if (this.selectorObserverMap.size === 0) {
+    if (!this.started) {
       this.outletDefinitions.forEach((outletName) => {
-        const element = this.scope.element
-        const attributeName = this.outletAttributeFor(outletName)
-        const details: SelectorObserverDetails = { outletName }
-        const selectorObserver = new SelectorObserver(element, attributeName, document.body, this, details)
-
-        this.selectorObserverMap.set(outletName, selectorObserver)
+        this.setupSelectorObserverForOutlet(outletName)
+        this.setupAttributeObserverForOutlet(outletName)
       })
-
-      this.selectorObserverMap.forEach((observer) => observer.start())
-    }
-
-    this.dependentContexts.forEach((context) => context.refresh())
-  }
-
-  stop() {
-    if (this.selectorObserverMap.size > 0) {
-      this.disconnectAllOutlets()
-      this.selectorObserverMap.forEach((observer) => observer.stop())
-      this.selectorObserverMap.clear()
+      this.started = true
+      this.dependentContexts.forEach((context) => context.refresh())
     }
   }
 
   refresh() {
     this.selectorObserverMap.forEach((observer) => observer.refresh())
+    this.attributeObserverMap.forEach((observer) => observer.refresh())
+  }
+
+  stop() {
+    if (this.started) {
+      this.started = false
+      this.disconnectAllOutlets()
+      this.stopSelectorObservers()
+      this.stopAttributeObservers()
+    }
+  }
+
+  stopSelectorObservers() {
+    if (this.selectorObserverMap.size > 0) {
+      this.selectorObserverMap.forEach((observer) => observer.stop())
+      this.selectorObserverMap.clear()
+    }
+  }
+
+  stopAttributeObservers() {
+    if (this.attributeObserverMap.size > 0) {
+      this.attributeObserverMap.forEach((observer) => observer.stop())
+      this.attributeObserverMap.clear()
+    }
   }
 
   // Selector observer delegate
 
-  selectorMatched(element: Element, _selector: string, { outletName }: SelectorObserverDetails) {
+  selectorMatched(element: Element, _selector: string, { outletName }: OutletObserverDetails) {
     const outlet = this.getOutlet(element, outletName)
 
     if (outlet) {
@@ -66,7 +81,7 @@ export class OutletObserver implements SelectorObserverDelegate {
     }
   }
 
-  selectorUnmatched(element: Element, _selector: string, { outletName }: SelectorObserverDetails) {
+  selectorUnmatched(element: Element, _selector: string, { outletName }: OutletObserverDetails) {
     const outlet = this.getOutletFromMap(element, outletName)
 
     if (outlet) {
@@ -74,11 +89,42 @@ export class OutletObserver implements SelectorObserverDelegate {
     }
   }
 
-  selectorMatchElement(element: Element, { outletName }: SelectorObserverDetails) {
-    return (
-      this.hasOutlet(element, outletName) &&
-      element.matches(`[${this.context.application.schema.controllerAttribute}~=${outletName}]`)
-    )
+  selectorMatchElement(element: Element, { outletName }: OutletObserverDetails) {
+    const selector = this.selector(outletName)
+    const hasOutlet = this.hasOutlet(element, outletName)
+    const hasOutletController = element.matches(`[${this.schema.controllerAttribute}~=${outletName}]`)
+
+    if (selector) {
+      return hasOutlet && hasOutletController && element.matches(selector)
+    } else {
+      return false
+    }
+  }
+
+  // Attribute observer delegate
+
+  elementMatchedAttribute(_element: Element, attributeName: string) {
+    const outletName = this.getOutletNameFromOutletAttributeName(attributeName)
+
+    if (outletName) {
+      this.updateSelectorObserverForOutlet(outletName)
+    }
+  }
+
+  elementAttributeValueChanged(_element: Element, attributeName: string) {
+    const outletName = this.getOutletNameFromOutletAttributeName(attributeName)
+
+    if (outletName) {
+      this.updateSelectorObserverForOutlet(outletName)
+    }
+  }
+
+  elementUnmatchedAttribute(_element: Element, attributeName: string) {
+    const outletName = this.getOutletNameFromOutletAttributeName(attributeName)
+
+    if (outletName) {
+      this.updateSelectorObserverForOutlet(outletName)
+    }
   }
 
   // Outlet management
@@ -111,10 +157,46 @@ export class OutletObserver implements SelectorObserverDelegate {
     }
   }
 
+  // Observer management
+
+  private updateSelectorObserverForOutlet(outletName: string) {
+    const observer = this.selectorObserverMap.get(outletName)
+
+    if (observer) {
+      observer.selector = this.selector(outletName)
+    }
+  }
+
+  private setupSelectorObserverForOutlet(outletName: string) {
+    const selector = this.selector(outletName)
+    const selectorObserver = new SelectorObserver(document.body, selector!, this, { outletName })
+
+    this.selectorObserverMap.set(outletName, selectorObserver)
+
+    selectorObserver.start()
+  }
+
+  private setupAttributeObserverForOutlet(outletName: string) {
+    const attributeName = this.attributeNameForOutletName(outletName)
+    const attributeObserver = new AttributeObserver(this.scope.element, attributeName, this)
+
+    this.attributeObserverMap.set(outletName, attributeObserver)
+
+    attributeObserver.start()
+  }
+
   // Private
 
-  private outletAttributeFor(outletName: string) {
-    return this.context.schema.outletAttributeForScope(this.identifier, outletName)
+  private selector(outletName: string) {
+    return this.scope.outlets.getSelectorForOutletName(outletName)
+  }
+
+  private attributeNameForOutletName(outletName: string) {
+    return this.scope.schema.outletAttributeForScope(this.identifier, outletName)
+  }
+
+  private getOutletNameFromOutletAttributeName(attributeName: string) {
+    return this.outletDefinitions.find((outletName) => this.attributeNameForOutletName(outletName) === attributeName)
   }
 
   private get outletDependencies() {
@@ -157,6 +239,10 @@ export class OutletObserver implements SelectorObserverDelegate {
 
   private get scope() {
     return this.context.scope
+  }
+
+  private get schema() {
+    return this.context.schema
   }
 
   private get identifier() {
