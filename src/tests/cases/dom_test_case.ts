@@ -60,6 +60,34 @@ export class DOMTestCase extends TestCase {
     return event
   }
 
+  async setAttribute(selectorOrElement: string | Element, name: string, value: string) {
+    const element = typeof selectorOrElement == "string" ? this.findElement(selectorOrElement) : selectorOrElement
+
+    element.setAttribute(name, value)
+    await this.nextFrame
+  }
+
+  async removeAttribute(selectorOrElement: string | Element, name: string) {
+    const element = typeof selectorOrElement == "string" ? this.findElement(selectorOrElement) : selectorOrElement
+
+    element.removeAttribute(name)
+    await this.nextFrame
+  }
+
+  async appendChild<T extends Node>(selectorOrElement: T | string, child: T) {
+    const parent = typeof selectorOrElement == "string" ? this.findElement(selectorOrElement) : selectorOrElement
+
+    parent.appendChild(child)
+    await this.nextFrame
+  }
+
+  async remove(selectorOrElement: Element | string) {
+    const element = typeof selectorOrElement == "string" ? this.findElement(selectorOrElement) : selectorOrElement
+
+    element.remove()
+    await this.nextFrame
+  }
+
   findElement(selector: string) {
     const element = this.fixtureElement.querySelector(selector)
     if (element) {

@@ -8,14 +8,14 @@ export interface SelectorObserverDelegate {
 }
 
 export class SelectorObserver implements ElementObserverDelegate {
-  private selector: string
-  private elementObserver: ElementObserver
-  private delegate: SelectorObserverDelegate
-  private matchesByElement: Multimap<string, Element>
-  private details: object
+  private readonly elementObserver: ElementObserver
+  private readonly delegate: SelectorObserverDelegate
+  private readonly matchesByElement: Multimap<string, Element>
+  private readonly details: object
+  _selector: string | null
 
-  constructor(element: Element, selector: string, delegate: SelectorObserverDelegate, details: object = {}) {
-    this.selector = selector
+  constructor(element: Element, selector: string, delegate: SelectorObserverDelegate, details: object) {
+    this._selector = selector
     this.details = details
     this.elementObserver = new ElementObserver(element, this)
     this.delegate = delegate
@@ -24,6 +24,15 @@ export class SelectorObserver implements ElementObserverDelegate {
 
   get started(): boolean {
     return this.elementObserver.started
+  }
+
+  get selector() {
+    return this._selector
+  }
+
+  set selector(selector: string | null) {
+    this._selector = selector
+    this.refresh()
   }
 
   start() {
@@ -49,47 +58,73 @@ export class SelectorObserver implements ElementObserverDelegate {
   // Element observer delegate
 
   matchElement(element: Element): boolean {
-    const matches = element.matches(this.selector)
+    const { selector } = this
 
-    if (this.delegate.selectorMatchElement) {
-      return matches && this.delegate.selectorMatchElement(element, this.details)
+    if (selector) {
+      const matches = element.matches(selector)
+
+      if (this.delegate.selectorMatchElement) {
+        return matches && this.delegate.selectorMatchElement(element, this.details)
+      }
+
+      return matches
+    } else {
+      return false
     }
-
-    return matches
   }
 
   matchElementsInTree(tree: Element): Element[] {
-    const match = this.matchElement(tree) ? [tree] : []
-    const matches = Array.from(tree.querySelectorAll(this.selector)).filter((match) => this.matchElement(match))
-    return match.concat(matches)
+    const { selector } = this
+
+    if (selector) {
+      const match = this.matchElement(tree) ? [tree] : []
+      const matches = Array.from(tree.querySelectorAll(selector)).filter((match) => this.matchElement(match))
+      return match.concat(matches)
+    } else {
+      return []
+    }
   }
 
   elementMatched(element: Element) {
-    this.selectorMatched(element)
+    const { selector } = this
+
+    if (selector) {
+      this.selectorMatched(element, selector)
+    }
   }
 
   elementUnmatched(element: Element) {
-    this.selectorUnmatched(element)
+    const selectors = this.matchesByElement.getKeysForValue(element)
+
+    for (const selector of selectors) {
+      this.selectorUnmatched(element, selector)
+    }
   }
 
   elementAttributeChanged(element: Element, _attributeName: string) {
-    const matches = this.matchElement(element)
-    const matchedBefore = this.matchesByElement.has(this.selector, element)
+    const { selector } = this
 
-    if (!matches && matchedBefore) {
-      this.selectorUnmatched(element)
+    if (selector) {
+      const matches = this.matchElement(element)
+      const matchedBefore = this.matchesByElement.has(selector, element)
+
+      if (matches && !matchedBefore) {
+        this.selectorMatched(element, selector)
+      } else if (!matches && matchedBefore) {
+        this.selectorUnmatched(element, selector)
+      }
     }
   }
 
-  private selectorMatched(element: Element) {
-    if (this.delegate.selectorMatched) {
-      this.delegate.selectorMatched(element, this.selector, this.details)
-      this.matchesByElement.add(this.selector, element)
-    }
+  // Selector management
+
+  private selectorMatched(element: Element, selector: string) {
+    this.delegate.selectorMatched(element, selector, this.details)
+    this.matchesByElement.add(selector, element)
   }
 
-  private selectorUnmatched(element: Element) {
-    this.delegate.selectorUnmatched(element, this.selector, this.details)
-    this.matchesByElement.delete(this.selector, element)
+  private selectorUnmatched(element: Element, selector: string) {
+    this.delegate.selectorUnmatched(element, selector, this.details)
+    this.matchesByElement.delete(selector, element)
   }
 }
