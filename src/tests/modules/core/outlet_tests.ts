@@ -374,15 +374,19 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     )
   }
 
-  async "skip test outlet disconnected callback when the controlled element's outlet attribute is removed"() {
+  async "test outlet disconnected callback when the controlled element's outlet attribute and referenced elements are removed"() {
     const alpha1 = this.findElement("#alpha1")
     const alpha2 = this.findElement("#alpha2")
 
-    await this.removeAttribute(this.controller.element, `data-${this.identifier}-alpha-outlet`)
+    this.controller.element.removeAttribute(`data-${this.identifier}-alpha-outlet`)
+    alpha1.removeAttribute(`data-controller`)
+    alpha2.remove()
+
+    await this.nextFrame
 
     this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 2)
     this.assert.ok(alpha1.isConnected, "#alpha1 is still present in document")
-    this.assert.ok(alpha2.isConnected, "#alpha2 is still present in document")
+    this.assert.notOk(alpha2.isConnected, "#alpha2 shouldn't be present in document anymore")
     this.assert.ok(
       alpha1.classList.contains("disconnected"),
       `expected "${alpha1.className}" to contain "disconnected"`
