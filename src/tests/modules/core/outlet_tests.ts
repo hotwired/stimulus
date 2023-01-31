@@ -349,7 +349,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     )
   }
 
-  async "test outlet connect callback when the controlled element's outlet attribute is emptied"() {
+  async "test outlet disconnected callback when the controlled element's outlet attribute is emptied"() {
     const alpha1 = this.findElement("#alpha1")
     const alpha2 = this.findElement("#alpha2")
 
