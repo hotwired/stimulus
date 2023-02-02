@@ -2,6 +2,8 @@ import { ActionDescriptor, parseActionDescriptorString, stringifyEventTarget } f
 import { Token } from "../mutation-observers"
 import { Schema } from "./schema"
 import { camelize } from "./string_helpers"
+import { hasProperty } from "./utils"
+
 export class Action {
   readonly element: Element
   readonly index: number
@@ -54,7 +56,7 @@ export class Action {
       return false
     }
 
-    if (!Object.prototype.hasOwnProperty.call(this.keyMappings, standardFilter)) {
+    if (!hasProperty(this.keyMappings, standardFilter)) {
       error(`contains unknown key filter: ${this.keyFilter}`)
     }
 
