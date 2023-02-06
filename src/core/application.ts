@@ -15,6 +15,7 @@ export class Application implements ErrorHandler {
   readonly actionDescriptorFilters: ActionDescriptorFilters
   logger: Logger = console
   debug = false
+  warnings = true
 
   static start(element?: Element, schema?: Schema): Application {
     const application = new this(element, schema)
@@ -88,6 +89,12 @@ export class Application implements ErrorHandler {
     this.logger.error(`%s\n\n%o\n\n%o`, message, error, detail)
 
     window.onerror?.(message, "", 0, 0, error)
+  }
+
+  handleWarning(warning: string, message: string, detail: object) {
+    if (this.warnings) {
+      this.logger.warn(`%s\n\n%s\n\n%o`, message, warning, detail)
+    }
   }
 
   // Debug logging

@@ -92,4 +92,13 @@ export class BindingObserver implements ValueListObserverDelegate<Action> {
   elementUnmatchedValue(element: Element, action: Action) {
     this.disconnectAction(action)
   }
+
+  elementMatchedNoValue(element: Element, token: Token) {
+    const { content } = token
+    this.context.handleWarning(
+      `Element references an undefined action "${content}"`,
+      `Warning connecting action ${content}`,
+      { element, action: content }
+    )
+  }
 }
