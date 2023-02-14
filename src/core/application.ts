@@ -91,13 +91,13 @@ export class Application implements ErrorHandler {
     window.onerror?.(message, "", 0, 0, error)
   }
 
+  // Logging
+
   handleWarning(warning: string, message: string, detail: object) {
     if (this.warnings) {
       this.logger.warn(`%s\n\n%s\n\n%o`, message, warning, detail)
     }
   }
-
-  // Debug logging
 
   logDebugActivity = (identifier: string, functionName: string, detail: object = {}): void => {
     if (this.debug) {

@@ -101,13 +101,13 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
     this.application.handleError(error, `Error ${message}`, detail)
   }
 
+  // Logging
+
   handleWarning(warning: string, message: string, detail: object = {}) {
-    const { identifier, controller, element } = this
+    const { controller, element, identifier } = this
     detail = Object.assign({ identifier, controller, element }, detail)
     this.application.handleWarning(warning, `Warning ${message}`, detail)
   }
-
-  // Debug logging
 
   logDebugActivity = (functionName: string, detail: object = {}): void => {
     const { identifier, controller, element } = this

@@ -95,8 +95,8 @@ export class Router implements ScopeObserverDelegate {
       module.connectContextForScope(scope)
     } else {
       this.application.handleWarning(
-        `Element references undefined controller ${identifier}`,
-        `Warning connecting controller ${identifier}`,
+        `Element references undefined controller "${identifier}"`,
+        `Warning connecting controller "${identifier}"`,
         { identifier, element }
       )
     }
