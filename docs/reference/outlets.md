@@ -62,7 +62,7 @@ export default class extends Controller {
   static outlets = [ "user-status" ]
 
   connect () {
-    this.userStatusOutlets.forEach(userStatus => ...)
+    this.userStatusOutlets.forEach(status => ...)
   }
 }
 ```
@@ -106,7 +106,7 @@ export default class extends Controller {
   static outlets = [ "user-status" ]
 
   selectAll(event) {
-    this.userStatusOutlets.forEach(userStatus => userStatus.markAsSelected(event))
+    this.userStatusOutlets.forEach(status => status.markAsSelected(event))
   }
 }
 ```
@@ -116,7 +116,7 @@ Similarly with the Outlet Element, it allows you to call any function or propert
 ```js
 this.userStatusOutletElement.dataset.value
 this.userStatusOutletElement.getAttribute("id")
-this.userStatusOutletElements.map(userStatus => userStatus.hasAttribute("selected"))
+this.userStatusOutletElements.map(status => status.hasAttribute("selected"))
 ```
 
 ## Outlet Callbacks
