@@ -1,6 +1,6 @@
 import { ActionDescriptor, parseActionDescriptorString, stringifyEventTarget } from "./action_descriptor"
 import { Token } from "../mutation-observers"
-import { Schema } from "./schema"
+import { getDefaultEventNameForElement, Schema } from "./schema"
 import { camelize } from "./string_helpers"
 import { hasProperty } from "./utils"
 
@@ -23,7 +23,7 @@ export class Action {
     this.element = element
     this.index = index
     this.eventTarget = descriptor.eventTarget || element
-    this.eventName = descriptor.eventName || getDefaultEventNameForElement(element) || error("missing event name")
+    this.eventName = descriptor.eventName || getDefaultEventNameForElement(element, schema) || error("missing event name")
     this.eventOptions = descriptor.eventOptions || {}
     this.identifier = descriptor.identifier || error("missing identifier")
     this.methodName = descriptor.methodName || error("missing method name")
@@ -83,23 +83,6 @@ export class Action {
 
   private get keyMappings() {
     return this.schema.keyMappings
-  }
-}
-
-const defaultEventNames: { [tagName: string]: (element: Element) => string } = {
-  a: () => "click",
-  button: () => "click",
-  form: () => "submit",
-  details: () => "toggle",
-  input: (e) => (e.getAttribute("type") == "submit" ? "click" : "input"),
-  select: () => "change",
-  textarea: () => "input",
-}
-
-export function getDefaultEventNameForElement(element: Element): string | undefined {
-  const tagName = element.tagName.toLowerCase()
-  if (tagName in defaultEventNames) {
-    return defaultEventNames[tagName](element)
   }
 }
 
