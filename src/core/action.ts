@@ -96,6 +96,14 @@ const defaultEventNames: { [tagName: string]: (element: Element) => string } = {
   textarea: () => "input",
 }
 
+export function registerDefaultEventName(tagName: string, eventName: string | ((element: Element) => string)) {
+  if (typeof eventName === 'string') {
+    defaultEventNames[tagName] = () => eventName
+  } else {
+    defaultEventNames[tagName] = eventName
+  }
+}
+
 export function getDefaultEventNameForElement(element: Element): string | undefined {
   const tagName = element.tagName.toLowerCase()
   if (tagName in defaultEventNames) {
