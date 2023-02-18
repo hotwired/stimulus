@@ -35,7 +35,7 @@ export const defaultSchema: Schema = {
     button: () => "click",
     form: () => "submit",
     details: () => "toggle",
-    input: (e) => (e.getAttribute("type") == "submit" ? "click" : "input"),
+    input: (element) => (element.getAttribute("type") == "submit" ? "click" : "input"),
     select: () => "change",
     textarea: () => "input",
   }
