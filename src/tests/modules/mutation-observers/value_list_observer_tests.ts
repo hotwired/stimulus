@@ -93,9 +93,7 @@ export default class ValueListObserverTests extends ObserverTestCase implements 
     this.valueString = "undefined"
     await this.nextFrame
 
-    this.assert.deepEqual(this.testCalls, [
-      ["elementUnmatchedValue", this.element, 1, "one"],
-    ])
+    this.assert.deepEqual(this.testCalls, [["elementUnmatchedValue", this.element, 1, "one"]])
   }
 
   get element() {
@@ -109,11 +107,11 @@ export default class ValueListObserverTests extends ObserverTestCase implements 
   // Value observer delegate
 
   parseValueForToken(token: Token) {
-    if (token.content === 'unknown') {
-      throw new Error('unknown token throws error')
+    if (token.content === "unknown") {
+      throw new Error("unknown token throws error")
     }
 
-    if (token.content === 'undefined') {
+    if (token.content === "undefined") {
       return undefined
     }
 
