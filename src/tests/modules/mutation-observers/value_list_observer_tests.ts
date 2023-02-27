@@ -89,7 +89,7 @@ export default class ValueListObserverTests extends ObserverTestCase implements 
     ])
   }
 
-  async "test skips when parseValueForToken returns undefined"() {
+  async "test doesnt call elementMatchedNoValue when parseValueForToken returns undefined"() {
     this.valueString = "undefined"
     await this.nextFrame
 
