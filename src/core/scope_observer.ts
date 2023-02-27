@@ -61,7 +61,7 @@ export class ScopeObserver implements ValueListObserverDelegate<Scope> {
     }
   }
 
-  elementMatchedNoValue(_element: Element, _token: Token) {}
+  elementMatchedNoValue() {}
 
   elementUnmatchedValue(element: Element, value: Scope) {
     const referenceCount = this.scopeReferenceCounts.get(value)
