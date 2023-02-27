@@ -101,7 +101,7 @@ export default class ValueListObserverTests extends ObserverTestCase implements 
     this.recordCall("elementUnmatchedValue", element, value.id, value.token.content)
   }
 
-  elementMatchedNoValue(element: Element, token: Token) {
+  elementMatchedNoValue(element: Element, token: Token, error: Error) {
     this.recordCall("elementMatchedNoValue", element, token)
   }
 }
