@@ -25,7 +25,7 @@ export const defaultSchema: Schema = {
     home: "Home",
     end: "End",
     page_up: "PageUp",
-    page_left: "PageLeft",
+    page_down: "PageDown",
     // [a-z]
     ...objectFromEntries("abcdefghijklmnopqrstuvwxyz".split("").map((c) => [c, c])),
     // [0-9]
