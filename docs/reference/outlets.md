@@ -33,7 +33,7 @@ While a **target** is a specifically marked element **within the scope** of its 
 
 ## Attributes and Names
 
-The `data-search-result-outlet` attribute is called an _outlet attribute_, and its value is a [CSS selector](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) which you can use to refer to other controller elements which should be available as outlets on the _host controller_. The outlet identifier in the host controller **must be the same** as the target controller's name.
+The `data-search-result-outlet` attribute is called an _outlet attribute_, and its value is a [CSS selector](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) which you can use to refer to other controller elements which should be available as outlets on the _host controller_. The outlet identifier in the host controller must be the same as the target controller's name.
 
 ```html
 data-[identifier]-[outlet]-outlet="[selector]"
