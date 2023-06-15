@@ -231,6 +231,15 @@ class EffectsController extends Controller {
 }
 ```
 
+If the two controllers don't belong to the same HTML element, the `data-action` attribute
+needs to be added to the *receiving* controller's element. And if the receiving controller's
+element is not a parent (or same) of the emitting controller's element, you need to add
+`@window` to the event:
+
+```html
+<div data-action="clipboard:copy@window->effects#flash">
+```
+
 `dispatch` accepts additional options as the second parameter as follows:
 
 option       | default            | notes

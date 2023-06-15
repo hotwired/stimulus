@@ -4,6 +4,8 @@ import { Schema } from "./schema"
 import { camelize } from "./string_helpers"
 import { hasProperty } from "./utils"
 
+const allModifiers = ["meta", "ctrl", "alt", "shift"]
+
 export class Action {
   readonly element: Element
   readonly index: number
@@ -37,20 +39,17 @@ export class Action {
     return `${this.eventName}${eventFilter}${eventTarget}->${this.identifier}#${this.methodName}`
   }
 
-  isFilterTarget(event: KeyboardEvent): boolean {
+  shouldIgnoreKeyboardEvent(event: KeyboardEvent): boolean {
     if (!this.keyFilter) {
       return false
     }
 
-    const filteres = this.keyFilter.split("+")
-    const modifiers = ["meta", "ctrl", "alt", "shift"]
-    const [meta, ctrl, alt, shift] = modifiers.map((modifier) => filteres.includes(modifier))
-
-    if (event.metaKey !== meta || event.ctrlKey !== ctrl || event.altKey !== alt || event.shiftKey !== shift) {
+    const filters = this.keyFilter.split("+")
+    if (this.keyFilterDissatisfied(event, filters)) {
       return true
     }
 
-    const standardFilter = filteres.filter((key) => !modifiers.includes(key))[0]
+    const standardFilter = filters.filter((key) => !allModifiers.includes(key))[0]
     if (!standardFilter) {
       // missing non modifier key
       return false
@@ -61,6 +60,19 @@ export class Action {
     }
 
     return this.keyMappings[standardFilter].toLowerCase() !== event.key.toLowerCase()
+  }
+
+  shouldIgnoreMouseEvent(event: MouseEvent): boolean {
+    if (!this.keyFilter) {
+      return false
+    }
+
+    const filters = [this.keyFilter]
+    if (this.keyFilterDissatisfied(event, filters)) {
+      return true
+    }
+
+    return false
   }
 
   get params() {
@@ -83,6 +95,12 @@ export class Action {
 
   private get keyMappings() {
     return this.schema.keyMappings
+  }
+
+  private keyFilterDissatisfied(event: KeyboardEvent | MouseEvent, filters: Array<string>): boolean {
+    const [meta, ctrl, alt, shift] = allModifiers.map((modifier) => filters.includes(modifier))
+
+    return event.metaKey !== meta || event.ctrlKey !== ctrl || event.altKey !== alt || event.shiftKey !== shift
   }
 }
 

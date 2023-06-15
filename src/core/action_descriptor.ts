@@ -38,14 +38,14 @@ export interface ActionDescriptor {
   keyFilter: string
 }
 
-// capture nos.:               1   1     2   2      3               3      4   4    5      5     6  6
-const descriptorPattern = /^(?:(.+?)(?:\.(.+?))?(?:@(window|document))?->)?(.+?)(?:#([^:]+?))(?::(.+))?$/
+// capture nos.:                  1      1    2   2     3   3      4               4      5   5    6      6     7  7
+const descriptorPattern = /^(?:(?:([^.]+?)\+)?(.+?)(?:\.(.+?))?(?:@(window|document))?->)?(.+?)(?:#([^:]+?))(?::(.+))?$/
 
 export function parseActionDescriptorString(descriptorString: string): Partial<ActionDescriptor> {
   const source = descriptorString.trim()
   const matches = source.match(descriptorPattern) || []
-  let eventName = matches[1]
-  let keyFilter = matches[2]
+  let eventName = matches[2]
+  let keyFilter = matches[3]
 
   if (keyFilter && !["keydown", "keyup", "keypress"].includes(eventName)) {
     eventName += `.${keyFilter}`
@@ -53,12 +53,12 @@ export function parseActionDescriptorString(descriptorString: string): Partial<A
   }
 
   return {
-    eventTarget: parseEventTarget(matches[3]),
+    eventTarget: parseEventTarget(matches[4]),
     eventName,
-    eventOptions: matches[6] ? parseEventOptions(matches[6]) : {},
-    identifier: matches[4],
-    methodName: matches[5],
-    keyFilter,
+    eventOptions: matches[7] ? parseEventOptions(matches[7]) : {},
+    identifier: matches[5],
+    methodName: matches[6],
+    keyFilter: matches[1] || keyFilter,
   }
 }
 
