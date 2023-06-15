@@ -91,13 +91,16 @@ export class Router implements ScopeObserverDelegate {
     const { element, identifier } = scope
     this.scopesByIdentifier.add(identifier, scope)
     const module = this.modulesByIdentifier.get(identifier)
+
     if (module) {
       module.connectContextForScope(scope)
     } else {
+      const registeredIdentifiers = Array.from(this.modulesByIdentifier.keys()).sort()
+
       this.application.handleWarning(
-        `Element references undefined controller "${identifier}"`,
-        `Warning connecting controller "${identifier}"`,
-        { identifier, element }
+        `Stimulus is unable to connect the controller with identifier "${identifier}". The specified controller is not registered within the application. Please ensure that the controller with the identifier "${identifier}" is properly registered. For reference, the warning details include a list of all currently registered controller identifiers.`,
+        `Warning: Element references an unregistered controller identifier "${identifier}".`,
+        { identifier, element, registeredIdentifiers }
       )
     }
   }
