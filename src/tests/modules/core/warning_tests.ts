@@ -41,13 +41,11 @@ export default class WarningTests extends ApplicationTestCase {
   }
 
   async "test warnings for undefined controllers"() {
-    const mockLogger: any = this.application.logger
-
     await this.setAttribute(this.fixtureElement, "data-controller", "controller1 unknown")
 
-    this.assert.equal(mockLogger.warns.length, 1)
+    this.assert.equal(this.mockLogger.warns.length, 1)
 
-    const { message, warning, detail } = mockLogger.warns[0]
+    const { message, warning, detail } = this.mockLogger.warns[0]
 
     this.assert.equal(message, 'Warning connecting controller "unknown"')
     this.assert.equal(warning, 'Element references undefined controller "unknown"')
@@ -55,23 +53,19 @@ export default class WarningTests extends ApplicationTestCase {
   }
 
   async "test no warnings for found controllers"() {
-    const mockLogger: any = this.application.logger
-
     await this.setAttribute(this.fixtureElement, "data-controller", "controller1 controller2")
 
-    this.assert.equal(mockLogger.warns.length, 0)
+    this.assert.equal(this.mockLogger.warns.length, 0)
   }
 
   async "test warnings for undefined actions"() {
-    const mockLogger: any = this.application.logger
-
     await this.renderFixture(
       `<a data-controller="controller1 controller2" data-action="click->controller2#not-found"></a>`
     )
 
-    this.assert.equal(mockLogger.warns.length, 1)
+    this.assert.equal(this.mockLogger.warns.length, 1)
 
-    const { message, warning } = mockLogger.warns[0]
+    const { message, warning } = this.mockLogger.warns[0]
 
     this.assert.equal(message, 'Warning connecting action "click->controller2#not-found"')
     this.assert.equal(
@@ -82,20 +76,30 @@ export default class WarningTests extends ApplicationTestCase {
   }
 
   async "test warnings for actions referencing undefined controllers"() {
-    const mockLogger: any = this.application.logger
+    await this.renderFixture(`<a data-controller="controller1 controller2"></a><a data-action="non-existing-controller#found" data-controller="controller1 controller2"></a>`)
 
-    await this.renderFixture(`<a data-action="non-existing-controller#found" data-controller="controller1"></a>`)
+    console.log(this.mockLogger.warns.map((warn) => warn.message))
 
-    this.assert.equal(mockLogger.warns.length, 1)
+    this.assert.equal(this.mockLogger.warns.length, 1)
+  }
+
+  get mockLogger(): MockLogger {
+    return this.application.logger as any
   }
 
   async "test no warnings for found actions"() {
-    const mockLogger: any = this.application.logger
-
     await this.renderFixture(
       `<a data-controller="controller1 controller2" data-action="controller1#found controller2#found"></a>`
     )
 
-    this.assert.equal(mockLogger.warns.length, 0)
+    this.assert.equal(this.mockLogger.warns.length, 0)
+  }
+
+  async "test case from comments"() {
+    await this.renderFixture(`<div data-controller="controller1 controller2" data-action="click->controller1#found click->controller2#found">`)
+
+    console.log(this.mockLogger.warns)
+
+    this.assert.equal(this.mockLogger.warns.length, 0)
   }
 }
