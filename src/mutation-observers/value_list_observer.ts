@@ -3,7 +3,7 @@ import { Token, TokenListObserver, TokenListObserverDelegate } from "./token_lis
 export interface ValueListObserverDelegate<T> {
   parseValueForToken(token: Token): T | undefined
   elementMatchedValue(element: Element, value: T): void
-  elementMatchedNoValue(element: Element, token: Token, error: Error): void
+  elementMatchedNoValue(element: Element, token: Token, error?: Error): void
   elementUnmatchedValue(element: Element, value: T): void
 }
 
@@ -55,7 +55,7 @@ export class ValueListObserver<T> implements TokenListObserverDelegate {
     if (value) {
       this.fetchValuesByTokenForElement(element).set(token, value)
       this.delegate.elementMatchedValue(element, value)
-    } else if (error) {
+    } else {
       this.delegate.elementMatchedNoValue(element, token, error)
     }
   }

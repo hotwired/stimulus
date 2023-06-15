@@ -61,6 +61,15 @@ export class BindingObserver implements ValueListObserverDelegate<Action> {
     const binding = new Binding(this.context, action)
     this.bindingsByAction.set(action, binding)
     this.delegate.bindingConnected(binding)
+    const { controller } = binding.context
+    const method = (controller as any)[action.methodName]
+
+    if (typeof method !== "function") {
+      this.context.handleWarning(
+        `Action "${action.toString()}" references undefined method "${action.methodName}" on controller "${action.identifier}"`,
+        `connecting action "${action.toString()}"`
+      )
+    }
   }
 
   private disconnectAction(action: Action) {
@@ -93,8 +102,17 @@ export class BindingObserver implements ValueListObserverDelegate<Action> {
     this.disconnectAction(action)
   }
 
-  elementMatchedNoValue(element: Element, token: Token, error: Error) {
+  elementMatchedNoValue(element: Element, token: Token, error?: Error) {
     const { content: action } = token
-    this.context.handleWarning(`Warning connecting action "${action}"`, error.message, { action, element })
+
+    if (error) {
+      this.context.handleWarning(`Warning connecting action "${action}"`, error.message, { action, element })
+    } else {
+      const parsed = Action.forToken(token, this.schema)
+
+      if (!this.context.application.router.modules.map((c) => c.identifier).includes(parsed.identifier)) {
+        this.context.handleWarning(`Warning connecting identifier: ${parsed.identifier} action ${token.content}`, `Warning connecting action ${token.content} with identifier: ${parsed.identifier}`)
+      }
+    }
   }
 }

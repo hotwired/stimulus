@@ -15,8 +15,8 @@ class MockLogger {
     this.errors.push(event)
   }
 
-  warn(event: any) {
-    this.warns.push(event)
+  warn(event: any, message: string, warning: string, detail: string) {
+    this.warns.push({ message, warning, detail })
   }
 
   groupCollapsed() {}
