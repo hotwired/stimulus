@@ -108,11 +108,7 @@ export class BindingObserver implements ValueListObserverDelegate<Action> {
     if (error) {
       this.context.handleWarning(`Warning connecting action "${action}"`, error.message, { action, element })
     } else {
-      const parsed = Action.forToken(token, this.schema)
-
-      if (!this.context.application.router.modules.map((c) => c.identifier).includes(parsed.identifier)) {
-        this.context.handleWarning(`Warning connecting identifier: ${parsed.identifier} action ${token.content}`, `Warning connecting action ${token.content} with identifier: ${parsed.identifier}`)
-      }
+      this.context.handleElementMatchedNoValue(element, token, error)
     }
   }
 }

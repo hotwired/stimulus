@@ -10,6 +10,7 @@ import { ValueObserver } from "./value_observer"
 import { TargetObserver, TargetObserverDelegate } from "./target_observer"
 import { OutletObserver, OutletObserverDelegate } from "./outlet_observer"
 import { namespaceCamelize } from "./string_helpers"
+import { Token } from "../mutation-observers"
 
 export class Context implements ErrorHandler, TargetObserverDelegate, OutletObserverDelegate {
   readonly module: Module
@@ -142,5 +143,9 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
     if (typeof controller[methodName] == "function") {
       controller[methodName](...args)
     }
+  }
+
+  handleElementMatchedNoValue(element: Element, token: Token, error?: Error) {
+    this.application.router.scopeObserver.elementMatchedNoValue(element, token, error)
   }
 }

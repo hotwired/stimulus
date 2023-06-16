@@ -8,7 +8,7 @@ import { ScopeObserver, ScopeObserverDelegate } from "./scope_observer"
 
 export class Router implements ScopeObserverDelegate {
   readonly application: Application
-  private scopeObserver: ScopeObserver
+  public scopeObserver: ScopeObserver
   private scopesByIdentifier: Multimap<string, Scope>
   private modulesByIdentifier: Map<string, Module>
 
