@@ -6,8 +6,9 @@ import { Logger } from "./logger"
 import { Router } from "./router"
 import { Schema, defaultSchema } from "./schema"
 import { ActionDescriptorFilter, ActionDescriptorFilters, defaultActionDescriptorFilters } from "./action_descriptor"
+import { WarningHandler } from "./warning_handler"
 
-export class Application implements ErrorHandler {
+export class Application implements ErrorHandler, WarningHandler {
   readonly element: Element
   readonly schema: Schema
   readonly dispatcher: Dispatcher
@@ -93,7 +94,7 @@ export class Application implements ErrorHandler {
 
   // Logging
 
-  handleWarning(warning: string, message: string, detail: object) {
+  handleWarning(warning: string, message: string, detail: any) {
     if (this.warnings) {
       this.logger.warn(`%s\n\n%s\n\n%o`, message, warning, detail)
     }

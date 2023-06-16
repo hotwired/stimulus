@@ -146,6 +146,6 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
   }
 
   handleElementMatchedNoValue(element: Element, token: Token, error?: Error) {
-    this.application.router.scopeObserver.elementMatchedNoValue(element, token, error)
+    this.application.router.handleWarningsWithDuplicates(element, token, error)
   }
 }

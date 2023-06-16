@@ -5,18 +5,23 @@ import { Module } from "./module"
 import { Multimap } from "../multimap"
 import { Scope } from "./scope"
 import { ScopeObserver, ScopeObserverDelegate } from "./scope_observer"
+import { Token } from "../mutation-observers"
+import { Guide } from "./guide"
+import { Action } from "./action"
 
 export class Router implements ScopeObserverDelegate {
   readonly application: Application
-  public scopeObserver: ScopeObserver
+  private scopeObserver: ScopeObserver
   private scopesByIdentifier: Multimap<string, Scope>
   private modulesByIdentifier: Map<string, Module>
+  private guide: Guide
 
   constructor(application: Application) {
     this.application = application
     this.scopeObserver = new ScopeObserver(this.element, this.schema, this)
     this.scopesByIdentifier = new Multimap()
     this.modulesByIdentifier = new Map()
+    this.guide = new Guide(this.warningHandler)
   }
 
   get element() {
@@ -27,8 +32,8 @@ export class Router implements ScopeObserverDelegate {
     return this.application.schema
   }
 
-  get logger() {
-    return this.application.logger
+  get warningHandler() {
+    return this.application
   }
 
   get controllerAttribute(): string {
@@ -81,10 +86,25 @@ export class Router implements ScopeObserverDelegate {
     this.application.handleError(error, message, detail)
   }
 
+  handleWarningsWithDuplicates(element: Element, token: Token, error?: Error) {
+    if (!error) {
+      const parsed = Action.forToken(token, this.schema)
+
+      if (!this.modules.map((c) => c.identifier).includes(parsed.identifier)) {
+        this.guide.warn(
+          element,
+          `identifier:${parsed.identifier}`,
+          `Warning connecting "${token.content}" to undefined controller "${parsed.identifier}"`,
+          `Warning connecting "${token.content}" to undefined controller "${parsed.identifier}"`
+        )
+      }
+    }
+  }
+
   // Scope observer delegate
 
   createScopeForElementAndIdentifier(element: Element, identifier: string) {
-    return new Scope(this.schema, element, identifier, this.logger)
+    return new Scope(this.schema, element, identifier, this.application)
   }
 
   scopeConnected(scope: Scope) {

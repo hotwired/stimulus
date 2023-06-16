@@ -90,12 +90,21 @@ export default class WarningTests extends ApplicationTestCase {
     this.assert.equal(this.mockLogger.warns.length, 2)
 
     this.assert.deepEqual(
-      this.mockLogger.warns.map((warn) => ({ message: warn.message })),
+      this.mockLogger.warns
+        .map((warn) => ({ message: warn.message, warning: warn.warning }))
+        .sort((warn) => warn.warning),
       [
-        { message: "Warning connecting action non-existing-controller#found with identifier: non-existing-controller" },
         {
+          warning:
+            'Warning connecting "non-existing-controller#found" to undefined controller "non-existing-controller"',
           message:
-            "Warning connecting action non-existing-controller#not-found with identifier: non-existing-controller",
+            'Warning connecting "non-existing-controller#found" to undefined controller "non-existing-controller"',
+        },
+        {
+          warning:
+            'Warning connecting "non-existing-controller#not-found" to undefined controller "non-existing-controller"',
+          message:
+            'Warning connecting "non-existing-controller#not-found" to undefined controller "non-existing-controller"',
         },
       ]
     )

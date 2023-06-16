@@ -80,6 +80,7 @@ export class TargetSet {
       this.guide.warn(
         element,
         `target:${targetName}`,
+        `Deprecated attributeName`,
         `Please replace ${attributeName}="${identifier}.${targetName}" with ${revisedAttributeName}="${targetName}". ` +
           `The ${attributeName} attribute is deprecated and will be removed in a future version of Stimulus.`
       )

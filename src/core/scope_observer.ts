@@ -2,8 +2,6 @@ import { ErrorHandler } from "./error_handler"
 import { Schema } from "./schema"
 import { Scope } from "./scope"
 import { Token, ValueListObserver, ValueListObserverDelegate } from "../mutation-observers"
-import { Action } from "./action"
-import { Router } from "./router"
 
 export interface ScopeObserverDelegate extends ErrorHandler {
   createScopeForElementAndIdentifier(element: Element, identifier: string): Scope
@@ -18,7 +16,6 @@ export class ScopeObserver implements ValueListObserverDelegate<Scope> {
   private valueListObserver: ValueListObserver<Scope>
   private scopesByIdentifierByElement: WeakMap<Element, Map<string, Scope>>
   private scopeReferenceCounts: WeakMap<Scope, number>
-  private warnedSet: WeakMap<Element, string[]>
 
   constructor(element: Element, schema: Schema, delegate: ScopeObserverDelegate) {
     this.element = element
@@ -27,7 +24,6 @@ export class ScopeObserver implements ValueListObserverDelegate<Scope> {
     this.valueListObserver = new ValueListObserver(this.element, this.controllerAttribute, this)
     this.scopesByIdentifierByElement = new WeakMap()
     this.scopeReferenceCounts = new WeakMap()
-    this.warnedSet = new WeakMap()
   }
 
   start() {
@@ -65,29 +61,6 @@ export class ScopeObserver implements ValueListObserverDelegate<Scope> {
     }
   }
 
-  elementMatchedNoValue(element: Element, token: Token, error?: Error) {
-    if (!error) {
-      const parsed = Action.forToken(token, this.schema)
-      const router = this.delegate as Router
-
-      if (!router.modules.map((c) => c.identifier).includes(parsed.identifier)) {
-        if (!this.warnedSet.has(element)) {
-          this.warnedSet.set(element, [])
-        }
-
-        if (!this.warnedSet.get(element)?.includes(parsed.identifier)) {
-          router.application.handleWarning(
-            `Warning connecting identifier: ${parsed.identifier} action ${token.content}`,
-            `Warning connecting action ${token.content} with identifier: ${parsed.identifier}`,
-            { element, token }
-          )
-
-          this.warnedSet.get(element)?.push(parsed.identifier)
-        }
-      }
-    }
-  }
-
   elementUnmatchedValue(element: Element, value: Scope) {
     const referenceCount = this.scopeReferenceCounts.get(value)
     if (referenceCount) {
@@ -106,4 +79,6 @@ export class ScopeObserver implements ValueListObserverDelegate<Scope> {
     }
     return scopesByIdentifier
   }
+
+  elementMatchedNoValue() {}
 }
