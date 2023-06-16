@@ -47,9 +47,16 @@ export default class WarningTests extends ApplicationTestCase {
 
     const { message, warning, detail } = this.mockLogger.warns[0]
 
-    this.assert.equal(message, 'Warning connecting controller "unknown"')
-    this.assert.equal(warning, 'Element references undefined controller "unknown"')
-    this.assert.deepEqual(detail, { element: this.fixtureElement, identifier: "unknown" })
+    this.assert.equal(message, 'Warning: Element references an unregistered controller identifier "unknown".')
+    this.assert.equal(
+      warning,
+      'Stimulus is unable to connect the controller with identifier "unknown". The specified controller is not registered within the application. Please ensure that the controller with the identifier "unknown" is properly registered. For reference, the warning details include a list of all currently registered controller identifiers.'
+    )
+    this.assert.deepEqual(detail, {
+      element: this.fixtureElement,
+      identifier: "unknown",
+      registeredIdentifiers: ["controller1", "controller2"],
+    })
   }
 
   async "test no warnings for found controllers"() {
@@ -86,7 +93,10 @@ export default class WarningTests extends ApplicationTestCase {
       this.mockLogger.warns.map((warn) => ({ message: warn.message })),
       [
         { message: "Warning connecting action non-existing-controller#found with identifier: non-existing-controller" },
-        { message: "Warning connecting action non-existing-controller#not-found with identifier: non-existing-controller" }
+        {
+          message:
+            "Warning connecting action non-existing-controller#not-found with identifier: non-existing-controller",
+        },
       ]
     )
   }
