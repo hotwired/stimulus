@@ -105,9 +105,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
   // Logging
 
   handleWarning(warning: string, message: string, detail: object = {}) {
-    const { controller, element, identifier } = this
-    detail = Object.assign({ identifier, controller, element }, detail)
-    this.application.handleWarning(warning, `Warning ${message}`, detail)
+    this.application.handleWarning(warning, `Warning: ${message}`, detail)
   }
 
   logDebugActivity = (functionName: string, detail: object = {}): void => {
@@ -146,6 +144,6 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
   }
 
   handleElementMatchedNoValue(element: Element, token: Token, error?: Error) {
-    this.application.router.handleWarningsWithDuplicates(element, token, error)
+    this.application.router.handleUniqueWarningsForUnregisteredControllers(element, token, error)
   }
 }

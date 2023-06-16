@@ -8,7 +8,7 @@ export class Guide {
     this.warningHandler = warningHandler
   }
 
-  warn(object: any, key: string, warning: string, message: string) {
+  warn(object: any, key: string, warning: string, message: string, detail?: object) {
     let warnedKeys: Set<string> | undefined = this.warnedKeysByObject.get(object)
 
     if (!warnedKeys) {
@@ -18,7 +18,7 @@ export class Guide {
 
     if (!warnedKeys.has(key)) {
       warnedKeys.add(key)
-      this.warningHandler.handleWarning(warning, message, object)
+      this.warningHandler.handleWarning(warning, message, detail || object)
     }
   }
 }

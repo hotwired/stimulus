@@ -56,17 +56,24 @@ export default class WarningTests extends ApplicationTestCase {
 
     this.assert.equal(this.mockLogger.warns.length, 1)
 
-    const { message, warning } = this.mockLogger.warns[0]
+    const { message, warning, detail } = this.mockLogger.warns[0]
 
-    this.assert.equal(message, 'Warning connecting action "click->controller2#not-found"')
+    this.assert.equal(
+      message,
+      'Warning: Element references undefined action "not-found" on controller with identifier "controller2"'
+    )
     this.assert.equal(
       warning,
-      'Action "click->controller2#not-found" references undefined method "not-found" on controller "controller2"'
+      'Stimulus is unable to connect the action "not-found" with an action on the controller "controller2". Please make sure the action references a valid method on the controller.'
     )
-    // this.assert.deepEqual(detail, { element: this.fixtureElement, identifier: "unknown" })
+    this.assert.deepEqual(detail, {
+      element: this.fixtureElement.children[0],
+      identifier: "controller2",
+      methodName: "not-found",
+    })
   }
 
-  async "test warnings for actions referencing undefined controllers"() {
+  async "test unique warnings for actions referencing undefined controllers"() {
     await this.renderFixture(
       `<a data-controller="controller1 controller2"></a><a data-action="non-existing-controller#found" data-controller="controller1 controller2"></a><a data-controller="controller1" data-action="non-existing-controller#not-found"></a>`
     )
@@ -79,16 +86,14 @@ export default class WarningTests extends ApplicationTestCase {
         .sort((warn) => warn.warning),
       [
         {
+          message: 'Element references unknown action for non-registered controller "non-existing-controller"',
           warning:
-            'Warning connecting "non-existing-controller#found" to undefined controller "non-existing-controller"',
-          message:
-            'Warning connecting "non-existing-controller#found" to undefined controller "non-existing-controller"',
+            'Stimulus is unable to find a registered controller with identifier "non-existing-controller" that is referenced from action "non-existing-controller#found". The specified controller is not registered within the application. Please ensure that the controller with the identifier "non-existing-controller" is properly registered. For reference, the warning details include a list of all currently registered controller identifiers.',
         },
         {
+          message: 'Element references unknown action for non-registered controller "non-existing-controller"',
           warning:
-            'Warning connecting "non-existing-controller#not-found" to undefined controller "non-existing-controller"',
-          message:
-            'Warning connecting "non-existing-controller#not-found" to undefined controller "non-existing-controller"',
+            'Stimulus is unable to find a registered controller with identifier "non-existing-controller" that is referenced from action "non-existing-controller#not-found". The specified controller is not registered within the application. Please ensure that the controller with the identifier "non-existing-controller" is properly registered. For reference, the warning details include a list of all currently registered controller identifiers.',
         },
       ]
     )

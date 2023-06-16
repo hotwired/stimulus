@@ -66,10 +66,13 @@ export class BindingObserver implements ValueListObserverDelegate<Action> {
 
     if (typeof method !== "function") {
       this.context.handleWarning(
-        `Action "${action.toString()}" references undefined method "${action.methodName}" on controller "${
-          action.identifier
-        }"`,
-        `connecting action "${action.toString()}"`
+        `Stimulus is unable to connect the action "${action.methodName}" with an action on the controller "${action.identifier}". Please make sure the action references a valid method on the controller.`,
+        `Element references undefined action "${action.methodName}" on controller with identifier "${action.identifier}"`,
+        {
+          element: action.element,
+          identifier: action.identifier,
+          methodName: action.methodName,
+        }
       )
     }
   }

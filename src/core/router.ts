@@ -86,16 +86,18 @@ export class Router implements ScopeObserverDelegate {
     this.application.handleError(error, message, detail)
   }
 
-  handleWarningsWithDuplicates(element: Element, token: Token, error?: Error) {
+  handleUniqueWarningsForUnregisteredControllers(element: Element, token: Token, error?: Error) {
     if (!error) {
-      const parsed = Action.forToken(token, this.schema)
+      const { identifier } = Action.forToken(token, this.schema)
+      const registeredIdentifiers = Array.from(this.modulesByIdentifier.keys()).sort()
 
-      if (!this.modules.map((c) => c.identifier).includes(parsed.identifier)) {
+      if (!registeredIdentifiers.includes(identifier)) {
         this.guide.warn(
           element,
-          `identifier:${parsed.identifier}`,
-          `Warning connecting "${token.content}" to undefined controller "${parsed.identifier}"`,
-          `Warning connecting "${token.content}" to undefined controller "${parsed.identifier}"`
+          `identifier:${identifier}`,
+          `Stimulus is unable to find a registered controller with identifier "${identifier}" that is referenced from action "${token.content}". The specified controller is not registered within the application. Please ensure that the controller with the identifier "${identifier}" is properly registered. For reference, the warning details include a list of all currently registered controller identifiers.`,
+          `Element references unknown action for non-registered controller "${identifier}"`,
+          { identifier, element, registeredIdentifiers }
         )
       }
     }
