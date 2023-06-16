@@ -51,6 +51,15 @@ export class DOMTestCase extends TestCase {
     return event
   }
 
+  async triggerMouseEvent(selectorOrTarget: string | EventTarget, type: string, options: MouseEventInit = {}) {
+    const eventTarget = typeof selectorOrTarget == "string" ? this.findElement(selectorOrTarget) : selectorOrTarget
+    const event = new MouseEvent(type, options)
+
+    eventTarget.dispatchEvent(event)
+    await this.nextFrame
+    return event
+  }
+
   async triggerKeyboardEvent(selectorOrTarget: string | EventTarget, type: string, options: KeyboardEventInit = {}) {
     const eventTarget = typeof selectorOrTarget == "string" ? this.findElement(selectorOrTarget) : selectorOrTarget
     const event = new KeyboardEvent(type, options)

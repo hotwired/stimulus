@@ -31,10 +31,11 @@
   "scripts": {
     "clean": "rm -fr dist",
     "types": "tsc --noEmit false --declaration true --emitDeclarationOnly true --outDir dist/types",
+    "prebuild": "yarn build:test",
     "build": "yarn types && rollup -c",
     "build:test": "tsc -b tsconfig.test.json",
     "watch": "rollup -wc",
-    "prerelease": "yarn build && git --no-pager diff && echo && npm pack --dry-run",
+    "prerelease": "yarn clean && yarn build && yarn build:test && git --no-pager diff && echo && npm pack --dry-run",
     "release": "npm publish",
     "start": "concurrently \"npm:watch\" \"npm:start:examples\"",
     "start:examples": "cd examples && yarn install && node server.js",
