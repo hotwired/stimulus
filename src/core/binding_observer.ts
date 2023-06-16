@@ -66,7 +66,9 @@ export class BindingObserver implements ValueListObserverDelegate<Action> {
 
     if (typeof method !== "function") {
       this.context.handleWarning(
-        `Action "${action.toString()}" references undefined method "${action.methodName}" on controller "${action.identifier}"`,
+        `Action "${action.toString()}" references undefined method "${action.methodName}" on controller "${
+          action.identifier
+        }"`,
         `connecting action "${action.toString()}"`
       )
     }

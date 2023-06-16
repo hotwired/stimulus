@@ -2,8 +2,8 @@ import { ErrorHandler } from "./error_handler"
 import { Schema } from "./schema"
 import { Scope } from "./scope"
 import { Token, ValueListObserver, ValueListObserverDelegate } from "../mutation-observers"
-import {Action} from "./action";
-import {Router} from "./router";
+import { Action } from "./action"
+import { Router } from "./router"
 
 export interface ScopeObserverDelegate extends ErrorHandler {
   createScopeForElementAndIdentifier(element: Element, identifier: string): Scope
