@@ -1,30 +1,11 @@
 import { ApplicationTestCase } from "../../cases"
 import { Controller } from "../../../core"
+import { MockLogger } from "./error_handler_tests"
 
 class WarningController extends Controller {
   found() {}
 }
 
-class MockLogger {
-  errors: any[] = []
-  logs: any[] = []
-  warns: any[] = []
-
-  log(event: any) {
-    this.logs.push(event)
-  }
-
-  error(event: any) {
-    this.errors.push(event)
-  }
-
-  warn(event: any, message: string, warning: string, detail: string) {
-    this.warns.push({ message, warning, detail })
-  }
-
-  groupCollapsed() {}
-  groupEnd() {}
-}
 
 export default class WarningTests extends ApplicationTestCase {
   async setupApplication() {
