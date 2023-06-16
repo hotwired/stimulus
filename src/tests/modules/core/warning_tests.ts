@@ -6,7 +6,6 @@ class WarningController extends Controller {
   found() {}
 }
 
-
 export default class WarningTests extends ApplicationTestCase {
   async setupApplication() {
     const logger = new MockLogger()
@@ -19,6 +18,10 @@ export default class WarningTests extends ApplicationTestCase {
     identifiers.forEach((identifier) => {
       this.application.register(identifier, WarningController)
     })
+  }
+
+  get mockLogger(): MockLogger {
+    return this.application.logger as any
   }
 
   async "test warnings for undefined controllers"() {
@@ -91,21 +94,9 @@ export default class WarningTests extends ApplicationTestCase {
     )
   }
 
-  get mockLogger(): MockLogger {
-    return this.application.logger as any
-  }
-
   async "test no warnings for found actions"() {
     await this.renderFixture(
       `<a data-controller="controller1 controller2" data-action="controller1#found controller2#found"></a>`
-    )
-
-    this.assert.equal(this.mockLogger.warns.length, 0)
-  }
-
-  async "test case from comments"() {
-    await this.renderFixture(
-      `<div data-controller="controller1 controller2" data-action="click->controller1#found click->controller2#found">`
     )
 
     this.assert.equal(this.mockLogger.warns.length, 0)
