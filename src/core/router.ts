@@ -96,7 +96,7 @@ export class Router implements ScopeObserverDelegate {
           element,
           `identifier:${identifier}`,
           `Stimulus is unable to find a registered controller with identifier "${identifier}" that is referenced from action "${token.content}". The specified controller is not registered within the application. Please ensure that the controller with the identifier "${identifier}" is properly registered. For reference, the warning details include a list of all currently registered controller identifiers.`,
-          `Element references unknown action for non-registered controller "${identifier}"`,
+          `Warning: Element references unknown action for non-registered controller "${identifier}"`,
           { identifier, element, registeredIdentifiers }
         )
       }

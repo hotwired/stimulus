@@ -86,12 +86,12 @@ export default class WarningTests extends ApplicationTestCase {
         .sort((warn) => warn.warning),
       [
         {
-          message: 'Element references unknown action for non-registered controller "non-existing-controller"',
+          message: 'Warning: Element references unknown action for non-registered controller "non-existing-controller"',
           warning:
             'Stimulus is unable to find a registered controller with identifier "non-existing-controller" that is referenced from action "non-existing-controller#found". The specified controller is not registered within the application. Please ensure that the controller with the identifier "non-existing-controller" is properly registered. For reference, the warning details include a list of all currently registered controller identifiers.',
         },
         {
-          message: 'Element references unknown action for non-registered controller "non-existing-controller"',
+          message: 'Warning: Element references unknown action for non-registered controller "non-existing-controller"',
           warning:
             'Stimulus is unable to find a registered controller with identifier "non-existing-controller" that is referenced from action "non-existing-controller#not-found". The specified controller is not registered within the application. Please ensure that the controller with the identifier "non-existing-controller" is properly registered. For reference, the warning details include a list of all currently registered controller identifiers.',
         },
