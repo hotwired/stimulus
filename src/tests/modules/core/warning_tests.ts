@@ -73,6 +73,14 @@ export default class WarningTests extends ApplicationTestCase {
     })
   }
 
+  async "test errors from elementMatchedNoValue being forwarded as warnings"() {
+    await this.renderFixture(`<div data-controller="controller2" data-action="controller2#not-a-method"></div>`)
+
+    this.assert.equal(this.mockLogger.warns.length, 1)
+    this.assert.equal(this.mockLogger.warns[0].message, "Warning: missing event name")
+    this.assert.equal(this.mockLogger.warns[0].warning, 'Warning connecting action "controller2#not-a-method"')
+  }
+
   async "test unique warnings for actions referencing undefined controllers"() {
     await this.renderFixture(
       `<a data-controller="controller1 controller2"></a><a data-action="non-existing-controller#found" data-controller="controller1 controller2"></a><a data-controller="controller1" data-action="non-existing-controller#not-found"></a>`
