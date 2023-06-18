@@ -82,20 +82,22 @@ This will only work if the event being fired is a keyboard event.
 
 The correspondence between these filter and keys is shown below.
 
-Filter | Key Name
--------- | --------
-enter    | Enter
-tab      | Tab
-esc      | Escape
-space    | " "
-up       | ArrowUp
-down     | ArrowDown
-left     | ArrowLeft
-right    | ArrowRight
-home     | Home
-end      | End
-[a-z]    | [a-z]
-[0-9]    | [0-9]
+Filter    | Key Name
+--------  | --------
+enter     | Enter
+tab       | Tab
+esc       | Escape
+space     | " "
+up        | ArrowUp
+down      | ArrowDown
+left      | ArrowLeft
+right     | ArrowRight
+home      | Home
+end       | End
+page_up   | PageUp
+page_down | PageDown
+[a-z]     | [a-z]
+[0-9]     | [0-9]
 
 If you need to support other keys, you can customize the modifiers using a custom schema.
 

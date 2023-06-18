@@ -11,20 +11,20 @@ The use of Outlets helps with cross-controller communication and coordination as
 
 They are conceptually similar to [Stimulus Targets](https://stimulus.hotwired.dev/reference/targets) but with the difference that they reference a Stimulus controller instance plus its associated controller element.
 
-<meta data-controller="callout" data-callout-text-value='data-search-result-outlet=".result"'>
-<meta data-controller="callout" data-callout-text-value='class="result"'>
+<meta data-controller="callout" data-callout-text-value='data-chat-user-status-outlet=".online-user"'>
+<meta data-controller="callout" data-callout-text-value='class="online-user"'>
 
 
 ```html
-<div data-controller="search" data-search-result-outlet=".result">
+<div>
+  <div class="online-user" data-controller="user-status">...</div>
+  <div class="online-user" data-controller="user-status">...</div>
   ...
 </div>
 
 ...
 
-<div id="results">
-  <div class="result" data-controller="result">...</div>
-  <div class="result" data-controller="result">...</div>
+<div data-controller="chat" data-chat-user-status-outlet=".online-user">
   ...
 </div>
 ```
@@ -33,17 +33,17 @@ While a **target** is a specifically marked element **within the scope** of its 
 
 ## Attributes and Names
 
-The `data-search-result-outlet` attribute is called an _outlet attribute_, and its value is a [CSS selector](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) which you can use to refer to other controller elements which should be available as outlets on the _host controller_.
+The `data-chat-user-status-outlet` attribute is called an _outlet attribute_, and its value is a [CSS selector](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors) which you can use to refer to other controller elements which should be available as outlets on the _host controller_. The outlet identifier in the host controller must be the same as the target controller's identifier.
 
 ```html
 data-[identifier]-[outlet]-outlet="[selector]"
 ```
 
-<meta data-controller="callout" data-callout-text-value='data-search-result-outlet=".result"'>
+<meta data-controller="callout" data-callout-text-value='data-chat-user-status-outlet=".online-user"'>
 
 
 ```html
-<div data-controller="search" data-search-result-outlet=".result"></div>
+<div data-controller="chat" data-chat-user-status-outlet=".online-user"></div>
 ```
 
 ## Definitions
@@ -51,17 +51,18 @@ data-[identifier]-[outlet]-outlet="[selector]"
 Define controller identifiers in your controller class using the `static outlets` array. This array declares which other controller identifiers can be used as outlets on this controller:
 
 <meta data-controller="callout" data-callout-text-value='static outlets'>
-<meta data-controller="callout" data-callout-text-value='"result"'>
+<meta data-controller="callout" data-callout-text-value='"user-status"'>
+<meta data-controller="callout" data-callout-text-value='userStatus'>
 
 
 ```js
-// search_controller.js
+// chat_controller.js
 
 export default class extends Controller {
-  static outlets = [ "result" ]
+  static outlets = [ "user-status" ]
 
   connect () {
-    this.resultOutlets.forEach(result => ...)
+    this.userStatusOutlets.forEach(status => ...)
   }
 }
 ```
@@ -83,15 +84,15 @@ For each outlet defined in the `static outlets` array, Stimulus adds five proper
 Since you get back a `Controller` instance from the `[name]Outlet` and `[name]Outlets` properties you are also able to access the Values, Classes, Targets and all of the other properties and functions that controller instance defines:
 
 ```js
-this.resultOutlet.idValue
-this.resultOutlet.imageTarget
-this.resultOutlet.activeClasses
+this.userStatusOutlet.idValue
+this.userStatusOutlet.imageTarget
+this.userStatusOutlet.activeClasses
 ```
 
 You are also able to invoke any function the outlet controller may define:
 
 ```js
-// result_controller.js
+// user_status_controller.js
 
 export default class extends Controller {
   markAsSelected(event) {
@@ -99,13 +100,13 @@ export default class extends Controller {
   }
 }
 
-// search_controller.js
+// chat_controller.js
 
 export default class extends Controller {
-  static outlets = [ "result" ]
+  static outlets = [ "user-status" ]
 
   selectAll(event) {
-    this.resultOutlets.forEach(result => result.markAsSelected(event))
+    this.userStatusOutlets.forEach(status => status.markAsSelected(event))
   }
 }
 ```
@@ -113,9 +114,9 @@ export default class extends Controller {
 Similarly with the Outlet Element, it allows you to call any function or property on [`Element`](https://developer.mozilla.org/en-US/docs/Web/API/Element):
 
 ```js
-this.resultOutletElement.dataset.value
-this.resultOutletElement.getAttribute("id")
-this.resultOutletElements.map(result => result.hasAttribute("selected"))
+this.userStatusOutletElement.dataset.value
+this.userStatusOutletElement.getAttribute("id")
+this.userStatusOutletElements.map(status => status.hasAttribute("selected"))
 ```
 
 ## Outlet Callbacks
@@ -125,16 +126,16 @@ Outlet callbacks are specially named functions called by Stimulus to let you res
 To observe outlet changes, define a function named `[name]OutletConnected()` or `[name]OutletDisconnected()`.
 
 ```js
-// search_controller.js
+// chat_controller.js
 
 export default class extends Controller {
-  static outlets = [ "result" ]
+  static outlets = [ "user-status" ]
 
-  resultOutletConnected(outlet, element) {
+  userStatusOutletConnected(outlet, element) {
     // ...
   }
 
-  resultOutletDisconnected(outlet, element) {
+  userStatusOutletDisconnected(outlet, element) {
     // ...
   }
 }
@@ -145,7 +146,7 @@ export default class extends Controller {
 When you access an Outlet property in a Controller, you assert that at least one corresponding Outlet is present. If the declaration is missing and no matching outlet is found Stimulus will throw an exception:
 
 ```html
-Missing outlet element "result" for "search" controller
+Missing outlet element "user-status" for "chat" controller
 ```
 
 ### Optional outlets
@@ -153,8 +154,8 @@ Missing outlet element "result" for "search" controller
 If an Outlet is optional or you want to assert that at least Outlet is present, you must first check the presence of the Outlet using the existential property:
 
 ```js
-if (this.hasResultOutlet) {
-  this.resultOutlet.safelyCallSomethingOnTheOutlet()
+if (this.hasUserStatusOutlet) {
+  this.userStatusOutlet.safelyCallSomethingOnTheOutlet()
 }
 ```
 
@@ -162,18 +163,18 @@ if (this.hasResultOutlet) {
 
 Stimulus will throw an exception if you try to declare an element as an outlet which doesn't have a corresponding `data-controller` and identifier on it:
 
-<meta data-controller="callout" data-callout-text-value='data-search-result-outlet="#result"'>
-<meta data-controller="callout" data-callout-text-value='id="result"'>
+<meta data-controller="callout" data-callout-text-value='data-chat-user-status-outlet="#user-column"'>
+<meta data-controller="callout" data-callout-text-value='id="user-column"'>
 
 
 ```html
-<div data-controller="search" data-search-result-outlet="#result"></div>
+<div data-controller="chat" data-chat-user-status-outlet="#user-column"></div>
 
-<div id="result"></div>
+<div id="user-column"></div>
 ```
 
 Would result in:
 ```html
-Missing "data-controller=result" attribute on outlet element for
-"search" controller`
+Missing "data-controller=user-status" attribute on outlet element for
+"chat" controller`
 ```

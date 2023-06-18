@@ -57,7 +57,7 @@ export class Router implements ScopeObserverDelegate {
     this.connectModule(module)
     const afterLoad = (definition.controllerConstructor as any).afterLoad
     if (afterLoad) {
-      afterLoad(definition.identifier, this.application)
+      afterLoad.call(definition.controllerConstructor, definition.identifier, this.application)
     }
   }
 

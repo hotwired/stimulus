@@ -169,13 +169,15 @@ If you want to trigger some behaviour once a controller has been registered you 
 
 ```js
 class SpinnerButton extends Controller {
+  static legacySelector = ".legacy-spinner-button"
+
   static afterLoad(identifier, application) {
     // use the application instance to read the configured 'data-controller' attribute
     const { controllerAttribute } = application.schema
 
     // update any legacy buttons with the controller's registered identifier
     const updateLegacySpinners = () => {
-      document.querySelector(".legacy-spinner-button").forEach((element) => {
+      document.querySelector(this.legacySelector).forEach((element) => {
         element.setAttribute(controllerAttribute, identifier)
       })
     }
@@ -193,7 +195,7 @@ class SpinnerButton extends Controller {
 application.register("spinner-button", SpinnerButton)
 ```
 
-The `afterLoad` method will get called as soon as the controller has been registered, even if no controlled elements exist in the DOM. It gets called with the `identifier` that was used when registering the controller and the Stimulus application instance.
+The `afterLoad` method will get called as soon as the controller has been registered, even if no controlled elements exist in the DOM. The function will be called bound to the original controller constructor along with two arguments; the `identifier` that was used when registering the controller and the Stimulus application instance.
 
 ## Cross-Controller Coordination With Events
 
@@ -227,6 +229,15 @@ class EffectsController extends Controller {
     console.log(content) // 1234
   }
 }
+```
+
+If the two controllers don't belong to the same HTML element, the `data-action` attribute
+needs to be added to the *receiving* controller's element. And if the receiving controller's
+element is not a parent (or same) of the emitting controller's element, you need to add
+`@window` to the event:
+
+```html
+<div data-action="clipboard:copy@window->effects#flash">
 ```
 
 `dispatch` accepts additional options as the second parameter as follows:

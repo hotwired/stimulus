@@ -2,6 +2,7 @@ import { Constructor } from "./constructor"
 import { Controller } from "./controller"
 import { readInheritableStaticObjectPairs } from "./inheritable_statics"
 import { camelize, capitalize, dasherize } from "./string_helpers"
+import { isSomething, hasProperty } from "./utils"
 
 export function ValuePropertiesBlessing<T>(constructor: Constructor<T>) {
   const valueDefinitionPairs = readInheritableStaticObjectPairs<T, ValueTypeDefinition>(constructor, "values")
@@ -77,7 +78,7 @@ export type ValueTypeConstant = typeof Array | typeof Boolean | typeof Number | 
 
 export type ValueTypeDefault = Array<any> | boolean | number | Object | string
 
-export type ValueTypeObject = { type: ValueTypeConstant; default: ValueTypeDefault }
+export type ValueTypeObject = Partial<{ type: ValueTypeConstant; default: ValueTypeDefault }>
 
 export type ValueTypeDefinition = ValueTypeConstant | ValueTypeDefault | ValueTypeObject
 
@@ -91,7 +92,7 @@ function parseValueDefinitionPair([token, typeDefinition]: ValueDefinitionPair, 
   })
 }
 
-function parseValueTypeConstant(constant: ValueTypeConstant) {
+export function parseValueTypeConstant(constant?: ValueTypeConstant) {
   switch (constant) {
     case Array:
       return "array"
@@ -106,7 +107,7 @@ function parseValueTypeConstant(constant: ValueTypeConstant) {
   }
 }
 
-function parseValueTypeDefault(defaultValue: ValueTypeDefault) {
+export function parseValueTypeDefault(defaultValue?: ValueTypeDefault) {
   switch (typeof defaultValue) {
     case "boolean":
       return "boolean"
@@ -120,73 +121,97 @@ function parseValueTypeDefault(defaultValue: ValueTypeDefault) {
   if (Object.prototype.toString.call(defaultValue) === "[object Object]") return "object"
 }
 
-function parseValueTypeObject(payload: { controller?: string; token: string; typeObject: ValueTypeObject }) {
-  const typeFromObject = parseValueTypeConstant(payload.typeObject.type)
+type ValueTypeObjectPayload = {
+  controller?: string
+  token: string
+  typeObject: ValueTypeObject
+}
 
-  if (!typeFromObject) return
+export function parseValueTypeObject(payload: ValueTypeObjectPayload) {
+  const { controller, token, typeObject } = payload
 
-  const defaultValueType = parseValueTypeDefault(payload.typeObject.default)
+  const hasType = isSomething(typeObject.type)
+  const hasDefault = isSomething(typeObject.default)
 
-  if (typeFromObject !== defaultValueType) {
-    const propertyPath = payload.controller ? `${payload.controller}.${payload.token}` : payload.token
+  const fullObject = hasType && hasDefault
+  const onlyType = hasType && !hasDefault
+  const onlyDefault = !hasType && hasDefault
+
+  const typeFromObject = parseValueTypeConstant(typeObject.type)
+  const typeFromDefaultValue = parseValueTypeDefault(payload.typeObject.default)
+
+  if (onlyType) return typeFromObject
+  if (onlyDefault) return typeFromDefaultValue
+
+  if (typeFromObject !== typeFromDefaultValue) {
+    const propertyPath = controller ? `${controller}.${token}` : token
 
     throw new Error(
-      `The specified default value for the Stimulus Value "${propertyPath}" must match the defined type "${typeFromObject}". The provided default value of "${payload.typeObject.default}" is of type "${defaultValueType}".`
+      `The specified default value for the Stimulus Value "${propertyPath}" must match the defined type "${typeFromObject}". The provided default value of "${typeObject.default}" is of type "${typeFromDefaultValue}".`
     )
   }
 
-  return typeFromObject
+  if (fullObject) return typeFromObject
 }
 
-function parseValueTypeDefinition(payload: {
+type ValueTypeDefinitionPayload = {
   controller?: string
   token: string
   typeDefinition: ValueTypeDefinition
-}): ValueType {
-  const typeFromObject = parseValueTypeObject({
-    controller: payload.controller,
-    token: payload.token,
-    typeObject: payload.typeDefinition as ValueTypeObject,
-  })
-  const typeFromDefaultValue = parseValueTypeDefault(payload.typeDefinition as ValueTypeDefault)
-  const typeFromConstant = parseValueTypeConstant(payload.typeDefinition as ValueTypeConstant)
+}
+
+export function parseValueTypeDefinition(payload: ValueTypeDefinitionPayload): ValueType {
+  const { controller, token, typeDefinition } = payload
+
+  const typeObject = { controller, token, typeObject: typeDefinition as ValueTypeObject }
+
+  const typeFromObject = parseValueTypeObject(typeObject as ValueTypeObjectPayload)
+  const typeFromDefaultValue = parseValueTypeDefault(typeDefinition as ValueTypeDefault)
+  const typeFromConstant = parseValueTypeConstant(typeDefinition as ValueTypeConstant)
 
   const type = typeFromObject || typeFromDefaultValue || typeFromConstant
 
   if (type) return type
 
-  const propertyPath = payload.controller ? `${payload.controller}.${payload.typeDefinition}` : payload.token
+  const propertyPath = controller ? `${controller}.${typeDefinition}` : token
 
-  throw new Error(`Unknown value type "${propertyPath}" for "${payload.token}" value`)
+  throw new Error(`Unknown value type "${propertyPath}" for "${token}" value`)
 }
 
-function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): ValueTypeDefault {
+export function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): ValueTypeDefault {
   const constant = parseValueTypeConstant(typeDefinition as ValueTypeConstant)
-
   if (constant) return defaultValuesByType[constant]
 
-  const defaultValue = (typeDefinition as ValueTypeObject).default
-  if (defaultValue !== undefined) return defaultValue
+  const hasDefault = hasProperty(typeDefinition, "default")
+  const hasType = hasProperty(typeDefinition, "type")
+  const typeObject = typeDefinition as ValueTypeObject
+
+  if (hasDefault) return typeObject.default!
+
+  if (hasType) {
+    const { type } = typeObject
+    const constantFromType = parseValueTypeConstant(type)
+
+    if (constantFromType) return defaultValuesByType[constantFromType]
+  }
 
   return typeDefinition
 }
 
-function valueDescriptorForTokenAndTypeDefinition(payload: {
-  token: string
-  typeDefinition: ValueTypeDefinition
-  controller?: string
-}) {
-  const key = `${dasherize(payload.token)}-value`
+function valueDescriptorForTokenAndTypeDefinition(payload: ValueTypeDefinitionPayload) {
+  const { token, typeDefinition } = payload
+
+  const key = `${dasherize(token)}-value`
   const type = parseValueTypeDefinition(payload)
   return {
     type,
     key,
     name: camelize(key),
     get defaultValue() {
-      return defaultValueForDefinition(payload.typeDefinition)
+      return defaultValueForDefinition(typeDefinition)
     },
     get hasCustomDefaultValue() {
-      return parseValueTypeDefault(payload.typeDefinition) !== undefined
+      return parseValueTypeDefault(typeDefinition) !== undefined
     },
     reader: readers[type],
     writer: writers[type] || writers.default,

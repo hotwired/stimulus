@@ -132,7 +132,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     this.assert.throws(() => this.controller.alphaOutletElement)
   }
 
-  "test outlet connected callback fires"() {
+  async "test outlet connected callback fires"() {
     const alphaOutlets = this.controller.alphaOutletElements.filter((outlet) => outlet.classList.contains("connected"))
 
     this.assert.equal(alphaOutlets.length, 2)
@@ -149,13 +149,12 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
 
   async "test outlet connected callback when element is inserted"() {
     const betaOutletElement = document.createElement("div")
-    betaOutletElement.setAttribute("class", "beta")
-    betaOutletElement.setAttribute("data-controller", "beta")
+    await this.setAttribute(betaOutletElement, "class", "beta")
+    await this.setAttribute(betaOutletElement, "data-controller", "beta")
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 2)
 
-    this.controller.element.appendChild(betaOutletElement)
-    await this.nextFrame
+    await this.appendChild(this.controller.element, betaOutletElement)
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 3)
     this.assert.ok(
@@ -164,8 +163,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     )
     this.assert.ok(betaOutletElement.isConnected, "element is present in document")
 
-    this.findElement("#container").appendChild(betaOutletElement.cloneNode(true))
-    await this.nextFrame
+    await this.appendChild("#container", betaOutletElement.cloneNode(true))
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 4)
   }
@@ -175,9 +173,8 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 2)
 
-    element.setAttribute("data-controller", "beta")
-    element.classList.add("beta")
-    await this.nextFrame
+    await this.setAttribute(element, "data-controller", "beta")
+    await this.setAttribute(element, "class", "beta")
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 3)
     this.assert.ok(element.classList.contains("connected"), `expected "${element.className}" to contain "connected"`)
@@ -189,8 +186,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 2)
 
-    element.classList.add("beta")
-    await this.nextFrame
+    await this.setAttribute(element, "class", "beta")
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 3)
     this.assert.ok(element.classList.contains("connected"), `expected "${element.className}" to contain "connected"`)
@@ -202,8 +198,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 2)
 
-    element.setAttribute(`data-controller`, "beta")
-    await this.nextFrame
+    await this.setAttribute(element, "data-controller", "beta")
 
     this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 3)
     this.assert.ok(element.classList.contains("connected"), `expected "${element.className}" to contain "connected"`)
@@ -236,8 +231,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       `expected "${disconnectedAlpha.className}" not to contain "disconnected"`
     )
 
-    disconnectedAlpha.parentElement?.removeChild(disconnectedAlpha)
-    await this.nextFrame
+    await this.remove(disconnectedAlpha)
 
     this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 1)
     this.assert.ok(
@@ -256,8 +250,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       `expected "${disconnectedEpsilon.className}" not to contain "disconnected"`
     )
 
-    disconnectedEpsilon.parentElement?.removeChild(disconnectedEpsilon)
-    await this.nextFrame
+    await this.remove(disconnectedEpsilon)
 
     this.assert.equal(this.controller.namespacedEpsilonOutletDisconnectedCallCountValue, 1)
     this.assert.ok(
@@ -276,8 +269,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       `expected "${element.className}" not to contain "disconnected"`
     )
 
-    element.removeAttribute(`id`)
-    await this.nextFrame
+    await this.removeAttribute(element, "id")
 
     this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 1)
     this.assert.ok(
@@ -296,8 +288,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       `expected "${element.className}" not to contain "disconnected"`
     )
 
-    element.removeAttribute(`data-controller`)
-    await this.nextFrame
+    await this.removeAttribute(element, "data-controller")
 
     this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 1)
     this.assert.ok(
@@ -305,5 +296,74 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       `expected "${element.className}" to contain "disconnected"`
     )
     this.assert.ok(element.isConnected, "element is still present in document")
+  }
+
+  async "test outlet connect callback when the controlled element's outlet attribute is added"() {
+    const gamma2 = this.findElement("#gamma2")
+
+    await this.setAttribute(this.controller.element, `data-${this.identifier}-gamma-outlet`, "#gamma2")
+
+    this.assert.equal(this.controller.gammaOutletConnectedCallCountValue, 1)
+    this.assert.ok(gamma2.isConnected, "#gamma2 is still present in document")
+    this.assert.ok(gamma2.classList.contains("connected"), `expected "${gamma2.className}" to contain "connected"`)
+  }
+
+  async "test outlet connect callback doesn't get trigged when any attribute gets added to the controller element"() {
+    this.assert.equal(this.controller.alphaOutletConnectedCallCountValue, 2)
+    this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 2)
+    this.assert.equal(this.controller.gammaOutletConnectedCallCountValue, 0)
+    this.assert.equal(this.controller.namespacedEpsilonOutletConnectedCallCountValue, 2)
+
+    await this.setAttribute(this.controller.element, "data-some-random-attribute", "#alpha1")
+
+    this.assert.equal(this.controller.alphaOutletConnectedCallCountValue, 2)
+    this.assert.equal(this.controller.betaOutletConnectedCallCountValue, 2)
+    this.assert.equal(this.controller.gammaOutletConnectedCallCountValue, 0)
+    this.assert.equal(this.controller.namespacedEpsilonOutletConnectedCallCountValue, 2)
+
+    this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 0)
+    this.assert.equal(this.controller.betaOutletDisconnectedCallCountValue, 0)
+    this.assert.equal(this.controller.gammaOutletDisconnectedCallCountValue, 0)
+    this.assert.equal(this.controller.namespacedEpsilonOutletDisconnectedCallCountValue, 0)
+  }
+
+  async "test outlet connect callback when the controlled element's outlet attribute is changed"() {
+    const alpha1 = this.findElement("#alpha1")
+    const alpha2 = this.findElement("#alpha2")
+
+    await this.setAttribute(this.controller.element, `data-${this.identifier}-alpha-outlet`, "#alpha1")
+
+    this.assert.equal(this.controller.alphaOutletConnectedCallCountValue, 2)
+    this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 1)
+    this.assert.ok(alpha1.isConnected, "alpha1 is still present in document")
+    this.assert.ok(alpha2.isConnected, "alpha2 is still present in document")
+    this.assert.ok(alpha1.classList.contains("connected"), `expected "${alpha1.className}" to contain "connected"`)
+    this.assert.notOk(
+      alpha1.classList.contains("disconnected"),
+      `expected "${alpha1.className}" to contain "disconnected"`
+    )
+    this.assert.ok(
+      alpha2.classList.contains("disconnected"),
+      `expected "${alpha2.className}" to contain "disconnected"`
+    )
+  }
+
+  async "test outlet disconnected callback when the controlled element's outlet attribute is removed"() {
+    const alpha1 = this.findElement("#alpha1")
+    const alpha2 = this.findElement("#alpha2")
+
+    await this.removeAttribute(this.controller.element, `data-${this.identifier}-alpha-outlet`)
+
+    this.assert.equal(this.controller.alphaOutletDisconnectedCallCountValue, 2)
+    this.assert.ok(alpha1.isConnected, "#alpha1 is still present in document")
+    this.assert.ok(alpha2.isConnected, "#alpha2 is still present in document")
+    this.assert.ok(
+      alpha1.classList.contains("disconnected"),
+      `expected "${alpha1.className}" to contain "disconnected"`
+    )
+    this.assert.ok(
+      alpha2.classList.contains("disconnected"),
+      `expected "${alpha2.className}" to contain "disconnected"`
+    )
   }
 }
