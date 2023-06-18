@@ -15,6 +15,7 @@ export class Application implements ErrorHandler {
   readonly actionDescriptorFilters: ActionDescriptorFilters
   logger: Logger = console
   debug = false
+  lazyLoadingControllers = false
 
   static start(element?: Element, schema?: Schema): Application {
     const application = new this(element, schema)
