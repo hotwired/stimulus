@@ -16,7 +16,7 @@ export default class OutletOrderTests extends ControllerTestCase(OutletControlle
   async "test can access outlets in connect() even if they are referenced before they are connected"() {
     this.assert.equal(this.controller.betaOutletsInConnectValue, 3)
 
-    this.controller.betaOutlets.forEach(outlet => {
+    this.controller.betaOutlets.forEach((outlet) => {
       this.assert.equal(outlet.identifier, "beta")
       this.assert.equal(Array.from(outlet.element.classList.values()), "beta")
     })
