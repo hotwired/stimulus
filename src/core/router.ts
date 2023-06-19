@@ -99,14 +99,6 @@ export class Router implements ScopeObserverDelegate {
     return new Scope(this.schema, element, identifier, this.logger)
   }
 
-  addLazy(identifier: string, controllerConstructor: AsyncConstructor) {
-    if (!this.modulesByIdentifier.has(identifier) && !this.lazyModulesByIdentifier.has(identifier)) {
-      this.lazyModulesByIdentifier.set(identifier, controllerConstructor)
-    } else {
-      this.application.logger.warn(`Stimulus has already a controller with "${identifier}" registered.`)
-    }
-  }
-
   scopeConnected(scope: Scope) {
     const { identifier } = scope
     this.scopesByIdentifier.add(identifier, scope)
@@ -127,6 +119,14 @@ export class Router implements ScopeObserverDelegate {
   }
 
   // Modules
+
+  registerLazyModule(identifier: string, controllerConstructor: AsyncConstructor) {
+    if (!this.modulesByIdentifier.has(identifier) && !this.lazyModulesByIdentifier.has(identifier)) {
+      this.lazyModulesByIdentifier.set(identifier, controllerConstructor)
+    } else {
+      this.application.logger.warn(`Stimulus has already a controller with "${identifier}" registered.`)
+    }
+  }
 
   private connectModule(module: Module) {
     this.modulesByIdentifier.set(module.identifier, module)

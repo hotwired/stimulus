@@ -52,7 +52,7 @@ export class Application implements ErrorHandler {
   }
 
   registerLazy(identifier: string, controllerConstructor: AsyncConstructor) {
-    this.router.addLazy(identifier, controllerConstructor)
+    this.router.registerLazyModule(identifier, controllerConstructor)
   }
 
   registerActionOption(name: string, filter: ActionDescriptorFilter) {
