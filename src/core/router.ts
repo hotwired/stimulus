@@ -111,7 +111,7 @@ export class Router implements ScopeObserverDelegate {
       module.connectContextForScope(scope)
     } else if (this.lazyModulesByIdentifier.has(identifier)) {
       const callback = this.lazyModulesByIdentifier.get(identifier)
-      if (callback) {
+      if (callback && typeof callback === "function") {
         callback().then((controllerConstructor) => {
           if (!this.modulesByIdentifier.has(identifier)) {
             this.loadDefinition({ identifier, controllerConstructor })
