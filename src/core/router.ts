@@ -100,7 +100,11 @@ export class Router implements ScopeObserverDelegate {
   }
 
   addLazy(identifier: string, controllerConstructor: AsyncConstructor) {
-    this.lazyModulesByIdentifier.set(identifier, controllerConstructor)
+    if (!this.modulesByIdentifier.has(identifier) && !this.lazyModulesByIdentifier.has(identifier)) {
+      this.lazyModulesByIdentifier.set(identifier, controllerConstructor)
+    } else {
+      this.application.logger.warn(`Stimulus has already a controller with "${identifier}" registered.`)
+    }
   }
 
   scopeConnected(scope: Scope) {
@@ -147,7 +151,7 @@ export class Router implements ScopeObserverDelegate {
       })
     } else {
       this.application.logger.warn(
-        `Simulus expected the callback registered for "${identifier}" to resolve to a controllerConstructor but didn't`,
+        `Stimulus expected the callback registered for "${identifier}" to resolve to a controllerConstructor but didn't`,
         `Failed to lazy load ${identifier}`,
         { identifier }
       )
