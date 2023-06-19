@@ -113,8 +113,10 @@ export class Router implements ScopeObserverDelegate {
       const callback = this.lazyModulesByIdentifier.get(identifier)
       if (callback) {
         callback().then((controllerConstructor) => {
-          this.loadDefinition({ identifier, controllerConstructor })
-          this.lazyModulesByIdentifier.delete(identifier)
+          if (!this.modulesByIdentifier.has(identifier)) {
+            this.loadDefinition({ identifier, controllerConstructor })
+            this.lazyModulesByIdentifier.delete(identifier)
+          }
         })
       } else {
         this.application.logger.warn(
