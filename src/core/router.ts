@@ -1,4 +1,4 @@
-import { Application } from "./application"
+import { Application, AsyncConstructor } from "./application"
 import { Context } from "./context"
 import { Definition } from "./definition"
 import { Module } from "./module"
@@ -11,11 +11,13 @@ export class Router implements ScopeObserverDelegate {
   private scopeObserver: ScopeObserver
   private scopesByIdentifier: Multimap<string, Scope>
   private modulesByIdentifier: Map<string, Module>
+  private lazyModulesByIdentifier: Map<string, AsyncConstructor>
 
   constructor(application: Application) {
     this.application = application
     this.scopeObserver = new ScopeObserver(this.element, this.schema, this)
     this.scopesByIdentifier = new Multimap()
+    this.lazyModulesByIdentifier = new Map()
     this.modulesByIdentifier = new Map()
   }
 
@@ -87,11 +89,30 @@ export class Router implements ScopeObserverDelegate {
     return new Scope(this.schema, element, identifier, this.logger)
   }
 
+  addLazy(identifier: string, controllerConstructor: AsyncConstructor) {
+    this.lazyModulesByIdentifier.set(identifier, controllerConstructor)
+  }
+
   scopeConnected(scope: Scope) {
-    this.scopesByIdentifier.add(scope.identifier, scope)
+    const { identifier } = scope
+    this.scopesByIdentifier.add(identifier, scope)
     const module = this.modulesByIdentifier.get(scope.identifier)
     if (module) {
       module.connectContextForScope(scope)
+    } else if (this.lazyModulesByIdentifier.has(identifier)) {
+      const callback = this.lazyModulesByIdentifier.get(identifier)
+      if (callback) {
+        callback().then((controllerConstructor) => {
+          this.loadDefinition({ identifier, controllerConstructor })
+          this.lazyModulesByIdentifier.delete(identifier)
+        })
+      } else {
+        this.application.logger.warn(
+          `Simulus expected the callback registered for "${identifier}" to resolve to a controllerConstructor but didn't`,
+          `Failed to lazy load ${identifier}`,
+          { identifier }
+        )
+      }
     }
   }
 

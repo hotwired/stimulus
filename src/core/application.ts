@@ -7,6 +7,8 @@ import { Router } from "./router"
 import { Schema, defaultSchema } from "./schema"
 import { ActionDescriptorFilter, ActionDescriptorFilters, defaultActionDescriptorFilters } from "./action_descriptor"
 
+export type AsyncConstructor = () => Promise<ControllerConstructor>
+
 export class Application implements ErrorHandler {
   readonly element: Element
   readonly schema: Schema
@@ -47,6 +49,10 @@ export class Application implements ErrorHandler {
 
   register(identifier: string, controllerConstructor: ControllerConstructor) {
     this.load({ identifier, controllerConstructor })
+  }
+
+  registerLazy(identifier: string, controllerConstructor: AsyncConstructor) {
+    this.router.addLazy(identifier, controllerConstructor)
   }
 
   registerActionOption(name: string, filter: ActionDescriptorFilter) {
