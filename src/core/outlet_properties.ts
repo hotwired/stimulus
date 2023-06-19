@@ -10,26 +10,42 @@ export function OutletPropertiesBlessing<T>(constructor: Constructor<T>) {
   }, {} as PropertyDescriptorMap)
 }
 
+function getOutletController(controller: Controller, element: Element, identifier: string) {
+  return controller.application.getControllerForElementAndIdentifier(element, identifier)
+}
+
+function getControllerAndEnsureConnectedScope(controller: Controller, element: Element, outletName: string) {
+  let outletController = getOutletController(controller, element, outletName)
+  if (outletController) return outletController
+
+  controller.application.router.proposeToConnectScopeForElementAndIdentifier(element, outletName)
+
+  outletController = getOutletController(controller, element, outletName)
+  if (outletController) return outletController
+}
+
 function propertiesForOutletDefinition(name: string) {
   const camelizedName = namespaceCamelize(name)
 
   return {
     [`${camelizedName}Outlet`]: {
       get(this: Controller) {
-        const outlet = this.outlets.find(name)
+        const outletElement = this.outlets.find(name)
+        const selector = this.outlets.getSelectorForOutletName(name)
 
-        if (outlet) {
-          const outletController = this.application.getControllerForElementAndIdentifier(outlet, name)
-          if (outletController) {
-            return outletController
-          } else {
-            throw new Error(
-              `Missing "${this.application.schema.controllerAttribute}=${name}" attribute on outlet element for "${this.identifier}" controller`
-            )
-          }
+        if (outletElement) {
+          const outletController = getControllerAndEnsureConnectedScope(this, outletElement, name)
+
+          if (outletController) return outletController
+
+          throw new Error(
+            `The provided outlet element is missing an outlet controller "${name}" instance for host controller "${this.identifier}"`
+          )
         }
 
-        throw new Error(`Missing outlet element "${name}" for "${this.identifier}" controller`)
+        throw new Error(
+          `Missing outlet element "${name}" for host controller "${this.identifier}". Stimulus couldn't find a matching outlet element using selector "${selector}".`
+        )
       },
     },
 
@@ -39,16 +55,15 @@ function propertiesForOutletDefinition(name: string) {
 
         if (outlets.length > 0) {
           return outlets
-            .map((outlet: Element) => {
-              const controller = this.application.getControllerForElementAndIdentifier(outlet, name)
-              if (controller) {
-                return controller
-              } else {
-                console.warn(
-                  `The provided outlet element is missing the outlet controller "${name}" for "${this.identifier}"`,
-                  outlet
-                )
-              }
+            .map((outletElement: Element) => {
+              const outletController = getControllerAndEnsureConnectedScope(this, outletElement, name)
+
+              if (outletController) return outletController
+
+              console.warn(
+                `The provided outlet element is missing an outlet controller "${name}" instance for host controller "${this.identifier}"`,
+                outletElement
+              )
             })
             .filter((controller) => controller) as Controller[]
         }
@@ -59,11 +74,15 @@ function propertiesForOutletDefinition(name: string) {
 
     [`${camelizedName}OutletElement`]: {
       get(this: Controller) {
-        const outlet = this.outlets.find(name)
-        if (outlet) {
-          return outlet
+        const outletElement = this.outlets.find(name)
+        const selector = this.outlets.getSelectorForOutletName(name)
+
+        if (outletElement) {
+          return outletElement
         } else {
-          throw new Error(`Missing outlet element "${name}" for "${this.identifier}" controller`)
+          throw new Error(
+            `Missing outlet element "${name}" for host controller "${this.identifier}". Stimulus couldn't find a matching outlet element using selector "${selector}".`
+          )
         }
       },
     },
