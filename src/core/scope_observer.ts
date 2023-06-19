@@ -42,6 +42,10 @@ export class ScopeObserver implements ValueListObserverDelegate<Scope> {
 
   parseValueForToken(token: Token): Scope | undefined {
     const { element, content: identifier } = token
+    return this.parseValueForElementAndIdentifier(element, identifier)
+  }
+
+  parseValueForElementAndIdentifier(element: Element, identifier: string): Scope | undefined {
     const scopesByIdentifier = this.fetchScopesByIdentifierForElement(element)
 
     let scope = scopesByIdentifier.get(identifier)
