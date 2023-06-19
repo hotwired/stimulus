@@ -110,21 +110,7 @@ export class Router implements ScopeObserverDelegate {
     if (module) {
       module.connectContextForScope(scope)
     } else if (this.lazyModulesByIdentifier.has(identifier)) {
-      const callback = this.lazyModulesByIdentifier.get(identifier)
-      if (callback && typeof callback === "function") {
-        callback().then((controllerConstructor) => {
-          if (!this.modulesByIdentifier.has(identifier)) {
-            this.loadDefinition({ identifier, controllerConstructor })
-            this.lazyModulesByIdentifier.delete(identifier)
-          }
-        })
-      } else {
-        this.application.logger.warn(
-          `Simulus expected the callback registered for "${identifier}" to resolve to a controllerConstructor but didn't`,
-          `Failed to lazy load ${identifier}`,
-          { identifier }
-        )
-      }
+      this.loadLazyModule(identifier)
     }
   }
 
@@ -148,5 +134,23 @@ export class Router implements ScopeObserverDelegate {
     this.modulesByIdentifier.delete(module.identifier)
     const scopes = this.scopesByIdentifier.getValuesForKey(module.identifier)
     scopes.forEach((scope) => module.disconnectContextForScope(scope))
+  }
+
+  private loadLazyModule(identifier: string) {
+    const callback = this.lazyModulesByIdentifier.get(identifier)
+    if (callback && typeof callback === "function") {
+      callback().then((controllerConstructor) => {
+        if (!this.modulesByIdentifier.has(identifier)) {
+          this.loadDefinition({ identifier, controllerConstructor })
+          this.lazyModulesByIdentifier.delete(identifier)
+        }
+      })
+    } else {
+      this.application.logger.warn(
+        `Simulus expected the callback registered for "${identifier}" to resolve to a controllerConstructor but didn't`,
+        `Failed to lazy load ${identifier}`,
+        { identifier }
+      )
+    }
   }
 }
