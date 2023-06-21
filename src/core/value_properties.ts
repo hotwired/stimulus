@@ -248,7 +248,7 @@ const readers: { [type: string]: Reader } = {
   },
 
   number(value: string): number {
-    return Number(value)
+    return Number(value.replace(/_/g, ""))
   },
 
   object(value: string): object {

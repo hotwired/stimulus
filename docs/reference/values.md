@@ -53,13 +53,13 @@ export default class extends Controller {
 
 A value's type is one of `Array`, `Boolean`, `Number`, `Object`, or `String`. The type determines how the value is transcoded between JavaScript and HTML.
 
-Type | Encoded as… | Decoded as…
----- | ----------- | -----------
-Array | `JSON.stringify(array)` | `JSON.parse(value)`
-Boolean | `boolean.toString()` | `!(value == "0" \|\| value == "false")`
-Number | `number.toString()` | `Number(value)`
-Object | `JSON.stringify(object)` | `JSON.parse(value)`
-String | Itself | Itself
+| Type    | Encoded as…              | Decoded as…                             |
+| ------- | ------------------------ | --------------------------------------- |
+| Array   | `JSON.stringify(array)`  | `JSON.parse(value)`                     |
+| Boolean | `boolean.toString()`     | `!(value == "0" \|\| value == "false")` |
+| Number  | `number.toString()`      | `Number(value.replace(/_/g, ""))`       |
+| Object  | `JSON.stringify(object)` | `JSON.parse(value)`                     |
+| String  | Itself                   | Itself                                  |
 
 ## Properties and Attributes
 
