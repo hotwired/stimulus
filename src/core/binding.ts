@@ -29,8 +29,9 @@ export class Binding {
   }
 
   handleEvent(event: Event) {
-    if (this.willBeInvokedByEvent(event) && this.applyEventModifiers(event)) {
-      this.invokeWithEvent(event)
+    const actionEvent = this.prepareActionEvent(event)
+    if (this.willBeInvokedByEvent(event) && this.applyEventModifiers(actionEvent)) {
+      this.invokeWithEvent(actionEvent)
     }
   }
 
@@ -65,12 +66,14 @@ export class Binding {
     return passes
   }
 
-  private invokeWithEvent(event: Event) {
+  private prepareActionEvent(event: Event): ActionEvent {
+    return Object.assign(event, { params: this.action.params })
+  }
+
+  private invokeWithEvent(event: ActionEvent) {
     const { target, currentTarget } = event
     try {
-      const { params } = this.action
-      const actionEvent: ActionEvent = Object.assign(event, { params })
-      this.method.call(this.controller, actionEvent)
+      this.method.call(this.controller, event)
       this.context.logDebugActivity(this.methodName, { event, target, currentTarget, action: this.methodName })
     } catch (error: any) {
       const { identifier, controller, element, index } = this
