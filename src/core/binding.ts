@@ -50,6 +50,7 @@ export class Binding {
   private applyEventModifiers(event: Event): boolean {
     const { element } = this.action
     const { actionDescriptorFilters } = this.context.application
+    const { controller } = this.context
 
     let passes = true
 
@@ -57,7 +58,7 @@ export class Binding {
       if (name in actionDescriptorFilters) {
         const filter = actionDescriptorFilters[name]
 
-        passes = passes && filter({ name, value, event, element })
+        passes = passes && filter({ name, value, event, element, controller })
       } else {
         continue
       }

@@ -1,3 +1,4 @@
+import type { Controller } from "src/core"
 import { LogControllerTestCase } from "../../cases/log_controller_test_case"
 
 export default class EventOptionsTests extends LogControllerTestCase {
@@ -175,6 +176,47 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertNoActions()
+  }
+
+  async "test custom action option callback params contain the controller instance"() {
+    let lastActionOptions: { controller?: Controller<Element> } = {}
+
+    const mockCallback = (options: Object) => {
+      lastActionOptions = options
+    }
+
+    this.application.registerActionOption("all", (options: Object) => {
+      mockCallback(options)
+      return true
+    })
+
+    await this.setAction(this.buttonElement, "click->c#log:all")
+
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions({ name: "log", identifier: "c", eventType: "click", currentTarget: this.buttonElement })
+
+    this.assert.deepEqual(["name", "value", "event", "element", "controller"], Object.keys(lastActionOptions))
+
+    this.assert.equal(
+      lastActionOptions.controller,
+      this.application.getControllerForElementAndIdentifier(this.element, "c")
+    )
+
+    this.controllerConstructor.actionLog = [] // clear actions
+
+    await this.setAction(this.buttonElement, "click->d#log:all")
+
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions({ name: "log", identifier: "d", eventType: "click", currentTarget: this.buttonElement })
+
+    this.assert.deepEqual(["name", "value", "event", "element", "controller"], Object.keys(lastActionOptions))
+
+    this.assert.equal(
+      lastActionOptions.controller,
+      this.application.getControllerForElementAndIdentifier(this.element, "d")
+    )
   }
 
   async "test custom option"() {
