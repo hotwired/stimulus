@@ -86,6 +86,10 @@ export class Binding {
   private willBeInvokedByEvent(event: Event): boolean {
     const eventTarget = event.target
 
+    if (this.action.shouldIgnoreGlobalEvent(event, this.action.element)) {
+      return false
+    }
+
     if (event instanceof KeyboardEvent && this.action.shouldIgnoreKeyboardEvent(event)) {
       return false
     }
