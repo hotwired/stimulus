@@ -52,7 +52,7 @@ Stimulus lets you shorten the action descriptors for some common element/event p
 <button data-action="gallery#next">…</button>
 ```
 
-The full set of these shorthand pairs is as follows:
+The built-in set of these shorthand pairs is as follows:
 
 Element           | Default Event
 ----------------- | -------------
@@ -65,6 +65,27 @@ input type=submit | click
 select            | change
 textarea          | input
 
+This built-in set can be extended with the `Application.registerDefaultEventName` method, for example to associate default event names with custom elements.
+
+<meta data-controller="callout" data-callout-text-value="gallery#next">
+
+```js
+import { Application } from "@hotwired/stimulus"
+
+const app = new Application()
+app.registerDefaultEventNames({ "custom-button": "click" })
+app.start()
+```
+
+The above allows you to omit the event name on custom buttons:
+
+```html
+<custom-button data-action="gallery#next">…</custom-button>
+```
+
+Custom default event names must be registered before calling `start()`, or the application will not be able to add the correct event listeners.
+
+```html
 
 ## KeyboardEvent Filter
 

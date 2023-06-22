@@ -53,6 +53,10 @@ export class Application implements ErrorHandler {
     this.actionDescriptorFilters[name] = filter
   }
 
+  registerDefaultEventNames(extensions: Schema['defaultEventNames']) {
+    Object.assign(this.schema.defaultEventNames, extensions)
+  }
+
   load(...definitions: Definition[]): void
   load(definitions: Definition[]): void
   load(head: Definition | Definition[], ...rest: Definition[]) {
