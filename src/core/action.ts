@@ -1,6 +1,6 @@
 import { ActionDescriptor, parseActionDescriptorString, stringifyEventTarget } from "./action_descriptor"
 import { Token } from "../mutation-observers"
-import { getDefaultEventNameForElement, Schema } from "./schema"
+import { Schema } from "./schema"
 import { camelize } from "./string_helpers"
 import { hasProperty } from "./utils"
 
@@ -83,6 +83,16 @@ export class Action {
 
   private get keyMappings() {
     return this.schema.keyMappings
+  }
+}
+
+function getDefaultEventNameForElement(element: Element, schema: Schema): string | undefined {
+  let eventName = schema.defaultEventNames[element.localName]
+  if (typeof eventName === 'function') {
+    return eventName(element)
+  }
+  if (typeof eventName === 'string') {
+    return eventName
   }
 }
 

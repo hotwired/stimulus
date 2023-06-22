@@ -5,7 +5,7 @@ export interface Schema {
   targetAttributeForScope(identifier: string): string
   outletAttributeForScope(identifier: string, outlet: string): string
   keyMappings: { [key: string]: string }
-  defaultEventNames: { [tagName: string]: (element: Element) => string }
+  defaultEventNames: { [tagName: string]: string | ((element: Element) => string) }
 }
 
 export const defaultSchema: Schema = {
@@ -31,20 +31,13 @@ export const defaultSchema: Schema = {
     ...objectFromEntries("0123456789".split("").map((n) => [n, n])),
   },
   defaultEventNames: {
-    a: () => "click",
-    button: () => "click",
-    form: () => "submit",
-    details: () => "toggle",
+    a: "click",
+    button: "click",
+    form: "submit",
+    details: "toggle",
     input: (element) => (element.getAttribute("type") == "submit" ? "click" : "input"),
-    select: () => "change",
-    textarea: () => "input",
-  }
-}
-
-export function getDefaultEventNameForElement(element: Element, schema = defaultSchema): string | undefined {
-  const tagName = element.tagName.toLowerCase()
-  if (tagName in schema.defaultEventNames) {
-    return schema.defaultEventNames[tagName](element)
+    select: "change",
+    textarea: "input",
   }
 }
 
