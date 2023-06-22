@@ -22,7 +22,7 @@ export class Application implements ErrorHandler {
     return application
   }
 
-  constructor(element: Element = document.documentElement, schema: Schema = defaultSchema) {
+  constructor(element: Element = document.documentElement, schema: Schema = cloneDefaultSchema()) {
     this.element = element
     this.schema = schema
     this.dispatcher = new Dispatcher(this)
@@ -115,4 +115,12 @@ function domReady() {
       resolve()
     }
   })
+}
+
+function cloneDefaultSchema(): Schema {
+  return {
+    ...defaultSchema,
+    keyMappings: { ...defaultSchema.keyMappings },
+    defaultEventNames: { ...defaultSchema.defaultEventNames }
+  }
 }
