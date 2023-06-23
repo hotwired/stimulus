@@ -67,7 +67,7 @@ textarea          | input
 
 This built-in set can be extended with the `Application.registerDefaultEventNames` method, for example to associate default event names with custom elements.
 
-<meta data-controller="callout" data-callout-text-value="gallery#next">
+<meta data-controller="callout" data-callout-text-value="custom-button">
 
 ```js
 import { Application } from "@hotwired/stimulus"
@@ -79,13 +79,13 @@ app.start()
 
 The above allows you to omit the event name on custom buttons:
 
+<meta data-controller="callout" data-callout-text-value="gallery#next">
+
 ```html
 <custom-button data-action="gallery#next">…</custom-button>
 ```
 
 Custom default event names must be registered before calling `start()`, or the application will not be able to add the correct event listeners.
-
-```html
 
 ## KeyboardEvent Filter
 
