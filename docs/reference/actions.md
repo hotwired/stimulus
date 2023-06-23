@@ -65,7 +65,7 @@ input type=submit | click
 select            | change
 textarea          | input
 
-This built-in set can be extended with the `Application.registerDefaultEventName` method, for example to associate default event names with custom elements.
+This built-in set can be extended with the `Application.registerDefaultEventNames` method, for example to associate default event names with custom elements.
 
 <meta data-controller="callout" data-callout-text-value="gallery#next">
 
