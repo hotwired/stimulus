@@ -79,6 +79,24 @@ For each outlet defined in the `static outlets` array, Stimulus adds five proper
 | Singular | `[name]OutletElement` | `Element` | Returns the Controller `Element` of the first `[name]` outlet or throws an exception if none is present
 | Plural | `[name]OutletElements` | `Array<Element>` | Returns the Controller `Element`'s of all `[name]` outlets
 
+**Note:** For nested Stimulus controller properties, make sure to omit namespace delimiters in order to correctly access the referenced outlet:
+
+```js
+// chat_controller.js
+
+export default class extends Controller {
+  static outlets = [ "admin--user-status" ]
+
+  selectAll(event) {
+    // returns undefined
+    this.admin__UserStatusOutlets
+
+    // returns controller reference
+    this.adminUserStatusOutlets
+  }
+}
+```
+
 ## Accessing Controllers and Elements
 
 Since you get back a `Controller` instance from the `[name]Outlet` and `[name]Outlets` properties you are also able to access the Values, Classes, Targets and all of the other properties and functions that controller instance defines:
