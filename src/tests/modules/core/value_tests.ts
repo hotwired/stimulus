@@ -46,6 +46,14 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.controller.numericValue = "" as any
     this.assert.equal(this.controller.numericValue, 0)
     this.assert.equal(this.get("numeric-value"), "")
+
+    // Number values should support Numeric separators
+    this.set("numeric-value", "7_150")
+    this.assert.equal(this.controller.numericValue, 7150)
+
+    // Number values should be written simply, without Numeric separators
+    this.controller.numericValue = 10500
+    this.assert.deepEqual(this.get("numeric-value"), "10500")
   }
 
   "test boolean values"() {
