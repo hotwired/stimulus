@@ -43,6 +43,6 @@ export class DataMap {
   }
 
   getAttributeNameForKey(key: string): string {
-    return `data-${this.identifier}-${dasherize(key)}`
+    return `data-${this.identifier.toLowerCase()}-${dasherize(key)}`
   }
 }
