@@ -213,6 +213,43 @@ export default class EventOptionsTests extends LogControllerTestCase {
     this.assertActions({ name: "log", eventType: "toggle" })
   }
 
+  async "test custom action option callback event contains params"() {
+    let lastActionEventParams: Object = {}
+
+    // clone the params to ensure we check the value as the callback receives it
+    // not the event after all actions have resolved
+
+    const mockCallback = ({ event: { params = {} } = {} }) => {
+      lastActionEventParams = { ...params }
+    }
+
+    this.application.registerActionOption("all", (options: Object) => {
+      mockCallback(options)
+      return true
+    })
+
+    this.buttonElement.setAttribute("data-c-custom-number-param", "41")
+    this.buttonElement.setAttribute("data-c-custom-string-param", "validation")
+    this.buttonElement.setAttribute("data-c-custom-boolean-param", "true")
+    this.buttonElement.setAttribute("data-d-should-ignore-param", "_IGNORED_")
+
+    await this.setAction(this.buttonElement, "click->c#log:all")
+
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions({ name: "log", identifier: "c", eventType: "click", currentTarget: this.buttonElement })
+
+    const expectedEventParams = {
+      customBoolean: true,
+      customNumber: 41,
+      customString: "validation",
+    }
+
+    this.assert.deepEqual(this.controllerConstructor.actionLog[0].params, expectedEventParams)
+
+    this.assert.deepEqual(lastActionEventParams, expectedEventParams)
+  }
+
   setAction(element: Element, value: string) {
     element.setAttribute("data-action", value)
     return this.nextFrame

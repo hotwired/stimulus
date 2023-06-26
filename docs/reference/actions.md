@@ -215,12 +215,12 @@ route the event to the controller action, return `true`.
 
 The callback accepts a single object argument with the following keys:
 
-Name    | Description
---------|------------
-name    | String: The option's name (`"open"` in the example above)
-value   | Boolean: The value of the option (`:open` would yield `true`, `:!open` would yield `false`)
-event   | [Event][]: The event instance
-element | [Element]: The element where the action descriptor is declared
+| Name    | Description                                                                                           |
+| ------- | ----------------------------------------------------------------------------------------------------- |
+| name    | String: The option's name (`"open"` in the example above)                                             |
+| value   | Boolean: The value of the option (`:open` would yield `true`, `:!open` would yield `false`)           |
+| event   | [Event][]: The event instance, including with the `params` action parameters on the submitter element |
+| element | [Element]: The element where the action descriptor is declared                                        |
 
 [toggle]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLDetailsElement/toggle_event
 [Event]: https://developer.mozilla.org/en-US/docs/web/api/event
