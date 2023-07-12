@@ -1,3 +1,5 @@
+import type { Controller } from "./controller"
+
 export type ActionDescriptorFilters = Record<string, ActionDescriptorFilter>
 export type ActionDescriptorFilter = (options: ActionDescriptorFilterOptions) => boolean
 type ActionDescriptorFilterOptions = {
@@ -5,6 +7,7 @@ type ActionDescriptorFilterOptions = {
   value: boolean
   event: Event
   element: Element
+  controller: Controller<Element>
 }
 
 export const defaultActionDescriptorFilters: ActionDescriptorFilters = {
