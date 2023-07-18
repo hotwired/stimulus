@@ -10,10 +10,11 @@ You can read and write [HTML data attributes](https://developer.mozilla.org/en-U
 <meta data-controller="callout" data-callout-text-value="data-loader-url-value=&quot;/messages&quot;">
 
 ```html
-<div data-controller="loader"
-     data-loader-url-value="/messages">
+<div data-controller="loader" data-loader-url-value="/messages">
 </div>
 ```
+
+The definition of the value data attribute should be specified in the same location as the controller data attribute.
 
 <meta data-controller="callout" data-callout-text-value="static values = { url: String }">
 <meta data-controller="callout" data-callout-text-value="this.urlValue">
