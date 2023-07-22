@@ -14,7 +14,7 @@ You can read and write [HTML data attributes](https://developer.mozilla.org/en-U
 </div>
 ```
 
-As per the given HTML snippet, remember to place the values for data attributes within the same element alongside the controller data attribute.
+As per the given HTML snippet, remember to place the data attributes for values on the same element as the `data-controller` attribute.
 
 <meta data-controller="callout" data-callout-text-value="static values = { url: String }">
 <meta data-controller="callout" data-callout-text-value="this.urlValue">
