@@ -1,6 +1,6 @@
 {
   "name": "stimulus",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "description": "Stimulus JavaScript framework",
   "repository": "https://stimulus.hotwired.dev",
   "author": "Basecamp, LLC",
@@ -42,7 +42,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@hotwired/stimulus": "^3.2.1",
+    "@hotwired/stimulus": "^3.2.2",
     "@hotwired/stimulus-webpack-helpers": "^1.0.0"
   },
   "devDependencies": {
