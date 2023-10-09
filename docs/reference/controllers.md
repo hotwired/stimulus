@@ -138,6 +138,8 @@ import ReferenceController from "./controllers/reference_controller"
 application.register("reference", ReferenceController)
 ```
 
+Use kebab-case in references to ensure features like targets function correctly (i.e., controllers/date_picker_controller, DatePickerController, date-picker)
+
 You can also register a controller class inline instead of importing it from a module:
 
 ```js
