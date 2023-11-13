@@ -1,0 +1,13 @@
+<%- include("layout/head") %>
+
+<p data-controller="async">
+  <button data-action="async#run">Click me</button>
+</p>
+
+<br />
+
+<p data-controller="async">
+  <button data-action="async#throwError">Throw error</button>
+</p>
+
+<%- include("layout/tail") %>
