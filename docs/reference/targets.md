@@ -124,8 +124,8 @@ with a matching name, the corresponding callback _will not_ be invoked again.
 Always use camelCase to specify target names, since they map directly to properties on your controller:
 
 ```html
-<span data-search-target="camelCase" /> 
-<span data-search-target="do-not-do-this" />
+<span data-search-target="camelCase"></span>
+<span data-search-target="do-not-do-this"></span>
 ```
 
 ```js
