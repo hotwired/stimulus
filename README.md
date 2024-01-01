@@ -73,4 +73,4 @@ Continuous integration VMs generously provided by [Sauce Labs](https://opensourc
 
 ---
 
-© 2023 Basecamp, LLC.
+© 2024 Basecamp, LLC.
