@@ -274,7 +274,7 @@ When an element has more than one action for the same event, Stimulus invokes th
 The action chain can be stopped at any point by calling `Event#stopImmediatePropagation()` within an action. Any additional actions to the right will be ignored:
 
 ```javascript
-highlight: function(event) {
+highlight(event) {
   event.stopImmediatePropagation()
   // ...
 }
