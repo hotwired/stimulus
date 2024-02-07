@@ -1,10 +1,10 @@
-name: CI
+name: Build
 
 on: [push, pull_request]
 
 jobs:
-  test:
-    name: Test
+  build:
+    name: Build
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -22,5 +22,8 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Test
-        run: yarn test
+      - name: Build
+        run: yarn build
+
+      - name: Test Build
+        run: yarn build:test
