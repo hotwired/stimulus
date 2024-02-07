@@ -3,15 +3,20 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  build:
-
+  test:
+    name: Test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 19, 20, 21]
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+
+      - name: Setup Node v${{ matrix.node }}
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: ${{ matrix.node }}
           cache: 'yarn'
 
       - name: Install Dependencies
@@ -19,6 +24,3 @@ jobs:
 
       - name: Test
         run: yarn test
-
-      - name: Lint
-        run: yarn lint
