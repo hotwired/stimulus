@@ -1,6 +1,6 @@
-import { ActionDescriptor, parseActionDescriptorString, stringifyEventTarget } from "./action_descriptor"
+import { ActionDescriptor, parseActionDescriptorString } from "./action_descriptor"
 import { Token } from "../mutation-observers"
-import { Schema } from "./schema"
+import { Context } from "./context"
 import { camelize } from "./string_helpers"
 import { hasProperty } from "./utils"
 
@@ -9,28 +9,28 @@ const allModifiers = ["meta", "ctrl", "alt", "shift"]
 export class Action {
   readonly element: Element
   readonly index: number
-  readonly eventTarget: EventTarget
+  private readonly eventTargetName: string | undefined
   readonly eventName: string
   readonly eventOptions: AddEventListenerOptions
   readonly identifier: string
   readonly methodName: string
   readonly keyFilter: string
-  readonly schema: Schema
+  readonly context: Context
 
-  static forToken(token: Token, schema: Schema) {
-    return new this(token.element, token.index, parseActionDescriptorString(token.content), schema)
+  static forToken(token: Token, context: Context) {
+    return new this(token.element, token.index, parseActionDescriptorString(token.content), context)
   }
 
-  constructor(element: Element, index: number, descriptor: Partial<ActionDescriptor>, schema: Schema) {
+  constructor(element: Element, index: number, descriptor: Partial<ActionDescriptor>, context: Context) {
     this.element = element
     this.index = index
-    this.eventTarget = descriptor.eventTarget || element
+    this.eventTargetName = descriptor.eventTargetName
     this.eventName = descriptor.eventName || getDefaultEventNameForElement(element) || error("missing event name")
     this.eventOptions = descriptor.eventOptions || {}
     this.identifier = descriptor.identifier || error("missing identifier")
     this.methodName = descriptor.methodName || error("missing method name")
     this.keyFilter = descriptor.keyFilter || ""
-    this.schema = schema
+    this.context = context
   }
 
   toString() {
@@ -89,8 +89,20 @@ export class Action {
     return params
   }
 
-  private get eventTargetName() {
-    return stringifyEventTarget(this.eventTarget)
+  get schema() {
+    return this.context.schema
+  }
+
+  get eventTargets(): EventTarget[] {
+    if (this.eventTargetName == "window") {
+      return [window]
+    } else if (this.eventTargetName == "document") {
+      return [document]
+    } else if (typeof this.eventTargetName == "string") {
+      return this.context.controller.outlets.findAll(this.eventTargetName)
+    } else {
+      return [this.element]
+    }
   }
 
   private get keyMappings() {

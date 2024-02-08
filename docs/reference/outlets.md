@@ -196,3 +196,28 @@ Would result in:
 Missing "data-controller=user-status" attribute on outlet element for
 "chat" controller`
 ```
+
+## Actions
+
+An element that declares outlets can listen for events dispatched on its outlets' elements.
+
+To attach an event listener whenever an associated outlet connects to the document, declare the host element's action descriptor with [outlet controller's identifier](./outlets#attributes-and-names) prefixed by `@` (along with any filter modifier), as in the following example:
+
+<meta data-controller="callout" data-callout-text-value="close@element">
+
+```html
+<button type="button"
+        data-controller="disclosure"
+        data-disclosure-element-outlet="#dialog"
+        data-action="click->disclosure#expand close@element->disclosure#collapse">
+  Click to expand a modal dialog
+</button>
+
+<dialog id="dialog" data-controller="element">
+  A modal dialog
+</dialog>
+```
+
+In this example, the `<button>` element will route any [close][close-event] events dispatched by the `<dialog id="dialog">` element to its `disclosure#collapse` action, despite the `close` event bubbling up a different part of the document.
+
+[close-event]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/close_event
