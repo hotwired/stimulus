@@ -62,7 +62,6 @@
     "karma-webpack": "^4.0.2",
     "prettier": "^2.8.8",
     "qunit": "^2.20.0",
-    "rimraf": "^3.0.2",
     "rollup": "^2.53",
     "rollup-plugin-terser": "^7.0.2",
     "ts-loader": "^9.4.3",
