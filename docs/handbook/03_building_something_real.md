@@ -145,7 +145,7 @@ Now let's add one more PIN field. This time we'll use a Copy _link_ instead of a
 </div>
 ```
 
-Stimulus lets us use any kind of element we want as long as it has an appropriate `data-action` attribute.
+Stimulus lets us use any kind of element we want as long as it has an appropriate `data-action` attribute, and is a child of the controller component.
 
 Note that in this case, clicking the link will also cause the browser to follow the link's `href`. We can cancel this default behavior by calling `event.preventDefault()` in the action:
 
