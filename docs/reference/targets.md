@@ -95,7 +95,7 @@ removed within the controller's element.
 
 Define a method `[name]TargetConnected` or `[name]TargetDisconnected` in the controller, where `[name]` is the name of the target you want to observe for additions or removals. The method receives the element as the first argument.
 
-Stimulus invokes each element callback any time its target elements are added or removed after `connect()` and before `disconnect()` lifecycle hooks.
+Stimulus invokes each element callback any time its target elements are added or removed after `initialize()` and before `disconnect()` lifecycle hooks.
 
 ```js
 export default class extends Controller {
