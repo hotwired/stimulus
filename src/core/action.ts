@@ -28,7 +28,7 @@ export class Action {
     this.eventName = descriptor.eventName || getDefaultEventNameForElement(element) || error("missing event name")
     this.eventOptions = descriptor.eventOptions || {}
     this.identifier = descriptor.identifier || error("missing identifier")
-    this.methodName = descriptor.methodName || error("missing method name")
+    this.methodName = descriptor.methodName || "_"
     this.keyFilter = descriptor.keyFilter || ""
     this.schema = schema
   }
