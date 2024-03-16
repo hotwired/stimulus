@@ -30,6 +30,10 @@ export class LogController extends Controller {
     this.disconnectCount++
   }
 
+  _(event: ActionEvent) {
+    this.recordAction("default", event)
+  }
+
   log(event: ActionEvent) {
     this.recordAction("log", event)
   }
