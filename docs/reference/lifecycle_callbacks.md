@@ -71,7 +71,7 @@ A connected target will later become _disconnected_ when either of the preceding
 * the element's `data-{identifier}-target` attribute is removed or modified
 * the document installs a new `<body>` element, such as during a Turbo page change
 
-When a target becomes disconnected, Stimulus calls its controller's `[name]TargetDisconnected()` method, passing the target element as a parameter. The `[name]TargetDisconnected()` lifecycle callbacks will fire *before* the controller's `disconnect()` callback.
+When a target becomes disconnected, Stimulus calls its controller's `[name]TargetDisconnected()` method, passing the target element as a parameter. The `[name]TargetDisconnected()` lifecycle callbacks will fire *after* the controller's `disconnect()` callback.
 
 ## Reconnection
 
