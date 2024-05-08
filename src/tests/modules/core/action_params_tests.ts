@@ -40,7 +40,7 @@ export default class ActionParamsTests extends LogControllerTestCase {
   async "test global event return element params where the action is defined"() {
     this.actionValue = "keydown@window->c#log"
     await this.nextFrame
-    await this.triggerEvent("#outside", "keydown")
+    await this.triggerKeyboardEvent("#outside", "keydown", { bubbles: true })
 
     this.assertActions({ identifier: "c", params: this.expectedParamsForC })
   }
