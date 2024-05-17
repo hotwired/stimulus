@@ -46,6 +46,7 @@ button {
   background: #ccc;
   border-left-color: #fff;
   border-top-color: #fff;
+  cursor: pointer;
 }
 
 button:active {
