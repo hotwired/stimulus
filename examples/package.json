@@ -9,7 +9,7 @@
     "@babel/preset-env": "^7.5.5",
     "@hotwired/turbo": "^7.2.4",
     "babel-loader": "^8.0.6",
-    "ejs": "^3.1.7",
+    "ejs": "^3.1.10",
     "express": "^4.19.2",
     "webpack": "^4.39.1",
     "webpack-dev-middleware": "^3.7.0"
