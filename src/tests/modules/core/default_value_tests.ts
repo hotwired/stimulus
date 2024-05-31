@@ -46,6 +46,11 @@ export default class DefaultValueTests extends ControllerTestCase(DefaultValueCo
     this.assert.ok(this.controller.hasDefaultBooleanOverrideValue)
   }
 
+  "test boolean with no default value"() {
+    this.assert.notOk(this.controller.hasDefaultBooleanWithTypeConstantValue)
+    this.assert.notOk(this.controller.hasDefaultBooleanWithTypePropertyValue)
+  }
+
   // Strings
 
   "test custom default string values"() {
@@ -74,6 +79,11 @@ export default class DefaultValueTests extends ControllerTestCase(DefaultValueCo
     this.assert.deepEqual(this.get("default-string-override-value"), "I am the expected value")
     this.assert.deepEqual(this.controller.defaultStringOverrideValue, "I am the expected value")
     this.assert.ok(this.controller.hasDefaultStringOverrideValue)
+  }
+
+  "test string with no default value"() {
+    this.assert.notOk(this.controller.hasDefaultStringWithTypeConstantValue)
+    this.assert.notOk(this.controller.hasDefaultStringWithTypePropertyValue)
   }
 
   // Numbers
@@ -110,6 +120,11 @@ export default class DefaultValueTests extends ControllerTestCase(DefaultValueCo
     this.assert.ok(this.controller.hasDefaultNumberOverrideValue)
   }
 
+  "test number with no default value"() {
+    this.assert.notOk(this.controller.hasDefaultNumberWithTypeConstantValue)
+    this.assert.notOk(this.controller.hasDefaultNumberWithTypePropertyValue)
+  }
+
   // Arrays
 
   "test custom default array values"() {
@@ -140,6 +155,11 @@ export default class DefaultValueTests extends ControllerTestCase(DefaultValueCo
     this.assert.ok(this.controller.hasDefaultArrayOverrideValue)
   }
 
+  "test array with no default value"() {
+    this.assert.notOk(this.controller.hasDefaultArrayWithTypeConstantValue)
+    this.assert.notOk(this.controller.hasDefaultArrayWithTypePropertyValue)
+  }
+
   // Objects
 
   "test custom default object values"() {
@@ -168,6 +188,11 @@ export default class DefaultValueTests extends ControllerTestCase(DefaultValueCo
     this.assert.deepEqual(this.get("default-object-override-value"), '{"expected":"value"}')
     this.assert.deepEqual(this.controller.defaultObjectOverrideValue, { expected: "value" })
     this.assert.ok(this.controller.hasDefaultObjectOverrideValue)
+  }
+
+  "test object with no default value"() {
+    this.assert.notOk(this.controller.hasDefaultObjectWithTypeConstantValue)
+    this.assert.notOk(this.controller.hasDefaultObjectWithTypePropertyValue)
   }
 
   "test [name]ValueChanged callbacks fire after initialize and before connect"() {
