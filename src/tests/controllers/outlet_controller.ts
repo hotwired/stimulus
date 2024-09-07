@@ -1,7 +1,8 @@
+import { OutletRenameObject } from "src/core/outlet_properties"
 import { Controller } from "../../core/controller"
 
 class BaseOutletController extends Controller {
-  static outlets = ["alpha"]
+  static outlets: (string | OutletRenameObject)[] = ["alpha"]
 
   alphaOutlet!: Controller | null
   alphaOutlets!: Controller[]
@@ -12,7 +13,7 @@ class BaseOutletController extends Controller {
 
 export class OutletController extends BaseOutletController {
   static classes = ["connected", "disconnected"]
-  static outlets = ["beta", "gamma", "delta", "omega", "namespaced--epsilon"]
+  static outlets = ["beta", "gamma", "delta", "omega", "namespaced--epsilon", { "helpers--common--input": "input" }]
 
   static values = {
     alphaOutletConnectedCallCount: Number,
@@ -31,6 +32,9 @@ export class OutletController extends BaseOutletController {
   betaOutletElement!: Element | null
   betaOutletElements!: Element[]
   hasBetaOutlet!: boolean
+
+  inputOutlet!: Controller | null
+  inputOutletElement!: Element | null
 
   namespacedEpsilonOutlet!: Controller | null
   namespacedEpsilonOutlets!: Controller[]

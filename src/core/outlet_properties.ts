@@ -24,8 +24,18 @@ function getControllerAndEnsureConnectedScope(controller: Controller, element: E
   if (outletController) return outletController
 }
 
-function propertiesForOutletDefinition(name: string) {
-  const camelizedName = namespaceCamelize(name)
+function propertiesForOutletDefinition(outletDescription: string | OutletRenameObject) {
+  let camelizedName: string;
+  let name: string;
+
+  if (typeof outletDescription === 'object') {
+      const [[originalName, newName]] = Object.entries(outletDescription)
+      name = originalName
+      camelizedName = namespaceCamelize(newName)
+  } else {
+      name = outletDescription;
+      camelizedName = namespaceCamelize(name)
+  }
 
   return {
     [`${camelizedName}Outlet`]: {
@@ -100,3 +110,6 @@ function propertiesForOutletDefinition(name: string) {
     },
   }
 }
+
+export type OutletRenameObject = { [key: string]: string };
+

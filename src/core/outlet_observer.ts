@@ -206,7 +206,15 @@ export class OutletObserver implements AttributeObserverDelegate, SelectorObserv
       const constructor = module.definition.controllerConstructor
       const outlets = readInheritableStaticArrayValues(constructor, "outlets")
 
-      outlets.forEach((outlet) => dependencies.add(outlet, module.identifier))
+       outlets.forEach((outlet) => {
+          let name;
+          if (typeof outlet === 'object') {
+              name = Object.keys(outlet)[0]
+          } else {
+              name = outlet;
+          }
+          return dependencies.add(name, module.identifier)
+      });
     })
 
     return dependencies
