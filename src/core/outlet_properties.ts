@@ -29,7 +29,7 @@ function propertiesForOutletDefinition(outletDescription: string | OutletRenameO
   let name: string;
 
   if (typeof outletDescription === 'object') {
-      const [[originalName, newName]] = Object.entries(outletDescription)
+      const [[newName, originalName]] = Object.entries(outletDescription)
       name = originalName
       camelizedName = namespaceCamelize(newName)
   } else {
