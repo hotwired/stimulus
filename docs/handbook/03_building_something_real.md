@@ -156,7 +156,7 @@ Note that in this case, clicking the link will also cause the browser to follow 
   }
 ```
 
-Similarly, our `source` target need not be an `<input type="text">`. The controller only expects it to have a `value` property and a `select()` method. That means we can use a `<textarea>` instead:
+Similarly, our `source` target need not be an `<input type="text">`. The controller only expects it to have a `value` property and a `copy()` method. That means we can use a `<textarea>` instead:
 
 ```html
   PIN: <textarea data-clipboard-target="source" readonly>3737</textarea>
