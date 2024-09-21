@@ -5,6 +5,7 @@ export default class ActionTests extends LogControllerTestCase {
   fixtureHTML = `
     <div data-controller="c" data-action="keydown@window->c#log">
       <button data-action="c#log"><span>Log</span></button>
+      <button id="default" data-action="c"><span>Default</span></button>
       <div id="outer" data-action="click->c#log">
         <div id="inner" data-controller="c" data-action="click->c#log keyup@window->c#log"></div>
       </div>
@@ -19,6 +20,11 @@ export default class ActionTests extends LogControllerTestCase {
   async "test default event"() {
     await this.triggerEvent("button", "click")
     this.assertActions({ name: "log", eventType: "click" })
+  }
+
+  async "test default method"() {
+    await this.triggerEvent("#default", "click")
+    this.assertActions({ name: "default", eventType: "click" })
   }
 
   async "test bubbling events"() {
