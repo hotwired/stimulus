@@ -141,6 +141,20 @@ You can append `@window` or `@document` to the event name (along with any filter
 </div>
 ```
 
+Alternatively, you can append `@outside` to the event name which will act similar to `@document` but only trigger if the event's target is outside the element with the action.
+
+```html
+<main>
+  <button type="button">Other</button>
+  <div class="popover" data-controller="popover" data-action="click@outside->popover#close">
+    <button data-action="click->popover#close" type="button">Close</button>
+    <p>Popover content... <a href="#">a link</a></p>
+  </div>
+</main>
+```
+
+In the example above, the user can close the popover explicitly via the close button or by clicking anywhere outside the `div.popover`, but clicking on the link inside the popover will not trigger the close action.
+
 ### Options
 
 You can append one or more _action options_ to an action descriptor if you need to specify [DOM event listener options](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Parameters).
