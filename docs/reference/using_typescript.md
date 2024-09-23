@@ -1,6 +1,6 @@
 ---
 permalink: /reference/using-typescript.html
-order: 07
+order: 08
 ---
 
 # Using Typescript
