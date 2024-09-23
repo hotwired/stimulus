@@ -1,4 +1,8 @@
+import { registerDefaultEventName } from "../../../core"
 import { LogControllerTestCase } from "../../cases/log_controller_test_case"
+
+// must be done before the fixture element is constructed
+registerDefaultEventName('some-element', 'click')
 
 export default class ActionTests extends LogControllerTestCase {
   identifier = "c"
@@ -14,10 +18,16 @@ export default class ActionTests extends LogControllerTestCase {
     <svg id="svgRoot" data-controller="c" data-action="click->c#log">
       <circle id="svgChild" data-action="mousedown->c#log" cx="5" cy="5" r="5">
     </svg>
+    <some-element data-controller="c" data-action="c#log">Hm</some-element>
   `
 
   async "test default event"() {
     await this.triggerEvent("button", "click")
+    this.assertActions({ name: "log", eventType: "click" })
+  }
+
+  async "test default event on custom element"() {
+    await this.triggerEvent("some-element", "click")
     this.assertActions({ name: "log", eventType: "click" })
   }
 
