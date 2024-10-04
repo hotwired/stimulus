@@ -17,3 +17,6 @@ application.register("slideshow", SlideshowController)
 
 import TabsController from "./controllers/tabs_controller"
 application.register("tabs", TabsController)
+
+import AsyncController from "./controllers/async_controller"
+application.register("async", AsyncController)
