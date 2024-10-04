@@ -15,6 +15,7 @@ export class ApplicationTestCase extends DOMTestCase {
   async runTest(testName: string) {
     try {
       this.application = new TestApplication(this.fixtureElement, this.schema)
+      this.application.warnings = false
       this.setupApplication()
       this.application.start()
       await super.runTest(testName)
