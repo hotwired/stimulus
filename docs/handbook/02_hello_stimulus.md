@@ -133,7 +133,7 @@ We'll finish the exercise by changing our action to say hello to whatever name w
 
 In order to do that, first we need a reference to the input element inside our controller. Then we can read the `value` property to get its contents.
 
-Stimulus lets us mark important elements as _targets_ so we can easily reference them in the controller through corresponding properties. Open `public/index.html` and add a `data-hello-target` attribute to the input element:
+Stimulus lets us mark important child elements as _targets_ so we can easily reference them in the controller through corresponding properties. Open `public/index.html` and add a `data-hello-target` attribute to the input element:
 
 ```html
 <div data-controller="hello">
