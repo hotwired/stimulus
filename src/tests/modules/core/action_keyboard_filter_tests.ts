@@ -22,6 +22,7 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
       <button id="button8" data-action="keydown.a->a#log keydown.b->a#log2"></button>
       <button id="button9" data-action="keydown.shift+a->a#log keydown.a->a#log2 keydown.ctrl+shift+a->a#log3">
       <button id="button10" data-action="jquery.custom.event->a#log jquery.a->a#log2">
+      <button id="button11" data-action="keydown.esc->a#log keydown.tab->a#log2 keyup.a->a#log3">
     </div>
   `
 
@@ -196,5 +197,12 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
     await this.nextFrame
     await this.triggerEvent(button, "jquery.a")
     this.assertActions({ name: "log2", identifier: "a", eventType: "jquery.a", currentTarget: button })
+  }
+
+  async "test ignore keydown event with input suggestion in Chrome"() {
+    const button = this.findElement("#button11")
+    await this.nextFrame
+    await this.triggerEvent(button, "keydown")
+    this.assertActions()
   }
 }
