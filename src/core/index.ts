@@ -1,3 +1,4 @@
+export { registerDefaultEventName } from "./action"
 export { ActionEvent } from "./action_event"
 export { Application } from "./application"
 export { Context } from "./context"
