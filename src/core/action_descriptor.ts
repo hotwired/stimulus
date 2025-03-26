@@ -33,7 +33,7 @@ export const defaultActionDescriptorFilters: ActionDescriptorFilters = {
 }
 
 export interface ActionDescriptor {
-  eventTarget: EventTarget
+  eventTargetName: string
   eventOptions: AddEventListenerOptions
   eventName: string
   identifier: string
@@ -41,8 +41,8 @@ export interface ActionDescriptor {
   keyFilter: string
 }
 
-// capture nos.:                  1      1    2   2     3   3      4               4      5   5    6      6     7  7
-const descriptorPattern = /^(?:(?:([^.]+?)\+)?(.+?)(?:\.(.+?))?(?:@(window|document))?->)?(.+?)(?:#([^:]+?))(?::(.+))?$/
+// capture nos.:                  1      1    2   2     3   3      4   4      5   5    6      6     7  7
+const descriptorPattern = /^(?:(?:([^.]+?)\+)?(.+?)(?:\.(.+?))?(?:@(.+?))?->)?(.+?)(?:#([^:]+?))(?::(.+))?$/
 
 export function parseActionDescriptorString(descriptorString: string): Partial<ActionDescriptor> {
   const source = descriptorString.trim()
@@ -56,7 +56,7 @@ export function parseActionDescriptorString(descriptorString: string): Partial<A
   }
 
   return {
-    eventTarget: parseEventTarget(matches[4]),
+    eventTargetName: matches[4],
     eventName,
     eventOptions: matches[7] ? parseEventOptions(matches[7]) : {},
     identifier: matches[5],
@@ -65,24 +65,8 @@ export function parseActionDescriptorString(descriptorString: string): Partial<A
   }
 }
 
-function parseEventTarget(eventTargetName: string): EventTarget | undefined {
-  if (eventTargetName == "window") {
-    return window
-  } else if (eventTargetName == "document") {
-    return document
-  }
-}
-
 function parseEventOptions(eventOptions: string): AddEventListenerOptions {
   return eventOptions
     .split(":")
     .reduce((options, token) => Object.assign(options, { [token.replace(/^!/, "")]: !/^!/.test(token) }), {})
-}
-
-export function stringifyEventTarget(eventTarget: EventTarget) {
-  if (eventTarget == window) {
-    return "window"
-  } else if (eventTarget == document) {
-    return "document"
-  }
 }

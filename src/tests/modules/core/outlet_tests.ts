@@ -13,8 +13,9 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
         <div data-controller="beta" id="beta4"></div>
       </div>
 
-      <div
+      <button type="button"
         data-controller="${this.identifier}"
+        data-action="click@namespaced--epsilon->${this.identifier}#outletClicked"
         data-${this.identifier}-connected-class="connected"
         data-${this.identifier}-disconnected-class="disconnected"
         data-${this.identifier}-alpha-outlet="#alpha1,#alpha2"
@@ -23,15 +24,15 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
         data-${this.identifier}-namespaced--epsilon-outlet=".epsilon"
       >
         <div data-controller="gamma" class="gamma" id="gamma2"></div>
-      </div>
+      </button>
 
       <div data-controller="delta gamma" class="delta gamma" id="delta1">
         <div data-controller="gamma" class="gamma" id="gamma1"></div>
       </div>
 
-      <div data-controller="namespaced--epsilon" class="epsilon" id="epsilon1"></div>
+      <button data-controller="namespaced--epsilon" class="epsilon" id="epsilon1"></button>
 
-      <div data-controller="namespaced--epsilon" class="epsilon" id="epsilon2"></div>
+      <button data-controller="namespaced--epsilon" class="epsilon" id="epsilon2"></button>
 
       <div class="beta" id="beta5"></div>
     </div>
@@ -365,5 +366,50 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       alpha2.classList.contains("disconnected"),
       `expected "${alpha2.className}" to contain "disconnected"`
     )
+  }
+
+  async "test action descriptor with @-prefixed does not attach event listener to host element"() {
+    await this.triggerEvent(this.element, "click")
+
+    this.assert.equal(this.outletClickEvents.length, 0)
+  }
+
+  async "test action descriptor with @-prefixed outlet-name attaches event listeners when the outlet element connects"() {
+    const epsilon1 = this.findElement("#epsilon1")
+    const epsilon2 = this.findElement("#epsilon2")
+
+    await this.setAttribute(this.element, `data-${this.identifier}-namespaced--epsilon-outlet`, "#epsilon2")
+    await this.triggerEvent(epsilon1, "click")
+    await this.triggerEvent(epsilon2, "click")
+
+    const [clickEpsilon2, ...rest] = this.outletClickEvents
+    this.assert.equal(clickEpsilon2.identifier, this.identifier)
+    this.assert.equal(clickEpsilon2.event.type, "click")
+    this.assert.equal(clickEpsilon2.event.target, epsilon2)
+    this.assert.equal(rest.length, 0)
+  }
+
+  async "test action descriptor with @-prefixed outlet-name removes event listeners when the outlet element disconnects"() {
+    await this.removeAttribute(this.element, `data-${this.identifier}-namespaced--epsilon-outlet`)
+    await this.triggerEvent("#epsilon1", "click")
+    await this.triggerEvent("#epsilon2", "click")
+
+    this.assert.equal(this.outletClickEvents.length, 0)
+  }
+
+  async "test action descriptor with @-prefixed outlet-name removes event listeners when the action descriptor is removed"() {
+    await this.removeAttribute(this.element, "data-action")
+    await this.triggerEvent("#epsilon1", "click")
+    await this.triggerEvent("#epsilon2", "click")
+
+    this.assert.equal(this.outletClickEvents.length, 0)
+  }
+
+  get outletClickEvents() {
+    return this.controller.outletClickEvents
+  }
+
+  get element() {
+    return this.controller.element
   }
 }
