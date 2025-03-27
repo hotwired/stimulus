@@ -95,7 +95,7 @@ removed within the controller's element.
 
 Define a method `[name]TargetConnected` or `[name]TargetDisconnected` in the controller, where `[name]` is the name of the target you want to observe for additions or removals. The method receives the element as the first argument.
 
-Stimulus invokes each element callback any time its target elements are added or removed after `connect()` and before `disconnect()` lifecycle hooks.
+Stimulus invokes each element callback any time its target elements are added or removed. When the controller is connected or disconnected from the document, these callbacks are invoked *before* `connect()` and *after* `disconnect()` lifecycle hooks.
 
 ```js
 export default class extends Controller {
@@ -130,6 +130,6 @@ Always use camelCase to specify target names, since they map directly to propert
 
 ```js
 export default class extends Controller {
-  static targets = [ "camelCase" ]  
+  static targets = [ "camelCase" ]
 }
 ```
