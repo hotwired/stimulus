@@ -16,8 +16,8 @@ export class Binding {
     return this.action.index
   }
 
-  get eventTarget(): EventTarget {
-    return this.action.eventTarget
+  get eventTargets(): EventTarget[] {
+    return this.action.eventTargets
   }
 
   get eventOptions(): AddEventListenerOptions {
@@ -85,6 +85,7 @@ export class Binding {
 
   private willBeInvokedByEvent(event: Event): boolean {
     const eventTarget = event.target
+    const [actionEventTarget] = this.action.eventTargets
 
     if (event instanceof KeyboardEvent && this.action.shouldIgnoreKeyboardEvent(event)) {
       return false
@@ -98,6 +99,14 @@ export class Binding {
       return true
     } else if (eventTarget instanceof Element && this.element.contains(eventTarget)) {
       return this.scope.containsElement(eventTarget)
+    } else if (eventTarget instanceof Element && this.action.eventTargets.length == 0) {
+      return false
+    } else if (
+      eventTarget instanceof Element &&
+      actionEventTarget instanceof Element &&
+      actionEventTarget != this.action.element
+    ) {
+      return this.action.eventTargets.includes(eventTarget)
     } else {
       return this.scope.containsElement(this.action.element)
     }
