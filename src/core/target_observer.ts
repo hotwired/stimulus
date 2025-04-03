@@ -73,7 +73,7 @@ export class TargetObserver implements TokenListObserverDelegate {
   // Private
 
   private get attributeName() {
-    return `data-${this.context.identifier}-target`
+    return this.context.schema.targetAttributeForScope(this.context.identifier)
   }
 
   private get element() {
