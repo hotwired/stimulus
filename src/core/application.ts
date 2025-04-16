@@ -22,7 +22,7 @@ export class Application implements ErrorHandler {
     return application
   }
 
-  constructor(element: Element = document.documentElement, schema: Schema = defaultSchema) {
+  constructor(element: Element = document.documentElement, schema: Schema = cloneDefaultSchema()) {
     this.element = element
     this.schema = schema
     this.dispatcher = new Dispatcher(this)
@@ -51,6 +51,10 @@ export class Application implements ErrorHandler {
 
   registerActionOption(name: string, filter: ActionDescriptorFilter) {
     this.actionDescriptorFilters[name] = filter
+  }
+
+  registerDefaultEventNames(extensions: Schema['defaultEventNames']) {
+    Object.assign(this.schema.defaultEventNames, extensions)
   }
 
   load(...definitions: Definition[]): void
@@ -115,4 +119,12 @@ function domReady() {
       resolve()
     }
   })
+}
+
+function cloneDefaultSchema(): Schema {
+  return {
+    ...defaultSchema,
+    keyMappings: { ...defaultSchema.keyMappings },
+    defaultEventNames: { ...defaultSchema.defaultEventNames }
+  }
 }
