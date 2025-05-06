@@ -2,7 +2,11 @@
   "name": "stimulus",
   "version": "3.2.2",
   "description": "Stimulus JavaScript framework",
-  "repository": "https://stimulus.hotwired.dev",
+  "homepage": "https://stimulus.hotwired.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hotwired/stimulus.git"
+  },
   "author": "Basecamp, LLC",
   "contributors": [
     "David Heinemeier Hansson <david@basecamp.com>",
