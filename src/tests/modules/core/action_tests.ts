@@ -41,13 +41,13 @@ export default class ActionTests extends LogControllerTestCase {
   }
 
   async "test global actions"() {
-    await this.triggerEvent("#outside", "keydown")
+    await this.triggerKeyboardEvent("#outside", "keydown", { bubbles: true })
     this.assertActions({ name: "log", eventType: "keydown" })
   }
 
   async "test nested global actions"() {
     const innerController = this.controllers[1]
-    await this.triggerEvent("#outside", "keyup")
+    await this.triggerKeyboardEvent("#outside", "keyup", { bubbles: true })
     this.assertActions({ controller: innerController, eventType: "keyup" })
   }
 
