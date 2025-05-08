@@ -306,13 +306,14 @@ This will help you reason about the behavior of a block of HTML without having t
 
 Actions can have parameters that are be passed from the submitter element. They follow the format of `data-[identifier]-[param-name]-param`. Parameters must be specified on the same element as the action they intend to be passed to is declared.
 
-All parameters are automatically typecast to either a `Number`, `String`, `Object`, or `Boolean`, inferred by their value:
+All parameters are automatically typecast to either a `Number`, `String`, `Object`, `Array` or `Boolean`, inferred by their value:
 
 Data attribute                                  | Param                | Type
 ----------------------------------------------- | -------------------- | --------
 `data-item-id-param="12345"`                    | `12345`              | Number
 `data-item-url-param="/votes"`                  | `"/votes"`           | String
 `data-item-payload-param='{"value":"1234567"}'` | `{ value: 1234567 }` | Object
+`data-item-arr-param='[1,2,3,4,5]'`             | `[1,2,3,4,5]`        | Array
 `data-item-active-param="true"`                 | `true`               | Boolean
 
 
