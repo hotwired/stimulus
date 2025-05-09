@@ -1,6 +1,6 @@
 <%- include("layout/head") %>
 
-<div data-controller="slideshow" data-slideshow-current-slide-class="slide--current">
+<div data-controller="slideshow" data-slideshow-current-slide-class="slide--current" data-action="keydown.mod+j@document->slideshow#previous keydown.mod+k@document->slideshow#next">
   <button data-action="slideshow#previous">←</button>
   <button data-action="slideshow#next">→</button>
 
@@ -8,6 +8,10 @@
   <div data-slideshow-target="slide" class="slide">🙈</div>
   <div data-slideshow-target="slide" class="slide">🙉</div>
   <div data-slideshow-target="slide" class="slide">🙊</div>
+
+  <p>
+    Hint: Use keyboard shortcuts to navigate the slideshow: <kbd>mod + j</kbd> & <kbd>mod + k</kbd>
+  </p>
 </div>
 
 <%- include("layout/tail") %>
