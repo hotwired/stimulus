@@ -5,18 +5,23 @@ import { Module } from "./module"
 import { Multimap } from "../multimap"
 import { Scope } from "./scope"
 import { ScopeObserver, ScopeObserverDelegate } from "./scope_observer"
+import { Token } from "../mutation-observers"
+import { Guide } from "./guide"
+import { Action } from "./action"
 
 export class Router implements ScopeObserverDelegate {
   readonly application: Application
   private scopeObserver: ScopeObserver
   private scopesByIdentifier: Multimap<string, Scope>
   private modulesByIdentifier: Map<string, Module>
+  private guide: Guide
 
   constructor(application: Application) {
     this.application = application
     this.scopeObserver = new ScopeObserver(this.element, this.schema, this)
     this.scopesByIdentifier = new Multimap()
     this.modulesByIdentifier = new Map()
+    this.guide = new Guide(this.warningHandler)
   }
 
   get element() {
@@ -27,8 +32,8 @@ export class Router implements ScopeObserverDelegate {
     return this.application.schema
   }
 
-  get logger() {
-    return this.application.logger
+  get warningHandler() {
+    return this.application
   }
 
   get controllerAttribute(): string {
@@ -91,17 +96,44 @@ export class Router implements ScopeObserverDelegate {
     this.application.handleError(error, message, detail)
   }
 
+  handleUniqueWarningsForUnregisteredControllers(element: Element, token: Token, error?: Error) {
+    if (!error) {
+      const { identifier } = Action.forToken(token, this.schema)
+      const registeredIdentifiers = Array.from(this.modulesByIdentifier.keys()).sort()
+
+      if (!registeredIdentifiers.includes(identifier)) {
+        this.guide.warn(
+          element,
+          `identifier:${identifier}`,
+          `Stimulus is unable to find a registered controller with identifier "${identifier}" that is referenced from action "${token.content}". The specified controller is not registered within the application. Please ensure that the controller with the identifier "${identifier}" is properly registered. For reference, the warning details include a list of all currently registered controller identifiers.`,
+          `Warning: Element references unknown action for non-registered controller "${identifier}"`,
+          { identifier, element, registeredIdentifiers }
+        )
+      }
+    }
+  }
+
   // Scope observer delegate
 
   createScopeForElementAndIdentifier(element: Element, identifier: string) {
-    return new Scope(this.schema, element, identifier, this.logger)
+    return new Scope(this.schema, element, identifier, this.application)
   }
 
   scopeConnected(scope: Scope) {
-    this.scopesByIdentifier.add(scope.identifier, scope)
-    const module = this.modulesByIdentifier.get(scope.identifier)
+    const { element, identifier } = scope
+    this.scopesByIdentifier.add(identifier, scope)
+    const module = this.modulesByIdentifier.get(identifier)
+
     if (module) {
       module.connectContextForScope(scope)
+    } else {
+      const registeredIdentifiers = Array.from(this.modulesByIdentifier.keys()).sort()
+
+      this.application.handleWarning(
+        `Stimulus is unable to connect the controller with identifier "${identifier}". The specified controller is not registered within the application. Please ensure that the controller with the identifier "${identifier}" is properly registered. For reference, the warning details include a list of all currently registered controller identifiers.`,
+        `Warning: Element references an unregistered controller identifier "${identifier}".`,
+        { identifier, element, registeredIdentifiers }
+      )
     }
   }
 

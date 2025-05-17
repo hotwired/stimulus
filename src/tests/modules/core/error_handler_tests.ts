@@ -2,7 +2,7 @@ import { Controller } from "../../../core/controller"
 import { Application } from "../../../core/application"
 import { ControllerTestCase } from "../../cases/controller_test_case"
 
-class MockLogger {
+export class MockLogger {
   errors: any[] = []
   logs: any[] = []
   warns: any[] = []
@@ -15,8 +15,8 @@ class MockLogger {
     this.errors.push(event)
   }
 
-  warn(event: any) {
-    this.warns.push(event)
+  warn(event: any, message: string, warning: string, detail: string) {
+    this.warns.push({ message, warning, detail })
   }
 
   groupCollapsed() {}

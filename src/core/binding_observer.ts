@@ -61,6 +61,20 @@ export class BindingObserver implements ValueListObserverDelegate<Action> {
     const binding = new Binding(this.context, action)
     this.bindingsByAction.set(action, binding)
     this.delegate.bindingConnected(binding)
+    const { controller } = binding.context
+    const method = (controller as any)[action.methodName]
+
+    if (typeof method !== "function") {
+      this.context.handleWarning(
+        `Stimulus is unable to connect the action "${action.methodName}" with an action on the controller "${action.identifier}". Please make sure the action references a valid method on the controller.`,
+        `Element references undefined action "${action.methodName}" on controller with identifier "${action.identifier}"`,
+        {
+          element: action.element,
+          identifier: action.identifier,
+          methodName: action.methodName,
+        }
+      )
+    }
   }
 
   private disconnectAction(action: Action) {
@@ -91,5 +105,15 @@ export class BindingObserver implements ValueListObserverDelegate<Action> {
 
   elementUnmatchedValue(element: Element, action: Action) {
     this.disconnectAction(action)
+  }
+
+  elementMatchedNoValue(element: Element, token: Token, error?: Error) {
+    const { content: action } = token
+
+    if (error) {
+      this.context.handleWarning(`Warning connecting action "${action}"`, error.message, { action, element })
+    } else {
+      this.context.handleElementMatchedNoValue(element, token, error)
+    }
   }
 }

@@ -79,6 +79,23 @@ export default class ValueListObserverTests extends ObserverTestCase implements 
     ])
   }
 
+  async "test forwards errors to elementMatchedNoValue"() {
+    this.valueString = "unknown"
+    await this.nextFrame
+
+    this.assert.deepEqual(this.testCalls, [
+      ["elementUnmatchedValue", this.element, 1, "one"],
+      ["elementMatchedNoValue", this.element, "unknown", "unknown token throws error"],
+    ])
+  }
+
+  async "test doesnt call elementMatchedNoValue when parseValueForToken returns undefined"() {
+    this.valueString = "undefined"
+    await this.nextFrame
+
+    this.assert.deepEqual(this.testCalls, [["elementUnmatchedValue", this.element, 1, "one"]])
+  }
+
   get element() {
     return this.findElement("div")
   }
@@ -90,6 +107,14 @@ export default class ValueListObserverTests extends ObserverTestCase implements 
   // Value observer delegate
 
   parseValueForToken(token: Token) {
+    if (token.content === "unknown") {
+      throw new Error("unknown token throws error")
+    }
+
+    if (token.content === "undefined") {
+      return undefined
+    }
+
     return { id: ++this.lastValueId, token }
   }
 
@@ -99,5 +124,9 @@ export default class ValueListObserverTests extends ObserverTestCase implements 
 
   elementUnmatchedValue(element: Element, value: Value) {
     this.recordCall("elementUnmatchedValue", element, value.id, value.token.content)
+  }
+
+  elementMatchedNoValue(element: Element, token: Token, error: Error) {
+    this.recordCall("elementMatchedNoValue", element, token.content, error.message)
   }
 }
