@@ -9,11 +9,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: browser-actions/setup-chrome@v1
+      - uses: browser-actions/setup-firefox@v1
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'yarn'
 
       - name: Install Dependencies
