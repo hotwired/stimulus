@@ -69,8 +69,6 @@ We expect all Stimulus contributors to abide by the terms of our [Code of Conduc
 
 Stimulus is [MIT-licensed](LICENSE.md) open-source software from [Basecamp](https://basecamp.com/), the creators of [Ruby on Rails](https://rubyonrails.org).
 
-Continuous integration VMs generously provided by [Sauce Labs](https://opensource.saucelabs.com/).
-
 ---
 
 © 2024 Basecamp, LLC.
