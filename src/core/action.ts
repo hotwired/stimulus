@@ -14,6 +14,7 @@ export class Action {
   readonly eventOptions: AddEventListenerOptions
   readonly identifier: string
   readonly methodName: string
+  readonly globalFilter: string
   readonly keyFilter: string
   readonly schema: Schema
 
@@ -29,6 +30,7 @@ export class Action {
     this.eventOptions = descriptor.eventOptions || {}
     this.identifier = descriptor.identifier || error("missing identifier")
     this.methodName = descriptor.methodName || error("missing method name")
+    this.globalFilter = descriptor.globalFilter || ""
     this.keyFilter = descriptor.keyFilter || ""
     this.schema = schema
   }
@@ -37,6 +39,13 @@ export class Action {
     const eventFilter = this.keyFilter ? `.${this.keyFilter}` : ""
     const eventTarget = this.eventTargetName ? `@${this.eventTargetName}` : ""
     return `${this.eventName}${eventFilter}${eventTarget}->${this.identifier}#${this.methodName}`
+  }
+
+  shouldIgnoreGlobalEvent(event: Event, element: Element): boolean {
+    if (!this.globalFilter) return false
+    const eventTarget = event.target
+    if (!(eventTarget instanceof Element)) return false
+    return element.contains(eventTarget) // assume that one globalFilter exists ('outside')
   }
 
   shouldIgnoreKeyboardEvent(event: KeyboardEvent): boolean {
@@ -90,7 +99,7 @@ export class Action {
   }
 
   private get eventTargetName() {
-    return stringifyEventTarget(this.eventTarget)
+    return stringifyEventTarget(this.eventTarget, this.globalFilter)
   }
 
   private get keyMappings() {
