@@ -31,8 +31,11 @@ export class Module {
 
   connectContextForScope(scope: Scope) {
     const context = this.fetchContextForScope(scope)
-    this.connectedContexts.add(context)
-    context.connect()
+
+    if (!this.connectedContexts.has(context)) {
+      this.connectedContexts.add(context)
+      context.connect()
+    }
   }
 
   disconnectContextForScope(scope: Scope) {
