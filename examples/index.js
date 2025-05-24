@@ -3,6 +3,12 @@ import "@hotwired/turbo"
 
 const application = Application.start()
 
+import DisclosureController from "./controllers/disclosure_controller"
+application.register("disclosure", DisclosureController)
+
+import ElementController from "./controllers/element_controller"
+application.register("element", ElementController)
+
 import ClipboardController from "./controllers/clipboard_controller"
 application.register("clipboard", ClipboardController)
 

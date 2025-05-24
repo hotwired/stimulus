@@ -127,6 +127,31 @@ The list of supported modifier keys is shown below.
 | `meta`   | Command key on MacOS |
 | `shift`  |                    |
 
+### Outlet Events
+
+Sometimes a controller needs to listen for events dispatched on elements made available through its [Outlets](./outlets).
+
+You can append an [outlet controller's identifier](./outlets#attributes-and-names) prefixed by `@` (along with any filter modifier) in an action descriptor to install the event listener on that outlet's element, as in the following example:
+
+<meta data-controller="callout" data-callout-text-value="close@element">
+
+```html
+<button type="button"
+        data-controller="disclosure"
+        data-disclosure-element-outlet="#dialog"
+        data-action="click->disclosure#expand close@element->disclosure#collapse">
+  Click to expand a modal dialog
+</button>
+
+<dialog id="dialog" data-controller="element">
+  A modal dialog
+</dialog>
+```
+
+In this example, the `<button>` element will route any [close][close-event] events dispatched by the `<dialog id="dialog">` element to its `disclosure#collapse` action, despite the `close` event bubbling up a different part of the document.
+
+[close-event]: https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement/close_event
+
 ### Global Events
 
 Sometimes a controller needs to listen for events dispatched on the global `window` or `document` objects.
