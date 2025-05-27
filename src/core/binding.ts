@@ -96,11 +96,15 @@ export class Binding {
 
     if (this.element === eventTarget) {
       return true
-    } else if (eventTarget instanceof Element && this.element.contains(eventTarget)) {
+    } else if (eventTarget instanceof Element && this.containsElement(eventTarget)) {
       return this.scope.containsElement(eventTarget)
     } else {
       return this.scope.containsElement(this.action.element)
     }
+  }
+
+  private containsElement(element: Element): boolean {
+    return HTMLElement.prototype.contains.call(this.element, element)
   }
 
   private get controller(): Controller {
