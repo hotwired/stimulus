@@ -62,14 +62,35 @@ export default class EventOptionsTests extends LogControllerTestCase {
     this.assertActions({ name: "log", eventType: "keydown" })
   }
 
-  async "test edge case when updating action list with setAttribute preserves once history"() {
+  async "test edge case when updating action list with setAttribute loses once history if events are prepended to it"() {
     await this.setAction(this.buttonElement, "c#log:once")
 
     await this.triggerEvent(this.buttonElement, "click")
     await this.triggerEvent(this.buttonElement, "click")
 
-    //modify with a setAttribute and c#log should not be called anyhow
+    //modify with a setAttribute and c#log should be called once again
     await this.setAction(this.buttonElement, "c#log2 c#log:once d#log")
+    await this.triggerEvent(this.buttonElement, "click")
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { name: "log", identifier: "c" },
+      { name: "log2", identifier: "c" },
+      { name: "log", identifier: "d" },
+      { name: "log", identifier: "c" },
+      { name: "log2", identifier: "c" },
+      { name: "log", identifier: "d" }
+    )
+  }
+
+  async "test edge case when updating action list with setAttribute keeps once history if action keeps the same index"() {
+    await this.setAction(this.buttonElement, "c#log:once")
+
+    await this.triggerEvent(this.buttonElement, "click")
+    await this.triggerEvent(this.buttonElement, "click")
+
+    //modify with a setAttribute and c#log should be called once again
+    await this.setAction(this.buttonElement, "c#log:once c#log2 d#log")
     await this.triggerEvent(this.buttonElement, "click")
 
     this.assertActions(

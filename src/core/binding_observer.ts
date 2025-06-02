@@ -7,7 +7,7 @@ import { Token, ValueListObserver, ValueListObserverDelegate } from "../mutation
 
 export interface BindingObserverDelegate extends ErrorHandler {
   bindingConnected(binding: Binding): void
-  bindingDisconnected(binding: Binding, clearEventListeners?: boolean): void
+  bindingDisconnected(binding: Binding): void
 }
 
 export class BindingObserver implements ValueListObserverDelegate<Action> {
@@ -72,7 +72,7 @@ export class BindingObserver implements ValueListObserverDelegate<Action> {
   }
 
   private disconnectAllActions() {
-    this.bindings.forEach((binding) => this.delegate.bindingDisconnected(binding, true))
+    this.bindings.forEach((binding) => this.delegate.bindingDisconnected(binding))
     this.bindingsByAction.clear()
   }
 
