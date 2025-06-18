@@ -30,6 +30,19 @@ export const defaultActionDescriptorFilters: ActionDescriptorFilters = {
       return true
     }
   },
+
+  input({ event, value }) {
+    if (value) return true
+
+    const target = event.target
+    if (!(target instanceof Element)) return true
+
+    const isInput =
+      target.tagName === "INPUT" ||
+      target.tagName === "TEXTAREA" ||
+      (target instanceof HTMLElement && target.isContentEditable)
+    return !isInput
+  },
 }
 
 export interface ActionDescriptor {
