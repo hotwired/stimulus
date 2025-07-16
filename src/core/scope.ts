@@ -26,14 +26,36 @@ export class Scope {
   }
 
   findElement(selector: string): Element | undefined {
-    return this.element.matches(selector) ? this.element : this.queryElements(selector).find(this.containsElement)
+    const elementWithId = document.getElementById(selector)
+    if (elementWithId && this.containsElement(elementWithId)) {
+      return elementWithId
+    }
+    const newSelector = this.classifySelector(selector)
+    return this.element.matches(newSelector) ? this.element : this.queryElements(newSelector).find(this.containsElement)
   }
 
   findAllElements(selector: string): Element[] {
+    const newSelector = this.classifySelector(selector)
     return [
-      ...(this.element.matches(selector) ? [this.element] : []),
-      ...this.queryElements(selector).filter(this.containsElement),
+      ...(this.element.matches(newSelector) ? [this.element] : []),
+      ...this.queryElements(newSelector).filter(this.containsElement),
     ]
+  }
+
+  classifySelector(selector: string | string[]): string {
+    const tokens = Array.isArray(selector) ? selector : [selector]
+
+    const allDefinedTokens = this.getAllClassTokens()
+    const isDefinedClass = tokens.every((token) => allDefinedTokens.includes(token))
+
+    const stringySelector = tokens.join(" ")
+    return isDefinedClass ? `.${stringySelector.replace(/ /g, ".")}` : stringySelector
+  }
+
+  getAllClassTokens(): string[] {
+    return Object.entries((this.element as HTMLElement).dataset)
+      .filter(([key]) => key.endsWith("Class"))
+      .flatMap(([_, value]) => (value ? value.trim().split(/\s+/) : []))
   }
 
   containsElement = (element: Element): boolean => {

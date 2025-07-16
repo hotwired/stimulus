@@ -73,6 +73,14 @@ export class Controller<ElementType extends Element = Element> {
     return this.scope.data
   }
 
+  findElement(selector: string) {
+    return this.scope.findElement(selector)
+  }
+
+  findAllElements(selector: string) {
+    return this.scope.findAllElements(selector)
+  }
+
   initialize() {
     // Override in your subclass to set up initial controller state
   }
