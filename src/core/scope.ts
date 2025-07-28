@@ -44,18 +44,15 @@ export class Scope {
 
   classifySelector(selector: string | string[]): string {
     const tokens = Array.isArray(selector) ? selector : [selector]
-
-    const allDefinedTokens = this.getAllClassTokens()
-    const isDefinedClass = tokens.every((token) => allDefinedTokens.includes(token))
-
-    const stringySelector = tokens.join(" ")
-    return isDefinedClass ? `.${stringySelector.replace(/ /g, ".")}` : stringySelector
+    const definedTokens = new Set(this.getAllClassTokens())
+    const allTokensDefined = tokens.every((token) => definedTokens.has(token))
+    return tokens.join(allTokensDefined ? "." : " ")
   }
 
   getAllClassTokens(): string[] {
     return Object.entries((this.element as HTMLElement).dataset)
       .filter(([key]) => key.endsWith("Class"))
-      .flatMap(([_, value]) => (value ? value.trim().split(/\s+/) : []))
+      .flatMap(([, value]) => value?.trim().split(/\s+/) ?? [])
   }
 
   containsElement = (element: Element): boolean => {
