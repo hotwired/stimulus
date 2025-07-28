@@ -4,21 +4,20 @@ import { ControllerTestCase } from "../../cases/controller_test_case"
 export default class FindElementTests extends ControllerTestCase(ClassController) {
   fixtureHTML = `
     <div data-controller="${this.identifier}"
-      data-${this.identifier}-active-class="test--active"
+      data-${this.identifier}-active-class="active"
       data-${this.identifier}-loading-class="busy"
-      data-${this.identifier}-success-class="bg-green-400 border border-green-600"
     >
-      <div id="inside-id" class="busy"></div>
+      <div id="inside" class="busy"></div>
     </div>
-    <div id="outside-id" class="busy"></div>
+    <div id="outside" class="busy"></div>
 
     "test findElement finds element by id inside scope"() {
-      const result = this.controller.findElement("inside-id")
-      this.assert.equal(result?.id, "inside-id")
+      const result = this.controller.findElement("inside")
+      this.assert.equal(result?.id, "inside")
     }
 
     "test findElement does not find element by id outside scope"() {
-      const result = this.controller.findElement("outside-id")
+      const result = this.controller.findElement("outside")
       this.assert.equal(result, undefined)
     }
 
