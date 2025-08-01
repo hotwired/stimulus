@@ -36,19 +36,6 @@ export class Scope {
     ]
   }
 
-  classifySelector(selector: string | string[]): string {
-    const tokens = Array.isArray(selector) ? selector : [selector]
-    const definedTokens = new Set(this.getAllClassTokens())
-    const allTokensDefined = tokens.every((token) => definedTokens.has(token))
-    return tokens.join(allTokensDefined ? "." : " ")
-  }
-
-  getAllClassTokens(): string[] {
-    return Object.entries((this.element as HTMLElement).dataset)
-      .filter(([key]) => key.endsWith("Class"))
-      .flatMap(([, value]) => value?.trim().split(/\s+/) ?? [])
-  }
-
   containsElement = (element: Element): boolean => {
     return element.closest(this.controllerSelector) === this.element
   }
