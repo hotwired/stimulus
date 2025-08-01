@@ -26,19 +26,13 @@ export class Scope {
   }
 
   findElement(selector: string): Element | undefined {
-    const elementWithId = document.getElementById(selector)
-    if (elementWithId && this.containsElement(elementWithId)) {
-      return elementWithId
-    }
-    const newSelector = this.classifySelector(selector)
-    return this.element.matches(newSelector) ? this.element : this.queryElements(newSelector).find(this.containsElement)
+    return this.element.matches(selector) ? this.element : this.queryElements(selector).find(this.containsElement)
   }
 
   findAllElements(selector: string): Element[] {
-    const newSelector = this.classifySelector(selector)
     return [
-      ...(this.element.matches(newSelector) ? [this.element] : []),
-      ...this.queryElements(newSelector).filter(this.containsElement),
+      ...(this.element.matches(selector) ? [this.element] : []),
+      ...this.queryElements(selector).filter(this.containsElement),
     ]
   }
 
