@@ -31,6 +31,78 @@ connect()    | Anytime the controller is connected to the DOM
 [name]TargetDisconnected(target: Element) | Anytime a target is disconnected from the DOM
 disconnect() | Anytime the controller is disconnected from the DOM
 
+## Events
+
+After each new lifecycle state is reached and the corresponding method described above has been called, 
+a event will also be dispatched deom the controller.
+
+Event name       | Event detail
+------------ | --------------------
+[identifer]:initialized | `{}` empty object
+[identifer]:[name]TargetConnected | {target: Element} 
+[identifer]:connected   | `{}` empty object
+[identifer]:[name]TargetDisconnected | {target: Element}
+[identifer]:disconnect | `{}` empty object
+
+The event are distached using [`controller.dispatch()`](https://stimulus.hotwired.dev/reference/controllers#cross-controller-coordination-with-events) 
+so you can use [actions](https://stimulus.hotwired.dev/reference/actions) to observe the controller's 
+lifecycle.
+
+Example usage:
+
+```js
+import { Controller } from "@hotwired/stimulus"
+
+class ControllerObserver extends Controller {
+    onObservedInputConnected({target}) {
+    }
+}
+
+class ObservedController extends Controller {
+    static targets = ["input"]
+}
+
+application.register("observer", ControllerObserver)
+application.register("observed", ControllerObserver)
+```
+
+```html
+<div data-controller="observer">
+    <div data-controller="observed" data-action="observed:inputTargetConnected->observer#onObservedInputConnected">
+      <input type="text" data-observed-target="input">
+    </div>
+</div>
+```
+
+## Knowing the controller's current lifecycle state
+
+In addition to the events explained above, the controller also expose their current lifecycle through 
+the read-only property `lifecycle`. Combined with the said events, this can be used to write controller extensions:
+
+```js
+import { Lifecycle } from "@hotwired/stimulus"
+
+function useExtention(controller) {
+    function onConnected() {
+        controller.element.addEventListener(`${controller.identifier}:connected`, removeEventListener)
+        // extend the controller
+    }
+    
+    if(controller.lifecycle < Lifecycle.connected) {
+        controller.element.addEventListener(`${controller.identifier}:connected`, onConnected)
+    } else {
+        onConnected()
+    }
+}
+
+class ControllerObserver extends Controller {
+    initialize() {
+        useExtention(this)
+    }
+}
+```
+
+
 ## Connection
 
 A controller is _connected_ to the document when both of the following conditions are true:

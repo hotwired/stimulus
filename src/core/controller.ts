@@ -49,6 +49,10 @@ export class Controller<ElementType extends Element = Element> {
     return this.context.scope
   }
 
+  get lifecycle() {
+    return this.context.lifecycle
+  }
+
   get element() {
     return this.scope.element as ElementType
   }

@@ -11,18 +11,31 @@ import { TargetObserver, TargetObserverDelegate } from "./target_observer"
 import { OutletObserver, OutletObserverDelegate } from "./outlet_observer"
 import { namespaceCamelize } from "./string_helpers"
 
+export enum Lifecycle {
+  Idle,
+  Initialized,
+  Connected,
+  Disconnected,
+}
+
 export class Context implements ErrorHandler, TargetObserverDelegate, OutletObserverDelegate {
   readonly module: Module
   readonly scope: Scope
   readonly controller: Controller
+  private _lifecycle: Lifecycle
   private bindingObserver: BindingObserver
   private valueObserver: ValueObserver
   private targetObserver: TargetObserver
   private outletObserver: OutletObserver
 
+  get lifecycle(): Lifecycle {
+    return this._lifecycle
+  }
+
   constructor(module: Module, scope: Scope) {
     this.module = module
     this.scope = scope
+    this._lifecycle = Lifecycle.Idle
     this.controller = new module.controllerConstructor(this)
     this.bindingObserver = new BindingObserver(this, this.dispatcher)
     this.valueObserver = new ValueObserver(this, this.controller)
@@ -31,6 +44,8 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
 
     try {
       this.controller.initialize()
+      this._lifecycle = Lifecycle.Initialized
+      this.controller.dispatch("initialized")
       this.logDebugActivity("initialize")
     } catch (error: any) {
       this.handleError(error, "initializing controller")
@@ -45,6 +60,8 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
 
     try {
       this.controller.connect()
+      this._lifecycle = Lifecycle.Connected
+      this.controller.dispatch("connected")
       this.logDebugActivity("connect")
     } catch (error: any) {
       this.handleError(error, "connecting controller")
@@ -58,6 +75,8 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
   disconnect() {
     try {
       this.controller.disconnect()
+      this._lifecycle = Lifecycle.Disconnected
+      this.controller.dispatch("disconnected")
       this.logDebugActivity("disconnect")
     } catch (error: any) {
       this.handleError(error, "disconnecting controller")
@@ -112,11 +131,15 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
   // Target observer delegate
 
   targetConnected(element: Element, name: string) {
-    this.invokeControllerMethod(`${name}TargetConnected`, element)
+    const methodName = `${name}TargetConnected`
+    this.invokeControllerMethod(methodName, element)
+    this.controller.dispatch(methodName, {detail: {element}})
   }
 
   targetDisconnected(element: Element, name: string) {
-    this.invokeControllerMethod(`${name}TargetDisconnected`, element)
+    const methodName = `${name}TargetDisconnected`
+    this.invokeControllerMethod(methodName, element)
+    this.controller.dispatch(methodName, {detail: {element}})
   }
 
   // Outlet observer delegate
