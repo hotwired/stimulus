@@ -45,6 +45,23 @@ export default class ApplicationTests extends ApplicationTestCase {
     this.assert.ok(this.controllers[0] instanceof BController)
   }
 
+  "test Application#getControllerForElementAndIdentifier logs debug activity when controller not found"() {
+    this.application.load(this.definitions)
+
+    const logCalls: { identifier: string; functionName: string; detail: object }[] = []
+    this.application.logDebugActivity = (identifier, functionName, detail = {}) => {
+      logCalls.push({ identifier, functionName, detail })
+    }
+
+    const element = this.fixtureElement.querySelector("[data-controller='a']")!
+    const result = this.application.getControllerForElementAndIdentifier(element, "nonexistent")
+
+    this.assert.equal(result, null)
+    this.assert.equal(logCalls.length, 1)
+    this.assert.equal(logCalls[0].identifier, "nonexistent")
+    this.assert.equal(logCalls[0].functionName, "controller not found")
+  }
+
   get controllers() {
     return this.application.controllers as LogController[]
   }
