@@ -48,7 +48,7 @@ export default class ApplicationTests extends ApplicationTestCase {
   "test Application#getControllerForElementAndIdentifier logs debug activity when controller not found"() {
     this.application.load(this.definitions)
 
-    const logCalls: { identifier: string; functionName: string; detail: object }[] = []
+    const logCalls: { identifier: string; functionName: string; detail: { element?: Element } }[] = []
     this.application.logDebugActivity = (identifier, functionName, detail = {}) => {
       logCalls.push({ identifier, functionName, detail })
     }
@@ -60,6 +60,7 @@ export default class ApplicationTests extends ApplicationTestCase {
     this.assert.equal(logCalls.length, 1)
     this.assert.equal(logCalls[0].identifier, "nonexistent")
     this.assert.equal(logCalls[0].functionName, "controller not found")
+    this.assert.equal(logCalls[0].detail.element, element)
   }
 
   get controllers() {
