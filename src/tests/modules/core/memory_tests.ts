@@ -19,4 +19,10 @@ export default class MemoryTests extends ControllerTestCase() {
     await this.fixtureElement.removeChild(this.controllerElement)
     this.assert.equal(this.application.dispatcher.eventListeners.length, 0)
   }
+
+  async "test removing an action element while its controller remains clears dangling eventListeners"() {
+    this.assert.equal(this.application.dispatcher.eventListeners.length, 2)
+    await this.remove("button[data-action$='#doLog']")
+    this.assert.equal(this.application.dispatcher.eventListeners.length, 1)
+  }
 }

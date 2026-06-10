@@ -67,7 +67,12 @@ export class BindingObserver implements ValueListObserverDelegate<Action> {
     const binding = this.bindingsByAction.get(action)
     if (binding) {
       this.bindingsByAction.delete(action)
-      this.delegate.bindingDisconnected(binding)
+      // Clear the dispatcher's cached event listener when the action's element
+      // has left the document. Keeping the cache for connected elements
+      // preserves { once: true } firing history across action attribute
+      // updates, but caching listeners for removed elements would retain the
+      // element (and everything it references) for the application's lifetime.
+      this.delegate.bindingDisconnected(binding, !action.element.isConnected)
     }
   }
 
