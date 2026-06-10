@@ -34,6 +34,18 @@ export default class ActionOrderingTests extends LogControllerTestCase {
     )
   }
 
+  async "test adding an action to the left with a :stop modifier"() {
+    this.actionValue = "c#log3:stop c#log d#log2"
+    await this.nextFrame
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { name: "log3", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log2", identifier: "d", eventType: "click", currentTarget: this.buttonElement }
+    )
+  }
+
   async "test removing an action from the right"() {
     this.actionValue = "c#log d#log2"
     await this.nextFrame
