@@ -13,6 +13,8 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
         <div data-controller="beta" id="beta4"></div>
       </div>
 
+      <div data-controller="helpers--common--input" class="inputs"></div>
+
       <div
         data-controller="${this.identifier}"
         data-${this.identifier}-connected-class="connected"
@@ -21,6 +23,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
         data-${this.identifier}-beta-outlet=".beta"
         data-${this.identifier}-delta-outlet=".delta"
         data-${this.identifier}-namespaced--epsilon-outlet=".epsilon"
+        data-${this.identifier}-helpers--common--input-outlet=".inputs"
       >
         <div data-controller="gamma" class="gamma" id="gamma2"></div>
       </div>
@@ -37,7 +40,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     </div>
   `
   get identifiers() {
-    return ["test", "alpha", "beta", "gamma", "delta", "omega", "namespaced--epsilon"]
+    return ["test", "alpha", "beta", "gamma", "delta", "omega", "namespaced--epsilon", "helpers--common--input"]
   }
 
   "test OutletSet#find"() {
@@ -365,5 +368,15 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       alpha2.classList.contains("disconnected"),
       `expected "${alpha2.className}" to contain "disconnected"`
     )
+  }
+
+  "test outlet renaming"() {
+    const element = this.findElement(".inputs")
+    const inputOutlet = this.controller.application.getControllerForElementAndIdentifier(
+      element,
+      "helpers--common--input"
+    )
+    this.assert.equal(this.controller.inputOutlet, inputOutlet)
+    this.assert.equal(this.controller.inputOutletElement, element)
   }
 }
