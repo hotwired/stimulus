@@ -197,4 +197,12 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
     await this.triggerEvent(button, "jquery.a")
     this.assertActions({ name: "log2", identifier: "a", eventType: "jquery.a", currentTarget: button })
   }
+
+  async "test ignore events dispatched by autocomplete"() {
+    const button = this.findElement("#button10")
+    await this.nextFrame
+    await this.triggerEvent(button, "keydown", {})
+
+    this.assertNoActions()
+  }
 }
