@@ -95,7 +95,9 @@ export class OutletObserver implements AttributeObserverDelegate, SelectorObserv
     const hasOutletController = element.matches(`[${this.schema.controllerAttribute}~=${outletName}]`)
 
     if (selector) {
-      return hasOutlet && hasOutletController && element.matches(selector)
+      const matches =
+        element.matches(selector) || Array.from(this.context.element.querySelectorAll(selector)).includes(element)
+      return hasOutlet && hasOutletController && matches
     } else {
       return false
     }
