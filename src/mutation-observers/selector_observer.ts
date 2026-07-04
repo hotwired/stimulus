@@ -61,13 +61,11 @@ export class SelectorObserver implements ElementObserverDelegate {
     const { selector } = this
 
     if (selector) {
-      const matches = element.matches(selector)
-
       if (this.delegate.selectorMatchElement) {
-        return matches && this.delegate.selectorMatchElement(element, this.details)
+        return this.delegate.selectorMatchElement(element, this.details)
       }
 
-      return matches
+      return element.matches(selector)
     } else {
       return false
     }
