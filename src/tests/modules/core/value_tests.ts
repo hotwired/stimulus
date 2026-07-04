@@ -163,6 +163,16 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     await this.nextFrame
     this.assert.deepEqual(this.controller.loggedNumericValues, [123, 0, 1])
     this.assert.deepEqual(this.controller.oldLoggedNumericValues, [0, 123, 0])
+
+    this.set("numeric-value", "")
+    await this.nextFrame
+    this.assert.deepEqual(this.controller.loggedNumericValues, [123, 0, 1, 0])
+    this.assert.deepEqual(this.controller.oldLoggedNumericValues, [0, 123, 0, 1])
+
+    this.set("numeric-value", "5")
+    await this.nextFrame
+    this.assert.deepEqual(this.controller.loggedNumericValues, [123, 0, 1, 0, 5])
+    this.assert.deepEqual(this.controller.oldLoggedNumericValues, [0, 123, 0, 1, 0])
   }
 
   async "test changed callbacks for object"() {

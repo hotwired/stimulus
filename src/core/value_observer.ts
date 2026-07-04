@@ -90,7 +90,7 @@ export class ValueObserver implements StringMapObserverDelegate {
         const value = descriptor.reader(rawValue)
         let oldValue = rawOldValue
 
-        if (rawOldValue) {
+        if (rawOldValue !== undefined) {
           oldValue = descriptor.reader(rawOldValue)
         }
 
