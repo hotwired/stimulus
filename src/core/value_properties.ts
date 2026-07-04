@@ -74,7 +74,13 @@ export type ValueDefinitionMap = { [token: string]: ValueTypeDefinition }
 
 export type ValueDefinitionPair = [string, ValueTypeDefinition]
 
-export type ValueTypeConstant = typeof Array | typeof Boolean | typeof Number | typeof Object | typeof String
+export type ValueTypeConstant =
+  | typeof Array
+  | typeof Boolean
+  | typeof DOMTokenList
+  | typeof Number
+  | typeof Object
+  | typeof String
 
 export type ValueTypeDefault = Array<any> | boolean | number | Object | string
 
@@ -82,7 +88,7 @@ export type ValueTypeObject = Partial<{ type: ValueTypeConstant; default: ValueT
 
 export type ValueTypeDefinition = ValueTypeConstant | ValueTypeDefault | ValueTypeObject
 
-export type ValueType = "array" | "boolean" | "number" | "object" | "string"
+export type ValueType = "array" | "boolean" | "list" | "number" | "object" | "string"
 
 function parseValueDefinitionPair([token, typeDefinition]: ValueDefinitionPair, controller?: string): ValueDescriptor {
   return valueDescriptorForTokenAndTypeDefinition({
@@ -93,6 +99,8 @@ function parseValueDefinitionPair([token, typeDefinition]: ValueDefinitionPair, 
 }
 
 export function parseValueTypeConstant(constant?: ValueTypeConstant) {
+  if (typeof DOMTokenList !== "undefined" && constant === DOMTokenList) return "list"
+
   switch (constant) {
     case Array:
       return "array"
@@ -143,12 +151,26 @@ export function parseValueTypeObject(payload: ValueTypeObjectPayload) {
   if (onlyType) return typeFromObject
   if (onlyDefault) return typeFromDefaultValue
 
-  if (typeFromObject !== typeFromDefaultValue) {
-    const propertyPath = controller ? `${controller}.${token}` : token
+  const propertyPath = controller ? `${controller}.${token}` : token
 
+  const defaultValueMatchesType =
+    typeFromObject === typeFromDefaultValue || (typeFromObject === "list" && typeFromDefaultValue === "array")
+
+  if (!defaultValueMatchesType) {
     throw new Error(
       `The specified default value for the Stimulus Value "${propertyPath}" must match the defined type "${typeFromObject}". The provided default value of "${typeObject.default}" is of type "${typeFromDefaultValue}".`
     )
+  }
+
+  if (typeFromObject === "list" && Array.isArray(typeObject.default)) {
+    for (const item of typeObject.default) {
+      const listToken = `${item}`
+      if (listToken.length == 0 || /\s/.test(listToken)) {
+        throw new Error(
+          `The specified default value for the Stimulus Value "${propertyPath}" contains the invalid list token "${listToken}". List tokens must be non-empty and free of whitespace.`
+        )
+      }
+    }
   }
 
   if (fullObject) return typeFromObject
@@ -223,6 +245,9 @@ const defaultValuesByType = {
     return []
   },
   boolean: false,
+  get list() {
+    return []
+  },
   number: 0,
   get object() {
     return {}
@@ -245,6 +270,14 @@ const readers: { [type: string]: Reader } = {
 
   boolean(value: string): boolean {
     return !(value == "0" || String(value).toLowerCase() == "false")
+  },
+
+  list(value: string): string[] {
+    const tokens = value
+      .trim()
+      .split(/\s+/)
+      .filter((token) => token.length > 0)
+    return Array.from(new Set(tokens))
   },
 
   number(value: string): number {
@@ -271,11 +304,32 @@ type Writer = (value: any) => string
 const writers: { [type: string]: Writer } = {
   default: writeString,
   array: writeJSON,
+  list: writeList,
   object: writeJSON,
 }
 
 function writeJSON(value: any) {
   return JSON.stringify(value)
+}
+
+function writeList(value: any) {
+  if (!Array.isArray(value)) {
+    throw new TypeError(
+      `expected value of type "list" but instead got value "${value}" of type "${parseValueTypeDefault(value)}"`
+    )
+  }
+
+  const tokens = value.map((item) => `${item}`)
+
+  for (const token of tokens) {
+    if (token.length == 0 || /\s/.test(token)) {
+      throw new TypeError(
+        `expected token of a "list" value to be non-empty and free of whitespace but got "${token}". Use the Array type for values containing arbitrary strings.`
+      )
+    }
+  }
+
+  return tokens.join(" ")
 }
 
 function writeString(value: any) {
