@@ -19,6 +19,7 @@ export class ValueController extends BaseValueController {
     missingString: String,
     ids: Array,
     options: Object,
+    tokens: DOMTokenList,
     "time-24hr": Boolean,
   }
 
@@ -26,6 +27,7 @@ export class ValueController extends BaseValueController {
   missingStringValue!: string
   idsValue!: any[]
   optionsValue!: { [key: string]: any }
+  tokensValue!: string[]
   time24hrValue!: boolean
 
   loggedNumericValues: number[] = []
@@ -47,5 +49,12 @@ export class ValueController extends BaseValueController {
   optionsValueChanged(value: Object, oldValue: any) {
     this.optionsValues.push(value)
     this.oldOptionsValues.push(oldValue)
+  }
+
+  loggedTokensValues: string[][] = []
+  oldLoggedTokensValues: any[] = []
+  tokensValueChanged(value: string[], oldValue: any) {
+    this.loggedTokensValues.push(value)
+    this.oldLoggedTokensValues.push(oldValue)
   }
 }

@@ -9,6 +9,7 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
       data-${this.identifier}-string-value="ok"
       data-${this.identifier}-ids-value="[1,2,3]"
       data-${this.identifier}-options-value='{"one":[2,3]}'
+      data-${this.identifier}-tokens-value="one two three"
       data-${this.identifier}-time-24hr-value="true">
     </div>
   `
@@ -114,6 +115,46 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
     this.assert.throws(() => this.controller.optionsValue)
   }
 
+  "test list values"() {
+    this.assert.deepEqual(this.controller.tokensValue, ["one", "two", "three"])
+
+    this.controller.tokensValue = ["a", "b"]
+    this.assert.deepEqual(this.controller.tokensValue, ["a", "b"])
+    this.assert.deepEqual(this.get("tokens-value"), "a b")
+
+    this.controller.tokensValue.push("c")
+    this.assert.deepEqual(this.controller.tokensValue, ["a", "b"])
+
+    this.set("tokens-value", "b a b c a")
+    this.assert.deepEqual(this.controller.tokensValue, ["b", "a", "c"])
+
+    this.set("tokens-value", "  one\t two\n  three   ")
+    this.assert.deepEqual(this.controller.tokensValue, ["one", "two", "three"])
+
+    this.set("tokens-value", "")
+    this.assert.deepEqual(this.controller.tokensValue, [])
+
+    this.set("tokens-value", "   ")
+    this.assert.deepEqual(this.controller.tokensValue, [])
+
+    this.controller.tokensValue = ["x", "y", "x"]
+    this.assert.deepEqual(this.get("tokens-value"), "x y x")
+    this.assert.deepEqual(this.controller.tokensValue, ["x", "y"])
+
+    this.controller.tokensValue = [1, 2] as any
+    this.assert.deepEqual(this.get("tokens-value"), "1 2")
+    this.assert.deepEqual(this.controller.tokensValue, ["1", "2"])
+
+    this.controller.tokensValue = []
+    this.assert.deepEqual(this.get("tokens-value"), "")
+    this.assert.deepEqual(this.controller.tokensValue, [])
+
+    this.assert.throws(() => (this.controller.tokensValue = "not an array" as any))
+    this.assert.throws(() => (this.controller.tokensValue = null as any))
+    this.assert.throws(() => (this.controller.tokensValue = ["foo bar"]))
+    this.assert.throws(() => (this.controller.tokensValue = [""]))
+  }
+
   "test accessing a string value returns the empty string when the attribute is missing"() {
     this.controller.stringValue = undefined as any
     this.assert.notOk(this.has("string-value"))
@@ -148,6 +189,15 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
 
     this.controller.optionsValue.hello = true
     this.assert.deepEqual(this.controller.optionsValue, {})
+  }
+
+  "test accessing a list value returns an empty array when the attribute is missing"() {
+    this.controller.tokensValue = undefined as any
+    this.assert.notOk(this.has("tokens-value"))
+    this.assert.deepEqual(this.controller.tokensValue, [])
+
+    this.controller.tokensValue.push("x")
+    this.assert.deepEqual(this.controller.tokensValue, [])
   }
 
   async "test changed callbacks"() {
@@ -199,6 +249,21 @@ export default class ValueTests extends ControllerTestCase(ValueController) {
       { one: [2, 3] },
       { person: { name: "John", age: 42, active: true } },
     ])
+  }
+
+  async "test changed callbacks for list"() {
+    this.assert.deepEqual(this.controller.loggedTokensValues, [["one", "two", "three"]])
+    this.assert.deepEqual(this.controller.oldLoggedTokensValues, [[]])
+
+    this.controller.tokensValue = ["four"]
+    await this.nextFrame
+    this.assert.deepEqual(this.controller.loggedTokensValues, [["one", "two", "three"], ["four"]])
+    this.assert.deepEqual(this.controller.oldLoggedTokensValues, [[], ["one", "two", "three"]])
+
+    this.set("tokens-value", "five six")
+    await this.nextFrame
+    this.assert.deepEqual(this.controller.loggedTokensValues, [["one", "two", "three"], ["four"], ["five", "six"]])
+    this.assert.deepEqual(this.controller.oldLoggedTokensValues, [[], ["one", "two", "three"], ["four"]])
   }
 
   async "test default values trigger changed callbacks"() {
