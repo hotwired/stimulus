@@ -893,10 +893,10 @@
     "@babel/helper-string-parser" "^7.29.7"
     "@babel/helper-validator-identifier" "^7.29.7"
 
-"@hotwired/turbo@^7.2.4":
-  version "7.2.4"
-  resolved "https://registry.yarnpkg.com/@hotwired/turbo/-/turbo-7.2.4.tgz#0d35541be32cfae3b4f78c6ab9138f5b21f28a21"
-  integrity sha512-c3xlOroHp/cCZHDOuLp6uzQYEbvXBUVaal0puXoGJ9M8L/KHwZ3hQozD4dVeSN9msHWLxxtmPT1TlCN7gFhj4w==
+"@hotwired/turbo@^8.0.21":
+  version "8.0.21"
+  resolved "https://registry.yarnpkg.com/@hotwired/turbo/-/turbo-8.0.21.tgz#a3e80c01d70048200f64bbe3582b84f9bfac034e"
+  integrity sha512-fJTv3JnzFHeDxBb23esZSOhT4r142xf5o3lKMFMvzPC6AllkqbBKk5Yb31UZhtIsKQCwmO/pUQrtTUlYl5CHAQ==
 
 "@jridgewell/gen-mapping@^0.3.12", "@jridgewell/gen-mapping@^0.3.5":
   version "0.3.13"
