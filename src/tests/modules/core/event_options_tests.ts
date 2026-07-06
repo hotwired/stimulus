@@ -56,8 +56,8 @@ export default class EventOptionsTests extends LogControllerTestCase {
   async "test global once actions"() {
     await this.setAction(this.buttonElement, "keydown@window->c#log:once")
 
-    await this.triggerEvent("#outside", "keydown")
-    await this.triggerEvent("#outside", "keydown")
+    await this.triggerKeyboardEvent("#outside", "keydown", { bubbles: true })
+    await this.triggerKeyboardEvent("#outside", "keydown", { bubbles: true })
 
     this.assertActions({ name: "log", eventType: "keydown" })
   }
@@ -132,7 +132,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     await this.setAction(this.element, "keydown->c#log")
     await this.setAction(this.buttonElement, "keydown->c#log2:stop")
 
-    await this.triggerEvent(this.buttonElement, "keydown")
+    await this.triggerKeyboardEvent(this.buttonElement, "keydown", { bubbles: true })
 
     this.assertActions({ name: "log2", eventType: "keydown" })
   }
@@ -157,7 +157,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
   async "test prevent option with explicit event"() {
     await this.setAction(this.buttonElement, "keyup->c#log:prevent")
 
-    await this.triggerEvent(this.buttonElement, "keyup")
+    await this.triggerKeyboardEvent(this.buttonElement, "keyup", { bubbles: true, cancelable: true })
 
     this.assertActions({ name: "log", eventType: "keyup", defaultPrevented: true })
   }
