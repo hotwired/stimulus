@@ -20,6 +20,7 @@ app.use(webpackMiddleware(webpack(webpackConfig)))
 const pages = [
   { path: "/hello", title: "Hello" },
   { path: "/clipboard", title: "Clipboard" },
+  { path: "/disclosures", title: "Disclosures" },
   { path: "/slideshow", title: "Slideshow" },
   { path: "/content-loader", title: "Content Loader" },
   { path: "/tabs", title: "Tabs" },
