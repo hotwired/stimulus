@@ -5,6 +5,7 @@ import { Context } from "./context"
 import { Controller } from "./controller"
 
 import { readInheritableStaticArrayValues } from "./inheritable_statics"
+import { OutletRenameObject } from "./outlet_properties"
 
 type OutletObserverDetails = { outletName: string }
 
@@ -206,7 +207,15 @@ export class OutletObserver implements AttributeObserverDelegate, SelectorObserv
       const constructor = module.definition.controllerConstructor
       const outlets = readInheritableStaticArrayValues(constructor, "outlets")
 
-      outlets.forEach((outlet) => dependencies.add(outlet, module.identifier))
+      outlets.forEach((outlet: string | OutletRenameObject) => {
+        let name: string
+        if (typeof outlet === "object") {
+          name = Object.values(outlet)[0]
+        } else {
+          name = outlet
+        }
+        return dependencies.add(name, module.identifier)
+      })
     })
 
     return dependencies
