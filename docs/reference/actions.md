@@ -170,6 +170,7 @@ Custom action option | Description
 `:stop`              | calls `.stopPropagation()` on the event before invoking the method
 `:prevent`           | calls `.preventDefault()` on the event before invoking the method
 `:self`              | only invokes the method if the event was fired by the element itself
+`:!input`            | suppress an event if it was fired while an input element has focus
 
 You can register your own action options with the `Application.registerActionOption` method.
 
