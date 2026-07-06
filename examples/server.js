@@ -23,6 +23,7 @@ const pages = [
   { path: "/slideshow", title: "Slideshow" },
   { path: "/content-loader", title: "Content Loader" },
   { path: "/tabs", title: "Tabs" },
+  { path: "/async", title: "Async" },
 ]
 
 app.get("/", (req, res) => {

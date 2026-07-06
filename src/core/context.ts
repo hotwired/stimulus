@@ -30,7 +30,9 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
     this.outletObserver = new OutletObserver(this, this)
 
     try {
-      this.controller.initialize()
+      Promise
+        .resolve(this.controller.initialize())
+        .catch(error => this.handleError(error, "initializing controller"))
       this.logDebugActivity("initialize")
     } catch (error: any) {
       this.handleError(error, "initializing controller")
@@ -44,7 +46,9 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
     this.outletObserver.start()
 
     try {
-      this.controller.connect()
+      Promise
+        .resolve(this.controller.connect())
+        .catch(error => this.handleError(error, "connecting controller"))
       this.logDebugActivity("connect")
     } catch (error: any) {
       this.handleError(error, "connecting controller")
@@ -57,7 +61,9 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
 
   disconnect() {
     try {
-      this.controller.disconnect()
+      Promise
+        .resolve(this.controller.disconnect())
+        .catch(error => this.handleError(error, "disconnecting controller"))
       this.logDebugActivity("disconnect")
     } catch (error: any) {
       this.handleError(error, "disconnecting controller")
