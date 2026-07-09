@@ -45,6 +45,16 @@ export default class ApplicationTests extends ApplicationTestCase {
     this.assert.ok(this.controllers[0] instanceof BController)
   }
 
+  "test Application#lazyLoadingControllers"() {
+    this.assert.equal(this.application.lazyLoadingControllers, false)
+
+    this.application.lazyLoadingControllers = true
+    this.assert.equal(this.application.lazyLoadingControllers, true)
+
+    this.application.lazyLoadingControllers = false
+    this.assert.equal(this.application.lazyLoadingControllers, false)
+  }
+
   get controllers() {
     return this.application.controllers as LogController[]
   }
