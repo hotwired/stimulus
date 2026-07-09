@@ -25,7 +25,7 @@ export class Action {
     this.element = element
     this.index = index
     this.eventTarget = descriptor.eventTarget || element
-    this.eventName = descriptor.eventName || getDefaultEventNameForElement(element) || error("missing event name")
+    this.eventName = descriptor.eventName || getDefaultEventNameForElement(element, schema) || error("missing event name")
     this.eventOptions = descriptor.eventOptions || {}
     this.identifier = descriptor.identifier || error("missing identifier")
     this.methodName = descriptor.methodName || error("missing method name")
@@ -104,20 +104,13 @@ export class Action {
   }
 }
 
-const defaultEventNames: { [tagName: string]: (element: Element) => string } = {
-  a: () => "click",
-  button: () => "click",
-  form: () => "submit",
-  details: () => "toggle",
-  input: (e) => (e.getAttribute("type") == "submit" ? "click" : "input"),
-  select: () => "change",
-  textarea: () => "input",
-}
-
-export function getDefaultEventNameForElement(element: Element): string | undefined {
-  const tagName = element.tagName.toLowerCase()
-  if (tagName in defaultEventNames) {
-    return defaultEventNames[tagName](element)
+function getDefaultEventNameForElement(element: Element, schema: Schema): string | undefined {
+  let eventName = schema.defaultEventNames[element.localName]
+  if (typeof eventName === 'function') {
+    return eventName(element)
+  }
+  if (typeof eventName === 'string') {
+    return eventName
   }
 }
 
