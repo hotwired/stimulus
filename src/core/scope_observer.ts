@@ -83,4 +83,6 @@ export class ScopeObserver implements ValueListObserverDelegate<Scope> {
     }
     return scopesByIdentifier
   }
+
+  elementMatchedNoValue() {}
 }

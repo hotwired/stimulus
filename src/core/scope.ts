@@ -1,11 +1,11 @@
 import { ClassMap } from "./class_map"
 import { DataMap } from "./data_map"
 import { Guide } from "./guide"
-import { Logger } from "./logger"
 import { Schema } from "./schema"
 import { attributeValueContainsToken } from "./selectors"
 import { TargetSet } from "./target_set"
 import { OutletSet } from "./outlet_set"
+import { WarningHandler } from "./warning_handler"
 
 export class Scope {
   readonly schema: Schema
@@ -17,11 +17,11 @@ export class Scope {
   readonly classes = new ClassMap(this)
   readonly data = new DataMap(this)
 
-  constructor(schema: Schema, element: Element, identifier: string, logger: Logger) {
+  constructor(schema: Schema, element: Element, identifier: string, warningHandler: WarningHandler) {
     this.schema = schema
     this.element = element
     this.identifier = identifier
-    this.guide = new Guide(logger)
+    this.guide = new Guide(warningHandler)
     this.outlets = new OutletSet(this.documentScope, element)
   }
 
@@ -55,6 +55,6 @@ export class Scope {
   private get documentScope(): Scope {
     return this.isDocumentScope
       ? this
-      : new Scope(this.schema, document.documentElement, this.identifier, this.guide.logger)
+      : new Scope(this.schema, document.documentElement, this.identifier, this.guide.warningHandler)
   }
 }
