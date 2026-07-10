@@ -46,8 +46,10 @@ export class Binding {
       return method
     }
 
-    return (event: ActionEvent) => {
-      this.controller.actionHandlerMissing(this.action, event)
+    const action = this.action
+
+    return function (this: Controller, event: ActionEvent) {
+      this.actionHandlerMissing(action, event)
     }
   }
 

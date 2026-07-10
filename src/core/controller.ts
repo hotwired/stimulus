@@ -1,5 +1,5 @@
-import { Action } from "./action"
-import { ActionEvent } from "./action_event"
+import type { Action } from "./action"
+import type { ActionEvent } from "./action_event"
 import { Application } from "./application"
 import { ClassPropertiesBlessing } from "./class_properties"
 import { Constructor } from "./constructor"

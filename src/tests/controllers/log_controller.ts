@@ -1,4 +1,4 @@
-import { Action } from "../../core/action"
+import type { Action } from "../../core/action"
 import { ActionEvent } from "../../core/action_event"
 import { Controller } from "../../core/controller"
 
