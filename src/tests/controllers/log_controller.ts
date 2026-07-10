@@ -1,3 +1,4 @@
+import { Action } from "../../core/action"
 import { ActionEvent } from "../../core/action_event"
 import { Controller } from "../../core/controller"
 
@@ -54,6 +55,10 @@ export class LogController extends Controller {
   stop(event: ActionEvent) {
     this.recordAction("stop", event)
     event.stopImmediatePropagation()
+  }
+
+  actionHandlerMissing(action: Action, event: ActionEvent) {
+    this.recordAction(`${action.methodName}_missing`, event)
   }
 
   get actionLog() {

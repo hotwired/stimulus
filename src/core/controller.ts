@@ -1,3 +1,5 @@
+import { Action } from "./action"
+import { ActionEvent } from "./action_event"
 import { Application } from "./application"
 import { ClassPropertiesBlessing } from "./class_properties"
 import { Constructor } from "./constructor"
@@ -99,5 +101,9 @@ export class Controller<ElementType extends Element = Element> {
     const event = new CustomEvent(type, { detail, bubbles, cancelable })
     target.dispatchEvent(event)
     return event
+  }
+
+  actionHandlerMissing(action: Action, _event: ActionEvent) {
+    throw new Error(`Action "${action}" references undefined method "${action.methodName}"`)
   }
 }

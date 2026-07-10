@@ -41,10 +41,14 @@ export class Binding {
 
   get method(): Function {
     const method = (this.controller as any)[this.methodName]
+
     if (typeof method == "function") {
       return method
     }
-    throw new Error(`Action "${this.action}" references undefined method "${this.methodName}"`)
+
+    return (event: ActionEvent) => {
+      this.controller.actionHandlerMissing(this.action, event)
+    }
   }
 
   private applyEventModifiers(event: Event): boolean {

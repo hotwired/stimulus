@@ -280,6 +280,18 @@ highlight(event) {
 }
 ```
 
+## Missing Action Handlers
+
+If the method specified by an action descriptor doesn't exist on the controller, Stimulus will call the special `actionHandlerMissing` method. You can override this method in your controller to dynamically handle events. The method receives the action and the event as arguments:
+
+```javascript
+actionHandlerMissing(action, event) {
+  if (action.methodName === "next") {
+    // ...
+  }
+}
+```
+
 ## Naming Conventions
 
 Always use camelCase to specify action names, since they map directly to methods on your controller.
