@@ -74,15 +74,17 @@ function parseEventTarget(eventTargetName: string): EventTarget | undefined {
 }
 
 function parseEventOptions(eventOptions: string): AddEventListenerOptions {
-  return eventOptions.split(":").reduce((options, token) => {
-    const valueMatch = token.match(/^([^(]+)\(([^)]*)\)$/)
+  return eventOptions
+    .split(":")
+    .reduce((options, token) => {
+      const valueMatch = token.match(/^([^(]+)\(([^)]*)\)$/)
 
-    if (valueMatch) {
-      return Object.assign(options, { [valueMatch[1]]: valueMatch[2] })
-    }
+      if (valueMatch) {
+        return Object.assign(options, { [valueMatch[1]]: valueMatch[2] })
+      }
 
-    return Object.assign(options, { [token.replace(/^!/, "")]: !/^!/.test(token) })
-  }, {})
+      return Object.assign(options, { [token.replace(/^!/, "")]: !/^!/.test(token) })
+    }, {})
 }
 
 export function stringifyEventTarget(eventTarget: EventTarget) {
