@@ -11,11 +11,7 @@ The best way to learn how Stimulus works is to build a simple controller. This c
 
 To follow along, you'll need a running copy of the [`stimulus-starter`](https://github.com/hotwired/stimulus-starter) project, which is a preconfigured blank slate for exploring Stimulus.
 
-We recommend [remixing `stimulus-starter` on Glitch](https://glitch.com/edit/#!/import/git?url=https://github.com/hotwired/stimulus-starter.git) so you can work entirely in your browser without installing anything:
-
-[![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/git?url=https://github.com/hotwired/stimulus-starter.git)
-
-Or, if you'd prefer to work from the comfort of your own text editor, you'll need to clone and set up `stimulus-starter`:
+Clone and set up `stimulus-starter`:
 
 ```
 $ git clone https://github.com/hotwired/stimulus-starter.git
