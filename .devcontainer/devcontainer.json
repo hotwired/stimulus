@@ -1,0 +1,19 @@
+{
+  "name": "Stimulus DevContainer",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "postCreateCommand": "yarn install",
+  "containerEnv": {
+    "CHROME_BIN": "/usr/bin/chromium"
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {},
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
+}
