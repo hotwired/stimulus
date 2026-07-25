@@ -16,6 +16,7 @@ export default class ValuePropertiesTests extends ControllerTestCase(ValueContro
     this.assert.equal(parseValueTypeConstant(Array), "array")
     this.assert.equal(parseValueTypeConstant(Object), "object")
     this.assert.equal(parseValueTypeConstant(Number), "number")
+    this.assert.equal(parseValueTypeConstant(DOMTokenList), "list")
 
     this.assert.equal(parseValueTypeConstant("" as any), undefined)
     this.assert.equal(parseValueTypeConstant({} as any), undefined)
@@ -94,6 +95,11 @@ export default class ValuePropertiesTests extends ControllerTestCase(ValueContro
     this.assert.equal(typeObject({ type: Boolean }), "boolean")
     this.assert.equal(typeObject({ default: false }), "boolean")
 
+    this.assert.equal(typeObject({ type: DOMTokenList }), "list")
+    this.assert.equal(typeObject({ type: DOMTokenList, default: [] }), "list")
+    this.assert.equal(typeObject({ type: DOMTokenList, default: ["a", "b"] }), "list")
+    this.assert.equal(typeObject({ default: ["a", "b"] }), "array")
+
     this.assert.throws(() => typeObject({ type: Boolean, default: "something else" }), {
       name: "Error",
       message: `The specified default value for the Stimulus Value "test.url" must match the defined type "boolean". The provided default value of "something else" is of type "string".`,
@@ -102,6 +108,21 @@ export default class ValuePropertiesTests extends ControllerTestCase(ValueContro
     this.assert.throws(() => typeObject({ type: Boolean, default: "true" }), {
       name: "Error",
       message: `The specified default value for the Stimulus Value "test.url" must match the defined type "boolean". The provided default value of "true" is of type "string".`,
+    })
+
+    this.assert.throws(() => typeObject({ type: DOMTokenList, default: "a b" }), {
+      name: "Error",
+      message: `The specified default value for the Stimulus Value "test.url" must match the defined type "list". The provided default value of "a b" is of type "string".`,
+    })
+
+    this.assert.throws(() => typeObject({ type: DOMTokenList, default: ["foo bar"] }), {
+      name: "Error",
+      message: `The specified default value for the Stimulus Value "test.url" contains the invalid list token "foo bar". List tokens must be non-empty and free of whitespace.`,
+    })
+
+    this.assert.throws(() => typeObject({ type: DOMTokenList, default: [""] }), {
+      name: "Error",
+      message: `The specified default value for the Stimulus Value "test.url" contains the invalid list token "". List tokens must be non-empty and free of whitespace.`,
     })
   }
 
@@ -128,6 +149,7 @@ export default class ValuePropertiesTests extends ControllerTestCase(ValueContro
     this.assert.equal(typeDefinition({}), "object")
     this.assert.equal(typeDefinition(""), "string")
     this.assert.equal(typeDefinition([]), "array")
+    this.assert.equal(typeDefinition(DOMTokenList), "list")
 
     this.assert.throws(() => typeDefinition(null))
     this.assert.throws(() => typeDefinition(undefined))
@@ -139,12 +161,15 @@ export default class ValuePropertiesTests extends ControllerTestCase(ValueContro
     this.assert.deepEqual(defaultValueForDefinition(Object), {})
     this.assert.deepEqual(defaultValueForDefinition(Array), [])
     this.assert.deepEqual(defaultValueForDefinition(Number), 0)
+    this.assert.deepEqual(defaultValueForDefinition(DOMTokenList), [])
 
     this.assert.deepEqual(defaultValueForDefinition({ type: String }), "")
     this.assert.deepEqual(defaultValueForDefinition({ type: Boolean }), false)
     this.assert.deepEqual(defaultValueForDefinition({ type: Object }), {})
     this.assert.deepEqual(defaultValueForDefinition({ type: Array }), [])
     this.assert.deepEqual(defaultValueForDefinition({ type: Number }), 0)
+    this.assert.deepEqual(defaultValueForDefinition({ type: DOMTokenList }), [])
+    this.assert.deepEqual(defaultValueForDefinition({ type: DOMTokenList, default: ["a", "b"] }), ["a", "b"])
 
     this.assert.deepEqual(defaultValueForDefinition({ type: String, default: null }), null)
     this.assert.deepEqual(defaultValueForDefinition({ type: Boolean, default: null }), null)

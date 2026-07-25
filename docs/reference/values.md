@@ -52,15 +52,34 @@ export default class extends Controller {
 
 ## Types
 
-A value's type is one of `Array`, `Boolean`, `Number`, `Object`, or `String`. The type determines how the value is transcoded between JavaScript and HTML.
+A value's type is one of `Array`, `Boolean`, `DOMTokenList`, `Number`, `Object`, or `String`. The type determines how the value is transcoded between JavaScript and HTML.
 
 | Type    | Encoded as…              | Decoded as…                             |
 | ------- | ------------------------ | --------------------------------------- |
 | Array   | `JSON.stringify(array)`  | `JSON.parse(value)`                     |
 | Boolean | `boolean.toString()`     | `!(value == "0" \|\| value == "false")` |
+| DOMTokenList | `tokens.join(" ")`  | Space-separated tokens, deduplicated    |
 | Number  | `number.toString()`      | `Number(value.replace(/_/g, ""))`       |
 | Object  | `JSON.stringify(object)` | `JSON.parse(value)`                     |
 | String  | Itself                   | Itself                                  |
+
+### List Values
+
+Declare a list value with the `DOMTokenList` constructor to store a simple array of string tokens as a space-separated attribute, the same format the platform uses for the `class` attribute and `DOMTokenList` properties like `classList`:
+
+```js
+export default class extends Controller {
+  static values = {
+    permittedTypes: DOMTokenList
+  }
+}
+```
+
+```html
+<div data-controller="upload" data-upload-permitted-types-value="image video audio"></div>
+```
+
+Reading a list value returns an array of strings. Like `DOMTokenList`, repeated tokens are deduplicated, keeping the first occurrence. Writing joins the tokens with single spaces; assigning a value that is not an array, or a token that is empty or contains whitespace, throws a `TypeError`. Use the `Array` type instead when your values are arbitrary strings rather than simple tokens. Default values declared for a list value must themselves be valid tokens.
 
 ## Properties and Attributes
 
@@ -82,6 +101,7 @@ Type | Default value
 ---- | -------------
 Array | `[]`
 Boolean | `false`
+DOMTokenList | `[]`
 Number | `0`
 Object | `{}`
 String | `""`

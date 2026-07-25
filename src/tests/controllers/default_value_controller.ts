@@ -21,6 +21,10 @@ export class DefaultValueController extends Controller {
     defaultArrayFilled: { type: Array, default: [1, 2, 3] },
     defaultArrayOverride: [9, 9, 9],
 
+    defaultList: { type: DOMTokenList, default: [] },
+    defaultListFilled: { type: DOMTokenList, default: ["one", "two"] },
+    defaultListOverride: { type: DOMTokenList, default: ["will", "be", "overridden"] },
+
     defaultObject: {},
     defaultObjectPerson: { type: Object, default: { name: "David" } },
     defaultObjectOverride: { override: "me" },
@@ -59,6 +63,13 @@ export class DefaultValueController extends Controller {
   hasDefaultArrayFilledValue!: boolean
   defaultArrayOverrideValue!: { [key: string]: any }
   hasDefaultArrayOverrideValue!: boolean
+
+  defaultListValue!: string[]
+  hasDefaultListValue!: boolean
+  defaultListFilledValue!: string[]
+  hasDefaultListFilledValue!: boolean
+  defaultListOverrideValue!: string[]
+  hasDefaultListOverrideValue!: boolean
 
   defaultObjectValue!: object
   hasDefaultObjectValue!: boolean

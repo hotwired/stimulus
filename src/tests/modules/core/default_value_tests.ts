@@ -8,6 +8,7 @@ export default class DefaultValueTests extends ControllerTestCase(DefaultValueCo
       data-${this.identifier}-default-boolean-override-value="false"
       data-${this.identifier}-default-number-override-value="42"
       data-${this.identifier}-default-array-override-value="[9,8,7]"
+      data-${this.identifier}-default-list-override-value="expected value"
       data-${this.identifier}-default-object-override-value='{"expected":"value"}'
     </div>
   `
@@ -138,6 +139,36 @@ export default class DefaultValueTests extends ControllerTestCase(DefaultValueCo
     this.assert.deepEqual(this.get("default-array-override-value"), "[9,8,7]")
     this.assert.deepEqual(this.controller.defaultArrayOverrideValue, [9, 8, 7])
     this.assert.ok(this.controller.hasDefaultArrayOverrideValue)
+  }
+
+  // Lists
+
+  "test custom default list values"() {
+    this.assert.deepEqual(this.controller.defaultListValue, [])
+    this.assert.ok(this.controller.hasDefaultListValue)
+    this.assert.deepEqual(this.get("default-list-value"), null)
+
+    this.assert.deepEqual(this.controller.defaultListFilledValue, ["one", "two"])
+    this.assert.ok(this.controller.hasDefaultListFilledValue)
+    this.assert.deepEqual(this.get("default-list-filled-value"), null)
+  }
+
+  "test should be able to set a new value for custom default list values"() {
+    this.assert.deepEqual(this.get("default-list-value"), null)
+    this.assert.deepEqual(this.controller.defaultListValue, [])
+    this.assert.ok(this.controller.hasDefaultListValue)
+
+    this.controller.defaultListValue = ["new", "value"]
+
+    this.assert.deepEqual(this.get("default-list-value"), "new value")
+    this.assert.deepEqual(this.controller.defaultListValue, ["new", "value"])
+    this.assert.ok(this.controller.hasDefaultListValue)
+  }
+
+  "test should override custom default list value with given data-attribute"() {
+    this.assert.deepEqual(this.get("default-list-override-value"), "expected value")
+    this.assert.deepEqual(this.controller.defaultListOverrideValue, ["expected", "value"])
+    this.assert.ok(this.controller.hasDefaultListOverrideValue)
   }
 
   // Objects
