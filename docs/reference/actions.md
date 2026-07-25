@@ -106,11 +106,24 @@ import { Application, defaultSchema } from "@hotwired/stimulus"
 
 const customSchema = {
   ...defaultSchema,
-  keyMappings: { ...defaultSchema.keyMappings, at: "@" },
+  keyMappings: { 
+    ...defaultSchema.keyMappings, 
+    at: "@",
+    slash: "/",
+    question: "?"
+  },
 }
 
 const app = Application.start(document.documentElement, customSchema)
 ```
+
+Then use them in your action descriptors:
+
+```html
+<div data-controller="search" 
+     data-action="keydown.slash->search#focus keydown.question->search#showHelp">
+</div>
+html
 
 If you want to subscribe to a compound filter using a modifier key, you can write it like `ctrl+a`.
 
