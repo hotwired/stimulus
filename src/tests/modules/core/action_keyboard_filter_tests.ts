@@ -22,6 +22,7 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
       <button id="button8" data-action="keydown.a->a#log keydown.b->a#log2"></button>
       <button id="button9" data-action="keydown.shift+a->a#log keydown.a->a#log2 keydown.ctrl+shift+a->a#log3">
       <button id="button10" data-action="jquery.custom.event->a#log jquery.a->a#log2">
+      <button id="button11" data-action="keydown.j->a#log"></button>
     </div>
   `
 
@@ -196,5 +197,29 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
     await this.nextFrame
     await this.triggerEvent(button, "jquery.a")
     this.assertActions({ name: "log2", identifier: "a", eventType: "jquery.a", currentTarget: button })
+  }
+
+  // Cyrillic (Bulgarian, phonetic layout)
+  async "test plain j key filter falls back to code for cyrillic key"() {
+    const button = this.findElement("#button11")
+    await this.nextFrame
+    await this.triggerKeyboardEvent(button, "keydown", { key: "й", code: "KeyJ" })
+    this.assertActions({ name: "log", identifier: "a", eventType: "keydown", currentTarget: button })
+  }
+
+  // Greek
+  async "test plain j key filter falls back to code for greek key"() {
+    const button = this.findElement("#button11")
+    await this.nextFrame
+    await this.triggerKeyboardEvent(button, "keydown", { key: "ξ", code: "KeyJ" })
+    this.assertActions({ name: "log", identifier: "a", eventType: "keydown", currentTarget: button })
+  }
+
+  // Hebrew
+  async "test plain j key filter falls back to code for hebrew key"() {
+    const button = this.findElement("#button11")
+    await this.nextFrame
+    await this.triggerKeyboardEvent(button, "keydown", { key: "ח", code: "KeyJ" })
+    this.assertActions({ name: "log", identifier: "a", eventType: "keydown", currentTarget: button })
   }
 }
