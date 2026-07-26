@@ -79,7 +79,10 @@ export class Application implements ErrorHandler {
 
   getControllerForElementAndIdentifier(element: Element, identifier: string): Controller | null {
     const context = this.router.getContextForElementAndIdentifier(element, identifier)
-    return context ? context.controller : null
+    if (context) return context.controller
+
+    this.logDebugActivity(identifier, "controller not found", { element })
+    return null
   }
 
   // Error handling
