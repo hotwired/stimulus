@@ -5,7 +5,7 @@ export default class ActionTests extends LogControllerTestCase {
   fixtureHTML = `
     <div data-controller="c" data-action="keydown@window->c#log">
       <button data-action="c#log"><span>Log</span></button>
-      <div id="outer" data-action="click->c#log">
+      <div id="outer" data-action="click->c#log mousedown->c#iAmMissing">
         <div id="inner" data-controller="c" data-action="click->c#log keyup@window->c#log"></div>
       </div>
       <div id="multiple" data-action="click->c#log click->c#log2 mousedown->c#log"></div>
@@ -65,5 +65,10 @@ export default class ActionTests extends LogControllerTestCase {
     await this.triggerEvent("#svgRoot", "click")
     await this.triggerEvent("#svgChild", "mousedown")
     this.assertActions({ name: "log", eventType: "click" }, { name: "log", eventType: "mousedown" })
+  }
+
+  async "test missing actions routed through actionHandlerMissing"() {
+    await this.triggerEvent("#outer", "mousedown")
+    this.assertActions({ name: "iAmMissing_missing", eventType: "mousedown" })
   }
 }
