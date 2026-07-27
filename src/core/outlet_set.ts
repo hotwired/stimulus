@@ -41,7 +41,10 @@ export class OutletSet {
 
   getSelectorForOutletName(outletName: string) {
     const attributeName = this.schema.outletAttributeForScope(this.identifier, outletName)
-    return this.controllerElement.getAttribute(attributeName)
+    const hasSelector = this.controllerElement.hasAttribute(attributeName)
+    const selector = this.controllerElement.getAttribute(attributeName)
+
+    return hasSelector ? selector : this.getControllerSelectorForOutletName(outletName)
   }
 
   private findOutlet(outletName: string) {
@@ -65,7 +68,11 @@ export class OutletSet {
   }
 
   private matchesElement(element: Element, selector: string, outletName: string): boolean {
-    const controllerAttribute = element.getAttribute(this.scope.schema.controllerAttribute) || ""
-    return element.matches(selector) && controllerAttribute.split(" ").includes(outletName)
+    const controllerSelector = this.getControllerSelectorForOutletName(outletName)
+    return element.matches(selector) && element.matches(controllerSelector)
+  }
+
+  private getControllerSelectorForOutletName(outletName: string) {
+    return `[${this.schema.controllerAttribute}~="${outletName}"]`
   }
 }
