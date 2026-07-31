@@ -4,7 +4,7 @@ export type ActionDescriptorFilters = Record<string, ActionDescriptorFilter>
 export type ActionDescriptorFilter = (options: ActionDescriptorFilterOptions) => boolean
 type ActionDescriptorFilterOptions = {
   name: string
-  value: boolean
+  value: boolean | string
   event: Event
   element: Element
   controller: Controller<Element>
@@ -76,7 +76,15 @@ function parseEventTarget(eventTargetName: string): EventTarget | undefined {
 function parseEventOptions(eventOptions: string): AddEventListenerOptions {
   return eventOptions
     .split(":")
-    .reduce((options, token) => Object.assign(options, { [token.replace(/^!/, "")]: !/^!/.test(token) }), {})
+    .reduce((options, token) => {
+      const valueMatch = token.match(/^([^(]+)\(([^)]*)\)$/)
+
+      if (valueMatch) {
+        return Object.assign(options, { [valueMatch[1]]: valueMatch[2] })
+      }
+
+      return Object.assign(options, { [token.replace(/^!/, "")]: !/^!/.test(token) })
+    }, {})
 }
 
 export function stringifyEventTarget(eventTarget: EventTarget) {

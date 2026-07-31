@@ -209,6 +209,43 @@ application.registerActionOption("open", ({ event, value }) => {
 })
 ```
 
+Beyond boolean values, a custom action option can also capture a string value by
+wrapping it in parentheses. Declaring the option as `:name(value)` will yield a
+`value` argument set to the string `"value"` in the callback. This is useful for
+parameterizing an option, such as a `:throttled(500)` option that ignores events
+arriving within a configurable number of milliseconds of the previous one:
+
+<meta data-controller="callout" data-callout-text-value=":throttled(500)">
+
+```html
+<div data-controller="gallery"
+     data-action="scroll->gallery#layout:throttled(500)">
+</div>
+```
+
+```javascript
+import { Application } from "@hotwired/stimulus"
+
+const application = Application.start()
+
+let lastInvokedAt = 0
+
+application.registerActionOption("throttled", ({ value }) => {
+  const wait = Number(value)
+  const elapsed = Date.now() - lastInvokedAt
+
+  if (elapsed > wait) {
+    lastInvokedAt = Date.now()
+    return true
+  } else {
+    return false
+  }
+})
+```
+
+Values captured this way are always passed as strings, so convert them to the
+type you need (for example, with `Number(value)`) inside the callback.
+
 In order to prevent the event from being routed to the controller action, the
 `registerActionOption` callback function must return `false`. Otherwise, to
 route the event to the controller action, return `true`.
@@ -218,7 +255,7 @@ The callback accepts a single object argument with the following keys:
 | Name       | Description                                                                                           |
 | ---------- | ----------------------------------------------------------------------------------------------------- |
 | name       | String: The option's name (`"open"` in the example above)                                             |
-| value      | Boolean: The value of the option (`:open` would yield `true`, `:!open` would yield `false`)           |
+| value      | Boolean or String: The value of the option (`:open` yields `true`, `:!open` yields `false`, `:name(value)` yields the string `"value"`) |
 | event      | [Event][]: The event instance, including with the `params` action parameters on the submitter element |
 | element    | [Element]: The element where the action descriptor is declared                                        |
 | controller | The `Controller` instance which would receive the method call                                         |
