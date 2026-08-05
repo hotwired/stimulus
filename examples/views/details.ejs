@@ -1,0 +1,25 @@
+<%- include("layout/head") %>
+
+<strong>Opening outside a details item will close them, clicking inside details will not close that one.</strong>
+
+<details data-controller="details" data-action="click@outside->details#close">
+  <summary>Item 1</summary>
+  <p>These are the details for item 1 with a <button type="button">button</button> and some additional content.</p>
+</details>
+
+<details data-controller="details" data-action="click@outside->details#close">
+  <summary>Item 2</summary>
+  <p>These are the details for item 2 with a <button type="button">button</button> and some additional content.</p>
+</details>
+
+<details data-controller="details" data-action="click@outside->details#close">
+  <summary>Item 3</summary>
+  <p>These are the details for item 3 with a <button type="button">button</button> and some additional content.</p>
+</details>
+
+<details data-controller="details" data-action="click@outside->details#close">
+  <summary>Item 4</summary>
+  <p>These are the details for item 4 with a <button type="button">button</button> and some additional content.</p>
+</details>
+
+<%- include("layout/tail") %>

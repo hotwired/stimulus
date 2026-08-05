@@ -9,6 +9,9 @@ application.register("clipboard", ClipboardController)
 import ContentLoaderController from "./controllers/content_loader_controller"
 application.register("content-loader", ContentLoaderController)
 
+import DetailsController from "./controllers/details_controller"
+application.register("details", DetailsController)
+
 import HelloController from "./controllers/hello_controller"
 application.register("hello", HelloController)
 
