@@ -1,18 +1,27 @@
 import { ControllerTestCase } from "../../cases/controller_test_case"
 import { TargetController } from "../../controllers/target_controller"
+import { Schema, defaultSchema } from "../../../core/schema"
 
 export default class TargetTests extends ControllerTestCase(TargetController) {
+  override schema: Schema = {
+    ...defaultSchema,
+
+    // Override target attribute to verify that it is used correctly
+    // https://github.com/hotwired/stimulus/issues/809
+    targetAttributeForScope: (identifier) => `data-${identifier}-test-target`,
+  }
+
   fixtureHTML = `
     <div data-controller="${this.identifier}" data-${this.identifier}-connected-class="connected" data-${this.identifier}-disconnected-class="disconnected">
-      <div data-${this.identifier}-target="alpha" id="alpha1"></div>
-      <div data-${this.identifier}-target="alpha" id="alpha2"></div>
-      <div data-${this.identifier}-target="beta" id="beta1">
-        <div data-${this.identifier}-target="gamma" id="gamma1"></div>
+      <div data-${this.identifier}-test-target="alpha" id="alpha1"></div>
+      <div data-${this.identifier}-test-target="alpha" id="alpha2"></div>
+      <div data-${this.identifier}-test-target="beta" id="beta1">
+        <div data-${this.identifier}-test-target="gamma" id="gamma1"></div>
       </div>
       <div data-controller="${this.identifier}" id="child">
-        <div data-${this.identifier}-target="delta" id="delta1"></div>
+        <div data-${this.identifier}-test-target="delta" id="delta1"></div>
       </div>
-      <textarea data-${this.identifier}-target="omega input" id="input1"></textarea>
+      <textarea data-${this.identifier}-test-target="omega input" id="input1"></textarea>
     </div>
   `
 
@@ -54,7 +63,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
   }
 
   "test singular linked target property throws an error when no target is found"() {
-    this.findElement("#beta1").removeAttribute(`data-${this.identifier}-target`)
+    this.findElement("#beta1").removeAttribute(`data-${this.identifier}-test-target`)
     this.assert.equal(this.controller.hasBetaTarget, false)
     this.assert.equal(this.controller.betaTargets.length, 0)
     this.assert.throws(() => this.controller.betaTarget)
@@ -69,7 +78,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
 
   async "test target connected callback when element is inserted"() {
     const connectedInput = document.createElement("input")
-    connectedInput.setAttribute(`data-${this.controller.identifier}-target`, "input")
+    connectedInput.setAttribute(`data-${this.controller.identifier}-test-target`, "input")
 
     this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 1)
 
@@ -89,7 +98,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
 
     this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 1)
 
-    element.setAttribute(`data-${this.controller.identifier}-target`, "input")
+    element.setAttribute(`data-${this.controller.identifier}-test-target`, "input")
     await this.nextFrame
 
     this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 2)
@@ -102,7 +111,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
 
     this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 1)
 
-    element.setAttribute(`data-${this.controller.identifier}-target`, "alpha input")
+    element.setAttribute(`data-${this.controller.identifier}-test-target`, "alpha input")
     await this.nextFrame
 
     this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 2)
@@ -156,7 +165,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
       `expected "${element.className}" not to contain "disconnected"`
     )
 
-    element.removeAttribute(`data-${this.controller.identifier}-target`)
+    element.removeAttribute(`data-${this.controller.identifier}-test-target`)
     await this.nextFrame
 
     this.assert.equal(this.controller.inputTargetDisconnectedCallCountValue, 1)
@@ -177,7 +186,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
       `expected "${element.className}" not to contain "disconnected"`
     )
 
-    element.setAttribute(`data-${this.controller.identifier}-target`, "input")
+    element.setAttribute(`data-${this.controller.identifier}-test-target`, "input")
     await this.nextFrame
 
     this.assert.equal(this.controller.inputTargetConnectedCallCountValue, 2)
@@ -193,7 +202,7 @@ export default class TargetTests extends ControllerTestCase(TargetController) {
     this.controller.element.insertAdjacentHTML(
       "beforeend",
       `
-      <div data-${this.identifier}-target="recursive" id="recursive2"></div>
+      <div data-${this.identifier}-test-target="recursive" id="recursive2"></div>
     `
     )
     await this.nextFrame
