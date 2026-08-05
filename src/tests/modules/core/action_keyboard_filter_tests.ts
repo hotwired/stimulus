@@ -3,7 +3,10 @@ import { LogControllerTestCase } from "../../cases/log_controller_test_case"
 import { Schema, defaultSchema } from "../../../core/schema"
 import { Application } from "../../../core/application"
 
-const customSchema = { ...defaultSchema, keyMappings: { ...defaultSchema.keyMappings, a: "a", b: "b" } }
+const customSchema = {
+  ...defaultSchema,
+  keyMappings: { ...defaultSchema.keyMappings, a: "a", b: "b" } as { [key: string]: string },
+}
 
 export default class ActionKeyboardFilterTests extends LogControllerTestCase {
   schema: Schema = customSchema
@@ -22,6 +25,7 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
       <button id="button8" data-action="keydown.a->a#log keydown.b->a#log2"></button>
       <button id="button9" data-action="keydown.shift+a->a#log keydown.a->a#log2 keydown.ctrl+shift+a->a#log3">
       <button id="button10" data-action="jquery.custom.event->a#log jquery.a->a#log2">
+      <button id="button11" data-action="keydown.mod+s->a#log">
     </div>
   `
 
@@ -177,7 +181,7 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
     this.assertActions({ name: "log2", identifier: "a", eventType: "keydown", currentTarget: button })
   }
 
-  async "test ignore event handlers associated with modifiers other than ctrol+shift+a"() {
+  async "test ignore event handlers associated with modifiers other than ctrl+shift+a"() {
     const button = this.findElement("#button9")
     await this.nextFrame
     await this.triggerKeyboardEvent(button, "keydown", { key: "A", ctrlKey: true, shiftKey: true })
@@ -196,5 +200,54 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
     await this.nextFrame
     await this.triggerEvent(button, "jquery.a")
     this.assertActions({ name: "log2", identifier: "a", eventType: "jquery.a", currentTarget: button })
+  }
+
+  async "test that the default schema keyMappings.mod value is based on the platform"() {
+    const expectedKeyMapping = navigator.platform?.match(/Mac|iPod|iPhone|iPad/) ? "Meta" : "Control"
+    this.assert.equal(defaultSchema.keyMappings.mod, expectedKeyMapping)
+  }
+
+  async "test ignore event handlers associated with modifiers mod+<key> (dynamic based on platform)"() {
+    const button = this.findElement("#button11")
+    await this.nextFrame
+    await this.triggerKeyboardEvent(button, "keydown", { key: "s", ctrlKey: true })
+    await this.triggerKeyboardEvent(button, "keydown", { key: "s", metaKey: true })
+    // We should only see one event using `mod` (which is dynamic based on platform)
+    this.assertActions({ name: "log", identifier: "a", eventType: "keydown", currentTarget: button })
+
+    customSchema.keyMappings.mod = "Control" // set up for next test
+  }
+
+  async "test ignore event handlers associated with modifiers mod+<key> (set to 'Control')"() {
+    // see .mod setting in previous test (mocking Windows)
+    this.schema = {
+      ...this.application.schema,
+      keyMappings: { ...this.application.schema.keyMappings, mod: "Control" },
+    }
+    const button = this.findElement("#button11")
+    await this.nextFrame
+    await this.triggerKeyboardEvent(button, "keydown", { key: "s", metaKey: true })
+    this.assertNoActions()
+    await this.triggerKeyboardEvent(button, "keydown", { key: "s", ctrlKey: true })
+    this.assertActions({ name: "log", identifier: "a", eventType: "keydown", currentTarget: button })
+
+    customSchema.keyMappings.mod = "Meta" // set up for next test
+  }
+
+  async "test ignore event handlers associated with modifiers mod+<key> (set to 'Meta')"() {
+    // see .mod setting in previous test (mocking Windows)
+    this.schema = {
+      ...this.application.schema,
+      keyMappings: { ...this.application.schema.keyMappings, mod: "Meta" },
+    }
+    const button = this.findElement("#button11")
+    await this.nextFrame
+    await this.triggerKeyboardEvent(button, "keydown", { key: "s", ctrlKey: true })
+    this.assertNoActions()
+    await this.triggerKeyboardEvent(button, "keydown", { key: "s", metaKey: true })
+    this.assertActions({ name: "log", identifier: "a", eventType: "keydown", currentTarget: button })
+
+    // Reset to default for any subsequent tests
+    this.schema = customSchema
   }
 }

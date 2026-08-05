@@ -4,7 +4,7 @@ import { Schema } from "./schema"
 import { camelize } from "./string_helpers"
 import { hasProperty } from "./utils"
 
-const allModifiers = ["meta", "ctrl", "alt", "shift"]
+const allModifiers = ["meta", "ctrl", "alt", "shift", "mod"]
 
 export class Action {
   readonly element: Element
@@ -98,9 +98,14 @@ export class Action {
   }
 
   private keyFilterDissatisfied(event: KeyboardEvent | MouseEvent, filters: Array<string>): boolean {
-    const [meta, ctrl, alt, shift] = allModifiers.map((modifier) => filters.includes(modifier))
-
-    return event.metaKey !== meta || event.ctrlKey !== ctrl || event.altKey !== alt || event.shiftKey !== shift
+    const [meta, ctrl, alt, shift, mod] = allModifiers.map((modifier) => filters.includes(modifier))
+    const modKey = mod && this.keyMappings.mod
+    return (
+      event.metaKey !== (meta || modKey === "Meta") ||
+      event.ctrlKey !== (ctrl || modKey === "Control") ||
+      event.altKey !== alt ||
+      event.shiftKey !== shift
+    )
   }
 }
 

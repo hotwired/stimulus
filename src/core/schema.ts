@@ -1,3 +1,5 @@
+const isMac = typeof window !== "undefined" && /Mac|iPod|iPhone|iPad/.test(window.navigator?.platform || "")
+
 export interface Schema {
   controllerAttribute: string
   actionAttribute: string
@@ -14,6 +16,7 @@ export const defaultSchema: Schema = {
   targetAttributeForScope: (identifier) => `data-${identifier}-target`,
   outletAttributeForScope: (identifier, outlet) => `data-${identifier}-${outlet}-outlet`,
   keyMappings: {
+    mod: isMac ? "Meta" : "Control",
     enter: "Enter",
     tab: "Tab",
     esc: "Escape",
