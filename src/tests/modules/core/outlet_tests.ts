@@ -12,6 +12,8 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
         <div id="beta3"></div>
         <div data-controller="beta" id="beta4"></div>
       </div>
+      
+      <div data-controller="zeta" class="zeta"></div>
 
       <div
         data-controller="${this.identifier}"
@@ -21,8 +23,10 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
         data-${this.identifier}-beta-outlet=".beta"
         data-${this.identifier}-delta-outlet=".delta"
         data-${this.identifier}-namespaced--epsilon-outlet=".epsilon"
+        data-${this.identifier}-zeta-outlet=":scope .zeta"
       >
         <div data-controller="gamma" class="gamma" id="gamma2"></div>
+        <div data-controller="zeta" class="zeta" id="inner-zeta"></div>
       </div>
 
       <div data-controller="delta gamma" class="delta gamma" id="delta1">
@@ -36,8 +40,9 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       <div class="beta" id="beta5"></div>
     </div>
   `
+
   get identifiers() {
-    return ["test", "alpha", "beta", "gamma", "delta", "omega", "namespaced--epsilon"]
+    return ["test", "alpha", "beta", "gamma", "delta", "omega", "namespaced--epsilon", "zeta"]
   }
 
   "test OutletSet#find"() {
@@ -45,6 +50,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     this.assert.equal(this.controller.outlets.find("beta"), this.findElement("#beta1"))
     this.assert.equal(this.controller.outlets.find("delta"), this.findElement("#delta1"))
     this.assert.equal(this.controller.outlets.find("namespaced--epsilon"), this.findElement("#epsilon1"))
+    this.assert.equal(this.controller.outlets.find("zeta"), this.findElement("#inner-zeta"))
   }
 
   "test OutletSet#findAll"() {
@@ -54,12 +60,13 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       this.controller.outlets.findAll("namespaced--epsilon"),
       this.findElements("#epsilon1", "#epsilon2")
     )
+    this.assert.deepEqual(this.controller.outlets.findAll("zeta"), this.findElements("#inner-zeta"))
   }
 
   "test OutletSet#findAll with multiple arguments"() {
     this.assert.deepEqual(
-      this.controller.outlets.findAll("alpha", "beta", "namespaced--epsilon"),
-      this.findElements("#alpha1", "#alpha2", "#beta1", "#beta2", "#epsilon1", "#epsilon2")
+      this.controller.outlets.findAll("alpha", "beta", "namespaced--epsilon", "zeta"),
+      this.findElements("#alpha1", "#alpha2", "#beta1", "#beta2", "#epsilon1", "#epsilon2", "#inner-zeta")
     )
   }
 
@@ -70,6 +77,7 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     this.assert.equal(this.controller.outlets.has("delta"), true)
     this.assert.equal(this.controller.outlets.has("omega"), false)
     this.assert.equal(this.controller.outlets.has("namespaced--epsilon"), true)
+    this.assert.equal(this.controller.outlets.has("zeta"), true)
   }
 
   "test OutletSet#has when attribute gets added later"() {

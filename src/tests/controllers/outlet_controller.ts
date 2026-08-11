@@ -12,7 +12,7 @@ class BaseOutletController extends Controller {
 
 export class OutletController extends BaseOutletController {
   static classes = ["connected", "disconnected"]
-  static outlets = ["beta", "gamma", "delta", "omega", "namespaced--epsilon"]
+  static outlets = ["beta", "gamma", "delta", "omega", "namespaced--epsilon", "zeta"]
 
   static values = {
     alphaOutletConnectedCallCount: Number,

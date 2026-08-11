@@ -66,6 +66,8 @@ export class OutletSet {
 
   private matchesElement(element: Element, selector: string, outletName: string): boolean {
     const controllerAttribute = element.getAttribute(this.scope.schema.controllerAttribute) || ""
-    return element.matches(selector) && controllerAttribute.split(" ").includes(outletName)
+    const matches =
+      element.matches(selector) || Array.from(this.controllerElement.querySelectorAll(selector)).includes(element)
+    return matches && controllerAttribute.split(" ").includes(outletName)
   }
 }
