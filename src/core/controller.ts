@@ -73,6 +73,20 @@ export class Controller<ElementType extends Element = Element> {
     return this.scope.data
   }
 
+  findElement(selector: string): Element | undefined {
+    const elementWithId = document.getElementById(selector)
+    if (elementWithId && this.scope.containsElement(elementWithId)) {
+      return elementWithId
+    }
+    const newSelector = this.classifySelector(selector)
+    return this.scope.findElement(newSelector)
+  }
+
+  findAllElements(selector: string): Element[] {
+    const newSelector = this.classifySelector(selector)
+    return this.scope.findAllElements(newSelector)
+  }
+
   initialize() {
     // Override in your subclass to set up initial controller state
   }
@@ -99,5 +113,17 @@ export class Controller<ElementType extends Element = Element> {
     const event = new CustomEvent(type, { detail, bubbles, cancelable })
     target.dispatchEvent(event)
     return event
+  }
+
+  private classifySelector(selector: string | string[]): string {
+    const tokens = Array.isArray(selector) ? selector : [selector]
+
+    const definedClasses: string[] = (this.constructor as any).classes.flatMap((key: string) => {
+      const value = (this as any)[`${key}Classes`] as string[] | undefined
+      return value ?? []
+    })
+
+    const allTokensDefined = tokens.every((token) => definedClasses.includes(token))
+    return "." + tokens.join(allTokensDefined ? "." : " ")
   }
 }
