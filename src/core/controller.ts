@@ -2,7 +2,7 @@ import { Application } from "./application"
 import { ClassPropertiesBlessing } from "./class_properties"
 import { Constructor } from "./constructor"
 import { Context } from "./context"
-import { OutletPropertiesBlessing } from "./outlet_properties"
+import { OutletPropertiesBlessing, OutletRenameObject } from "./outlet_properties"
 import { TargetPropertiesBlessing } from "./target_properties"
 import { ValuePropertiesBlessing, ValueDefinitionMap } from "./value_properties"
 
@@ -24,7 +24,7 @@ export class Controller<ElementType extends Element = Element> {
     OutletPropertiesBlessing,
   ]
   static targets: string[] = []
-  static outlets: string[] = []
+  static outlets: (string | OutletRenameObject)[] = []
   static values: ValueDefinitionMap = {}
 
   static get shouldLoad() {
