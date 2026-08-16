@@ -72,14 +72,20 @@ export class Binding {
   }
 
   private invokeWithEvent(event: ActionEvent) {
-    const { target, currentTarget } = event
-    try {
-      this.method.call(this.controller, event)
-      this.context.logDebugActivity(this.methodName, { event, target, currentTarget, action: this.methodName })
-    } catch (error: any) {
+    const handleError = (error: any) => {
       const { identifier, controller, element, index } = this
       const detail = { identifier, controller, element, index, event }
       this.context.handleError(error, `invoking action "${this.action}"`, detail)
+    }
+
+    const { target, currentTarget } = event
+    try {
+      Promise
+        .resolve(this.method.call(this.controller, event))
+        .catch(error => handleError(error))
+      this.context.logDebugActivity(this.methodName, { event, target, currentTarget, action: this.methodName })
+    } catch (error: any) {
+      handleError(error)
     }
   }
 
