@@ -6,8 +6,9 @@ import { Logger } from "./logger"
 import { Router } from "./router"
 import { Schema, defaultSchema } from "./schema"
 import { ActionDescriptorFilter, ActionDescriptorFilters, defaultActionDescriptorFilters } from "./action_descriptor"
+import { WarningHandler } from "./warning_handler"
 
-export class Application implements ErrorHandler {
+export class Application implements ErrorHandler, WarningHandler {
   readonly element: Element
   readonly schema: Schema
   readonly dispatcher: Dispatcher
@@ -15,6 +16,7 @@ export class Application implements ErrorHandler {
   readonly actionDescriptorFilters: ActionDescriptorFilters
   logger: Logger = console
   debug = false
+  warnings = true
 
   static start(element?: Element, schema?: Schema): Application {
     const application = new this(element, schema)
@@ -90,7 +92,13 @@ export class Application implements ErrorHandler {
     window.onerror?.(message, "", 0, 0, error)
   }
 
-  // Debug logging
+  // Logging
+
+  handleWarning(warning: string, message: string, detail: any) {
+    if (this.warnings) {
+      this.logger.warn(`%s\n\n%s\n\n%o`, message, warning, detail)
+    }
+  }
 
   logDebugActivity = (identifier: string, functionName: string, detail: object = {}): void => {
     if (this.debug) {

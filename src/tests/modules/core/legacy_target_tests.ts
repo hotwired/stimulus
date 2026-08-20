@@ -20,6 +20,7 @@ export default class LegacyTargetTests extends ControllerTestCase(TargetControll
 
   async setupApplication() {
     super.setupApplication()
+    this.application.warnings = true
     this.application.logger = Object.create(console, {
       warn: {
         value: () => this.warningCount++,
