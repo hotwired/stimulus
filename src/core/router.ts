@@ -1,4 +1,4 @@
-import { Application } from "./application"
+import { Application, AsyncConstructor } from "./application"
 import { Context } from "./context"
 import { Definition } from "./definition"
 import { Module } from "./module"
@@ -11,11 +11,13 @@ export class Router implements ScopeObserverDelegate {
   private scopeObserver: ScopeObserver
   private scopesByIdentifier: Multimap<string, Scope>
   private modulesByIdentifier: Map<string, Module>
+  private lazyModulesByIdentifier: Map<string, AsyncConstructor>
 
   constructor(application: Application) {
     this.application = application
     this.scopeObserver = new ScopeObserver(this.element, this.schema, this)
     this.scopesByIdentifier = new Multimap()
+    this.lazyModulesByIdentifier = new Map()
     this.modulesByIdentifier = new Map()
   }
 
@@ -98,10 +100,13 @@ export class Router implements ScopeObserverDelegate {
   }
 
   scopeConnected(scope: Scope) {
-    this.scopesByIdentifier.add(scope.identifier, scope)
+    const { identifier } = scope
+    this.scopesByIdentifier.add(identifier, scope)
     const module = this.modulesByIdentifier.get(scope.identifier)
     if (module) {
       module.connectContextForScope(scope)
+    } else if (this.lazyModulesByIdentifier.has(identifier)) {
+      this.loadLazyModule(identifier)
     }
   }
 
@@ -115,6 +120,14 @@ export class Router implements ScopeObserverDelegate {
 
   // Modules
 
+  registerLazyModule(identifier: string, controllerConstructor: AsyncConstructor) {
+    if (!this.modulesByIdentifier.has(identifier) && !this.lazyModulesByIdentifier.has(identifier)) {
+      this.lazyModulesByIdentifier.set(identifier, controllerConstructor)
+    } else {
+      this.application.logger.warn(`Stimulus has already a controller with "${identifier}" registered.`)
+    }
+  }
+
   private connectModule(module: Module) {
     this.modulesByIdentifier.set(module.identifier, module)
     const scopes = this.scopesByIdentifier.getValuesForKey(module.identifier)
@@ -125,5 +138,23 @@ export class Router implements ScopeObserverDelegate {
     this.modulesByIdentifier.delete(module.identifier)
     const scopes = this.scopesByIdentifier.getValuesForKey(module.identifier)
     scopes.forEach((scope) => module.disconnectContextForScope(scope))
+  }
+
+  private loadLazyModule(identifier: string) {
+    const callback = this.lazyModulesByIdentifier.get(identifier)
+    if (callback && typeof callback === "function") {
+      callback().then((controllerConstructor) => {
+        if (!this.modulesByIdentifier.has(identifier)) {
+          this.loadDefinition({ identifier, controllerConstructor })
+          this.lazyModulesByIdentifier.delete(identifier)
+        }
+      })
+    } else {
+      this.application.logger.warn(
+        `Stimulus expected the callback registered for "${identifier}" to resolve to a controllerConstructor but didn't`,
+        `Failed to lazy load ${identifier}`,
+        { identifier }
+      )
+    }
   }
 }
