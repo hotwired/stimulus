@@ -1,0 +1,16 @@
+<%- include("layout/head") %>
+
+<dialog id="dialog" class="container" data-controller="element">
+  <span>This dialog is managed through a disclosure button powered by an Outlet.</span>
+
+  <form method="dialog">
+    <button>Close</button>
+  </form>
+</dialog>
+
+<button type="button"
+  data-controller="disclosure"
+  data-disclosure-element-outlet="#dialog"
+  data-action="click->disclosure#expand close@element->disclosure#collapse">Open dialog</button>
+
+<%- include("layout/tail") %>

@@ -38,11 +38,15 @@ export class Dispatcher implements BindingObserverDelegate {
   // Binding observer delegate
 
   bindingConnected(binding: Binding) {
-    this.fetchEventListenerForBinding(binding).bindingConnected(binding)
+    for (const eventListener of this.fetchEventListenersForBinding(binding)) {
+      eventListener.bindingConnected(binding)
+    }
   }
 
   bindingDisconnected(binding: Binding, clearEventListeners = false) {
-    this.fetchEventListenerForBinding(binding).bindingDisconnected(binding)
+    for (const eventListener of this.fetchEventListenersForBinding(binding)) {
+      eventListener.bindingDisconnected(binding)
+    }
     if (clearEventListeners) this.clearEventListenersForBinding(binding)
   }
 
@@ -53,25 +57,29 @@ export class Dispatcher implements BindingObserverDelegate {
   }
 
   private clearEventListenersForBinding(binding: Binding) {
-    const eventListener = this.fetchEventListenerForBinding(binding)
-    if (!eventListener.hasBindings()) {
-      eventListener.disconnect()
-      this.removeMappedEventListenerFor(binding)
+    for (const eventListener of this.fetchEventListenersForBinding(binding)) {
+      if (!eventListener.hasBindings()) {
+        eventListener.disconnect()
+        this.removeMappedEventListenerFor(binding)
+      }
     }
   }
 
   private removeMappedEventListenerFor(binding: Binding) {
-    const { eventTarget, eventName, eventOptions } = binding
-    const eventListenerMap = this.fetchEventListenerMapForEventTarget(eventTarget)
-    const cacheKey = this.cacheKey(eventName, eventOptions)
+    const { eventTargets, eventName, eventOptions } = binding
 
-    eventListenerMap.delete(cacheKey)
-    if (eventListenerMap.size == 0) this.eventListenerMaps.delete(eventTarget)
+    for (const eventTarget of eventTargets) {
+      const eventListenerMap = this.fetchEventListenerMapForEventTarget(eventTarget)
+      const cacheKey = this.cacheKey(eventName, eventOptions)
+
+      eventListenerMap.delete(cacheKey)
+      if (eventListenerMap.size == 0) this.eventListenerMaps.delete(eventTarget)
+    }
   }
 
-  private fetchEventListenerForBinding(binding: Binding): EventListener {
-    const { eventTarget, eventName, eventOptions } = binding
-    return this.fetchEventListener(eventTarget, eventName, eventOptions)
+  private fetchEventListenersForBinding(binding: Binding): EventListener[] {
+    const { eventTargets, eventName, eventOptions } = binding
+    return eventTargets.map((eventTarget) => this.fetchEventListener(eventTarget, eventName, eventOptions))
   }
 
   private fetchEventListener(
