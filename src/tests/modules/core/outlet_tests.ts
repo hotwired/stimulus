@@ -34,6 +34,13 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
       <div data-controller="namespaced--epsilon" class="epsilon" id="epsilon2"></div>
 
       <div class="beta" id="beta5"></div>
+
+      <div
+        data-controller="
+          beta
+        "
+        id="beta6"
+      ></div>
     </div>
   `
   get identifiers() {
@@ -86,6 +93,12 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
   "test OutletSet#has when selector matches but element doesn't have the right controller"() {
     this.controller.element.setAttribute(`data-${this.identifier}-gamma-outlet`, ".alpha")
     this.assert.equal(this.controller.outlets.has("gamma"), false)
+  }
+
+  "test OutletSet#has when the matched element's data-controller attribute is separated by newlines"() {
+    this.controller.element.setAttribute(`data-${this.identifier}-beta-outlet`, "#beta6")
+    this.assert.equal(this.controller.outlets.has("beta"), true)
+    this.assert.equal(this.controller.outlets.find("beta"), this.findElement("#beta6"))
   }
 
   "test linked outlet properties"() {
