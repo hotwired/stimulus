@@ -134,7 +134,11 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
   invokeControllerMethod(methodName: string, ...args: any[]) {
     const controller: any = this.controller
     if (typeof controller[methodName] == "function") {
-      controller[methodName](...args)
+      try {
+        controller[methodName](...args)
+      } catch (error: any) {
+        this.handleError(error, `invoking "${methodName}"`)
+      }
     }
   }
 }
