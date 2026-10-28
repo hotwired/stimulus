@@ -8,13 +8,13 @@ export class Module {
   readonly application: Application
   readonly definition: Definition
   private contextsByScope: WeakMap<Scope, Context>
-  private connectedContexts: Set<Context>
+  private connectedContextsByElement: Map<Element, Context>
 
   constructor(application: Application, definition: Definition) {
     this.application = application
     this.definition = blessDefinition(definition)
     this.contextsByScope = new WeakMap()
-    this.connectedContexts = new Set()
+    this.connectedContextsByElement = new Map()
   }
 
   get identifier(): string {
@@ -26,21 +26,25 @@ export class Module {
   }
 
   get contexts(): Context[] {
-    return Array.from(this.connectedContexts)
+    return Array.from(this.connectedContextsByElement.values())
   }
 
   connectContextForScope(scope: Scope) {
     const context = this.fetchContextForScope(scope)
-    this.connectedContexts.add(context)
+    this.connectedContextsByElement.set(scope.element, context)
     context.connect()
   }
 
   disconnectContextForScope(scope: Scope) {
     const context = this.contextsByScope.get(scope)
     if (context) {
-      this.connectedContexts.delete(context)
+      this.connectedContextsByElement.delete(scope.element)
       context.disconnect()
     }
+  }
+
+  getConnectedContextForElement(element: Element): Context | undefined {
+    return this.connectedContextsByElement.get(element)
   }
 
   private fetchContextForScope(scope: Scope): Context {

@@ -226,7 +226,7 @@ export class OutletObserver implements AttributeObserverDelegate, SelectorObserv
   }
 
   private hasOutlet(element: Element, outletName: string) {
-    return !!this.getOutlet(element, outletName) || !!this.getOutletFromMap(element, outletName)
+    return !!this.getOutlet(element, outletName) || this.outletElementsByName.has(outletName, element)
   }
 
   private getOutlet(element: Element, outletName: string) {

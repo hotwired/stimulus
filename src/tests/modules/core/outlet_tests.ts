@@ -40,6 +40,20 @@ export default class OutletTests extends ControllerTestCase(OutletController) {
     return ["test", "alpha", "beta", "gamma", "delta", "omega", "namespaced--epsilon"]
   }
 
+  "test matching an element against an outlet selector does not list the connected outlets"() {
+    const { outletsByName } = (this.controller.context as any).outletObserver
+    const getValuesForKey = outletsByName.getValuesForKey
+    let outletsReads = 0
+    outletsByName.getValuesForKey = (outletName: string) => {
+      outletsReads++
+      return getValuesForKey.call(outletsByName, outletName)
+    }
+
+    this.controller.context.refresh()
+
+    this.assert.equal(outletsReads, 0)
+  }
+
   "test OutletSet#find"() {
     this.assert.equal(this.controller.outlets.find("alpha"), this.findElement("#alpha1"))
     this.assert.equal(this.controller.outlets.find("beta"), this.findElement("#beta1"))
