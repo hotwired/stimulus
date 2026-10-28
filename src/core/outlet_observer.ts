@@ -222,7 +222,9 @@ export class OutletObserver implements AttributeObserverDelegate, SelectorObserv
 
   private get dependentContexts() {
     const identifiers = this.dependentControllerIdentifiers
-    return this.router.contexts.filter((context) => identifiers.includes(context.identifier))
+    return this.router.modules
+      .filter((module) => identifiers.includes(module.identifier))
+      .reduce((contexts, module) => contexts.concat(module.contexts), [] as Context[])
   }
 
   private hasOutlet(element: Element, outletName: string) {
