@@ -45,6 +45,23 @@ export default class ApplicationTests extends ApplicationTestCase {
     this.assert.ok(this.controllers[0] instanceof BController)
   }
 
+  "test connecting controllers does not list the contexts of every controller"() {
+    const router = this.application.router
+    const contexts = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(router), "contexts")!.get!
+    let contextsReads = 0
+    Object.defineProperty(router, "contexts", {
+      configurable: true,
+      get() {
+        contextsReads++
+        return contexts.call(this)
+      },
+    })
+
+    this.application.load(this.definitions)
+
+    this.assert.equal(contextsReads, 0)
+  }
+
   get controllers() {
     return this.application.controllers as LogController[]
   }
