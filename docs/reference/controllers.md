@@ -25,6 +25,10 @@ Every controller belongs to a Stimulus `Application` instance and is associated 
 * HTML element, via the `this.element` property
 * identifier, via the `this.identifier` property
 
+Stimulus relies on these properties as well as `this.context`, `this.scope`, `this.targets`, `this.outlets`, `this.classes`, and `this.data`. Avoid reusing these names for fields, getters, or methods in your controllers.
+
+When registering a controller, Stimulus warns about overrides on its prototype or on an inherited subclass prototype. JavaScript initializes instance fields later, when it constructs the controller.
+
 ## Modules
 
 Define your controller classes in JavaScript modules, one per file. Export each controller class as the module's default object, as in the example above.
