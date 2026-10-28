@@ -25,6 +25,8 @@ Every controller belongs to a Stimulus `Application` instance and is associated 
 * HTML element, via the `this.element` property
 * identifier, via the `this.identifier` property
 
+Stimulus relies on these properties, as well as `this.context`, `this.scope`, `this.targets`, `this.outlets`, `this.classes` and `this.data`, so avoid defining a field, getter or method with one of these names in a controller class. Stimulus logs a warning when it registers a controller that defines one of them as a getter or method.
+
 ## Modules
 
 Define your controller classes in JavaScript modules, one per file. Export each controller class as the module's default object, as in the example above.
