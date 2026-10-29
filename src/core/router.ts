@@ -1,5 +1,6 @@
 import { Application } from "./application"
 import { Context } from "./context"
+import { Controller, ControllerConstructor } from "./controller"
 import { Definition } from "./definition"
 import { Module } from "./module"
 import { Multimap } from "../multimap"
@@ -53,6 +54,7 @@ export class Router implements ScopeObserverDelegate {
 
   loadDefinition(definition: Definition) {
     this.unloadIdentifier(definition.identifier)
+    this.warnAboutOverriddenControllerProperties(definition)
     const module = new Module(this.application, definition)
     this.connectModule(module)
     const afterLoad = (definition.controllerConstructor as any).afterLoad
@@ -82,6 +84,15 @@ export class Router implements ScopeObserverDelegate {
       this.scopeObserver.elementMatchedValue(scope.element, scope)
     } else {
       console.error(`Couldn't find or create scope for identifier: "${identifier}" and element:`, element)
+    }
+  }
+
+  private warnAboutOverriddenControllerProperties({ identifier, controllerConstructor }: Definition) {
+    for (const name of getOverriddenControllerProperties(controllerConstructor)) {
+      this.logger.warn(
+        `The "${identifier}" controller overrides "${name}", a property Stimulus defines on Controller and reads itself. Rename it to keep the controller working.`,
+        controllerConstructor
+      )
     }
   }
 
@@ -126,4 +137,28 @@ export class Router implements ScopeObserverDelegate {
     const scopes = this.scopesByIdentifier.getValuesForKey(module.identifier)
     scopes.forEach((scope) => module.disconnectContextForScope(scope))
   }
+}
+
+function getOverriddenControllerProperties(constructor: ControllerConstructor) {
+  const names = getControllerPropertyNames()
+  const overridden: string[] = []
+  let prototype = constructor.prototype
+  while (prototype && prototype != Controller.prototype && prototype != Object.prototype) {
+    for (const name of names) {
+      if (Object.prototype.hasOwnProperty.call(prototype, name) && !overridden.includes(name)) {
+        overridden.push(name)
+      }
+    }
+    prototype = Object.getPrototypeOf(prototype)
+  }
+  return overridden
+}
+
+// The accessors Controller defines (application, scope, element, identifier, targets, outlets, classes, data).
+// Its methods are meant to be overridden.
+function getControllerPropertyNames() {
+  return Object.getOwnPropertyNames(Controller.prototype).filter((name) => {
+    const descriptor = Object.getOwnPropertyDescriptor(Controller.prototype, name)
+    return descriptor && typeof descriptor.get == "function"
+  })
 }
