@@ -71,7 +71,7 @@ export class Router implements ScopeObserverDelegate {
   getContextForElementAndIdentifier(element: Element, identifier: string) {
     const module = this.modulesByIdentifier.get(identifier)
     if (module) {
-      return module.contexts.find((context) => context.element == element)
+      return module.getConnectedContextForElement(element)
     }
   }
 

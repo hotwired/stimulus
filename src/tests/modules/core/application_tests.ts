@@ -45,6 +45,23 @@ export default class ApplicationTests extends ApplicationTestCase {
     this.assert.ok(this.controllers[0] instanceof BController)
   }
 
+  async "test finding a controller by its element after it disconnects and reconnects"() {
+    this.application.load(this.definitions)
+    const element = this.findElement(`[data-controller="a"]`)
+    const controller = this.application.getControllerForElementAndIdentifier(element, "a")
+    this.assert.ok(controller instanceof AController)
+
+    element.setAttribute("data-controller", "")
+    await this.nextFrame
+    this.assert.equal(this.application.getControllerForElementAndIdentifier(element, "a"), null)
+    this.assert.equal(this.controllers.length, 1)
+
+    element.setAttribute("data-controller", "a")
+    await this.nextFrame
+    this.assert.equal(this.application.getControllerForElementAndIdentifier(element, "a"), controller)
+    this.assert.equal(this.controllers.length, 2)
+  }
+
   get controllers() {
     return this.application.controllers as LogController[]
   }
