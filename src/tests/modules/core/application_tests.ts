@@ -97,6 +97,32 @@ export default class ApplicationTests extends ApplicationTestCase {
     this.assert.equal(this.controllers.length, 2)
   }
 
+  async "test registering a controller connects it as an outlet of the controllers declaring it"() {
+    await this.renderFixture(`
+      <div data-controller="host" data-host-beta-outlet=".beta"></div>
+      <div class="beta" data-controller="beta" id="first-outlet"></div>
+      <div class="beta" data-controller="beta" id="second-outlet"></div>
+    `)
+
+    const connectedOutlets: Element[] = []
+    this.application.register(
+      "host",
+      class extends LogController {
+        static outlets = ["beta"]
+
+        betaOutletConnected(_outlet: LogController, element: Element) {
+          connectedOutlets.push(element)
+        }
+      }
+    )
+    await this.nextFrame
+    this.assert.deepEqual(connectedOutlets, [])
+
+    this.application.register("beta", BController)
+    await this.nextFrame
+    this.assert.deepEqual(connectedOutlets, this.findElements("#first-outlet", "#second-outlet"))
+  }
+
   "test Application#register warns about a controller overriding a reserved property"() {
     const warnings = this.captureWarnings()
 
