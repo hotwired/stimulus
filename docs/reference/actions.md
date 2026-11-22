@@ -99,17 +99,26 @@ page_down | PageDown
 [a-z]     | [a-z]
 [0-9]     | [0-9]
 
-If you need to support other keys, you can customize the modifiers using a custom schema.
+To filter by another key, add a mapping to `keyMappings` in a custom schema.
 
 ```javascript
 import { Application, defaultSchema } from "@hotwired/stimulus"
 
 const customSchema = {
   ...defaultSchema,
-  keyMappings: { ...defaultSchema.keyMappings, at: "@" },
+  keyMappings: { ...defaultSchema.keyMappings, rename: "F2" },
 }
 
 const app = Application.start(document.documentElement, customSchema)
+```
+
+Use `rename` as the key filter. With the button focused, pressing `F2` invokes the same action as activating the button.
+
+```html
+<button type="button" data-controller="file" aria-keyshortcuts="F2"
+        data-action="click->file#rename keydown.rename->file#rename">
+  Rename Report.pdf
+</button>
 ```
 
 If you want to subscribe to a compound filter using a modifier key, you can write it like `ctrl+a`.
