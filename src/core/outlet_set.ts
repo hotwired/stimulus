@@ -1,4 +1,5 @@
 import { Scope } from "./scope"
+import { tokenize } from "./string_helpers"
 
 export class OutletSet {
   readonly scope: Scope
@@ -66,6 +67,6 @@ export class OutletSet {
 
   private matchesElement(element: Element, selector: string, outletName: string): boolean {
     const controllerAttribute = element.getAttribute(this.scope.schema.controllerAttribute) || ""
-    return element.matches(selector) && controllerAttribute.split(" ").includes(outletName)
+    return element.matches(selector) && tokenize(controllerAttribute).includes(outletName)
   }
 }

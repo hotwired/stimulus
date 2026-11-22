@@ -14,6 +14,6 @@ export function dasherize(value: string) {
   return value.replace(/([A-Z])/g, (_, char) => `-${char.toLowerCase()}`)
 }
 
-export function tokenize(value: string) {
+export function tokenize(value: string): string[] {
   return value.match(/[^\s]+/g) || []
 }
