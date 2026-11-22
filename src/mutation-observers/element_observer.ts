@@ -146,7 +146,7 @@ export class ElementObserver {
     if (element.isConnected != this.element.isConnected) {
       return false
     } else {
-      return this.element.contains(element)
+      return Node.prototype.contains.call(this.element, element)
     }
   }
 

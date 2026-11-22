@@ -100,7 +100,7 @@ export class Binding {
 
     if (this.element === eventTarget) {
       return true
-    } else if (eventTarget instanceof Element && this.element.contains(eventTarget)) {
+    } else if (eventTarget instanceof Element && Node.prototype.contains.call(this.element, eventTarget)) {
       return this.scope.containsElement(eventTarget)
     } else {
       return this.scope.containsElement(this.action.element)

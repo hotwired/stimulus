@@ -40,6 +40,39 @@ export default class AttributeObserverTests extends ObserverTestCase implements 
     ])
   }
 
+  async "test observes descendants of a form with a control named contains"() {
+    await this.renderFixture(`
+      <form>
+        <input name="contains">
+        <div ${this.attributeName}></div>
+      </form>
+    `)
+    const [form, input, initial] = this.findElements("form", "input", "form div")
+    this.assert.strictEqual<unknown>(form.contains, input)
+
+    const matched: Element[] = []
+    const unmatched: Element[] = []
+    const observer = new AttributeObserver(form, this.attributeName, {
+      elementMatchedAttribute: (element) => matched.push(element),
+      elementUnmatchedAttribute: (element) => unmatched.push(element),
+    })
+
+    try {
+      observer.start()
+      this.assert.deepEqual(matched, [initial])
+
+      const added = document.createElement("div")
+      added.setAttribute(this.attributeName, "")
+      await this.appendChild(form, added)
+      this.assert.deepEqual(matched, [initial, added])
+
+      await this.remove(added)
+      this.assert.deepEqual(unmatched, [added])
+    } finally {
+      observer.stop()
+    }
+  }
+
   async "test ignores other attributes"() {
     this.outerElement.setAttribute(this.attributeName + "-x", "hello")
     await this.nextFrame
