@@ -26,6 +26,22 @@ export default class ActionTests extends LogControllerTestCase {
     this.assertActions({ eventType: "click", currentTarget: this.findElement("button") })
   }
 
+  async "test bubbling events in a form with a control named contains"() {
+    await this.renderFixture(`
+      <form data-controller="c" data-action="click->c#log">
+        <input>
+        <button type="button">Log</button>
+      </form>
+    `)
+    const [form, input] = this.findElements("form", "input")
+
+    await this.setAttribute(input, "name", "contains")
+    this.assert.strictEqual<unknown>(form.contains, input)
+
+    await this.triggerEvent("button", "click")
+    this.assertActions({ name: "log", eventType: "click", currentTarget: form })
+  }
+
   async "test non-bubbling events"() {
     await this.triggerEvent("span", "click", { bubbles: false })
     this.assertNoActions()

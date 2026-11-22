@@ -146,7 +146,7 @@ export class ElementObserver {
     if (element.isConnected != this.element.isConnected) {
       return false
     } else {
-      return this.containsElement(element)
+      return Node.prototype.contains.call(this.element, element)
     }
   }
 
@@ -170,9 +170,5 @@ export class ElementObserver {
         this.delegate.elementUnmatched(element)
       }
     }
-  }
-
-  private containsElement(element: Element): boolean {
-    return HTMLElement.prototype.contains.call(this.element, element)
   }
 }
