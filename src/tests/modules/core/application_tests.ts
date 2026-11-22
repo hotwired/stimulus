@@ -4,6 +4,41 @@ import { LogController } from "../../controllers/log_controller"
 class AController extends LogController {}
 class BController extends LogController {}
 
+class ScopeOverridingController extends LogController {
+  get scope(): any {
+    return this.element.closest("section")
+  }
+}
+class InheritedScopeOverridingController extends ScopeOverridingController {}
+class UnloadedScopeOverridingController extends ScopeOverridingController {
+  static get shouldLoad() {
+    return false
+  }
+}
+class ForeignController {
+  static shouldLoad = true
+  constructor(readonly context: any) {}
+  get scope() {
+    return this.context.scope
+  }
+  get element() {
+    return this.scope.element
+  }
+  initialize() {}
+  connect() {}
+  disconnect() {}
+}
+class ForeignSubclassController extends ForeignController {}
+
+function controllerOnBasePrototype(basePrototype: any) {
+  function Base() {}
+  Base.prototype = basePrototype
+  Object.defineProperty(basePrototype, "scope", { get() {} })
+  return class extends (Base as any) {
+    static shouldLoad = true
+  }
+}
+
 export default class ApplicationTests extends ApplicationTestCase {
   fixtureHTML = `<div data-controller="a"><div data-controller="b">`
   private definitions = [
@@ -60,6 +95,78 @@ export default class ApplicationTests extends ApplicationTestCase {
     await this.nextFrame
     this.assert.equal(this.application.getControllerForElementAndIdentifier(element, "a"), controller)
     this.assert.equal(this.controllers.length, 2)
+  }
+
+  "test Application#register warns about a controller overriding a reserved property"() {
+    const warnings = this.captureWarnings()
+
+    this.application.register("scoped", ScopeOverridingController)
+    this.application.register("inherited", InheritedScopeOverridingController)
+
+    this.assert.equal(warnings.length, 2)
+    this.assert.ok(warnings[0].includes(`"scoped" controller defines "scope"`))
+    this.assert.ok(warnings[1].includes(`"inherited" controller defines "scope"`))
+  }
+
+  async "test Application#register warns and connects a controller with a working override"() {
+    const warnings = this.captureWarnings()
+    this.application.register(
+      "scoped",
+      class extends LogController {
+        get scope() {
+          return this.context.scope
+        }
+      }
+    )
+    await this.renderFixture(`<div data-controller="scoped">`)
+
+    this.assert.equal(warnings.length, 1)
+    this.assert.equal(this.controllers[0].connectCount, 1)
+  }
+
+  "test Application#register does not warn about a controller using only its own property names"() {
+    const warnings = this.captureWarnings()
+
+    this.application.load(this.definitions)
+
+    this.assert.equal(warnings.length, 0)
+  }
+
+  "test Application#register does not warn about a controller that does not load"() {
+    const warnings = this.captureWarnings()
+
+    this.application.register("unloaded", UnloadedScopeOverridingController)
+
+    this.assert.equal(warnings.length, 0)
+  }
+
+  "test Application#register does not report the properties of another copy of Controller"() {
+    const warnings = this.captureWarnings()
+
+    this.application.register("foreign", ForeignSubclassController as any)
+
+    this.assert.equal(warnings.length, 0)
+  }
+
+  "test Application#register does not report the base class of a controller from another realm"() {
+    const iframe = document.createElement("iframe")
+    document.body.appendChild(iframe)
+    const warnings = this.captureWarnings()
+
+    try {
+      this.application.register("null", controllerOnBasePrototype(Object.create(null)) as any)
+      this.application.register("realm", controllerOnBasePrototype(new (iframe.contentWindow as any).Object()) as any)
+    } finally {
+      iframe.remove()
+    }
+
+    this.assert.equal(warnings.length, 0)
+  }
+
+  private captureWarnings() {
+    const warnings: string[] = []
+    this.application.logger = { ...console, warn: (message: string) => warnings.push(message) }
+    return warnings
   }
 
   get controllers() {

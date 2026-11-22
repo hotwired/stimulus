@@ -59,6 +59,7 @@ export class Application implements ErrorHandler {
     const definitions = Array.isArray(head) ? head : [head, ...rest]
     definitions.forEach((definition) => {
       if ((definition.controllerConstructor as any).shouldLoad) {
+        this.warnAboutOverriddenReservedProperties(definition)
         this.router.loadDefinition(definition)
       }
     })
@@ -90,6 +91,14 @@ export class Application implements ErrorHandler {
     window.onerror?.(message, "", 0, 0, error)
   }
 
+  private warnAboutOverriddenReservedProperties({ identifier, controllerConstructor }: Definition) {
+    overriddenReservedPropertyNames(controllerConstructor).forEach((name) => {
+      this.logger.warn(
+        `The "${identifier}" controller defines "${name}", which Stimulus relies on. Overriding it can break the controller.`
+      )
+    })
+  }
+
   // Debug logging
 
   logDebugActivity = (identifier: string, functionName: string, detail: object = {}): void => {
@@ -105,6 +114,36 @@ export class Application implements ErrorHandler {
     this.logger.log("details:", { ...detail })
     this.logger.groupEnd()
   }
+}
+
+const reservedPropertyNames = [
+  "context",
+  "application",
+  "scope",
+  "element",
+  "identifier",
+  "targets",
+  "outlets",
+  "classes",
+  "data",
+]
+
+function overriddenReservedPropertyNames(controllerConstructor: ControllerConstructor) {
+  const prototypes: object[] = []
+
+  // Stop before the base class, whose prototype extends an Object.prototype,
+  // ours or another realm's, or null.
+  for (
+    let prototype = controllerConstructor.prototype, parent = Object.getPrototypeOf(prototype);
+    parent && Object.getPrototypeOf(parent);
+    prototype = parent, parent = Object.getPrototypeOf(prototype)
+  ) {
+    prototypes.push(prototype)
+  }
+
+  return reservedPropertyNames.filter((name) =>
+    prototypes.some((prototype) => Object.prototype.hasOwnProperty.call(prototype, name))
+  )
 }
 
 function domReady() {
