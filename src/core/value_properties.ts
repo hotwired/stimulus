@@ -211,7 +211,13 @@ function valueDescriptorForTokenAndTypeDefinition(payload: ValueTypeDefinitionPa
       return defaultValueForDefinition(typeDefinition)
     },
     get hasCustomDefaultValue() {
-      return parseValueTypeDefault(typeDefinition) !== undefined
+      const typeObject = typeDefinition as ValueTypeObject
+      const hasOnlyType =
+        hasProperty(typeObject, "type") &&
+        !hasProperty(typeObject, "default") &&
+        parseValueTypeConstant(typeObject.type) !== undefined
+
+      return !hasOnlyType && parseValueTypeDefault(typeDefinition) !== undefined
     },
     reader: readers[type],
     writer: writers[type] || writers.default,
