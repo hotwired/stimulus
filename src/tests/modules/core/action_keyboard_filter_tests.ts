@@ -199,6 +199,17 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
     this.assertActions({ name: "log2", identifier: "a", eventType: "jquery.a", currentTarget: button })
   }
 
+  async "test modifier filters apply to KeyboardEvents with a custom type"() {
+    const button = this.findElement("#button7")
+    await this.setAttribute(button, "data-action", "ctrl+shortcut->a#log")
+
+    await this.triggerKeyboardEvent(button, "shortcut", { ctrlKey: false })
+    this.assertNoActions()
+
+    await this.triggerKeyboardEvent(button, "shortcut", { ctrlKey: true })
+    this.assertActions({ name: "log", identifier: "a", eventType: "shortcut", currentTarget: button })
+  }
+
   async "test ignore non-keyboard keydown events in actions with a key filter"() {
     const button = this.findElement("#button1")
     await this.nextFrame
