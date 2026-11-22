@@ -255,6 +255,53 @@ export default class EventOptionsTests extends LogControllerTestCase {
     this.assertActions({ name: "log", eventType: "toggle" })
   }
 
+  async "test custom option with parenthesized value"() {
+    let lastValue: boolean | string | undefined
+
+    this.application.registerActionOption("throttled", ({ value }) => {
+      lastValue = value
+      return true
+    })
+    await this.setAction(this.buttonElement, "click->c#log:throttled(500)")
+
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions({ name: "log", identifier: "c", eventType: "click", currentTarget: this.buttonElement })
+    this.assert.equal(lastValue, "500")
+  }
+
+  async "test custom option value alongside boolean options"() {
+    const received: { [key: string]: boolean | string } = {}
+
+    this.application.registerActionOption("throttled", ({ value }) => {
+      received.throttled = value
+      return true
+    })
+    this.application.registerActionOption("flag", ({ value }) => {
+      received.flag = value
+      return true
+    })
+    await this.setAction(this.buttonElement, "click->c#log:throttled(500):flag")
+
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions({ name: "log", identifier: "c", eventType: "click", currentTarget: this.buttonElement })
+    this.assert.equal(received.throttled, "500")
+    this.assert.equal(received.flag, true)
+  }
+
+  async "test custom option value controls whether action runs"() {
+    this.application.registerActionOption("enabled", ({ value }) => value === "yes")
+
+    await this.setAction(this.buttonElement, "click->c#log:enabled(no)")
+    await this.triggerEvent(this.buttonElement, "click")
+    this.assertNoActions()
+
+    await this.setAction(this.buttonElement, "click->c#log:enabled(yes)")
+    await this.triggerEvent(this.buttonElement, "click")
+    this.assertActions({ name: "log", identifier: "c", eventType: "click", currentTarget: this.buttonElement })
+  }
+
   async "test custom action option callback event contains params"() {
     let lastActionEventParams: Object = {}
 
