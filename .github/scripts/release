@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+package_directory="$(mktemp -d)"
+trap 'rm -rf "$package_directory"' EXIT
+
+package_filename="$(npm pack --no-dry-run --no-json --no-foreground-scripts --pack-destination "$package_directory")"
+package_archive="$package_directory/$package_filename"
+version="$(tar -xOf "$package_archive" package/package.json | node -p 'JSON.parse(require("node:fs").readFileSync(0, "utf8")).version')"
+
+for bundle in stimulus.js stimulus.umd.js; do
+  banner="$(tar -xOf "$package_archive" "package/dist/$bundle" | sed -n '2p')"
+  if [[ "$banner" != "Stimulus $version" ]]; then
+    printf '%s: expected version header "Stimulus %s", found "%s"\n' "$bundle" "$version" "$banner" >&2
+    exit 1
+  fi
+done
+
+npm publish "$package_archive" "$@"
