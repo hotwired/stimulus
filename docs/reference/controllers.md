@@ -133,19 +133,17 @@ If not, your application must manually load and register each controller class.
 To manually register a controller class with an identifier, first import the class, then call the `Application#register` method on your application object:
 
 ```js
-import ReferenceController from "./controllers/reference_controller"
+import DatePickerController from "./controllers/date_picker_controller"
 
-application.register("reference", ReferenceController)
+application.register("date-picker", DatePickerController)
 ```
-
-Use kebab-case in references to ensure features like targets function correctly (i.e., controllers/date_picker_controller, DatePickerController, date-picker)
 
 You can also register a controller class inline instead of importing it from a module:
 
 ```js
 import { Controller } from "@hotwired/stimulus"
 
-application.register("reference", class extends Controller {
+application.register("date-picker", class extends Controller {
   // …
 })
 ```
