@@ -41,6 +41,8 @@ export interface ActionDescriptor {
   keyFilter: string
 }
 
+export const keyboardEventNames = ["keydown", "keyup", "keypress"]
+
 // capture nos.:                  1      1    2   2     3   3      4               4      5   5    6      6     7  7
 const descriptorPattern = /^(?:(?:([^.]+?)\+)?(.+?)(?:\.(.+?))?(?:@(window|document))?->)?(.+?)(?:#([^:]+?))(?::(.+))?$/
 
@@ -50,7 +52,7 @@ export function parseActionDescriptorString(descriptorString: string): Partial<A
   let eventName = matches[2]
   let keyFilter = matches[3]
 
-  if (keyFilter && !["keydown", "keyup", "keypress"].includes(eventName)) {
+  if (keyFilter && !keyboardEventNames.includes(eventName)) {
     eventName += `.${keyFilter}`
     keyFilter = ""
   }

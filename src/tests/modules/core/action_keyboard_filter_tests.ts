@@ -22,6 +22,7 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
       <button id="button8" data-action="keydown.a->a#log keydown.b->a#log2"></button>
       <button id="button9" data-action="keydown.shift+a->a#log keydown.a->a#log2 keydown.ctrl+shift+a->a#log3">
       <button id="button10" data-action="jquery.custom.event->a#log jquery.a->a#log2">
+      <button id="button11" data-action="keypress.enter->a#log keypress->a#log3"></button>
     </div>
   `
 
@@ -196,5 +197,37 @@ export default class ActionKeyboardFilterTests extends LogControllerTestCase {
     await this.nextFrame
     await this.triggerEvent(button, "jquery.a")
     this.assertActions({ name: "log2", identifier: "a", eventType: "jquery.a", currentTarget: button })
+  }
+
+  async "test modifier filters apply to KeyboardEvents with a custom type"() {
+    const button = this.findElement("#button7")
+    await this.setAttribute(button, "data-action", "ctrl+shortcut->a#log")
+
+    await this.triggerKeyboardEvent(button, "shortcut", { ctrlKey: false })
+    this.assertNoActions()
+
+    await this.triggerKeyboardEvent(button, "shortcut", { ctrlKey: true })
+    this.assertActions({ name: "log", identifier: "a", eventType: "shortcut", currentTarget: button })
+  }
+
+  async "test ignore non-keyboard keydown events in actions with a key filter"() {
+    const button = this.findElement("#button1")
+    await this.nextFrame
+    await this.triggerEvent(button, "keydown")
+    this.assertActions({ name: "log3", identifier: "a", eventType: "keydown", currentTarget: button })
+  }
+
+  async "test ignore non-keyboard keyup events in actions with a key filter"() {
+    const button = this.findElement("#button6")
+    await this.nextFrame
+    await this.triggerEvent(button, "keyup")
+    this.assertActions({ name: "log3", identifier: "a", eventType: "keyup", currentTarget: button })
+  }
+
+  async "test ignore non-keyboard keypress events in actions with a key filter"() {
+    const button = this.findElement("#button11")
+    await this.nextFrame
+    await this.triggerEvent(button, "keypress")
+    this.assertActions({ name: "log3", identifier: "a", eventType: "keypress", currentTarget: button })
   }
 }

@@ -1,5 +1,6 @@
 import { Action } from "./action"
 import { ActionEvent } from "./action_event"
+import { keyboardEventNames } from "./action_descriptor"
 import { Context } from "./context"
 import { Controller } from "./controller"
 import { Scope } from "./scope"
@@ -86,7 +87,10 @@ export class Binding {
   private willBeInvokedByEvent(event: Event): boolean {
     const eventTarget = event.target
 
-    if (event instanceof KeyboardEvent && this.action.shouldIgnoreKeyboardEvent(event)) {
+    if (
+      (event instanceof KeyboardEvent || keyboardEventNames.includes(event.type)) &&
+      this.action.shouldIgnoreKeyboardEvent(event)
+    ) {
       return false
     }
 

@@ -39,9 +39,14 @@ export class Action {
     return `${this.eventName}${eventFilter}${eventTarget}->${this.identifier}#${this.methodName}`
   }
 
-  shouldIgnoreKeyboardEvent(event: KeyboardEvent): boolean {
+  shouldIgnoreKeyboardEvent(event: Event): boolean {
     if (!this.keyFilter) {
       return false
+    }
+
+    // Chrome dispatches a plain Event, not a KeyboardEvent, when the user accepts an autocomplete suggestion
+    if (!(event instanceof KeyboardEvent)) {
+      return true
     }
 
     const filters = this.keyFilter.split("+")
