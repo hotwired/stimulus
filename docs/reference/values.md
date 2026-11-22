@@ -94,7 +94,7 @@ To remove the data attribute from the controller's element, assign `undefined` t
 
 ### Existential Properties
 
-The existential property for a value evaluates to `true` when the associated data attribute is present on the controller's element and `false` when it is absent.
+The existential property for a value evaluates to `true` when the associated data attribute is present on the controller's element or the value has a custom default. Otherwise, it evaluates to `false`.
 
 ## Change Callbacks
 

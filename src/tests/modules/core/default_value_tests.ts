@@ -84,6 +84,19 @@ export default class DefaultValueTests extends ControllerTestCase(DefaultValueCo
   "test string with no default value"() {
     this.assert.notOk(this.controller.hasDefaultStringWithTypeConstantValue)
     this.assert.notOk(this.controller.hasDefaultStringWithTypePropertyValue)
+    this.assert.strictEqual(this.controller.defaultStringWithTypePropertyValue, "")
+  }
+
+  "test string with only a type follows the presence of its attribute"() {
+    const attribute = "default-string-with-type-property-value"
+
+    this.assert.notOk(this.controller.hasDefaultStringWithTypePropertyValue)
+
+    this.set(attribute, "")
+    this.assert.ok(this.controller.hasDefaultStringWithTypePropertyValue)
+
+    this.element.removeAttribute(this.attr(attribute))
+    this.assert.notOk(this.controller.hasDefaultStringWithTypePropertyValue)
   }
 
   // Numbers
@@ -193,6 +206,11 @@ export default class DefaultValueTests extends ControllerTestCase(DefaultValueCo
   "test object with no default value"() {
     this.assert.notOk(this.controller.hasDefaultObjectWithTypeConstantValue)
     this.assert.notOk(this.controller.hasDefaultObjectWithTypePropertyValue)
+  }
+
+  "test object default with a type property"() {
+    this.assert.deepEqual(this.controller.defaultObjectWithTypeKeyValue, { type: "email" })
+    this.assert.ok(this.controller.hasDefaultObjectWithTypeKeyValue)
   }
 
   "test [name]ValueChanged callbacks fire after initialize and before connect"() {

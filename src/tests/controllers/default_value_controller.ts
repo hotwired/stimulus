@@ -30,6 +30,7 @@ export class DefaultValueController extends Controller {
     defaultArrayWithTypeProperty: { type: Array },
 
     defaultObject: {},
+    defaultObjectWithTypeKey: { type: "email" },
     defaultObjectPerson: { type: Object, default: { name: "David" } },
     defaultObjectOverride: { override: "me" },
     defaultObjectWithTypeConstant: Object,
@@ -88,6 +89,8 @@ export class DefaultValueController extends Controller {
 
   defaultObjectValue!: object
   hasDefaultObjectValue!: boolean
+  defaultObjectWithTypeKeyValue!: object
+  hasDefaultObjectWithTypeKeyValue!: boolean
   defaultObjectPersonValue!: object
   hasDefaultObjectPersonValue!: boolean
   defaultObjectOverrideValue!: object
@@ -96,7 +99,7 @@ export class DefaultValueController extends Controller {
   hasDefaultObjectWithTypeConstantValue!: boolean
   defaultObjectWithTypePropertyValue!: object
   hasDefaultObjectWithTypePropertyValue!: boolean
-  
+
   lifecycleCallbacks: string[] = []
 
   initialize() {

@@ -198,19 +198,6 @@ export function defaultValueForDefinition(typeDefinition: ValueTypeDefinition): 
   return typeDefinition
 }
 
-export function hasCustomDefaultValueForDefinition(typeDefinition: ValueTypeDefinition): boolean {
-  const constant = parseValueTypeConstant(typeDefinition as ValueTypeConstant)
-  if (constant) return false;
-
-  const hasDefault = hasProperty(typeDefinition, "default")
-  if (hasDefault) return true;
-  
-  const hasType = hasProperty(typeDefinition, "type")
-  if (hasType) return false;
-
-  return true;
-}
-
 function valueDescriptorForTokenAndTypeDefinition(payload: ValueTypeDefinitionPayload) {
   const { token, typeDefinition } = payload
 
@@ -224,7 +211,13 @@ function valueDescriptorForTokenAndTypeDefinition(payload: ValueTypeDefinitionPa
       return defaultValueForDefinition(typeDefinition)
     },
     get hasCustomDefaultValue() {
-      return hasCustomDefaultValueForDefinition(typeDefinition)
+      const typeObject = typeDefinition as ValueTypeObject
+      const hasOnlyType =
+        hasProperty(typeObject, "type") &&
+        !hasProperty(typeObject, "default") &&
+        parseValueTypeConstant(typeObject.type) !== undefined
+
+      return !hasOnlyType && parseValueTypeDefault(typeDefinition) !== undefined
     },
     reader: readers[type],
     writer: writers[type] || writers.default,
