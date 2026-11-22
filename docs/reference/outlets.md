@@ -29,8 +29,7 @@ They are conceptually similar to [Stimulus Targets](https://stimulus.hotwired.de
 </div>
 ```
 
-<img src="../../assets/link_controllers_and_classes_explanation.png" width="1023" height="317" class="docs__screenshot" alt="Take careful note of how the controller and class names ought to match up">
-
+In `data-chat-user-status-outlet=".online-user"`, `chat` names the host controller. `user-status` matches both the outlet elements' controller identifier and the host controller's `static outlets` entry. The selector `.online-user` determines which `user-status` elements are available as outlets.
 
 While a **target** is a specifically marked element **within the scope** of its own controller element, an **outlet** can be located **anywhere on the page** and doesn't necessarily have to be within the controller scope.
 
