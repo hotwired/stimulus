@@ -1,10 +1,9 @@
 import resolve from "@rollup/plugin-node-resolve"
 import typescript from "@rollup/plugin-typescript"
 import { terser } from "rollup-plugin-terser"
-import { version } from "./package.json"
 
 const year = new Date().getFullYear()
-const banner = `/*\nStimulus ${version}\nCopyright © ${year} Basecamp, LLC\n */`
+const banner = `/*\nStimulus\nCopyright © ${year} Basecamp, LLC\n */`
 
 export default [
   {
