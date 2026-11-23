@@ -46,6 +46,57 @@ export default class ActionOrderingTests extends LogControllerTestCase {
     )
   }
 
+  async "test adding an action to the left with a :prevent modifier"() {
+    this.actionValue = "c#log3:prevent c#log d#log2"
+    await this.nextFrame
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { name: "log3", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log2", identifier: "d", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log", identifier: "c", eventType: "click", currentTarget: this.element }
+    )
+  }
+
+  async "test adding an action to the left with a :self modifier"() {
+    this.actionValue = "c#log3:self c#log d#log2"
+    await this.nextFrame
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { name: "log3", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log2", identifier: "d", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log", identifier: "c", eventType: "click", currentTarget: this.element }
+    )
+  }
+
+  async "test adding an action to the left with a custom action option"() {
+    this.application.registerActionOption("custom", () => true)
+    this.actionValue = "c#log3:custom c#log d#log2"
+    await this.nextFrame
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { name: "log3", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log2", identifier: "d", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log", identifier: "c", eventType: "click", currentTarget: this.element }
+    )
+  }
+
+  async "test actions with only Stimulus action options share one event listener"() {
+    this.application.registerActionOption("custom", () => true)
+    this.actionValue = "c#log:prevent c#log2:self d#log2:custom c#log3"
+    await this.nextFrame
+
+    const listeners = this.application.dispatcher.eventListeners.filter(
+      (listener) => listener.eventTarget === this.buttonElement
+    )
+    this.assert.equal(listeners.length, 1)
+  }
+
   async "test removing an action from the right"() {
     this.actionValue = "c#log d#log2"
     await this.nextFrame
