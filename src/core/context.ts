@@ -9,9 +9,13 @@ import { Scope } from "./scope"
 import { ValueObserver } from "./value_observer"
 import { TargetObserver, TargetObserverDelegate } from "./target_observer"
 import { OutletObserver, OutletObserverDelegate } from "./outlet_observer"
+import { AriaElementObserver, AriaElementObserverDelegate } from "./aria_element_observer"
+import { AriaAttributeName, AriaPropertyName } from "./aria"
 import { namespaceCamelize } from "./string_helpers"
 
-export class Context implements ErrorHandler, TargetObserverDelegate, OutletObserverDelegate {
+export class Context
+  implements ErrorHandler, AriaElementObserverDelegate, TargetObserverDelegate, OutletObserverDelegate
+{
   readonly module: Module
   readonly scope: Scope
   readonly controller: Controller
@@ -19,6 +23,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
   private valueObserver: ValueObserver
   private targetObserver: TargetObserver
   private outletObserver: OutletObserver
+  private ariaElementObserver: AriaElementObserver
 
   constructor(module: Module, scope: Scope) {
     this.module = module
@@ -28,6 +33,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
     this.valueObserver = new ValueObserver(this, this.controller)
     this.targetObserver = new TargetObserver(this, this)
     this.outletObserver = new OutletObserver(this, this)
+    this.ariaElementObserver = new AriaElementObserver(this.element, document, this)
 
     try {
       this.controller.initialize()
@@ -42,6 +48,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
     this.valueObserver.start()
     this.targetObserver.start()
     this.outletObserver.start()
+    this.ariaElementObserver.start()
 
     try {
       this.controller.connect()
@@ -63,6 +70,7 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
       this.handleError(error, "disconnecting controller")
     }
 
+    this.ariaElementObserver.stop()
     this.outletObserver.stop()
     this.targetObserver.stop()
     this.valueObserver.stop()
@@ -127,6 +135,16 @@ export class Context implements ErrorHandler, TargetObserverDelegate, OutletObse
 
   outletDisconnected(outlet: Controller, element: Element, name: string) {
     this.invokeControllerMethod(`${namespaceCamelize(name)}OutletDisconnected`, outlet, element)
+  }
+
+  // Aria Element observer delegate
+
+  ariaElementConnected(element: Element, attributeName: AriaAttributeName, propertyName: AriaPropertyName) {
+    this.invokeControllerMethod(`${propertyName}ElementConnected`, element)
+  }
+
+  ariaElementDisconnected(element: Element, attributeName: AriaAttributeName, propertyName: AriaPropertyName) {
+    this.invokeControllerMethod(`${propertyName}ElementDisconnected`, element)
   }
 
   // Private
