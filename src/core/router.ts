@@ -79,7 +79,7 @@ export class Router implements ScopeObserverDelegate {
     const scope = this.scopeObserver.parseValueForElementAndIdentifier(element, identifier)
 
     if (scope) {
-      this.scopeConnected(scope)
+      if (!this.scopesByIdentifier.has(identifier, scope)) this.scopeConnected(scope)
     } else {
       console.error(`Couldn't find or create scope for identifier: "${identifier}" and element:`, element)
     }
