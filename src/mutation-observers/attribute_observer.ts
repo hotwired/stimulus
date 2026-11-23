@@ -1,3 +1,4 @@
+import { attributeNameMatches } from "./attribute_name"
 import { ElementObserver, ElementObserverDelegate } from "./element_observer"
 
 export interface AttributeObserverDelegate {
@@ -72,8 +73,11 @@ export class AttributeObserver implements ElementObserverDelegate {
   }
 
   elementAttributeChanged(element: Element, attributeName: string) {
-    if (this.delegate.elementAttributeValueChanged && this.attributeName == attributeName) {
-      this.delegate.elementAttributeValueChanged(element, attributeName)
+    if (
+      this.delegate.elementAttributeValueChanged &&
+      attributeNameMatches(element, this.attributeName, attributeName)
+    ) {
+      this.delegate.elementAttributeValueChanged(element, this.attributeName)
     }
   }
 }

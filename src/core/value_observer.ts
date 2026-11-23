@@ -1,5 +1,6 @@
 import { Context } from "./context"
 import { StringMapObserver, StringMapObserverDelegate } from "../mutation-observers"
+import { foldsAttributeNames, lowercaseASCII } from "../mutation-observers/attribute_name"
 import { ValueDescriptor } from "./value_properties"
 import { capitalize } from "./string_helpers"
 
@@ -8,12 +9,18 @@ export class ValueObserver implements StringMapObserverDelegate {
   readonly receiver: any
   private stringMapObserver: StringMapObserver
   private valueDescriptorMap: { [attributeName: string]: ValueDescriptor }
+  private lowercaseValueDescriptorMap: { [attributeName: string]: ValueDescriptor }
 
   constructor(context: Context, receiver: any) {
     this.context = context
     this.receiver = receiver
     this.stringMapObserver = new StringMapObserver(this.element, this)
     this.valueDescriptorMap = (this.controller as any).valueDescriptorMap
+    this.lowercaseValueDescriptorMap = Object.create(null)
+
+    for (const attributeName of Object.keys(this.valueDescriptorMap)) {
+      this.lowercaseValueDescriptorMap[lowercaseASCII(attributeName)] = this.valueDescriptorMap[attributeName]
+    }
   }
 
   start() {
@@ -36,13 +43,11 @@ export class ValueObserver implements StringMapObserverDelegate {
   // String map observer delegate
 
   getStringMapKeyForAttribute(attributeName: string) {
-    if (attributeName in this.valueDescriptorMap) {
-      return this.valueDescriptorMap[attributeName].name
-    }
+    return this.valueDescriptorForAttribute(attributeName)?.name
   }
 
   stringMapKeyAdded(key: string, attributeName: string) {
-    const descriptor = this.valueDescriptorMap[attributeName]
+    const descriptor = this.valueDescriptorForAttribute(attributeName)!
 
     if (!this.hasValue(key)) {
       this.invokeChangedCallback(key, descriptor.writer(this.receiver[key]), descriptor.writer(descriptor.defaultValue))
@@ -102,6 +107,14 @@ export class ValueObserver implements StringMapObserverDelegate {
 
         throw error
       }
+    }
+  }
+
+  private valueDescriptorForAttribute(attributeName: string): ValueDescriptor | undefined {
+    if (attributeName in this.valueDescriptorMap) {
+      return this.valueDescriptorMap[attributeName]
+    } else if (attributeName in this.lowercaseValueDescriptorMap && foldsAttributeNames(this.element)) {
+      return this.lowercaseValueDescriptorMap[attributeName]
     }
   }
 
