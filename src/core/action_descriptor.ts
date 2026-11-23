@@ -32,7 +32,7 @@ export const defaultActionDescriptorFilters: ActionDescriptorFilters = {
   },
 }
 
-export const nativeActionDescriptors: string[] = ["capture", "once", "passive", "!passive"]
+export const nativeActionDescriptors: string[] = ["capture", "once", "passive"]
 
 export interface ActionDescriptor {
   eventTarget: EventTarget
