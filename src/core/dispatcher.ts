@@ -2,6 +2,7 @@ import { Application } from "./application"
 import { Binding } from "./binding"
 import { BindingObserverDelegate } from "./binding_observer"
 import { EventListener } from "./event_listener"
+import { nativeActionDescriptors } from "./action_descriptor"
 
 export class Dispatcher implements BindingObserverDelegate {
   readonly application: Application
@@ -112,8 +113,11 @@ export class Dispatcher implements BindingObserverDelegate {
 
   private cacheKey(eventName: string, eventOptions: any): string {
     const parts = [eventName]
-    Object.keys(eventOptions)
-      .sort()
+    // A once listener is removed after its first call, so it must not be shared with other options
+    const keys = eventOptions.once ? Object.keys(eventOptions).sort() : nativeActionDescriptors
+
+    keys
+      .filter((key) => key in eventOptions)
       .forEach((key) => {
         parts.push(`${eventOptions[key] ? "" : "!"}${key}`)
       })

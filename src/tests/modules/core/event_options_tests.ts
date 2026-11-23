@@ -53,6 +53,31 @@ export default class EventOptionsTests extends LogControllerTestCase {
     )
   }
 
+  async "test stop immediate propagation with once does not consume another once action"() {
+    await this.setAction(this.buttonElement, "c#stop:once c#log:once:prevent")
+
+    await this.triggerEvent(this.buttonElement, "click")
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { name: "stop", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log", identifier: "c", eventType: "click", currentTarget: this.buttonElement }
+    )
+  }
+
+  async "test adding a once action with another option after a once action fired"() {
+    await this.setAction(this.buttonElement, "c#log:once")
+    await this.triggerEvent(this.buttonElement, "click")
+
+    await this.setAction(this.buttonElement, "c#log:once d#log2:once:prevent")
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { name: "log", identifier: "c", eventType: "click", currentTarget: this.buttonElement },
+      { name: "log2", identifier: "d", eventType: "click", currentTarget: this.buttonElement }
+    )
+  }
+
   async "test global once actions"() {
     await this.setAction(this.buttonElement, "keydown@window->c#log:once")
 
