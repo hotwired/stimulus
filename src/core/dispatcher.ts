@@ -113,8 +113,10 @@ export class Dispatcher implements BindingObserverDelegate {
 
   private cacheKey(eventName: string, eventOptions: any): string {
     const parts = [eventName]
+    // A once listener is removed after its first call, so it must not be shared with other options
+    const keys = eventOptions.once ? Object.keys(eventOptions).sort() : nativeActionDescriptors
 
-    nativeActionDescriptors
+    keys
       .filter((key) => key in eventOptions)
       .forEach((key) => {
         parts.push(`${eventOptions[key] ? "" : "!"}${key}`)

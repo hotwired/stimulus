@@ -97,6 +97,16 @@ export default class ActionOrderingTests extends LogControllerTestCase {
     this.assert.equal(listeners.length, 1)
   }
 
+  async "test actions with a native action option keep their own event listener"() {
+    this.actionValue = "c#log:capture d#log2"
+    await this.nextFrame
+
+    const listeners = this.application.dispatcher.eventListeners.filter(
+      (listener) => listener.eventTarget === this.buttonElement
+    )
+    this.assert.equal(listeners.length, 2)
+  }
+
   async "test removing an action from the right"() {
     this.actionValue = "c#log d#log2"
     await this.nextFrame
