@@ -7,6 +7,7 @@ export default class EventOptionsTests extends LogControllerTestCase {
     <div data-controller="c d">
       <button></button>
       <details></details>
+      <input>
     </div>
     <div id="outside"></div>
   `
@@ -178,6 +179,22 @@ export default class EventOptionsTests extends LogControllerTestCase {
     this.assertNoActions()
   }
 
+  async "test true input option"() {
+    await this.setAction(this.inputElement, "keydown@window->c#log:input")
+
+    await this.triggerEvent(this.inputElement, "keydown")
+
+    this.assertActions({ name: "log", eventType: "keydown" })
+  }
+
+  async "test false input option"() {
+    await this.setAction(this.inputElement, "keydown@window->c#log:!input")
+
+    await this.triggerEvent(this.inputElement, "keydown")
+
+    this.assertNoActions()
+  }
+
   async "test custom action option callback params contain the controller instance"() {
     let lastActionOptions: { controller?: Controller<Element> } = {}
 
@@ -312,5 +329,9 @@ export default class EventOptionsTests extends LogControllerTestCase {
 
   get detailsElement() {
     return this.findElement("details")
+  }
+
+  get inputElement() {
+    return this.findElement("input")
   }
 }
