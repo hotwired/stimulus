@@ -278,7 +278,7 @@ It's common for any given element to have many actions. For example, the followi
 <input type="text" data-action="focus->field#highlight input->search#update">
 ```
 
-When an element has more than one action for the same event, Stimulus invokes the actions from left to right in the order that their descriptors appear.
+When an element has more than one action for the same event, Stimulus invokes the actions from left to right in the order that their descriptors appear. Actions using the `:capture`, `:once` or `:passive` options (or their `:!capture`, `:!once` and `:!passive` forms) are the exception: these are native event listener options, so each combination registers its own listener, which may run before or after the others.
 
 The action chain can be stopped at any point by calling `Event#stopImmediatePropagation()` within an action. Any additional actions to the right will be ignored:
 
