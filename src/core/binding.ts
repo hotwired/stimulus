@@ -69,7 +69,24 @@ export class Binding {
   }
 
   private prepareActionEvent(event: Event): ActionEvent {
-    return Object.assign(event, { params: this.action.params })
+    const { params } = this.action
+    // Kept on the native event for backwards compatibility with code reading it synchronously.
+    Object.assign(event, { params })
+
+    // The native event is shared by every action it triggers, so each one gets a view of it with its own params:
+    // otherwise a later action would overwrite them before an asynchronous action reads them.
+    return new Proxy(event, {
+      get(target, property) {
+        if (property === "params") {
+          return params
+        }
+        const value = Reflect.get(target, property, target)
+        return typeof value == "function" ? value.bind(target) : value
+      },
+      set(target, property, value) {
+        return Reflect.set(target, property, value, target)
+      },
+    }) as ActionEvent
   }
 
   private invokeWithEvent(event: ActionEvent) {

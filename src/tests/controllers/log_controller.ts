@@ -42,6 +42,11 @@ export class LogController extends Controller {
     this.recordAction("log3", event)
   }
 
+  async logDeferred(event: ActionEvent) {
+    await Promise.resolve()
+    this.recordAction("logDeferred", event)
+  }
+
   logPassive(event: ActionEvent) {
     event.preventDefault()
     if (event.defaultPrevented) {

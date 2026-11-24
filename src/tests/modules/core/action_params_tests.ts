@@ -89,6 +89,29 @@ export default class ActionParamsTests extends LogControllerTestCase {
     this.assertActions({ identifier: "c", params: this.expectedParamsForC })
   }
 
+  async "test params are preserved when read asynchronously after another action on the same element"() {
+    this.actionValue = "click->c#logDeferred click->d#log2"
+    await this.nextFrame
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { name: "log2", identifier: "d", params: { id: 234 } },
+      { name: "logDeferred", identifier: "c", params: this.expectedParamsForC }
+    )
+  }
+
+  async "test params are preserved when read asynchronously after a global action without params"() {
+    this.buttonElement.removeAttribute("data-d-id-param")
+    this.actionValue = "click->c#logDeferred click@window->d#log2"
+    await this.nextFrame
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions(
+      { name: "log2", identifier: "d", params: {} },
+      { name: "logDeferred", identifier: "c", params: this.expectedParamsForC }
+    )
+  }
+
   set actionValue(value: string) {
     this.buttonElement.setAttribute("data-action", value)
   }
