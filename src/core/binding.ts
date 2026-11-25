@@ -69,7 +69,27 @@ export class Binding {
   }
 
   private prepareActionEvent(event: Event): ActionEvent {
-    return Object.assign(event, { params: this.action.params })
+    let { params } = this.action
+    // Kept on the native event for backwards compatibility with code reading it synchronously.
+    Object.assign(event, { params })
+
+    // The native event is shared by every action it triggers, so each one gets a view of it with its own params:
+    // otherwise a later action would overwrite them before an asynchronous action reads them.
+    return new Proxy(event, {
+      get(target, property) {
+        if (property === "params") {
+          return params
+        }
+        const value = Reflect.get(target, property, target)
+        return typeof value == "function" && isMethod(target, property) ? value.bind(target) : value
+      },
+      set(target, property, value) {
+        if (property === "params") {
+          params = value
+        }
+        return Reflect.set(target, property, value, target)
+      },
+    }) as ActionEvent
   }
 
   private invokeWithEvent(event: ActionEvent) {
@@ -122,4 +142,15 @@ export class Binding {
   private get scope(): Scope {
     return this.context.scope
   }
+}
+
+function isMethod(object: object, property: PropertyKey): boolean {
+  for (let current: object | null = object; current; current = Object.getPrototypeOf(current)) {
+    const descriptor = Object.getOwnPropertyDescriptor(current, property)
+    if (descriptor) {
+      const frozen = current === object && !descriptor.writable && !descriptor.configurable
+      return "value" in descriptor && property !== "constructor" && !frozen
+    }
+  }
+  return false
 }

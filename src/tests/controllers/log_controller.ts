@@ -3,6 +3,7 @@ import { Controller } from "../../core/controller"
 
 export type ActionLogEntry = {
   name: string
+  event: ActionEvent
   controller: Controller
   identifier: string
   eventType: string
@@ -42,6 +43,16 @@ export class LogController extends Controller {
     this.recordAction("log3", event)
   }
 
+  async logDeferred(event: ActionEvent) {
+    await Promise.resolve()
+    this.recordAction("logDeferred", event)
+  }
+
+  logReplacedParams(event: ActionEvent) {
+    event.params = { replaced: true }
+    this.recordAction("logReplacedParams", event)
+  }
+
   logPassive(event: ActionEvent) {
     event.preventDefault()
     if (event.defaultPrevented) {
@@ -63,6 +74,7 @@ export class LogController extends Controller {
   private recordAction(name: string, event: ActionEvent, passive?: boolean) {
     this.actionLog.push({
       name,
+      event,
       controller: this,
       identifier: this.identifier,
       eventType: event.type,
