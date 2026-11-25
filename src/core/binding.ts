@@ -69,7 +69,7 @@ export class Binding {
   }
 
   private prepareActionEvent(event: Event): ActionEvent {
-    const { params } = this.action
+    let { params } = this.action
     // Kept on the native event for backwards compatibility with code reading it synchronously.
     Object.assign(event, { params })
 
@@ -81,9 +81,12 @@ export class Binding {
           return params
         }
         const value = Reflect.get(target, property, target)
-        return typeof value == "function" ? value.bind(target) : value
+        return typeof value == "function" && isMethod(target, property) ? value.bind(target) : value
       },
       set(target, property, value) {
+        if (property === "params") {
+          params = value
+        }
         return Reflect.set(target, property, value, target)
       },
     }) as ActionEvent
@@ -139,4 +142,12 @@ export class Binding {
   private get scope(): Scope {
     return this.context.scope
   }
+}
+
+function isMethod(object: object, property: PropertyKey): boolean {
+  for (let current: object | null = object; current; current = Object.getPrototypeOf(current)) {
+    const descriptor = Object.getOwnPropertyDescriptor(current, property)
+    if (descriptor) return "value" in descriptor && property !== "constructor"
+  }
+  return false
 }

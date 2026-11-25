@@ -112,6 +112,14 @@ export default class ActionParamsTests extends LogControllerTestCase {
     )
   }
 
+  async "test params assigned by an action are read back"() {
+    this.actionValue = "click->c#logReplacedParams"
+    await this.nextFrame
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions({ name: "logReplacedParams", identifier: "c", params: { replaced: true } })
+  }
+
   set actionValue(value: string) {
     this.buttonElement.setAttribute("data-action", value)
   }

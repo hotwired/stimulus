@@ -82,4 +82,17 @@ export default class ActionTests extends LogControllerTestCase {
     await this.triggerEvent("#svgChild", "mousedown")
     this.assertActions({ name: "log", eventType: "click" }, { name: "log", eventType: "mousedown" })
   }
+
+  async "test the action event keeps the native event constructor"() {
+    const event = await this.triggerEvent("button", "click")
+    this.assert.strictEqual(this.actionLog[0].event.constructor, event.constructor)
+  }
+
+  async "test the action event returns a function detail as is"() {
+    const detail = () => {}
+    this.findElement("button").dispatchEvent(new CustomEvent("click", { bubbles: true, detail }))
+    await this.nextFrame
+
+    this.assert.strictEqual((this.actionLog[0].event as unknown as CustomEvent).detail, detail)
+  }
 }
