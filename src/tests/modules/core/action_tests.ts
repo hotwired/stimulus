@@ -95,4 +95,14 @@ export default class ActionTests extends LogControllerTestCase {
 
     this.assert.strictEqual((this.actionLog[0].event as unknown as CustomEvent).detail, detail)
   }
+
+  async "test the action event returns a read-only own method as is"() {
+    const method = () => {}
+    const event = new Event("click", { bubbles: true })
+    Object.defineProperty(event, "method", { value: method })
+    this.findElement("button").dispatchEvent(event)
+    await this.nextFrame
+
+    this.assert.strictEqual((this.actionLog[0].event as any).method, method)
+  }
 }

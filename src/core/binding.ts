@@ -147,7 +147,10 @@ export class Binding {
 function isMethod(object: object, property: PropertyKey): boolean {
   for (let current: object | null = object; current; current = Object.getPrototypeOf(current)) {
     const descriptor = Object.getOwnPropertyDescriptor(current, property)
-    if (descriptor) return "value" in descriptor && property !== "constructor"
+    if (descriptor) {
+      const frozen = current === object && !descriptor.writable && !descriptor.configurable
+      return "value" in descriptor && property !== "constructor" && !frozen
+    }
   }
   return false
 }
