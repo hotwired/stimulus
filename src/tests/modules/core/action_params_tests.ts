@@ -89,6 +89,26 @@ export default class ActionParamsTests extends LogControllerTestCase {
     this.assertActions({ identifier: "c", params: this.expectedParamsForC })
   }
 
+  async "test integers that cannot be represented exactly are passed as strings"() {
+    this.actionValue = "click->d#log"
+    this.buttonElement.setAttribute("data-d-id-param", "676280779033907854")
+    this.buttonElement.setAttribute("data-d-negative-id-param", "-676280779033907854")
+    this.buttonElement.setAttribute("data-d-max-safe-integer-param", "9007199254740991")
+    this.buttonElement.setAttribute("data-d-exponent-param", "1e21")
+    await this.nextFrame
+    await this.triggerEvent(this.buttonElement, "click")
+
+    this.assertActions({
+      identifier: "d",
+      params: {
+        id: "676280779033907854",
+        negativeId: "-676280779033907854",
+        maxSafeInteger: 9007199254740991,
+        exponent: 1e21,
+      },
+    })
+  }
+
   set actionValue(value: string) {
     this.buttonElement.setAttribute("data-action", value)
   }

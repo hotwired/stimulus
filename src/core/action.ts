@@ -132,8 +132,13 @@ function error(message: string): never {
 
 function typecast(value: any): any {
   try {
-    return JSON.parse(value)
+    const result = JSON.parse(value)
+    return isUnsafeIntegerLiteral(value, result) ? value : result
   } catch (o_O) {
     return value
   }
+}
+
+function isUnsafeIntegerLiteral(value: string, result: any): boolean {
+  return typeof result == "number" && !Number.isSafeInteger(result) && /^-?\d+$/.test(value)
 }
