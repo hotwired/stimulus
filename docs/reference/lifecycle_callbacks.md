@@ -40,6 +40,34 @@ A controller is _connected_ to the document when both of the following condition
 
 When a controller becomes connected, Stimulus calls its `connect()` method.
 
+### Actions
+
+Stimulus starts listening for a controller's [actions](/reference/actions) when the controller connects, immediately before calling its `connect()` method. The `initialize()` method runs earlier, before any of the controller's actions are bound.
+
+This means that events dispatched synchronously from `initialize()`, for example with [`this.dispatch()`](/reference/controllers#cross-controller-coordination-with-events), won't invoke actions that route to the same controller. Dispatch them from `connect()` instead:
+
+```html
+<div data-controller="greeter" data-action="greeter:ready->greeter#greet">…</div>
+```
+
+```js
+import { Controller } from "@hotwired/stimulus"
+
+export default class extends Controller {
+  initialize() {
+    this.dispatch("ready") // greet() is not called
+  }
+
+  connect() {
+    this.dispatch("ready") // greet() is called
+  }
+
+  greet() {
+    // …
+  }
+}
+```
+
 ### Targets
 
 A target is _connected_ to the document when both of the following conditions are true:
