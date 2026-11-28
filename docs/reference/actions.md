@@ -324,6 +324,8 @@ Data attribute                                  | Param                | Type
 `data-item-payload-param='{"value":"1234567"}'` | `{ value: 1234567 }` | Object
 `data-item-active-param="true"`                 | `true`               | Boolean
 
+Integers that a JavaScript `Number` can't represent exactly (above `Number.MAX_SAFE_INTEGER` or below `Number.MIN_SAFE_INTEGER`, such as 64-bit database IDs) are passed as a `String` so they don't lose precision. For example, `data-item-id-param="676280779033907854"` is passed as `"676280779033907854"`.
+
 
 <br>Consider this setup:
 
